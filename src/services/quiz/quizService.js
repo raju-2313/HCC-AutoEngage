@@ -30,15 +30,20 @@ export function buildQuizMessage(quiz, question) {
   const difficultyBadge =
     quiz.difficulty === 'advanced' ? '🔥 Advanced' : '🌱 Beginner';
 
+  // Support both snake_case (DB) and camelCase (memory)
+  const questionText = question.question_text || question.questionText || '';
+  const codeSnippet = question.code_snippet || question.codeSnippet;
+  const points = quiz.points_reward ?? quiz.pointsReward ?? 10;
+  const xp = quiz.xp_reward ?? quiz.xpReward ?? 20;
+
   // Format options text in the embed body
-  const optionsText = question.options
+  const optionsText = (question.options || [])
     .map((opt) => `**${opt.id})** ${opt.text}`)
     .join('\n\n');
 
-  let description = `${question.questionText}\n\n`;
-  if (question.code_snippet || question.codeSnippet) {
-    const code = question.code_snippet || question.codeSnippet;
-    description += `\`\`\`javascript\n${code}\n\`\`\`\n`;
+  let description = `${questionText}\n\n`;
+  if (codeSnippet) {
+    description += `\`\`\`javascript\n${codeSnippet}\n\`\`\`\n`;
   }
   description += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n${optionsText}\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
 
@@ -48,7 +53,7 @@ export function buildQuizMessage(quiz, question) {
     .setDescription(description)
     .addFields(
       { name: '🎯 Difficulty', value: difficultyBadge, inline: true },
-      { name: '🎁 Reward', value: `+${quiz.points_reward} Pts / +${quiz.xp_reward} XP`, inline: true },
+      { name: '🎁 Reward', value: `+${points} Pts / +${xp} XP`, inline: true },
       { name: '⏱️ Duration', value: '3–5 Minutes', inline: true }
     )
     .setFooter({ text: 'HCC AutoEngage • HackerRank Campus Crew | 1 attempt per member' })

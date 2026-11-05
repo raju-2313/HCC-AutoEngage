@@ -8,7 +8,9 @@ import { getActiveQuiz } from '../database/queries/quizzes.js';
 import { getMemberByDiscordId } from '../database/queries/members.js';
 import { getMemberQuizAttempts } from '../database/queries/attempts.js';
 import { buildQuizMessage } from '../services/quiz/quizService.js';
+import { runLiveQuizSession } from '../services/quiz/liveQuizRunner.js';
 import { COLORS, errorEmbed, infoEmbed } from '../utils/embeds.js';
+import { logger } from '../utils/logger.js';
 
 export const data = new SlashCommandBuilder()
   .setName('quiz')
@@ -22,10 +24,53 @@ export const data = new SlashCommandBuilder()
     sub
       .setName('stats')
       .setDescription('View your quiz participation, win rate, and current streak.')
+  )
+  .addSubcommand((sub) =>
+    sub
+      .setName('live')
+      .setDescription('Launch a live automated multi-question quiz challenge in this channel.')
+      .addIntegerOption((opt) =>
+        opt
+          .setName('questions')
+          .setDescription('Number of questions (default: 10)')
+          .setMinValue(1)
+          .setMaxValue(15)
+          .setRequired(false)
+      )
+      .addIntegerOption((opt) =>
+        opt
+          .setName('timer')
+          .setDescription('Seconds per question (default: 25s)')
+          .setMinValue(10)
+          .setMaxValue(60)
+          .setRequired(false)
+      )
   );
 
 export async function execute(interaction) {
   const subcommand = interaction.options.getSubcommand();
+
+  // ── Subcommand: /quiz live ──────────────────────────────────────────────────
+  if (subcommand === 'live') {
+    const questionsCount = interaction.options.getInteger('questions') || 10;
+    const timerSeconds = interaction.options.getInteger('timer') || 25;
+
+    await interaction.reply({
+      content: `🎯 Launching live **${questionsCount}-question quiz challenge** (${timerSeconds}s per question) in this channel!`,
+      flags: MessageFlags.Ephemeral,
+    });
+
+    // Run the live timer session
+    runLiveQuizSession({
+      client: interaction.client,
+      channelId: interaction.channelId,
+      questionCount: questionsCount,
+      secondsPerQuestion: timerSeconds,
+    }).catch((err) => {
+      logger.error('Error during live quiz session', { error: err.message, channelId: interaction.channelId });
+    });
+    return;
+  }
 
   // ── Subcommand: /quiz today ─────────────────────────────────────────────────
   if (subcommand === 'today') {
