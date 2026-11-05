@@ -25,6 +25,13 @@ import {
   getMemberByDiscordId,
   upsertMember,
 } from '../database/queries/members.js';
+import {
+  getEngagementScoreSettings,
+  setEngagementChannelSettings,
+  getAllEngagementChannelSettings,
+  awardCommunityContribution,
+  fetchEngagementLeaderboard,
+} from '../database/queries/engagement.js';
 import { getActiveQuiz, closeQuiz } from '../database/queries/quizzes.js';
 import { publishDailyQuiz } from '../services/quiz/quizService.js';
 import { QUESTION_BANK } from '../services/quiz/questionBank.js';
@@ -115,6 +122,80 @@ export const data = new SlashCommandBuilder()
               .setDescription('Target member')
               .setRequired(true)
           )
+      )
+  )
+  .addSubcommandGroup((group) =>
+    group
+      .setName('engagement')
+      .setDescription('Community engagement engine administration.')
+      .addSubcommand((sub) =>
+        sub
+          .setName('stats')
+          .setDescription('View server-wide community engagement metrics.')
+      )
+      .addSubcommand((sub) =>
+        sub
+          .setName('settings')
+          .setDescription('View active scoring weights and daily caps.')
+      )
+      .addSubcommand((sub) =>
+        sub
+          .setName('channels')
+          .setDescription('Configure channel category and engagement multiplier.')
+          .addChannelOption((opt) =>
+            opt
+              .setName('channel')
+              .setDescription('Channel to configure')
+              .setRequired(true)
+          )
+          .addStringOption((opt) =>
+            opt
+              .setName('category')
+              .setDescription('Engagement category')
+              .addChoices(
+                { name: 'Learning (1.5x)', value: 'learning' },
+                { name: 'Technical Discussion (1.25x)', value: 'technical' },
+                { name: 'General Community (1.0x)', value: 'general' },
+                { name: 'Projects (1.25x)', value: 'projects' },
+                { name: 'Events (1.5x)', value: 'events' },
+                { name: 'Excluded (0x - No Points)', value: 'excluded' }
+              )
+              .setRequired(true)
+          )
+          .addNumberOption((opt) =>
+            opt
+              .setName('multiplier')
+              .setDescription('Custom multiplier (e.g. 1.25, 0.0)')
+              .setRequired(false)
+          )
+      )
+      .addSubcommand((sub) =>
+        sub
+          .setName('award')
+          .setDescription('Award verified contribution points to a member.')
+          .addUserOption((opt) =>
+            opt
+              .setName('user')
+              .setDescription('Recipient member')
+              .setRequired(true)
+          )
+          .addIntegerOption((opt) =>
+            opt
+              .setName('points')
+              .setDescription('Points to award (e.g. 15, 25)')
+              .setRequired(true)
+          )
+          .addStringOption((opt) =>
+            opt
+              .setName('reason')
+              .setDescription('Reason for contribution award')
+              .setRequired(true)
+          )
+      )
+      .addSubcommand((sub) =>
+        sub
+          .setName('recalculate')
+          .setDescription('Recalculate engagement leaderboards across all members.')
       )
   );
 
@@ -305,6 +386,159 @@ export async function execute(interaction) {
           ),
         ],
       });
+    }
+
+    // ── 7. /admin engagement ... ──────────────────────────────────────────────
+    if (group === 'engagement') {
+      if (sub === 'settings') {
+        const settings = await getEngagementScoreSettings();
+        const s = settings || {
+          learning_weight: 0.40,
+          text_weight: 0.25,
+          voice_weight: 0.15,
+          reaction_weight: 0.10,
+          contribution_weight: 0.10,
+          text_daily_cap: 50,
+          reaction_daily_cap: 20,
+          voice_daily_cap: 45,
+          contribution_daily_cap: 50,
+          voice_min_session_seconds: 120,
+          text_cooldown_seconds: 45,
+        };
+
+        const embed = new EmbedBuilder()
+          .setColor(COLORS.info)
+          .setTitle('⚙️  Community Engagement Scoring Weights & Limits')
+          .setDescription(`> Live parameters configuring the overall leaderboard\n${HR}`)
+          .addFields(
+            {
+              name: '⚖️  Category Weights (Total 100%)',
+              value: [
+                `• **Learning & Challenges:** \`${Math.round(s.learning_weight * 100)}%\``,
+                `• **Text Channel Participation:** \`${Math.round(s.text_weight * 100)}%\``,
+                `• **Voice Study Sessions:** \`${Math.round(s.voice_weight * 100)}%\``,
+                `• **Reactions & Peer Support:** \`${Math.round(s.reaction_weight * 100)}%\``,
+                `• **Community Contributions:** \`${Math.round(s.contribution_weight * 100)}%\``,
+              ].join('\n'),
+              inline: false,
+            },
+            {
+              name: '🛡️  Daily Scoring Caps',
+              value: [
+                `• **Text Daily Cap:** \`${s.text_daily_cap} pts/day\``,
+                `• **Reaction Daily Cap:** \`${s.reaction_daily_cap} pts/day\``,
+                `• **Voice Daily Cap:** \`${s.voice_daily_cap} pts/day\` (90 mins max)`,
+                `• **Contribution Cap:** \`${s.contribution_daily_cap} pts/day\``,
+              ].join('\n'),
+              inline: true,
+            },
+            {
+              name: '⏱️  Cooldowns & Minimums',
+              value: [
+                `• **Text Cooldown:** \`${s.text_cooldown_seconds}s\` between messages`,
+                `• **Voice Minimum:** \`${s.voice_min_session_seconds}s\` session threshold`,
+              ].join('\n'),
+              inline: true,
+            }
+          )
+          .setFooter({ text: 'HCC AutoEngage • Configurable Engagement Parameters' })
+          .setTimestamp();
+
+        return interaction.editReply({ embeds: [embed] });
+      }
+
+      if (sub === 'channels') {
+        const targetChannel = interaction.options.getChannel('channel', true);
+        const category      = interaction.options.getString('category', true);
+        const multiplier    = interaction.options.getNumber('multiplier') ?? (category === 'excluded' ? 0.0 : category === 'learning' || category === 'events' ? 1.5 : 1.0);
+
+        await setEngagementChannelSettings({
+          channelId: targetChannel.id,
+          channelName: targetChannel.name,
+          category,
+          multiplier,
+          isEnabled: category !== 'excluded',
+        });
+
+        await logActivity('admin_engagement_channel_config', interaction.user.id, {
+          channelId: targetChannel.id,
+          category,
+          multiplier,
+        });
+
+        return interaction.editReply({
+          embeds: [
+            successEmbed(
+              'Channel Settings Updated',
+              `Channel <#${targetChannel.id}> is now configured as **${category.toUpperCase()}** (Multiplier: \`${multiplier}x\`).`
+            ),
+          ],
+        });
+      }
+
+      if (sub === 'award') {
+        const targetUser = interaction.options.getUser('user', true);
+        const points     = interaction.options.getInteger('points', true);
+        const reason     = interaction.options.getString('reason', true);
+
+        await awardCommunityContribution({
+          recipientDiscordId: targetUser.id,
+          recipientUsername: targetUser.username,
+          giverDiscordId: interaction.user.id,
+          type: 'moderator_award',
+          points,
+          reason,
+          channelId: interaction.channelId,
+        });
+
+        await logActivity('admin_contribution_award', interaction.user.id, {
+          targetDiscordId: targetUser.id,
+          points,
+          reason,
+        });
+
+        const embed = new EmbedBuilder()
+          .setColor(COLORS.success)
+          .setTitle('🏅  Verified Contribution Awarded')
+          .setDescription(
+            `Successfully awarded **+${points} Contribution Points** & **+${points * 2} XP** to <@${targetUser.id}>!\n\n` +
+            `• **Reason:** _${reason}_\n` +
+            `• **Awarded By:** <@${interaction.user.id}>`
+          )
+          .setTimestamp();
+
+        return interaction.editReply({ embeds: [embed] });
+      }
+
+      if (sub === 'recalculate' || sub === 'stats') {
+        const leaderboard = await fetchEngagementLeaderboard('weekly', 5).catch(() => []);
+        const channels = await getAllEngagementChannelSettings().catch(() => []);
+
+        const embed = new EmbedBuilder()
+          .setColor(0x5865F2)
+          .setTitle('📊  Community Engagement Status & Health')
+          .setDescription(`> Server-wide engagement engine overview\n${HR}`)
+          .addFields(
+            {
+              name: '🎛️  Configured Channels',
+              value: channels.length > 0
+                ? channels.map((c) => `<#${c.channel_id}> — \`${c.category}\` (\`${c.multiplier}x\`)`).join('\n')
+                : '*No custom channel rules configured yet — all channels earn default 1.0x points.*',
+              inline: false,
+            },
+            {
+              name: '🌟  Top Weekly Engagement Leaders',
+              value: leaderboard.length > 0
+                ? leaderboard.map((r, i) => `**#${i + 1}** <@${r.discord_id}> — **${r.overall_score} Score**`).join('\n')
+                : '*No engagement scores recorded yet for this week.*',
+              inline: false,
+            }
+          )
+          .setFooter({ text: 'HCC AutoEngage • Engagement Engine' })
+          .setTimestamp();
+
+        return interaction.editReply({ embeds: [embed] });
+      }
     }
 
     return interaction.editReply({ content: 'Unknown admin subcommand.' });
