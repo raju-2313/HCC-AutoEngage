@@ -1,6 +1,6 @@
 /**
  * src/services/recognition/leaderboardService.js
- * Builds leaderboard embeds, computes monthly winners, and manages snapshots.
+ * Builds rich, beautifully formatted leaderboard embeds, computes monthly winners, and manages snapshots.
  */
 
 import { EmbedBuilder } from 'discord.js';
@@ -9,19 +9,20 @@ import { getTopMembersByPoints, saveLeaderboardSnapshot, recordMonthlyReward } f
 import { COLORS } from '../../utils/embeds.js';
 import { logger } from '../../utils/logger.js';
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
+// ─── Helpers & Design Constants ───────────────────────────────────────────────
 
-/** Returns medal emoji for rank 1-3, numbered string for 4+. */
+const HR = '┄'.repeat(28);
+
+const RANK_MEDALS = ['🥇', '🥈', '🥉'];
+
 function rankLabel(index) {
-  return ['🥇', '🥈', '🥉'][index] ?? `${index + 1}.`;
+  return RANK_MEDALS[index] ?? `\`#${String(index + 1).padStart(2, '0')}\``;
 }
 
-/** Formats a number with leading sign (e.g. +120, -5). */
 function signed(n) {
   return n >= 0 ? `+${n}` : `${n}`;
 }
 
-/** Returns level badge emoji based on level. */
 function levelBadge(level) {
   if (level >= 10) return '💎';
   if (level >= 7)  return '🔮';
@@ -31,7 +32,6 @@ function levelBadge(level) {
   return '🌱';
 }
 
-/** ISO week string like 2026-W45. */
 function currentISOWeek() {
   const now = new Date();
   const startOfYear = new Date(now.getFullYear(), 0, 1);
@@ -39,30 +39,46 @@ function currentISOWeek() {
   return `${now.getFullYear()}-W${String(week).padStart(2, '0')}`;
 }
 
-/** Start of current calendar month as ISO timestamp. */
 function startOfCurrentMonth() {
   const now = new Date();
   return new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
 }
 
-/** YYYY-MM label for current month. */
 function currentMonthYear() {
   const now = new Date();
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 }
 
-// ─── Shared embed footer ─────────────────────────────────────────────────────
-
 function leaderboardFooter(count, period) {
-  return `HCC AutoEngage • HackerRank Campus Crew | ${count} participant${count !== 1 ? 's' : ''} | ${period}`;
+  return `HCC AutoEngage • HackerRank Campus Crew  │  ${count} participant${count !== 1 ? 's' : ''}  │  ${period}`;
+}
+
+/** Formats podium + table rows for standard leaderboard embeds */
+function formatLeaderboardRows(rows) {
+  if (!rows || rows.length === 0) {
+    return '> *No quiz activity recorded yet for this period!*\n> _Take today\'s quiz via `/quiz today` to be the first on the board!_';
+  }
+
+  const maxPoints = Math.max(1, rows[0]?.total_points || 1);
+
+  return rows.map((m, i) => {
+    const medal = rankLabel(i);
+    const badge = levelBadge(m.level ?? 1);
+    const pts = signed(m.total_points ?? 0);
+    const xp = m.total_xp ? ` · ${m.total_xp} XP` : '';
+    const bar = '█'.repeat(Math.round(((m.total_points || 0) / maxPoints) * 8)).padEnd(8, '░');
+
+    if (i < 3) {
+      // Highlight top 3 prominently
+      return `${medal}  **${m.username}**\n╰  \`${bar}\`  **${pts} pts**${xp}  ·  Lv ${m.level ?? 1} ${badge}`;
+    }
+    // Standard rows for 4-10
+    return `${medal}  **${m.username}** — \`${pts} pts\` · Lv ${m.level ?? 1} ${badge}`;
+  }).join('\n\n');
 }
 
 // ─── Weekly Leaderboard ───────────────────────────────────────────────────────
 
-/**
- * Calls the get_leaderboard_standings RPC for the last 7 days and returns
- * a rich embed with the top 10 members.
- */
 export async function buildWeeklyLeaderboardEmbed() {
   const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
@@ -80,24 +96,20 @@ export async function buildWeeklyLeaderboardEmbed() {
 
   const embed = new EmbedBuilder()
     .setColor(COLORS.primary)
-    .setTitle('📊 Weekly Leaderboard — Top 10')
-    .setDescription(rows.length === 0
-      ? '*No quiz activity this week yet. Play a quiz to get on the board!*'
-      : rows.map((m, i) =>
-          `${rankLabel(i)} ${levelBadge(m.level ?? 1)} **${m.username}** — ${signed(m.total_points)} pts \\| Lv ${m.level ?? 1}`
-        ).join('\n')
+    .setTitle('⚡  Weekly Leaderboard — Top 10')
+    .setDescription(
+      `> Top competitors ranked by points earned over the last 7 days.\n${HR}\n\n` +
+      formatLeaderboardRows(rows) +
+      `\n\n${HR}\n_Ranks reset every 7 days. Keep playing to maintain your standing!_`
     )
     .setTimestamp()
-    .setFooter({ text: leaderboardFooter(rows.length, 'Last 7 days') });
+    .setFooter({ text: leaderboardFooter(rows.length, 'Last 7 Days') });
 
   return embed;
 }
 
 // ─── Monthly Leaderboard ──────────────────────────────────────────────────────
 
-/**
- * Calls the get_leaderboard_standings RPC from the start of the current month.
- */
 export async function buildMonthlyLeaderboardEmbed() {
   const since = startOfCurrentMonth();
   const monthLabel = new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' });
@@ -115,13 +127,12 @@ export async function buildMonthlyLeaderboardEmbed() {
   const rows = data || [];
 
   const embed = new EmbedBuilder()
-    .setColor(COLORS.info)
-    .setTitle(`📅 Monthly Leaderboard — ${monthLabel}`)
-    .setDescription(rows.length === 0
-      ? '*No quiz activity this month yet. Play a quiz to get on the board!*'
-      : rows.map((m, i) =>
-          `${rankLabel(i)} ${levelBadge(m.level ?? 1)} **${m.username}** — ${signed(m.total_points)} pts \\| Lv ${m.level ?? 1}`
-        ).join('\n')
+    .setColor(0x5865F2)
+    .setTitle(`📅  Monthly Leaderboard — ${monthLabel}`)
+    .setDescription(
+      `> Current month standings for the **HCC Monthly Championship**.\n${HR}\n\n` +
+      formatLeaderboardRows(rows) +
+      `\n\n${HR}\n_Top 3 at month-end earn exclusive titles and recognition!_`
     )
     .setTimestamp()
     .setFooter({ text: leaderboardFooter(rows.length, monthLabel) });
@@ -131,23 +142,19 @@ export async function buildMonthlyLeaderboardEmbed() {
 
 // ─── All-Time Leaderboard ─────────────────────────────────────────────────────
 
-/**
- * Queries members table directly for all-time top 10 by total_points.
- */
 export async function buildAlltimeLeaderboardEmbed() {
   const members = await getTopMembersByPoints(10);
 
   const embed = new EmbedBuilder()
-    .setColor(COLORS.warning)
-    .setTitle('🏆 All-Time Leaderboard — Top 10')
-    .setDescription(members.length === 0
-      ? '*No members yet. Play a quiz to get started!*'
-      : members.map((m, i) =>
-          `${rankLabel(i)} ${levelBadge(m.level ?? 1)} **${m.username}** — ${m.total_points} pts \\| ${m.total_xp} XP \\| Lv ${m.level ?? 1}`
-        ).join('\n')
+    .setColor(0xFFD700) // Gold
+    .setTitle('🏆  All-Time Hall of Fame — Top 10')
+    .setDescription(
+      `> Cumulative all-time leaderboard of the most active members.\n${HR}\n\n` +
+      formatLeaderboardRows(members) +
+      `\n\n${HR}\n_Consistency is key — streaks and accuracy build lasting status!_`
     )
     .setTimestamp()
-    .setFooter({ text: leaderboardFooter(members.length, 'All time') });
+    .setFooter({ text: leaderboardFooter(members.length, 'All-Time Records') });
 
   return embed;
 }
@@ -160,10 +167,6 @@ const REWARD_TITLES = {
   3: '🥉 Monthly Third Place',
 };
 
-/**
- * Computes top 3 from the monthly standings, writes them to monthly_rewards,
- * and returns the winners array for announcement.
- */
 export async function computeMonthlyWinners() {
   const since = startOfCurrentMonth();
   const monthYear = currentMonthYear();
@@ -195,7 +198,6 @@ export async function computeMonthlyWinners() {
       });
       saved.push({ ...w, rank, reward });
     } catch (err) {
-      // Duplicate entry for this month/rank — skip gracefully
       logger.warn('Monthly reward already recorded or insert error', { monthYear, rank, error: err.message });
       saved.push({ ...w, rank });
     }
@@ -207,35 +209,29 @@ export async function computeMonthlyWinners() {
 
 // ─── Monthly Winner Announcement Embed ───────────────────────────────────────
 
-/**
- * Builds a rich announcement embed from a computeMonthlyWinners() result.
- */
 export function buildMonthlyWinnerAnnouncement(winners) {
   const monthLabel = new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' });
 
-  const lines = winners.map((w) =>
-    `${rankLabel(w.rank - 1)} **${w.username}** — ${w.total_points} pts | ${w.total_xp} XP | Lv ${w.level ?? 1}`
-  );
+  const lines = winners.map((w, idx) => {
+    const medal = RANK_MEDALS[idx] || `**#${idx + 1}**`;
+    const badge = levelBadge(w.level ?? 1);
+    return `${medal}  **${w.username}**\n╰  **${w.total_points} Points** · ${w.total_xp || 0} XP · Lv ${w.level ?? 1} ${badge}`;
+  });
 
   return new EmbedBuilder()
-    .setColor(COLORS.warning)
-    .setTitle(`🎉 ${monthLabel} — Monthly Winners Announced!`)
+    .setColor(0xFFD700)
+    .setTitle(`🎉  ${monthLabel} — Monthly Champions Crowned!`)
     .setDescription(
-      `Congratulations to this month's top performers in the HCC Quiz League!\n\n` +
-      lines.join('\n') +
-      `\n\n*Keep playing daily quizzes to climb the leaderboard next month!*`
+      `Congratulations to this month's highest achieving community members!\n${HR}\n\n` +
+      lines.join('\n\n') +
+      `\n\n${HR}\n*A brand new month has begun. Daily quizzes are your chance to reach next month's podium!*`
     )
     .setTimestamp()
-    .setFooter({ text: 'HCC AutoEngage • HackerRank Campus Crew | Monthly Recognition' });
+    .setFooter({ text: 'HCC AutoEngage • HackerRank Campus Crew  │  Monthly Recognition' });
 }
 
 // ─── Snapshot ─────────────────────────────────────────────────────────────────
 
-/**
- * Saves a snapshot of current all-time standings to leaderboard_snapshots.
- * @param {string} periodType  - e.g. 'weekly' | 'monthly' | 'alltime'
- * @param {string} [periodIdentifier] - e.g. '2026-W45' | '2026-11' (auto-computed if omitted)
- */
 export async function takeLeaderboardSnapshot(periodType = 'weekly', periodIdentifier = null) {
   const identifier = periodIdentifier ?? (periodType === 'monthly' ? currentMonthYear() : currentISOWeek());
   const members = await getTopMembersByPoints(10);
