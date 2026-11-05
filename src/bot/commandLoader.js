@@ -42,3 +42,4 @@ export async function loadCommands() {
   logger.info(`Commands loaded`, { count: commands.size });
   return commands;
 }
+

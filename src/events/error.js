@@ -11,3 +11,4 @@ export const once = false;
 export function execute(error) {
   logger.error('Discord client error', { message: error.message, stack: error.stack });
 }
+

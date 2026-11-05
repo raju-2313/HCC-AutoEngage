@@ -28,3 +28,4 @@ export async function execute(interaction) {
 
   await interaction.editReply({ content: '', embeds: [embed] });
 }
+

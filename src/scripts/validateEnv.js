@@ -12,6 +12,8 @@ const REQUIRED = [
   'DISCORD_TOKEN',
   'DISCORD_CLIENT_ID',
   'DISCORD_GUILD_ID',
+  'SUPABASE_URL',
+  'SUPABASE_SERVICE_ROLE_KEY',
 ];
 
 const OPTIONAL = [
@@ -19,9 +21,7 @@ const OPTIONAL = [
   'DISCORD_QUIZ_CHANNEL_ID',
   'DISCORD_LEADERBOARD_CHANNEL_ID',
   'DISCORD_LOGS_CHANNEL_ID',
-  'SUPABASE_URL',
   'SUPABASE_ANON_KEY',
-  'SUPABASE_SERVICE_ROLE_KEY',
 ];
 
 let hasError = false;
@@ -56,3 +56,4 @@ if (hasError) {
 } else {
   console.log('✅ All required variables are configured. Ready to start!\n');
 }
+

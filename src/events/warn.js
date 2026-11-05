@@ -11,3 +11,4 @@ export const once = false;
 export function execute(message) {
   logger.warn('Discord client warning', { message });
 }
+
