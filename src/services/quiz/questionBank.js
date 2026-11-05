@@ -13,7 +13,135 @@
  */
 
 export const QUESTION_BANK = [
-  // ── JavaScript: Beginner ───────────────────────────────────────────────────
+  // ── Ultra-Beginner Series (Designed for College Freshmen & Novices) ────────
+  {
+    id: 'beg-001',
+    category: 'python',
+    difficulty: 'beginner',
+    title: 'Python Multiplication Basics',
+    questionText: 'What is the output of the following Python code?',
+    codeSnippet: 'x = 5\nprint(x * 2)',
+    options: [
+      { id: 'A', text: '10' },
+      { id: 'B', text: '25' },
+      { id: 'C', text: '55' },
+      { id: 'D', text: '52' },
+    ],
+    correctOption: 'A',
+    explanation: 'x is an integer with value 5, so x * 2 performs standard numeric multiplication, which prints 10.',
+    pointsReward: 10,
+    xpReward: 20,
+  },
+  {
+    id: 'beg-002',
+    category: 'javascript',
+    difficulty: 'beginner',
+    title: 'JavaScript Constant Declaration',
+    questionText: 'Which keyword in modern JavaScript is used to declare a variable whose value CANNOT be reassigned?',
+    codeSnippet: 'const PI = 3.14159;\n// Reassigning PI later will cause an error',
+    options: [
+      { id: 'A', text: 'const' },
+      { id: 'B', text: 'let' },
+      { id: 'C', text: 'var' },
+      { id: 'D', text: 'constant' },
+    ],
+    correctOption: 'A',
+    explanation: 'const creates a read-only, block-scoped reference. Attempting to reassign a const variable throws a TypeError.',
+    pointsReward: 10,
+    xpReward: 20,
+  },
+  {
+    id: 'beg-003',
+    category: 'python',
+    difficulty: 'beginner',
+    title: 'Python For Loop Iterations',
+    questionText: 'How many times will "HCC" be printed to the screen?',
+    codeSnippet: 'for i in range(3):\n    print("HCC")',
+    options: [
+      { id: 'A', text: '3 times' },
+      { id: 'B', text: '2 times' },
+      { id: 'C', text: '4 times' },
+      { id: 'D', text: '0 times' },
+    ],
+    correctOption: 'A',
+    explanation: 'range(3) produces numbers 0, 1, and 2. The loop iterates 3 times, printing "HCC" 3 times.',
+    pointsReward: 10,
+    xpReward: 20,
+  },
+  {
+    id: 'beg-004',
+    category: 'dsa',
+    difficulty: 'beginner',
+    title: 'Zero-Based Array Indexing',
+    questionText: 'In Python, C, Java, and JavaScript, what index is used to access the very FIRST item in a list or array?',
+    codeSnippet: 'languages = ["Python", "JavaScript", "C++"]\nfirst = languages[?]',
+    options: [
+      { id: 'A', text: '0' },
+      { id: 'B', text: '1' },
+      { id: 'C', text: '-1' },
+      { id: 'D', text: 'first' },
+    ],
+    correctOption: 'A',
+    explanation: 'Modern programming languages use zero-based indexing, meaning the first element is always located at index 0.',
+    pointsReward: 10,
+    xpReward: 20,
+  },
+  {
+    id: 'beg-005',
+    category: 'git',
+    difficulty: 'beginner',
+    title: 'Git Clone Command',
+    questionText: 'Which Git command is used to copy/download an existing GitHub repository onto your computer for the first time?',
+    codeSnippet: 'git ______ https://github.com/hcc-campus/project.git',
+    options: [
+      { id: 'A', text: 'clone' },
+      { id: 'B', text: 'copy' },
+      { id: 'C', text: 'download' },
+      { id: 'D', text: 'pull' },
+    ],
+    correctOption: 'A',
+    explanation: 'git clone <url> clones and downloads the entire repository and its commit history to your local machine.',
+    pointsReward: 10,
+    xpReward: 20,
+  },
+  {
+    id: 'beg-006',
+    category: 'web',
+    difficulty: 'beginner',
+    title: 'HTML Hyperlink Tag',
+    questionText: 'Which HTML tag is used to create a clickable link to another webpage?',
+    codeSnippet: '<a href="https://hackerrank.com">Click to visit</a>',
+    options: [
+      { id: 'A', text: '<a>' },
+      { id: 'B', text: '<link>' },
+      { id: 'C', text: '<href>' },
+      { id: 'D', text: '<url>' },
+    ],
+    correctOption: 'A',
+    explanation: 'The <a> (anchor) tag combined with the href attribute creates a clickable hyperlink in web pages.',
+    pointsReward: 10,
+    xpReward: 20,
+  },
+  {
+    id: 'beg-007',
+    category: 'python',
+    difficulty: 'beginner',
+    title: 'Python String Length',
+    questionText: 'What is the output of the following Python snippet?',
+    codeSnippet: 'word = "Code"\nprint(len(word))',
+    options: [
+      { id: 'A', text: '4' },
+      { id: 'B', text: '3' },
+      { id: 'C', text: '5' },
+      { id: 'D', text: '"Code"' },
+    ],
+    correctOption: 'A',
+    explanation: 'The built-in len() function returns the total count of characters. "Code" has exactly 4 characters.',
+    pointsReward: 10,
+    xpReward: 20,
+  },
+
+  // ── JavaScript: Standard Series ───────────────────────────────────────────
   {
     id: 'js-001',
     category: 'javascript',
@@ -335,13 +463,13 @@ export function getRandomSampleQuestions(count = 10) {
  * Maps 'YYYY-MM-DD' (Asia/Kolkata) to Question Bank ID.
  */
 export const SCHEDULED_QUESTIONS = {
-  '2026-11-07': 'js-002',   // Day 1 (Sat): JavaScript Closures & Scoping
-  '2026-11-08': 'py-001',   // Day 2 (Sun): Python Default Mutable Arguments
-  '2026-11-09': 'dsa-002',  // Day 3 (Mon): DSA Binary Search Tree Traversal
-  '2026-11-10': 'sql-001',  // Day 4 (Tue): SQL JOIN Semantics
-  '2026-11-11': 'git-001',  // Day 5 (Wed): Git Merge vs Rebase
-  '2026-11-12': 'web-002',  // Day 6 (Thu): Web HTTP 401 vs 403
-  '2026-11-13': 'sys-001',  // Day 7 (Fri): Systems Process vs Thread
+  '2026-11-07': 'beg-001',   // Day 1 (Sat): Python Multiplication Basics (x * 2)
+  '2026-11-08': 'beg-002',   // Day 2 (Sun): JavaScript Constant Declaration (const)
+  '2026-11-09': 'beg-003',   // Day 3 (Mon): Python For Loop Iterations (range(3))
+  '2026-11-10': 'beg-004',   // Day 4 (Tue): Zero-Based Array Indexing (index 0)
+  '2026-11-11': 'beg-005',   // Day 5 (Wed): Git Clone Command (git clone)
+  '2026-11-12': 'beg-006',   // Day 6 (Thu): HTML Hyperlink Tag (<a>)
+  '2026-11-13': 'beg-007',   // Day 7 (Fri): Python String Length (len("Code"))
 };
 
 /**
