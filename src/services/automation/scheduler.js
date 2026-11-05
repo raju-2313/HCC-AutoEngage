@@ -14,7 +14,7 @@ import cron from 'node-cron';
 import { config } from '../../config/index.js';
 import { logger } from '../../utils/logger.js';
 import { publishDailyQuiz } from '../quiz/quizService.js';
-import { getActiveQuiz, closeQuiz } from '../../database/queries/quizzes.js';
+import { getActiveQuizzes, getQuizForScheduledDate, closeQuiz } from '../../database/queries/quizzes.js';
 import {
   buildWeeklyLeaderboardEmbed,
   computeMonthlyWinners,
@@ -24,6 +24,7 @@ import {
 import { postWeeklyAnnouncement } from '../recognition/weeklyAnnouncementService.js';
 import { resetInactiveStreaks } from '../../database/queries/members.js';
 import { logActivity } from '../../database/queries/logs.js';
+import { buildDailyQuizCron } from './schedulerUtils.js';
 
 const activeTasks = new Map();
 
@@ -54,7 +55,23 @@ export async function runDailyQuizDropJob(client) {
   }
 
   try {
+    const scheduledFor = new Intl.DateTimeFormat('en-CA', {
+      timeZone: config.app.timezone,
+    }).format(new Date());
+    const existingQuiz = await getQuizForScheduledDate(scheduledFor);
+    if (existingQuiz) {
+      logger.warn('Skipping scheduled quiz: a quiz already exists for today', {
+        quizId: existingQuiz.id,
+        status: existingQuiz.status,
+        scheduledFor,
+      });
+      return { success: true, skipped: true, quizId: existingQuiz.id };
+    }
+
     const result = await publishDailyQuiz({ client, channelId });
+    if (result.skipped) {
+      return { success: true, skipped: true, quizId: result.quiz.id };
+    }
     await logActivity('daily_quiz_scheduled_drop', 'scheduler', {
       quizId: result.quiz.id,
       channelId,
@@ -70,19 +87,43 @@ export async function runDailyQuizDropJob(client) {
 /**
  * Job 2: Daily Quiz Auto-Close
  */
-export async function runDailyQuizCloseJob() {
+export async function runDailyQuizCloseJob(client = null) {
   logger.info('⏰ Running scheduled task: Daily Quiz Auto-Close');
   try {
-    const active = await getActiveQuiz();
-    if (!active) {
+    const activeQuizzes = await getActiveQuizzes();
+    if (activeQuizzes.length === 0) {
       logger.info('No active quiz found to close.');
       return { success: true, closed: false };
     }
 
-    await closeQuiz(active.id);
-    await logActivity('daily_quiz_auto_close', 'scheduler', { quizId: active.id });
-    logger.info('Active quiz auto-closed', { quizId: active.id });
-    return { success: true, closed: true, quizId: active.id };
+    for (const quiz of activeQuizzes) {
+      await closeQuiz(quiz.id);
+      if (client && quiz.discord_channel_id && quiz.discord_message_id) {
+        try {
+          const channel = await client.channels.fetch(quiz.discord_channel_id);
+          const message = await channel?.messages?.fetch(quiz.discord_message_id);
+          if (message) {
+            await message.edit({
+              components: message.components.map((row) => ({
+                type: row.type,
+                components: row.components.map((button) => ({
+                  ...button.toJSON(),
+                  disabled: true,
+                })),
+              })),
+            });
+          }
+        } catch (error) {
+          logger.warn('Quiz closed in database but Discord buttons could not be disabled', {
+            quizId: quiz.id,
+            error: error.message,
+          });
+        }
+      }
+      await logActivity('daily_quiz_auto_close', 'scheduler', { quizId: quiz.id });
+    }
+    logger.info('Active quizzes auto-closed', { count: activeQuizzes.length });
+    return { success: true, closed: true, quizIds: activeQuizzes.map(({ id }) => id) };
   } catch (err) {
     logger.error('Failed to auto-close active quiz', { error: err.message });
     return { success: false, error: err.message };
@@ -163,12 +204,16 @@ export async function runStreakMaintenanceJob() {
  * Initializes and starts all recurring cron jobs.
  */
 export function initScheduler(client) {
+  if (activeTasks.size > 0) {
+    logger.warn('Scheduler already initialized; replacing existing tasks to prevent duplicate execution.');
+    stopScheduler();
+  }
   const timezone = config.app.timezone || 'Asia/Kolkata';
   logger.info(`Initializing HCC automation scheduler (Timezone: ${timezone})…`);
 
   // Parse quiz post time (e.g., '09:00')
   const [hourStr = '09', minStr = '00'] = (config.app.quizPostTime || '09:00').split(':');
-  const quizCron = `${parseInt(minStr, 10)} ${parseInt(hourStr, 10)} * * *`;
+  const quizCron = buildDailyQuizCron(`${hourStr}:${minStr}`);
 
   // 1. Daily Quiz Drop (Default: 09:00 AM IST)
   const taskDailyQuiz = cron.schedule(
@@ -181,7 +226,7 @@ export function initScheduler(client) {
   // 2. Daily Quiz Close (23:59 IST)
   const taskDailyClose = cron.schedule(
     '59 23 * * *',
-    () => runDailyQuizCloseJob(),
+    () => runDailyQuizCloseJob(client),
     { timezone }
   );
   activeTasks.set('dailyClose', taskDailyClose);
@@ -223,4 +268,3 @@ export function stopScheduler() {
   }
   activeTasks.clear();
 }
-

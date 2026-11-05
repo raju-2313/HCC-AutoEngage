@@ -28,6 +28,35 @@ export async function getActiveQuiz() {
   return data;
 }
 
+export async function getActiveQuizzes() {
+  const { data, error } = await supabaseAdmin
+    .from('quizzes')
+    .select('*, quiz_questions (*)')
+    .eq('status', 'active')
+    .order('published_at', { ascending: false });
+
+  if (error) {
+    logger.error('Error fetching active quizzes', { error: error.message });
+    throw error;
+  }
+  return data || [];
+}
+
+export async function getQuizForScheduledDate(scheduledFor) {
+  const { data, error } = await supabaseAdmin
+    .from('quizzes')
+    .select('id, status, scheduled_for, discord_message_id, discord_channel_id')
+    .eq('scheduled_for', scheduledFor)
+    .in('status', ['draft', 'active'])
+    .maybeSingle();
+
+  if (error) {
+    logger.error('Error checking scheduled quiz', { scheduledFor, error: error.message });
+    throw error;
+  }
+  return data;
+}
+
 /**
  * Gets a quiz by ID including questions.
  */
@@ -153,3 +182,15 @@ export async function closeQuiz(quizId) {
   return data;
 }
 
+export async function deleteDraftQuiz(quizId) {
+  const { error } = await supabaseAdmin
+    .from('quizzes')
+    .delete()
+    .eq('id', quizId)
+    .eq('status', 'draft');
+
+  if (error) {
+    logger.error('Error deleting draft quiz', { quizId, error: error.message });
+    throw error;
+  }
+}

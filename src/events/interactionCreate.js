@@ -79,10 +79,15 @@ export async function execute(interaction, client) {
         });
       } catch (err) {
         logger.error('Error switching leaderboard period view', { period, error: err.message });
+        const reply = { content: 'Unable to load that leaderboard right now. Please try again.', flags: MessageFlags.Ephemeral };
+        if (interaction.replied || interaction.deferred) {
+          await interaction.followUp(reply).catch(() => {});
+        } else {
+          await interaction.reply(reply).catch(() => {});
+        }
       }
       return;
     }
     return;
   }
 }
-
