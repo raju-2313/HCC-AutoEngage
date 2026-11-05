@@ -5,6 +5,7 @@
 
 import { logger } from '../utils/logger.js';
 import { errorEmbed } from '../utils/embeds.js';
+import { handleQuizAnswerInteraction } from '../services/quiz/quizService.js';
 
 export const name  = 'interactionCreate';
 export const once  = false;
@@ -51,13 +52,16 @@ export async function execute(interaction, client) {
     return;
   }
 
-  // ── Button / Select Menu interactions (stubbed for later phases) ────────────
-  if (interaction.isButton() || interaction.isStringSelectMenu()) {
-    logger.debug(`Component interaction received`, {
+  // ── Button Interactions ─────────────────────────────────────────────────────
+  if (interaction.isButton()) {
+    logger.debug(`Button interaction received`, {
       customId: interaction.customId,
       user:     interaction.user.tag,
     });
-    // Phase 3+ will handle these
+
+    if (interaction.customId.startsWith('quiz_ans:')) {
+      return handleQuizAnswerInteraction(interaction);
+    }
     return;
   }
 }

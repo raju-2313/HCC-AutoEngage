@@ -19,11 +19,10 @@ const COMMAND_GROUPS = [
     ],
   },
   {
-    name: '📚 Quiz & Learning  *(coming in Phase 3)*',
+    name: '📚 Quiz & Learning  *(Active)*',
     commands: [
-      { name: '/quiz today',   desc: "View today's daily quiz." },
-      { name: '/quiz answer',  desc: 'Submit your answer to the active quiz.' },
-      { name: '/quiz history', desc: 'See your past quiz attempts.' },
+      { name: '/quiz today', desc: "View today's active quiz challenge." },
+      { name: '/quiz stats', desc: 'View your quiz accuracy, completed count, and daily streak.' },
     ],
   },
   {
