@@ -463,13 +463,13 @@ export function getRandomSampleQuestions(count = 10) {
  * Maps 'YYYY-MM-DD' (Asia/Kolkata) to Question Bank ID.
  */
 export const SCHEDULED_QUESTIONS = {
-  '2026-11-07': 'beg-001',   // Day 1 (Sat): Python Multiplication Basics (x * 2)
-  '2026-11-08': 'beg-002',   // Day 2 (Sun): JavaScript Constant Declaration (const)
-  '2026-11-09': 'beg-003',   // Day 3 (Mon): Python For Loop Iterations (range(3))
-  '2026-11-10': 'beg-004',   // Day 4 (Tue): Zero-Based Array Indexing (index 0)
-  '2026-11-11': 'beg-005',   // Day 5 (Wed): Git Clone Command (git clone)
-  '2026-11-12': 'beg-006',   // Day 6 (Thu): HTML Hyperlink Tag (<a>)
-  '2026-11-13': 'beg-007',   // Day 7 (Fri): Python String Length (len("Code"))
+  '2026-11-06': 'beg-001',   // Day 1 (Thu): Python Multiplication Basics (x * 2)
+  '2026-11-07': 'beg-002',   // Day 2 (Fri): JavaScript Constant Declaration (const)
+  '2026-11-08': 'beg-003',   // Day 3 (Sat): Python For Loop Iterations (range(3))
+  '2026-11-09': 'beg-004',   // Day 4 (Sun): Zero-Based Array Indexing (index 0)
+  '2026-11-10': 'beg-005',   // Day 5 (Mon): Git Clone Command (git clone)
+  '2026-11-11': 'beg-006',   // Day 6 (Tue): HTML Hyperlink Tag (<a>)
+  '2026-11-12': 'beg-007',   // Day 7 (Wed): Python String Length (len("Code"))
 };
 
 /**
