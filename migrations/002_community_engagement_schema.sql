@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS public.engagement_score_settings (
     reaction_daily_cap NUMERIC(6, 2) NOT NULL DEFAULT 20.00,
     voice_daily_cap NUMERIC(6, 2) NOT NULL DEFAULT 45.00,
     contribution_daily_cap NUMERIC(6, 2) NOT NULL DEFAULT 50.00,
-    voice_min_session_seconds INTEGER NOT NULL DEFAULT 120,
+    voice_min_session_seconds INTEGER NOT NULL DEFAULT 10,
     text_cooldown_seconds INTEGER NOT NULL DEFAULT 45,
     reaction_cooldown_seconds INTEGER NOT NULL DEFAULT 15,
     is_active BOOLEAN NOT NULL DEFAULT true,
@@ -49,7 +49,7 @@ INSERT INTO public.engagement_score_settings (
     text_daily_cap, reaction_daily_cap, voice_daily_cap, contribution_daily_cap,
     voice_min_session_seconds, text_cooldown_seconds, reaction_cooldown_seconds, is_active
 )
-SELECT 0.40, 0.25, 0.10, 0.15, 0.10, 50.00, 20.00, 45.00, 50.00, 120, 45, 15, true
+SELECT 0.40, 0.25, 0.10, 0.15, 0.10, 50.00, 20.00, 45.00, 50.00, 10, 45, 15, true
 WHERE NOT EXISTS (SELECT 1 FROM public.engagement_score_settings);
 
 -- ------------------------------------------------------------------------------
@@ -389,7 +389,7 @@ DECLARE
     v_daily RECORD;
     v_duration INTEGER;
     v_points NUMERIC := 0.00;
-    v_min_seconds INTEGER := 120;
+    v_min_seconds INTEGER := 10;
     v_daily_cap NUMERIC := 45.00;
     v_today DATE;
     v_multiplier NUMERIC := 1.00;
