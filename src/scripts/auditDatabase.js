@@ -401,15 +401,25 @@ async function runAudit() {
     try {
       let rlsFailures = [];
 
-      const { error: anonUpdateErr } = await supabasePublic
+      // Test A: Can anon client modify members table?
+      const { data: updateData } = await supabasePublic
         .from('members')
         .update({ total_points: 999999 })
-        .eq('discord_id', testUserId1);
+        .eq('discord_id', testUserId1)
+        .select();
 
-      if (!anonUpdateErr) {
+      // In Postgres RLS, an unauthorized update filters out all rows, updating 0 rows (empty data array)
+      if (updateData && updateData.length > 0) {
         rlsFailures.push('Anon was able to modify members.total_points!');
       }
 
+      // Verify the points in DB remained unchanged
+      const currentMember1 = await getMemberByDiscordId(testUserId1);
+      if (currentMember1 && currentMember1.total_points === 999999) {
+        rlsFailures.push('Anon successfully altered members.total_points in database!');
+      }
+
+      // Test B: Can anon client read quiz_attempts of others?
       const { data: attemptsRead } = await supabasePublic
         .from('quiz_attempts')
         .select('*')
@@ -419,15 +429,29 @@ async function runAudit() {
         rlsFailures.push('Anon was able to read quiz_attempts!');
       }
 
-      const { error: anonHistErr } = await supabasePublic
+      // Test C: Can anon client read answers from active quiz_questions?
+      if (activeQuizForAttempts) {
+        const { data: activeAnswers } = await supabasePublic
+          .from('quiz_questions')
+          .select('correct_option')
+          .eq('quiz_id', activeQuizForAttempts.id);
+
+        if (activeAnswers && activeAnswers.length > 0) {
+          rlsFailures.push('Anon was able to read active quiz answers!');
+        }
+      }
+
+      // Test D: Can anon client modify points_history?
+      const { data: histData } = await supabasePublic
         .from('points_history')
         .insert({
           discord_id: 'fake_user',
           amount: 1000,
           reason: 'malicious_award',
-        });
+        })
+        .select();
 
-      if (!anonHistErr) {
+      if (histData && histData.length > 0) {
         rlsFailures.push('Anon was able to insert into points_history!');
       }
 
