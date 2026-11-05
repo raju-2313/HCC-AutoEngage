@@ -12,7 +12,8 @@
     "pm2:restart": "pm2 restart ecosystem.config.cjs",
     "pm2:logs": "pm2 logs hcc-autoengage",
     "deploy-commands": "node src/scripts/deployCommands.js",
-    "lint": "node --check src/index.js"
+    "lint": "find src -name '*.js' -print0 | xargs -0 -n1 node --check",
+    "test": "node --test"
   },
   "engines": {
     "node": ">=20.0.0"

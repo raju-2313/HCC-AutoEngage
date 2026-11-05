@@ -16,12 +16,16 @@ import { COLORS } from '../../utils/embeds.js';
 import {
   createQuiz,
   getActiveQuiz,
+  getQuizForScheduledDate,
   publishQuiz,
   getQuizById,
+  deleteDraftQuiz,
 } from '../../database/queries/quizzes.js';
 import { upsertMember, getMemberByDiscordId } from '../../database/queries/members.js';
 import { submitQuizAttempt, hasMemberAttempted } from '../../database/queries/attempts.js';
 import { getDailyQuestion, getKolkataDateString } from './questionBank.js';
+import { config } from '../../config/index.js';
+import { isSameGuild } from '../automation/schedulerUtils.js';
 
 // ─── Visual constants ────────────────────────────────────────────────────────
 
@@ -128,8 +132,29 @@ export async function publishDailyQuiz({ client, channelId, questionData = null,
   if (!targetChannel) {
     throw new Error(`Target channel ${channelId} not found or inaccessible by the bot.`);
   }
+  if (!isSameGuild(targetChannel, config.discord.guildId)) {
+    throw new Error(`Target channel ${channelId} is not a text channel in configured guild ${config.discord.guildId}.`);
+  }
+  if (client.user && targetChannel.permissionsFor) {
+    const permissions = targetChannel.permissionsFor(client.user);
+    const requiredPermissions = ['ViewChannel', 'SendMessages', 'EmbedLinks'];
+    const missingPermissions = requiredPermissions.filter((permission) => !permissions?.has(permission));
+    if (missingPermissions.length > 0) {
+      throw new Error(`Bot lacks required permissions in channel ${targetChannel.name || channelId}: ${missingPermissions.join(', ')}`);
+    }
+  }
 
   const qData = questionData || getDailyQuestion();
+  const quizDate = scheduledFor || getKolkataDateString();
+  const existingQuiz = await getQuizForScheduledDate(quizDate);
+  if (existingQuiz) {
+    logger.warn('Daily quiz already exists; skipping duplicate publish', {
+      quizId: existingQuiz.id,
+      status: existingQuiz.status,
+      scheduledFor: quizDate,
+    });
+    return { quiz: existingQuiz, message: null, skipped: true };
+  }
 
   const createdQuiz = await createQuiz({
     title: qData.title,
@@ -138,25 +163,34 @@ export async function publishDailyQuiz({ client, channelId, questionData = null,
     difficulty: qData.difficulty,
     pointsReward: qData.pointsReward,
     xpReward: qData.xpReward,
-    scheduledFor: scheduledFor || getKolkataDateString(),
+    scheduledFor: quizDate,
     createdBy: 'system',
-    questions: [
-      {
-        questionText: qData.questionText,
-        codeSnippet: qData.codeSnippet,
-        options: qData.options,
-        correctOption: qData.correctOption,
-        explanation: qData.explanation,
-      },
-    ],
+    questions: [{
+      questionText: qData.questionText,
+      codeSnippet: qData.codeSnippet,
+      options: qData.options,
+      correctOption: qData.correctOption,
+      explanation: qData.explanation,
+    }],
   });
 
   const question = createdQuiz.quiz_questions[0];
   const messagePayload = buildQuizMessage(createdQuiz, question);
-  const sentMessage = await targetChannel.send({
-    content: '🔔 **@everyone — Today\'s Daily Tech Challenge is Live!** 🧠\nTest your knowledge, keep your daily streak burning, and climb the leaderboard:',
-    ...messagePayload,
-  });
+  let sentMessage;
+  try {
+    sentMessage = await targetChannel.send({
+      content: '🔔 **@everyone — Today\'s Daily Tech Challenge is Live!** 🧠\nTest your knowledge, keep your daily streak burning, and climb the leaderboard:',
+      ...messagePayload,
+    });
+  } catch (error) {
+    await deleteDraftQuiz(createdQuiz.id).catch((cleanupError) => {
+      logger.error('Failed to clean up draft after Discord delivery failure', {
+        quizId: createdQuiz.id,
+        error: cleanupError.message,
+      });
+    });
+    throw error;
+  }
 
   const activeQuiz = await publishQuiz(createdQuiz.id, {
     messageId: sentMessage.id,
@@ -166,6 +200,8 @@ export async function publishDailyQuiz({ client, channelId, questionData = null,
   logger.info('Daily quiz published successfully', {
     quizId: activeQuiz.id,
     channelId: targetChannel.id,
+    channelName: targetChannel.name || 'unknown',
+    guildId: targetChannel.guildId,
     messageId: sentMessage.id,
   });
 
@@ -184,9 +220,8 @@ export async function handleQuizAnswerInteraction(interaction) {
   const [, quizId, selectedOption] = parts;
   const discordUser = interaction.user;
 
-  await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-
   try {
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     // 1. Ensure member profile exists
     const member = await upsertMember({
       discordId: discordUser.id,

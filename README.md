@@ -138,15 +138,23 @@ npm run dev
 | `DISCORD_CLIENT_ID` | ✅ | Application ID (General Information page) |
 | `DISCORD_GUILD_ID` | ✅ | Your HCC server ID |
 | `DISCORD_ANNOUNCEMENTS_CHANNEL_ID` | Phase 3 | Channel for daily quiz announcements |
-| `DISCORD_QUIZ_CHANNEL_ID` | Phase 3 | Channel where quizzes are posted |
+| `DISCORD_QUIZ_CHANNEL_ID` | ✅ for daily quiz | Channel where quizzes are posted; must belong to `DISCORD_GUILD_ID` |
 | `DISCORD_LEADERBOARD_CHANNEL_ID` | Phase 4 | Channel for leaderboard posts |
 | `DISCORD_LOGS_CHANNEL_ID` | Optional | Channel for bot activity logs |
 | `SUPABASE_URL` | Phase 2 | Supabase project URL |
 | `SUPABASE_ANON_KEY` | Phase 2 | Supabase anon/public key |
 | `SUPABASE_SERVICE_ROLE_KEY` | Phase 2 | Supabase service role key (keep secret!) |
 | `TZ` | Optional | Timezone for scheduling (default: `Asia/Kolkata`) |
-| `QUIZ_POST_TIME` | Phase 3 | Daily quiz time in HH:MM format |
+| `QUIZ_POST_TIME` | Optional | Daily quiz time in HH:MM format (default: `09:00`) |
 | `ADMIN_ROLE_NAME` | Phase 6 | Discord role name with admin access |
+| `NODE_ENV` | Optional | Runtime environment (default: `development`) |
+| `LOG_LEVEL` | Optional | Logger verbosity (default: `info`) |
+| `PORT` | Optional | Health-check server port (default: `8080`) |
+
+The daily schedule uses `node-cron` with the `TZ` timezone (default `Asia/Kolkata`).
+The bot validates the configured quiz channel's guild and required send/embed permissions
+before delivery. Apply all SQL files in `migrations/` in order, including
+`003_daily_quiz_integrity.sql`, before starting the bot.
 
 ---
 
@@ -225,4 +233,3 @@ For questions, reach out in the HCC Discord server.
 ---
 
 *HCC AutoEngage is an open-source community project. It is not affiliated with or endorsed by HackerRank.*
-
