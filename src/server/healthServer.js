@@ -71,3 +71,4 @@ export function startHealthServer(client, port = process.env.PORT || 8080) {
 
   return server;
 }
+
