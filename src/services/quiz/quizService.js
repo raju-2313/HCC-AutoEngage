@@ -21,7 +21,7 @@ import {
 } from '../../database/queries/quizzes.js';
 import { upsertMember, getMemberByDiscordId } from '../../database/queries/members.js';
 import { submitQuizAttempt, hasMemberAttempted } from '../../database/queries/attempts.js';
-import { getDailyQuestion } from './questionBank.js';
+import { getDailyQuestion, getKolkataDateString } from './questionBank.js';
 
 // ─── Visual constants ────────────────────────────────────────────────────────
 
@@ -138,7 +138,7 @@ export async function publishDailyQuiz({ client, channelId, questionData = null,
     difficulty: qData.difficulty,
     pointsReward: qData.pointsReward,
     xpReward: qData.xpReward,
-    scheduledFor: scheduledFor || new Date().toISOString().split('T')[0],
+    scheduledFor: scheduledFor || getKolkataDateString(),
     createdBy: 'system',
     questions: [
       {

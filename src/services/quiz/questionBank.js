@@ -331,9 +331,36 @@ export function getRandomSampleQuestions(count = 10) {
 }
 
 /**
- * Returns a deterministic daily question based on date string.
+ * Curated 7-day scheduled questions for community testing sprint.
+ * Maps 'YYYY-MM-DD' (Asia/Kolkata) to Question Bank ID.
  */
-export function getDailyQuestion(daySeed = new Date().toISOString().split('T')[0]) {
+export const SCHEDULED_QUESTIONS = {
+  '2026-11-07': 'js-002',   // Day 1 (Sat): JavaScript Closures & Scoping
+  '2026-11-08': 'py-001',   // Day 2 (Sun): Python Default Mutable Arguments
+  '2026-11-09': 'dsa-002',  // Day 3 (Mon): DSA Binary Search Tree Traversal
+  '2026-11-10': 'sql-001',  // Day 4 (Tue): SQL JOIN Semantics
+  '2026-11-11': 'git-001',  // Day 5 (Wed): Git Merge vs Rebase
+  '2026-11-12': 'web-002',  // Day 6 (Thu): Web HTTP 401 vs 403
+  '2026-11-13': 'sys-001',  // Day 7 (Fri): Systems Process vs Thread
+};
+
+/**
+ * Returns the current date in Asia/Kolkata timezone formatted as YYYY-MM-DD.
+ */
+export function getKolkataDateString(date = new Date()) {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(date);
+}
+
+/**
+ * Returns a deterministic daily question based on date string (defaults to Asia/Kolkata current date).
+ * Checks the curated SCHEDULED_QUESTIONS calendar first, then falls back to hash-based selection.
+ */
+export function getDailyQuestion(daySeed = getKolkataDateString()) {
+  if (SCHEDULED_QUESTIONS[daySeed]) {
+    const scheduled = QUESTION_BANK.find((q) => q.id === SCHEDULED_QUESTIONS[daySeed]);
+    if (scheduled) return scheduled;
+  }
+
   let hash = 0;
   for (let i = 0; i < daySeed.length; i++) {
     hash = (hash << 5) - hash + daySeed.charCodeAt(i);
