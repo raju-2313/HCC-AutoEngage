@@ -26,11 +26,13 @@ const COMMAND_GROUPS = [
     ],
   },
   {
-    name: '🏆 Points & Leaderboard  *(coming in Phase 4)*',
+    name: '🏆 Points & Leaderboard  *(Active)*',
     commands: [
-      { name: '/leaderboard weekly',  desc: 'Weekly top-10 ranking.' },
-      { name: '/leaderboard monthly', desc: 'Monthly top-10 ranking.' },
-      { name: '/profile',             desc: 'Your XP, points and achievements.' },
+      { name: '/leaderboard weekly',  desc: 'Top 10 members by points earned in the last 7 days.' },
+      { name: '/leaderboard monthly', desc: 'Top 10 members by points earned this calendar month.' },
+      { name: '/leaderboard alltime', desc: 'Top 10 members by all-time total points.' },
+      { name: '/profile',             desc: 'Your XP, level, points, streaks, and achievement badges.' },
+      { name: '/profile @user',       desc: 'View another member\'s profile.' },
     ],
   },
   {
