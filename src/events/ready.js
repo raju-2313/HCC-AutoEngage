@@ -1,9 +1,10 @@
 /**
  * src/events/ready.js
  * Fires once when the bot successfully connects to the Discord Gateway.
- * Uses 'ready' — the standard Discord.js v14 event name.
- * Note: 'clientReady' is an alias that is unreliable in some v14 versions;
- * 'ready' is always fired and is the safe cross-version choice.
+ *
+ * Uses 'clientReady' — the correct event name in Discord.js v14.
+ * ('ready' also works in v14 but emits a deprecation warning; it will be
+ *  removed in v15. Always use 'clientReady' for v14+ compatibility.)
  */
 
 import { ActivityType } from 'discord.js';
@@ -11,7 +12,7 @@ import { logger } from '../utils/logger.js';
 import { initScheduler } from '../services/automation/scheduler.js';
 import { initializeVoiceRecovery } from '../services/voice/voiceService.js';
 
-export const name = 'ready';
+export const name = 'clientReady';
 export const once = true;
 
 export function execute(client) {
