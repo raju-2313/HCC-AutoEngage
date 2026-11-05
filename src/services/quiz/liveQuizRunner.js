@@ -131,7 +131,10 @@ export async function runLiveQuizSession({
     .setFooter({ text: 'HCC AutoEngage • HackerRank Campus Crew  │  Answers are private to each member' })
     .setTimestamp();
 
-  await channel.send({ embeds: [introEmbed] });
+  await channel.send({
+    content: '⚡ **@everyone — A Live Tech Quiz Challenge is starting right now!** 🎯 Hop in and test your speed!',
+    embeds: [introEmbed],
+  });
 
   // Animated countdown before Q1
   await animatedCountdown(channel, 5);
