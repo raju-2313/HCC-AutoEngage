@@ -47,12 +47,49 @@ async function main() {
   // Register event listeners
   await loadEvents(client);
 
-  // Connect to Discord Gateway
-  logger.info('Connecting to Discord Gateway…');
-  await client.login(config.discord.token);
+  // Shard & Gateway connectivity monitoring
+  client.rest.on('rateLimited', (info) => {
+    logger.warn('Discord API rate limited', {
+      timeToReset: info.timeToReset,
+      limit: info.limit,
+      method: info.method,
+      url: info.url,
+      global: info.global,
+    });
+  });
 
-  // Start Production Health Check HTTP Server (port 8080 or PORT env)
+  client.on('shardError', (error, shardId) => {
+    logger.error(`Discord Shard ${shardId} encountered an error`, { error: error.message });
+  });
+
+  client.on('shardDisconnect', (event, shardId) => {
+    logger.warn(`Discord Shard ${shardId} disconnected`, { code: event.code, reason: event.reason });
+  });
+
+  client.on('shardReconnecting', (shardId) => {
+    logger.info(`Discord Shard ${shardId} reconnecting…`);
+  });
+
+  client.on('shardResume', (shardId, replayedEvents) => {
+    logger.info(`Discord Shard ${shardId} resumed connection`, { replayedEvents });
+  });
+
+  // Start Production Health Check HTTP Server immediately (port 8080 or PORT env)
   const healthServer = startHealthServer(client);
+
+  // Connect to Discord Gateway
+  const cleanToken = (config.discord.token || '').trim().replace(/^["']|["']$/g, '');
+  logger.info(`Connecting to Discord Gateway (token length: ${cleanToken.length})…`);
+
+  try {
+    await client.login(cleanToken);
+    logger.info('Discord Gateway login initialized successfully.');
+  } catch (err) {
+    logger.error('Discord Gateway authentication error', {
+      error: err.message,
+      stack: err.stack,
+    });
+  }
 
   // ── Graceful shutdown ──────────────────────────────────────────────────────
   const shutdown = async (signal) => {
