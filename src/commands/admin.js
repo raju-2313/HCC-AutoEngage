@@ -35,8 +35,7 @@ const HR = '┄'.repeat(28);
 
 export const data = new SlashCommandBuilder()
   .setName('admin')
-  .setDescription('HCC AutoEngage administrative commands (Admin only).')
-  .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+  .setDescription('HCC AutoEngage administrative and moderator commands.')
   .addSubcommand((sub) =>
     sub
       .setName('stats')
@@ -126,7 +125,7 @@ export async function execute(interaction) {
       embeds: [
         errorEmbed(
           'Access Denied',
-          'You need Administrator permissions or the designated `HCC Admin` role to execute this command.'
+          `You need Administrator permissions or the designated \`${config.app.adminRoleName}\` role to execute this command.`
         ),
       ],
       flags: MessageFlags.Ephemeral,
@@ -316,3 +315,4 @@ export async function execute(interaction) {
     });
   }
 }
+
