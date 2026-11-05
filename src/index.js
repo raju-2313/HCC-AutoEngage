@@ -17,6 +17,7 @@ import { createClient } from './bot/client.js';
 import { loadEvents } from './bot/eventLoader.js';
 import { loadCommands } from './bot/commandLoader.js';
 import { testDatabaseConnection } from './database/client.js';
+import { startHealthServer } from './server/healthServer.js';
 
 async function main() {
   logger.info('═══════════════════════════════════════════');
@@ -50,9 +51,13 @@ async function main() {
   logger.info('Connecting to Discord Gateway…');
   await client.login(config.discord.token);
 
+  // Start Production Health Check HTTP Server (port 8080 or PORT env)
+  const healthServer = startHealthServer(client);
+
   // ── Graceful shutdown ──────────────────────────────────────────────────────
   const shutdown = async (signal) => {
     logger.info(`Received ${signal} – shutting down gracefully…`);
+    healthServer.close();
     client.destroy();
     logger.info('Discord client disconnected. Goodbye!');
     process.exit(0);
@@ -67,9 +72,11 @@ async function main() {
   });
 
   process.on('uncaughtException', (err) => {
-    logger.error('Uncaught exception', { error: err.message, stack: err.stack });
-    // Give the logger a tick to flush, then exit
-    setTimeout(() => process.exit(1), 500);
+    logger.error('Uncaught exception intercepted', { error: err.message, stack: err.stack });
+    // Keep process alive for non-fatal errors; exit only if fatal memory corruption
+    if (err.message && err.message.includes('out of memory')) {
+      setTimeout(() => process.exit(1), 500);
+    }
   });
 }
 
