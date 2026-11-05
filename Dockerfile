@@ -15,3 +15,4 @@ COPY . .
 
 # Run the Discord bot process
 CMD ["node", "src/index.js"]
+
