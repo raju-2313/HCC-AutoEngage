@@ -267,14 +267,18 @@ export async function awardCommunityContribution({
       stat_date: today,
     }, { onConflict: 'member_id,stat_date' });
 
-  await supabaseAdmin.rpc('record_points_transaction', {
-    p_discord_id: recipientDiscordId,
-    p_points_delta: Math.round(points),
-    p_xp_delta: Math.round(points * 2),
-    p_reason: `contribution:${type}`,
-    p_reference_id: data.id,
-    p_awarded_by: giverDiscordId,
-  }).catch(() => {});
+  try {
+    await supabaseAdmin.rpc('record_points_transaction', {
+      p_discord_id: recipientDiscordId,
+      p_points_delta: Math.round(points),
+      p_xp_delta: Math.round(points * 2),
+      p_reason: `contribution:${type}`,
+      p_reference_id: data.id,
+      p_awarded_by: giverDiscordId,
+    });
+  } catch (err) {
+    logger.warn('Points transaction for contribution skipped', { error: err.message });
+  }
 
   return data;
 }
@@ -361,3 +365,4 @@ export async function getMemberEngagementSummary(discordId) {
     },
   };
 }
+
