@@ -6,6 +6,7 @@
 
 import { ActivityType } from 'discord.js';
 import { logger } from '../utils/logger.js';
+import { initScheduler } from '../services/automation/scheduler.js';
 
 export const name = 'clientReady';
 export const once = true;
@@ -16,6 +17,9 @@ export function execute(client) {
     guilds: client.guilds.cache.size,
     users:  client.guilds.cache.reduce((acc, g) => acc + g.memberCount, 0),
   });
+
+  // Initialize Automation Scheduler (Phase 5)
+  initScheduler(client);
 
   // Set a rotating presence
   const activities = [
