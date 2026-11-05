@@ -152,3 +152,4 @@ export async function closeQuiz(quizId) {
   }
   return data;
 }
+

@@ -64,18 +64,19 @@ export const supabasePublic = getPublicClient();
 export async function testDatabaseConnection() {
   try {
     const client = getAdminClient();
-    // Quick query to check connection - count from members
+    // Perform a real GET query with limit 1 to accurately detect table existence
     const { error } = await client
       .from('members')
-      .select('id', { count: 'exact', head: true });
+      .select('id')
+      .limit(1);
 
     if (error) {
-      // If table doesn't exist yet (migrations pending), that's an informative state
-      if (error.code === '42P01') {
+      // PGRST205 = table not in schema cache; 42P01 = undefined_table in Postgres
+      if (error.code === 'PGRST205' || error.code === '42P01') {
         return {
           ok: false,
           code: 'TABLES_NOT_FOUND',
-          message: 'Connected to Supabase, but required tables were not found. Please run migrations/001_initial_schema.sql in the Supabase SQL Editor.',
+          message: 'Connected to Supabase, but required tables were not found in the schema cache. Please execute migrations/001_initial_schema.sql in your Supabase SQL Editor.',
         };
       }
       return {
@@ -94,3 +95,4 @@ export async function testDatabaseConnection() {
     return { ok: false, code: 'CONNECTION_FAILED', message: err.message };
   }
 }
+

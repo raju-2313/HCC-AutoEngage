@@ -7,6 +7,30 @@ import { supabaseAdmin } from '../client.js';
 import { logger } from '../../utils/logger.js';
 
 /**
+ * Submits a quiz attempt using atomic PostgreSQL transaction procedure.
+ * Validates active quiz, checks answer key, records attempt with unique lock,
+ * and updates member points/streaks atomically in a single ACID transaction.
+ */
+export async function submitQuizAttempt({ quizId, discordId, selectedOption }) {
+  const { data, error } = await supabaseAdmin.rpc('submit_quiz_attempt', {
+    p_quiz_id: quizId,
+    p_discord_id: discordId,
+    p_selected_option: selectedOption,
+  });
+
+  if (error) {
+    if (error.code === '23505' || error.message?.includes('duplicate key')) {
+      logger.warn('Duplicate quiz attempt prevented via RPC', { quizId, discordId });
+      throw new Error('DUPLICATE_ATTEMPT');
+    }
+    logger.error('Error in submitQuizAttempt RPC', { quizId, discordId, error: error.message });
+    throw error;
+  }
+
+  return data && data.length > 0 ? data[0] : null;
+}
+
+/**
  * Checks whether a member has already submitted an answer for a specific quiz.
  * @returns {Promise<boolean>}
  */
@@ -84,3 +108,4 @@ export async function getMemberQuizAttempts(discordId, limit = 10) {
   }
   return data || [];
 }
+
