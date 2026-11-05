@@ -83,12 +83,13 @@ async function main() {
 
   try {
     await client.login(cleanToken);
-    logger.info('Discord Gateway login initialized successfully.');
+    logger.info('Discord Gateway login call returned — awaiting READY event…');
   } catch (err) {
     logger.error('Discord Gateway authentication error', {
       error: err.message,
       stack: err.stack,
     });
+    process.exit(1); // Force restart on bad token
   }
 
   // ── Graceful shutdown ──────────────────────────────────────────────────────
