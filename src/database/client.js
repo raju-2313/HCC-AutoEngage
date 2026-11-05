@@ -9,8 +9,14 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
+import WebSocket from 'ws';
 import { config } from '../config/index.js';
 import { logger } from '../utils/logger.js';
+
+// Polyfill global WebSocket for Supabase Realtime in containerized/Node environments
+if (!globalThis.WebSocket) {
+  globalThis.WebSocket = WebSocket;
+}
 
 let adminClient = null;
 let publicClient = null;
@@ -30,6 +36,9 @@ export function getAdminClient() {
         persistSession: false,
         autoRefreshToken: false,
       },
+      realtime: {
+        transport: WebSocket,
+      },
     });
   }
   return adminClient;
@@ -45,6 +54,9 @@ export function getPublicClient() {
     publicClient = createClient(config.supabase.url, key, {
       auth: {
         persistSession: false,
+      },
+      realtime: {
+        transport: WebSocket,
       },
     });
   }
