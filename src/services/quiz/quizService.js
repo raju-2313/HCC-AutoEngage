@@ -9,6 +9,7 @@ import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
+  MessageFlags,
 } from 'discord.js';
 import { logger } from '../../utils/logger.js';
 import { COLORS } from '../../utils/embeds.js';
@@ -132,7 +133,7 @@ export async function handleQuizAnswerInteraction(interaction) {
   const discordUser = interaction.user;
 
   // Defer reply ephemerally so answers/feedback stay completely private
-  await interaction.deferReply({ ephemeral: true });
+  await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
   try {
     // 1. Ensure member profile exists in members table
@@ -232,3 +233,4 @@ export async function handleQuizAnswerInteraction(interaction) {
     });
   }
 }
+

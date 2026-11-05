@@ -3,7 +3,7 @@
  * Slash commands for members: /quiz today, /quiz stats
  */
 
-import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder, EmbedBuilder, MessageFlags } from 'discord.js';
 import { getActiveQuiz } from '../database/queries/quizzes.js';
 import { getMemberByDiscordId } from '../database/queries/members.js';
 import { getMemberQuizAttempts } from '../database/queries/attempts.js';
@@ -29,7 +29,7 @@ export async function execute(interaction) {
 
   // ── Subcommand: /quiz today ─────────────────────────────────────────────────
   if (subcommand === 'today') {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
     const activeQuiz = await getActiveQuiz();
     if (!activeQuiz || !activeQuiz.quiz_questions || activeQuiz.quiz_questions.length === 0) {
@@ -55,7 +55,7 @@ export async function execute(interaction) {
 
   // ── Subcommand: /quiz stats ─────────────────────────────────────────────────
   if (subcommand === 'stats') {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
     const member = await getMemberByDiscordId(interaction.user.id);
     if (!member || member.quizzes_completed === 0) {
@@ -109,3 +109,4 @@ export async function execute(interaction) {
     return interaction.editReply({ embeds: [statsEmbed] });
   }
 }
+
