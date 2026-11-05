@@ -13,11 +13,6 @@ import WebSocket from 'ws';
 import { config } from '../config/index.js';
 import { logger } from '../utils/logger.js';
 
-// Polyfill global WebSocket for Supabase Realtime in containerized/Node environments
-if (!globalThis.WebSocket) {
-  globalThis.WebSocket = WebSocket;
-}
-
 let adminClient = null;
 let publicClient = null;
 
