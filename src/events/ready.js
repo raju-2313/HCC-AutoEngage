@@ -1,12 +1,13 @@
 /**
  * src/events/ready.js
  * Fires once when the bot successfully connects to the Discord Gateway.
+ * Uses 'clientReady' (renamed from 'ready' in discord.js v14.16+).
  */
 
 import { ActivityType } from 'discord.js';
 import { logger } from '../utils/logger.js';
 
-export const name = 'ready';
+export const name = 'clientReady';
 export const once = true;
 
 export function execute(client) {
@@ -36,3 +37,4 @@ export function execute(client) {
   rotate();
   setInterval(rotate, 30_000); // rotate every 30 s
 }
+
