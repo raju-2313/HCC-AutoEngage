@@ -23,9 +23,10 @@ export function createClient() {
     intents: [
       GatewayIntentBits.Guilds,
       GatewayIntentBits.GuildMessages,
-      // GatewayIntentBits.GuildMembers, // Phase 6: enable after turning on in Dev Portal
+      GatewayIntentBits.GuildMessageReactions,
+      GatewayIntentBits.GuildVoiceStates,
     ],
-    partials: [Partials.Channel],
+    partials: [Partials.Channel, Partials.Message, Partials.Reaction],
     // Disable unnecessary caching to reduce memory footprint
     sweepers: {
       messages: { interval: 300, lifetime: 600 },

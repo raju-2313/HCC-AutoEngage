@@ -7,6 +7,7 @@
 import { ActivityType } from 'discord.js';
 import { logger } from '../utils/logger.js';
 import { initScheduler } from '../services/automation/scheduler.js';
+import { initializeVoiceRecovery } from '../services/voice/voiceService.js';
 
 export const name = 'clientReady';
 export const once = true;
@@ -20,6 +21,9 @@ export function execute(client) {
 
   // Initialize Automation Scheduler (Phase 5)
   initScheduler(client);
+
+  // Initialize Voice Session Recovery (Community Engine)
+  initializeVoiceRecovery(client);
 
   // Set a rotating presence
   const activities = [

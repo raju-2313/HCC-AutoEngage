@@ -26,11 +26,19 @@ const COMMAND_GROUPS = [
     ],
   },
   {
-    name: '🏆 Points & Leaderboard  *(Active)*',
+    name: '🌟 Community Engagement & Overall Leaderboards  *(New)*',
     commands: [
-      { name: '/leaderboard weekly',  desc: 'Top 10 members by points earned in the last 7 days.' },
-      { name: '/leaderboard monthly', desc: 'Top 10 members by points earned this calendar month.' },
-      { name: '/leaderboard alltime', desc: 'Top 10 members by all-time total points.' },
+      { name: '/leaderboard overall',  desc: 'Primary community ranking (Learning 40%, Text 25%, Voice 15%, Reactions 10%, Contributions 10%).' },
+      { name: '/leaderboard learning', desc: 'Learning & challenges leaderboard (Quizzes & XP).' },
+      { name: '/leaderboard social',   desc: 'Discussion & text channel participation ranking.' },
+      { name: '/leaderboard voice',    desc: 'Voice study session participation ranking.' },
+      { name: '/engagement me',        desc: 'Your 30-day personal engagement scorecard & category breakdown.' },
+      { name: '/engagement thank',     desc: 'Acknowledge and thank a peer for helpful contributions (+5 pts).' },
+    ],
+  },
+  {
+    name: '🏆 Points & Profile',
+    commands: [
       { name: '/profile',             desc: 'Your XP, level, points, streaks, and achievement badges.' },
       { name: '/profile @user',       desc: 'View another member\'s profile.' },
     ],
