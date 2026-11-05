@@ -7,6 +7,7 @@
  *   - Python
  *   - Data Structures & Algorithms
  *   - Web & Databases (SQL / HTTP)
+ *   - Git & Linux & Architecture
  *
  * Difficulty tiers: 'beginner' | 'advanced'
  */
@@ -17,7 +18,7 @@ export const QUESTION_BANK = [
     id: 'js-001',
     category: 'javascript',
     difficulty: 'beginner',
-    title: 'Daily Tech Quiz: JavaScript Type Coercion',
+    title: 'JavaScript Type Coercion',
     questionText: 'What is the output of the following JavaScript expression?',
     codeSnippet: 'console.log([] + []);',
     options: [
@@ -35,7 +36,7 @@ export const QUESTION_BANK = [
     id: 'js-002',
     category: 'javascript',
     difficulty: 'beginner',
-    title: 'Daily Tech Quiz: JavaScript Variable Scoping',
+    title: 'JavaScript Closures & Scoping',
     questionText: 'What does the following code log to the console?',
     codeSnippet: 'for (var i = 0; i < 3; i++) {\n  setTimeout(() => console.log(i), 0);\n}',
     options: [
@@ -55,8 +56,8 @@ export const QUESTION_BANK = [
     id: 'js-003',
     category: 'javascript',
     difficulty: 'advanced',
-    title: 'Daily Tech Quiz: JavaScript Microtask Queue',
-    questionText: 'In what order will the numbers be logged?',
+    title: 'JavaScript Event Loop & Microtasks',
+    questionText: 'In what exact order will the numbers be logged?',
     codeSnippet: 'console.log(1);\nsetTimeout(() => console.log(2), 0);\nPromise.resolve().then(() => console.log(3));\nconsole.log(4);',
     options: [
       { id: 'A', text: '1, 4, 3, 2' },
@@ -65,7 +66,25 @@ export const QUESTION_BANK = [
       { id: 'D', text: '1, 3, 4, 2' },
     ],
     correctOption: 'A',
-    explanation: 'Synchronous execution logs 1 and 4 first. Promises use the Microtask queue, which has higher priority and drains completely before the Macrotask (Task) queue (setTimeout) is processed. Thus: 1, 4, 3, 2.',
+    explanation: 'Synchronous statements log 1 and 4 first. Promises use the Microtask queue, which has higher priority and drains completely before the Macrotask (Task) queue (setTimeout) is processed. Thus: 1, 4, 3, 2.',
+    pointsReward: 15,
+    xpReward: 30,
+  },
+  {
+    id: 'js-004',
+    category: 'javascript',
+    difficulty: 'advanced',
+    title: 'JavaScript Strict Equality & NaN',
+    questionText: 'What is the output of the following comparison in JavaScript?',
+    codeSnippet: 'console.log(NaN === NaN, Object.is(NaN, NaN));',
+    options: [
+      { id: 'A', text: 'true true' },
+      { id: 'B', text: 'false false' },
+      { id: 'C', text: 'false true' },
+      { id: 'D', text: 'true false' },
+    ],
+    correctOption: 'C',
+    explanation: 'In JavaScript (and IEEE 754 floating point standard), NaN is the only value not equal to itself, so NaN === NaN evaluates to false. Object.is() uses SameValue equality, which treats NaN as equal to NaN.',
     pointsReward: 15,
     xpReward: 30,
   },
@@ -75,7 +94,7 @@ export const QUESTION_BANK = [
     id: 'py-001',
     category: 'python',
     difficulty: 'beginner',
-    title: 'Daily Tech Quiz: Python Default Mutable Arguments',
+    title: 'Python Default Mutable Arguments',
     questionText: 'What is the output of calling append_to() twice as shown?',
     codeSnippet: 'def append_to(element, target=[]):\n    target.append(element)\n    return target\n\nprint(append_to(1))\nprint(append_to(2))',
     options: [
@@ -85,7 +104,7 @@ export const QUESTION_BANK = [
       { id: 'D', text: 'TypeError: mutable default argument' },
     ],
     correctOption: 'B',
-    explanation: 'In Python, default arguments are evaluated only once when the function is defined, not each time it is called. The same list object is mutated across calls. The idiomatic pattern is: def append_to(element, target=None): if target is None: target = [].',
+    explanation: 'In Python, default arguments are evaluated only once when the function is defined, not each time it is called. The same list object is mutated across calls. The safe idiom is: def append_to(element, target=None): if target is None: target = [].',
     pointsReward: 10,
     xpReward: 20,
   },
@@ -95,7 +114,7 @@ export const QUESTION_BANK = [
     id: 'py-002',
     category: 'python',
     difficulty: 'advanced',
-    title: 'Daily Tech Quiz: Python GIL & Concurrency',
+    title: 'Python GIL & Concurrency',
     questionText: 'Which statement accurately describes Python’s Global Interpreter Lock (GIL) in CPython?',
     codeSnippet: null,
     options: [
@@ -115,7 +134,7 @@ export const QUESTION_BANK = [
     id: 'dsa-001',
     category: 'dsa',
     difficulty: 'beginner',
-    title: 'Daily Tech Quiz: Hash Table Complexity',
+    title: 'Hash Table Search Complexity',
     questionText: 'What is the average time complexity for searching a key in a standard Hash Table (assuming a good hash function)?',
     codeSnippet: null,
     options: [
@@ -125,7 +144,7 @@ export const QUESTION_BANK = [
       { id: 'D', text: 'O(N log N)' },
     ],
     correctOption: 'B',
-    explanation: 'Under simple uniform hashing, keys are distributed uniformly across buckets, yielding O(1) average lookup, insertion, and deletion. The worst-case is O(N) when all keys hash to the same bucket (collision collapse).',
+    explanation: 'Under simple uniform hashing, keys are distributed uniformly across buckets, yielding O(1) average lookup, insertion, and deletion. The worst-case is O(N) when all keys hash to the same bucket.',
     pointsReward: 10,
     xpReward: 20,
   },
@@ -135,7 +154,7 @@ export const QUESTION_BANK = [
     id: 'dsa-002',
     category: 'dsa',
     difficulty: 'advanced',
-    title: 'Daily Tech Quiz: Binary Search Tree Property',
+    title: 'Binary Search Tree Traversal',
     questionText: 'Which tree traversal of a valid Binary Search Tree (BST) visits nodes in strictly ascending sorted order?',
     codeSnippet: null,
     options: [
@@ -149,13 +168,31 @@ export const QUESTION_BANK = [
     pointsReward: 15,
     xpReward: 30,
   },
+  {
+    id: 'dsa-003',
+    category: 'dsa',
+    difficulty: 'advanced',
+    title: 'Two Pointer & Space Complexity',
+    questionText: 'Floyd’s Cycle-Finding Algorithm (Tortoise and Hare) detects a cycle in a linked list using which space complexity?',
+    codeSnippet: null,
+    options: [
+      { id: 'A', text: 'O(1) auxiliary space' },
+      { id: 'B', text: 'O(N) auxiliary space' },
+      { id: 'C', text: 'O(log N) auxiliary space' },
+      { id: 'D', text: 'O(N²) auxiliary space' },
+    ],
+    correctOption: 'A',
+    explanation: 'Floyd’s algorithm uses only two pointer references (a slow pointer advancing 1 step and a fast pointer advancing 2 steps). Since no extra data structures (like a Set or Hash Table) are allocated, it runs in strictly O(1) auxiliary space.',
+    pointsReward: 15,
+    xpReward: 30,
+  },
 
-  // ── SQL / Databases: Beginner ──────────────────────────────────────────────
+  // ── Databases / SQL ────────────────────────────────────────────────────────
   {
     id: 'sql-001',
     category: 'databases',
     difficulty: 'beginner',
-    title: 'Daily Tech Quiz: SQL JOIN Semantics',
+    title: 'SQL JOIN Semantics',
     questionText: 'Which SQL JOIN returns all rows from the left table, and matching rows from the right table (filling with NULL if no match)?',
     codeSnippet: null,
     options: [
@@ -165,17 +202,15 @@ export const QUESTION_BANK = [
       { id: 'D', text: 'CROSS JOIN' },
     ],
     correctOption: 'B',
-    explanation: 'A LEFT JOIN returns all records from the left table (table1), and the matched records from the right table (table2). If there is no match, the result contains NULL values for every column of the right table.',
+    explanation: 'A LEFT JOIN returns all records from the left table, and the matched records from the right table. If there is no match on the join predicate, the result contains NULL values for every column of the right table.',
     pointsReward: 10,
     xpReward: 20,
   },
-
-  // ── SQL / Databases: Advanced ──────────────────────────────────────────────
   {
     id: 'sql-002',
     category: 'databases',
     difficulty: 'advanced',
-    title: 'Daily Tech Quiz: Database ACID Isolation Levels',
+    title: 'Database ACID Isolation Levels',
     questionText: 'Which SQL isolation level protects against Dirty Reads and Non-Repeatable Reads, but may still allow Phantom Reads in the ANSI standard?',
     codeSnippet: null,
     options: [
@@ -185,9 +220,87 @@ export const QUESTION_BANK = [
       { id: 'D', text: 'Serializable' },
     ],
     correctOption: 'C',
-    explanation: 'According to the ANSI SQL-92 standard, Repeatable Read prevents both Dirty Reads and Non-Repeatable Reads, but permits Phantom Reads (new rows inserted by another transaction meeting search criteria). Serializable is the highest level, preventing all three anomalies.',
+    explanation: 'According to the ANSI SQL-92 standard, Repeatable Read prevents both Dirty Reads and Non-Repeatable Reads, but permits Phantom Reads (new rows inserted by another transaction meeting search criteria). Serializable prevents all three.',
     pointsReward: 15,
     xpReward: 30,
+  },
+
+  // ── Git & Version Control ──────────────────────────────────────────────────
+  {
+    id: 'git-001',
+    category: 'git',
+    difficulty: 'beginner',
+    title: 'Git Merge vs Rebase',
+    questionText: 'What is the primary difference between "git merge feature" and "git rebase main"?',
+    codeSnippet: null,
+    options: [
+      { id: 'A', text: 'Merge creates a new merge commit preserving branch history; rebase rewrites commit history onto the target base.' },
+      { id: 'B', text: 'Merge deletes the remote repository branch automatically; rebase preserves it.' },
+      { id: 'C', text: 'Rebase can only be used on uncommitted staging index changes.' },
+      { id: 'D', text: 'Merge is forbidden on public branches; rebase is always required on shared branches.' },
+    ],
+    correctOption: 'A',
+    explanation: 'git merge creates a join commit tying two histories together. git rebase reapplies your work on top of the target branch by creating new commits with different SHA-1 hashes, producing a linear, clean commit history.',
+    pointsReward: 10,
+    xpReward: 20,
+  },
+
+  // ── Web & HTTP Protocols ───────────────────────────────────────────────────
+  {
+    id: 'web-001',
+    category: 'web',
+    difficulty: 'beginner',
+    title: 'HTTP Idempotency',
+    questionText: 'Which of the following HTTP methods is NOT idempotent according to RFC 7231?',
+    codeSnippet: null,
+    options: [
+      { id: 'A', text: 'GET' },
+      { id: 'B', text: 'PUT' },
+      { id: 'C', text: 'DELETE' },
+      { id: 'D', text: 'POST' },
+    ],
+    correctOption: 'D',
+    explanation: 'An HTTP method is idempotent if the intended effect of multiple identical requests is the same as for a single request. GET, PUT, and DELETE are idempotent. POST is typically used to append/create new subordinate resources, producing different side effects on repeated calls.',
+    pointsReward: 10,
+    xpReward: 20,
+  },
+  {
+    id: 'web-002',
+    category: 'web',
+    difficulty: 'advanced',
+    title: 'HTTP Status 401 vs 403',
+    questionText: 'What is the fundamental semantic difference between HTTP 401 Unauthorized and HTTP 403 Forbidden?',
+    codeSnippet: null,
+    options: [
+      { id: 'A', text: '401 means authentication credentials are missing or invalid; 403 means the server understands identity but refuses authorization.' },
+      { id: 'B', text: '401 is a client error; 403 is a server internal error.' },
+      { id: 'C', text: '401 is only used with HTTPS; 403 is used with plain HTTP.' },
+      { id: 'D', text: 'There is no difference; they are interchangeable aliases.' },
+    ],
+    correctOption: 'A',
+    explanation: 'HTTP 401 (Unauthorized) indicates that the request lacks valid authentication credentials for the target resource. HTTP 403 (Forbidden) means the server understood who you are (authenticated), but your role/permissions do not grant access to the resource.',
+    pointsReward: 15,
+    xpReward: 30,
+  },
+
+  // ── Computer Systems / Architecture ────────────────────────────────────────
+  {
+    id: 'sys-001',
+    category: 'systems',
+    difficulty: 'beginner',
+    title: 'Process vs Thread',
+    questionText: 'What resource is shared by default between multiple threads belonging to the same process?',
+    codeSnippet: null,
+    options: [
+      { id: 'A', text: 'Thread Call Stack and CPU Registers' },
+      { id: 'B', text: 'Virtual Address Space, Heap Memory, and Open File Descriptors' },
+      { id: 'C', text: 'Process ID (PID) and Program Counter' },
+      { id: 'D', text: 'Thread Local Storage (TLS)' },
+    ],
+    correctOption: 'B',
+    explanation: 'Threads within the same process share the process’s virtual address space, heap memory, global variables, and OS handles (open file descriptors). Each thread maintains its own private call stack and register state (program counter).',
+    pointsReward: 10,
+    xpReward: 20,
   },
 ];
 
@@ -210,10 +323,17 @@ export function getQuestionsByFilter({ difficulty, category } = {}) {
 }
 
 /**
- * Returns a deterministic or randomized daily question.
+ * Returns a randomized or seeded sample of N questions from the bank.
+ */
+export function getRandomSampleQuestions(count = 10) {
+  const shuffled = [...QUESTION_BANK].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, Math.min(count, shuffled.length));
+}
+
+/**
+ * Returns a deterministic daily question based on date string.
  */
 export function getDailyQuestion(daySeed = new Date().toISOString().split('T')[0]) {
-  // Deterministic pick based on date string hash so everyone gets the same daily quiz
   let hash = 0;
   for (let i = 0; i < daySeed.length; i++) {
     hash = (hash << 5) - hash + daySeed.charCodeAt(i);
