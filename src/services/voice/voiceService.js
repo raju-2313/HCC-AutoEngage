@@ -103,3 +103,4 @@ export async function initializeVoiceRecovery(client) {
     logger.warn('Non-fatal error during voice session recovery', { error: err.message });
   }
 }
+

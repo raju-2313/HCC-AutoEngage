@@ -47,3 +47,4 @@ export async function execute(message) {
     logger.debug('Non-blocking error in messageCreate handler', { error: err.message });
   }
 }
+

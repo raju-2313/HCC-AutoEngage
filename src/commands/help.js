@@ -26,18 +26,16 @@ const COMMAND_GROUPS = [
     ],
   },
   {
-    name: '🌟 Community Engagement & Overall Leaderboards  *(New)*',
+    name: '🏆 Leaderboard & Community Rankings',
     commands: [
-      { name: '/leaderboard overall',  desc: 'Primary community ranking (Learning 40%, Text 25%, Voice 15%, Reactions 10%, Contributions 10%).' },
-      { name: '/leaderboard learning', desc: 'Learning & challenges leaderboard (Quizzes & XP).' },
-      { name: '/leaderboard social',   desc: 'Discussion & text channel participation ranking.' },
-      { name: '/leaderboard voice',    desc: 'Voice study session participation ranking.' },
-      { name: '/engagement me',        desc: 'Your 30-day personal engagement scorecard & category breakdown.' },
-      { name: '/engagement thank',     desc: 'Acknowledge and thank a peer for helpful contributions (+5 pts).' },
+      { name: '/leaderboard',         desc: 'View the unified HCC community leaderboard (Learning, Discussions, Voice, Reactions, and Contributions).' },
+      { name: '/leaderboard [timeframe]', desc: 'Switch directly between Weekly, Monthly, or All-Time standings.' },
+      { name: '/engagement me',       desc: 'Your 30-day personal engagement scorecard & category breakdown.' },
+      { name: '/engagement thank',    desc: 'Acknowledge and thank a peer for helpful contributions (+5 pts).' },
     ],
   },
   {
-    name: '🏆 Points & Profile',
+    name: '👤 Profile & Stats',
     commands: [
       { name: '/profile',             desc: 'Your XP, level, points, streaks, and achievement badges.' },
       { name: '/profile @user',       desc: 'View another member\'s profile.' },

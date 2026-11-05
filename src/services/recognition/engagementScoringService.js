@@ -1,45 +1,75 @@
 /**
  * src/services/recognition/engagementScoringService.js
- * Builds overall community engagement leaderboards, category views, and profile scorecards.
+ * Unified HCC Community Engagement Leaderboard Engine and Scorecard Builders.
  */
 
-import { EmbedBuilder } from 'discord.js';
+import {
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+} from 'discord.js';
 import { fetchEngagementLeaderboard, getMemberEngagementSummary } from '../../database/queries/engagement.js';
-import { COLORS } from '../../utils/embeds.js';
 
-const HR = '┄'.repeat(28);
+const HR = '┄'.repeat(30);
 const RANK_MEDALS = ['🥇', '🥈', '🥉'];
 
 function rankLabel(index) {
   return RANK_MEDALS[index] ?? `\`#${String(index + 1).padStart(2, '0')}\``;
 }
 
-function miniProgressBar(pct, segments = 8) {
+function miniProgressBar(pct, segments = 10) {
   const clamped = Math.max(0, Math.min(100, pct));
   const filled = Math.round((clamped / 100) * segments);
   return '█'.repeat(filled) + '░'.repeat(segments - filled);
 }
 
-// ─── 1. Overall Community Engagement Leaderboard ──────────────────────────────
+// ─── Interactive Timeframe ActionRow ──────────────────────────────────────────
+
+export function buildLeaderboardActionRow(activePeriod = 'weekly') {
+  return new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setCustomId('lb_view:weekly')
+      .setLabel('Weekly')
+      .setEmoji('⚡')
+      .setStyle(activePeriod === 'weekly' ? ButtonStyle.Primary : ButtonStyle.Secondary),
+    new ButtonBuilder()
+      .setCustomId('lb_view:monthly')
+      .setLabel('Monthly')
+      .setEmoji('📅')
+      .setStyle(activePeriod === 'monthly' ? ButtonStyle.Primary : ButtonStyle.Secondary),
+    new ButtonBuilder()
+      .setCustomId('lb_view:all_time')
+      .setLabel('All-Time')
+      .setEmoji('🏆')
+      .setStyle(activePeriod === 'all_time' ? ButtonStyle.Primary : ButtonStyle.Secondary)
+  );
+}
+
+// ─── Unified Overall Community Engagement Leaderboard ─────────────────────────
 
 export async function buildOverallLeaderboardEmbed(periodType = 'weekly') {
   const rows = await fetchEngagementLeaderboard(periodType, 10);
-  const periodLabel = periodType === 'weekly' ? 'Weekly' : periodType === 'monthly' ? 'Monthly' : 'All-Time';
+  const periodLabel = periodType === 'weekly' ? 'Weekly Standings (Last 7 Days)' : periodType === 'monthly' ? 'Monthly Standings' : 'All-Time Hall of Fame';
 
   const embed = new EmbedBuilder()
     .setColor(0x5865F2)
-    .setTitle(`🌟  HCC Overall Community Leaderboard — ${periodLabel}`)
+    .setTitle(`🏆  HCC Community Engagement Leaderboard`)
     .setDescription(
-      `> The primary ranking of students contributing across **Learning**, **Collaboration**, and **Community**.\n${HR}\n\n`
+      `## 🌟  ${periodLabel}\n` +
+      `> Overall community ranking balancing **Learning** (40%), **Discussions** (25%), **Voice** (15%), **Reactions** (10%), and **Contributions** (10%).\n${HR}\n\n`
     )
     .setFooter({
-      text: `HCC AutoEngage • Balanced Engagement (Learning 40% | Text 25% | Voice 15% | Reactions 10% | Contributions 10%)`,
+      text: 'HCC AutoEngage • Balanced multi-category ranking | Switch timeframes with buttons below',
     })
     .setTimestamp();
 
   if (rows.length === 0) {
     embed.setDescription(
-      `> *No engagement activity recorded yet for this period!*\n> _Start participating in tech channels, quizzes, and voice study sessions to climb!_\n\n${HR}`
+      `## 🌟  ${periodLabel}\n` +
+      `> Overall community ranking balancing **Learning** (40%), **Discussions** (25%), **Voice** (15%), **Reactions** (10%), and **Contributions** (10%).\n${HR}\n\n` +
+      `> *No engagement activity recorded yet for this period!*\n` +
+      `> _Start participating in tech channels, solving daily quizzes, and joining study sessions to take the #1 spot!_\n\n${HR}`
     );
     return embed;
   }
@@ -47,81 +77,40 @@ export async function buildOverallLeaderboardEmbed(periodType = 'weekly') {
   const lines = rows.map((r, i) => {
     const medal = rankLabel(i);
     const mention = r.discord_id ? `<@${r.discord_id}>` : `**${r.username}**`;
-    const scoreBar = miniProgressBar(r.overall_score, 8);
-    const breakdown = `\`L:${Math.round(r.learning_score)} T:${Math.round(r.text_score)} V:${Math.round(r.voice_score)} R:${Math.round(r.reaction_score)} C:${Math.round(r.contribution_score)}\``;
+    const scoreBar = miniProgressBar(r.overall_score, 10);
+    const breakdown = [
+      `🧠 Learn: \`${Math.round(r.learning_score)}%\``,
+      `💬 Chat: \`${Math.round(r.text_score)}%\``,
+      `🎙️ Voice: \`${Math.round(r.voice_score)}%\``,
+      `❤️ Support: \`${Math.round(r.reaction_score)}%\``,
+      `🤝 Collab: \`${Math.round(r.contribution_score)}%\``,
+    ].join('  ·  ');
 
     if (i < 3) {
       return (
         `${medal}  ${mention}\n` +
-        `╰  \`${scoreBar}\`  **${r.overall_score} Score**  ·  Breakdown: ${breakdown}`
+        `╰  \`${scoreBar}\`  **Overall Score: ${r.overall_score}**\n` +
+        `    ${breakdown}`
       );
     }
-    return `${medal}  ${mention} — **${r.overall_score}** pts  ·  ${breakdown}`;
+
+    return (
+      `${medal}  ${mention} — **${r.overall_score}** Score  ·  \`${scoreBar}\`\n` +
+      `    ${breakdown}`
+    );
   });
 
   embed.setDescription(
-    `> Primary community ranking (Learning 40% · Text 25% · Voice 15% · Reactions 10% · Contributions 10%)\n${HR}\n\n` +
+    `## 🌟  ${periodLabel}\n` +
+    `> Overall community ranking balancing **Learning** (40%), **Discussions** (25%), **Voice** (15%), **Reactions** (10%), and **Contributions** (10%).\n${HR}\n\n` +
     lines.join('\n\n') +
-    `\n\n${HR}\n_Scores are normalized across categories to reward balanced community contributions._`
+    `\n\n${HR}\n_Normalized across all 5 dimensions so learning, participation, and teamwork are all rewarded fairly._`
   );
 
   return embed;
 }
 
-// ─── 2. Category Leaderboards ─────────────────────────────────────────────────
-
-export async function buildCategoryLeaderboardEmbed(category = 'social', periodType = 'weekly') {
-  const rows = await fetchEngagementLeaderboard(periodType, 10);
-  const periodLabel = periodType === 'weekly' ? 'Weekly' : 'Monthly';
-
-  let title = '💬  Social & Text Engagement Leaderboard';
-  let color = COLORS.info;
-  let scoreGetter = (r) => r.text_score;
-  let metricLabel = 'Text Score';
-
-  if (category === 'voice') {
-    title = '🎙️  Voice & Study Session Leaderboard';
-    color = 0x9B59B6;
-    scoreGetter = (r) => r.voice_score;
-    metricLabel = 'Voice Score';
-  } else if (category === 'learning') {
-    title = '🧠  Learning & Challenge Leaderboard';
-    color = COLORS.primary;
-    scoreGetter = (r) => r.learning_score;
-    metricLabel = 'Learning Score';
-  }
-
-  // Sort rows by the specific category score
-  const sorted = [...rows].sort((a, b) => scoreGetter(b) - scoreGetter(a));
-
-  const embed = new EmbedBuilder()
-    .setColor(color)
-    .setTitle(`${title} — ${periodLabel}`)
-    .setTimestamp()
-    .setFooter({ text: 'HCC AutoEngage • HackerRank Campus Crew' });
-
-  if (sorted.length === 0 || scoreGetter(sorted[0]) === 0) {
-    embed.setDescription(`> *No activity recorded for ${metricLabel} during this period yet.*`);
-    return embed;
-  }
-
-  const lines = sorted.map((r, i) => {
-    const medal = rankLabel(i);
-    const mention = r.discord_id ? `<@${r.discord_id}>` : `**${r.username}**`;
-    const score = Math.round(scoreGetter(r));
-    const bar = miniProgressBar(score, 8);
-    return `${medal}  ${mention}\n╰  \`${bar}\`  **${score}** ${metricLabel}`;
-  });
-
-  embed.setDescription(
-    `> Ranked by ${metricLabel} (${periodLabel})\n${HR}\n\n` +
-    lines.join('\n\n')
-  );
-
-  return embed;
-}
-
-// ─── 3. Member Engagement Scorecard (/engagement me) ─────────────────────────
+// ─── Member Engagement Scorecard (/engagement me) ─────────────────────────────
 
 export async function buildMemberEngagementCard(discordUser) {
   const summary = await getMemberEngagementSummary(discordUser.id);
