@@ -36,6 +36,7 @@ import { getActiveQuiz, closeQuiz } from '../database/queries/quizzes.js';
 import { publishDailyQuiz } from '../services/quiz/quizService.js';
 import { QUESTION_BANK } from '../services/quiz/questionBank.js';
 import { runMonthlyWinnerJob } from '../services/automation/scheduler.js';
+import { postWeeklyAnnouncement } from '../services/recognition/weeklyAnnouncementService.js';
 import { logActivity } from '../database/queries/logs.js';
 
 const HR = '┄'.repeat(28);
@@ -102,6 +103,11 @@ export const data = new SlashCommandBuilder()
     group
       .setName('announce')
       .setDescription('Trigger server-wide community announcements.')
+      .addSubcommand((sub) =>
+        sub
+          .setName('weekly')
+          .setDescription('Broadcast the official Weekly Community Engagement Digest & Honors.')
+      )
       .addSubcommand((sub) =>
         sub
           .setName('winners')
@@ -340,7 +346,19 @@ export async function execute(interaction) {
       return interaction.editReply({ embeds: [embed] });
     }
 
-    // ── 5. /admin announce winners ────────────────────────────────────────────
+    // ── 5. /admin announce weekly & winners ──────────────────────────────────
+    if (group === 'announce' && sub === 'weekly') {
+      const result = await postWeeklyAnnouncement({ client: interaction.client });
+      return interaction.editReply({
+        embeds: [
+          successEmbed(
+            'Weekly Announcement Published',
+            `Successfully published the official **Weekly Community Engagement Roundup** to <#${result.channelId}>!`
+          ),
+        ],
+      });
+    }
+
     if (group === 'announce' && sub === 'winners') {
       const result = await runMonthlyWinnerJob(interaction.client);
 

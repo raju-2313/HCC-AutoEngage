@@ -21,6 +21,7 @@ import {
   buildMonthlyWinnerAnnouncement,
   takeLeaderboardSnapshot,
 } from '../recognition/leaderboardService.js';
+import { postWeeklyAnnouncement } from '../recognition/weeklyAnnouncementService.js';
 import { resetInactiveStreaks } from '../../database/queries/members.js';
 import { logActivity } from '../../database/queries/logs.js';
 
@@ -89,35 +90,15 @@ export async function runDailyQuizCloseJob() {
 }
 
 /**
- * Job 3: Weekly Leaderboard Drop & Snapshot
+ * Job 3: Weekly Leaderboard Drop & Snapshot (Official Community Roundup)
  */
 export async function runWeeklyLeaderboardJob(client) {
-  logger.info('⏰ Running scheduled task: Weekly Leaderboard Drop');
+  logger.info('⏰ Running scheduled task: Weekly Community Roundup & Leaderboard');
   try {
-    // 1. Take permanent snapshot in Supabase
-    await takeLeaderboardSnapshot('weekly');
-
-    // 2. Resolve destination channel
-    const targetChannel = await resolveChannel(
-      client,
-      config.discord.channels.leaderboard,
-      config.discord.channels.announcements,
-      config.discord.channels.quiz
-    );
-
-    if (targetChannel) {
-      const embed = await buildWeeklyLeaderboardEmbed();
-      await targetChannel.send({
-        content: '📢 **HCC Weekly Quiz Standings** are in! Check out our top contributors for the week:',
-        embeds: [embed],
-      });
-      logger.info('Weekly Leaderboard posted to channel', { channelId: targetChannel.id });
-    }
-
-    await logActivity('weekly_leaderboard_published', 'scheduler');
-    return { success: true };
+    const result = await postWeeklyAnnouncement({ client });
+    return result;
   } catch (err) {
-    logger.error('Failed to execute Weekly Leaderboard job', { error: err.message });
+    logger.error('Failed to execute Weekly Leaderboard announcement job', { error: err.message });
     return { success: false, error: err.message };
   }
 }
