@@ -225,3 +225,4 @@ For questions, reach out in the HCC Discord server.
 ---
 
 *HCC AutoEngage is an open-source community project. It is not affiliated with or endorsed by HackerRank.*
+

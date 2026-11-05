@@ -16,6 +16,7 @@ import { logger } from './utils/logger.js';
 import { createClient } from './bot/client.js';
 import { loadEvents } from './bot/eventLoader.js';
 import { loadCommands } from './bot/commandLoader.js';
+import { testDatabaseConnection } from './database/client.js';
 
 async function main() {
   logger.info('═══════════════════════════════════════════');
@@ -23,6 +24,18 @@ async function main() {
   logger.info(`  Environment : ${config.app.env}`);
   logger.info(`  Timezone    : ${config.app.timezone}`);
   logger.info('═══════════════════════════════════════════');
+
+  // Verify Supabase Database Connection
+  logger.info('Checking Supabase connection…');
+  const dbStatus = await testDatabaseConnection();
+  if (dbStatus.ok) {
+    logger.info('Supabase database connection verified ✅');
+  } else {
+    logger.warn('Supabase database check:', {
+      code: dbStatus.code,
+      message: dbStatus.message,
+    });
+  }
 
   // Create Discord client
   const client = createClient();
@@ -64,3 +77,4 @@ main().catch((err) => {
   console.error('Fatal startup error:', err);
   process.exit(1);
 });
+

@@ -48,3 +48,4 @@ export async function loadEvents(client) {
 
   logger.info(`Event handlers registered`, { count });
 }
+

@@ -35,9 +35,9 @@ export const config = {
     },
   },
   supabase: {
-    url:            optional_env('SUPABASE_URL'),
+    url:            require_env('SUPABASE_URL'),
     anonKey:        optional_env('SUPABASE_ANON_KEY'),
-    serviceRoleKey: optional_env('SUPABASE_SERVICE_ROLE_KEY'),
+    serviceRoleKey: require_env('SUPABASE_SERVICE_ROLE_KEY'),
   },
   app: {
     env:          process.env.NODE_ENV || 'development',
@@ -47,3 +47,4 @@ export const config = {
     adminRoleName: process.env.ADMIN_ROLE_NAME || 'HCC Admin',
   },
 };
+

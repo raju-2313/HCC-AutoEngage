@@ -56,3 +56,4 @@ deploy().catch((err) => {
   logger.error('Command deployment failed', { error: err.message });
   process.exit(1);
 });
+

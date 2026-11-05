@@ -47,3 +47,4 @@ export function primaryEmbed(title, description) {
     .setTimestamp()
     .setFooter({ text: 'HCC AutoEngage • HackerRank Campus Crew' });
 }
+
