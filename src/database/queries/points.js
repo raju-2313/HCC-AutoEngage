@@ -56,3 +56,4 @@ export async function getMemberPointsHistory(discordId, limit = 10) {
   }
   return data || [];
 }
+

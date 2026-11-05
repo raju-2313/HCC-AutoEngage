@@ -31,7 +31,7 @@ async function run() {
 
     console.log('\nChecking required tables:');
     for (const table of tables) {
-      const { error } = await supabaseAdmin.from(table).select('id', { count: 'exact', head: true });
+      const { error } = await supabaseAdmin.from(table).select('id').limit(1);
       if (error) {
         console.log(`  ❌ ${table.padEnd(25)} (Error: ${error.message})`);
       } else {
@@ -53,3 +53,4 @@ run().catch((err) => {
   console.error('Fatal test error:', err.message);
   process.exit(1);
 });
+
