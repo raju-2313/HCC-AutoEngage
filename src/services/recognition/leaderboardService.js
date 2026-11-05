@@ -54,26 +54,28 @@ function leaderboardFooter(count, period) {
 }
 
 /** Formats podium + table rows for standard leaderboard embeds */
-function formatLeaderboardRows(rows) {
+function formatLeaderboardRows(rows, showPeriodPoints = false) {
   if (!rows || rows.length === 0) {
     return '> *No quiz activity recorded yet for this period!*\n> _Take today\'s quiz via `/quiz today` to be the first on the board!_';
   }
 
-  const maxPoints = Math.max(1, rows[0]?.total_points || 1);
+  const maxPoints = Math.max(1, rows[0]?.period_points ?? rows[0]?.total_points ?? 1);
 
   return rows.map((m, i) => {
     const medal = rankLabel(i);
     const badge = levelBadge(m.level ?? 1);
-    const pts = signed(m.total_points ?? 0);
+    const userMention = m.discord_id ? `<@${m.discord_id}>` : `**${m.username}**`;
+    const ptsValue = showPeriodPoints ? (m.period_points ?? m.total_points ?? 0) : (m.total_points ?? 0);
+    const pts = signed(ptsValue);
     const xp = m.total_xp ? ` · ${m.total_xp} XP` : '';
-    const bar = '█'.repeat(Math.round(((m.total_points || 0) / maxPoints) * 8)).padEnd(8, '░');
+    const bar = '█'.repeat(Math.min(8, Math.max(1, Math.round(((ptsValue) / maxPoints) * 8)))).padEnd(8, '░');
 
     if (i < 3) {
-      // Highlight top 3 prominently
-      return `${medal}  **${m.username}**\n╰  \`${bar}\`  **${pts} pts**${xp}  ·  Lv ${m.level ?? 1} ${badge}`;
+      // Highlight top 3 prominently with user mention
+      return `${medal}  ${userMention}\n╰  \`${bar}\`  **${pts} pts**${xp}  ·  Lv ${m.level ?? 1} ${badge}`;
     }
     // Standard rows for 4-10
-    return `${medal}  **${m.username}** — \`${pts} pts\` · Lv ${m.level ?? 1} ${badge}`;
+    return `${medal}  ${userMention} — \`${pts} pts\` · Lv ${m.level ?? 1} ${badge}`;
   }).join('\n\n');
 }
 
@@ -99,7 +101,7 @@ export async function buildWeeklyLeaderboardEmbed() {
     .setTitle('⚡  Weekly Leaderboard — Top 10')
     .setDescription(
       `> Top competitors ranked by points earned over the last 7 days.\n${HR}\n\n` +
-      formatLeaderboardRows(rows) +
+      formatLeaderboardRows(rows, true) +
       `\n\n${HR}\n_Ranks reset every 7 days. Keep playing to maintain your standing!_`
     )
     .setTimestamp()
@@ -131,7 +133,7 @@ export async function buildMonthlyLeaderboardEmbed() {
     .setTitle(`📅  Monthly Leaderboard — ${monthLabel}`)
     .setDescription(
       `> Current month standings for the **HCC Monthly Championship**.\n${HR}\n\n` +
-      formatLeaderboardRows(rows) +
+      formatLeaderboardRows(rows, true) +
       `\n\n${HR}\n_Top 3 at month-end earn exclusive titles and recognition!_`
     )
     .setTimestamp()
@@ -150,7 +152,7 @@ export async function buildAlltimeLeaderboardEmbed() {
     .setTitle('🏆  All-Time Hall of Fame — Top 10')
     .setDescription(
       `> Cumulative all-time leaderboard of the most active members.\n${HR}\n\n` +
-      formatLeaderboardRows(members) +
+      formatLeaderboardRows(members, false) +
       `\n\n${HR}\n_Consistency is key — streaks and accuracy build lasting status!_`
     )
     .setTimestamp()
@@ -215,7 +217,8 @@ export function buildMonthlyWinnerAnnouncement(winners) {
   const lines = winners.map((w, idx) => {
     const medal = RANK_MEDALS[idx] || `**#${idx + 1}**`;
     const badge = levelBadge(w.level ?? 1);
-    return `${medal}  **${w.username}**\n╰  **${w.total_points} Points** · ${w.total_xp || 0} XP · Lv ${w.level ?? 1} ${badge}`;
+    const userMention = w.discord_id ? `<@${w.discord_id}>` : `**${w.username}**`;
+    return `${medal}  ${userMention}\n╰  **${w.total_points} Points** · ${w.total_xp || 0} XP · Lv ${w.level ?? 1} ${badge}`;
   });
 
   return new EmbedBuilder()
