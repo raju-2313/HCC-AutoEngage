@@ -1,0 +1,7 @@
+# Normalize line endings: use LF in the repo, convert on Windows checkout
+* text=auto eol=lf
+
+# Binary files – never touch line endings
+*.png binary
+*.jpg binary
+*.ico binary

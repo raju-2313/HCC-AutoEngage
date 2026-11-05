@@ -1,0 +1,5 @@
+/**
+ * src/database/.gitkeep
+ * Supabase client and query modules will live here.
+ * Populated in Phase 2.
+ */
