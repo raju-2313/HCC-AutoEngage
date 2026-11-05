@@ -1,0 +1,3 @@
+-- migrations/.gitkeep
+-- Supabase SQL migration files will be added in Phase 2.
+-- Run via: supabase db push

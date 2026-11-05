@@ -1,0 +1,31 @@
+{
+  "name": "hcc-autoengage",
+  "version": "1.0.0",
+  "description": "HCC AutoEngage – Discord automation bot for HackerRank Campus Crew",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "deploy-commands": "node src/scripts/deployCommands.js",
+    "lint": "node --check src/index.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "hackerrank",
+    "campus-crew",
+    "community"
+  ],
+  "author": "HackerRank Campus Crew",
+  "license": "MIT",
+  "dependencies": {
+    "@discordjs/rest": "^2.6.3",
+    "discord-api-types": "^0.38.57",
+    "discord.js": "^14.28.1",
+    "dotenv": "^18.0.9"
+  }
+}

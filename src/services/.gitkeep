@@ -1,0 +1,5 @@
+/**
+ * src/services/.gitkeep
+ * Business logic services (quiz engine, points, leaderboard) will live here.
+ * Populated in Phase 3+.
+ */
