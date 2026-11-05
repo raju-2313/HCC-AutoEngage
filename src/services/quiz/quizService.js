@@ -228,8 +228,8 @@ export async function handleQuizAnswerInteraction(interaction) {
 
     // Result banner
     const banner = isCorrect
-      ? `## 🎉  Nailed it, ${discordUser.username}!`
-      : `## ❌  Not quite, ${discordUser.username}`;
+      ? `## 🎉  Nailed it, <@${discordUser.id}>!`
+      : `## ❌  Not quite, <@${discordUser.id}>`;
 
     // Answer comparison block
     const yourIcon    = isCorrect ? '✅' : '❌';

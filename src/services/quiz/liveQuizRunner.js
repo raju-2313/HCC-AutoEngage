@@ -235,8 +235,9 @@ export async function runLiveQuizSession({
       for (const att of attempts) {
         const uid  = att.discord_id;
         const uname = att.members?.username ?? uid;
-        const cur  = sessionScores.get(uid) ?? { username: uname, score: 0, correctCount: 0 };
+        const cur  = sessionScores.get(uid) ?? { userId: uid, username: uname, score: 0, correctCount: 0 };
         cur.username = uname;
+        cur.userId = uid;
         if (att.is_correct) {
           cur.score        += att.points_awarded;
           cur.correctCount += 1;
@@ -340,13 +341,15 @@ export async function runLiveQuizSession({
   for (let p = 0; p < podiumLines.length; p++) {
     await sleep(p === 0 ? 500 : 1800);
     const entry = podiumLines[p];
+    const userMention = entry.userId ? `<@${entry.userId}>` : `**${entry.username}**`;
     await channel.send({
+      content: `${PODIUM_MEDALS[p]}  Congratulations ${userMention}!`,
       embeds: [
         new EmbedBuilder()
           .setColor(PODIUM_COLORS[p])
           .setTitle(`${PODIUM_MEDALS[p]}  ${PODIUM_TITLES[p]}`)
           .setDescription(
-            `## ${entry.username}\n` +
+            `## ${userMention}\n` +
             `**${entry.score} Points**  ·  ${entry.correctCount}/${sampleQuestions.length} correct`
           ),
       ],
@@ -360,8 +363,9 @@ export async function runLiveQuizSession({
     .slice(0, 10)
     .map((entry, idx) => {
       const medal = PODIUM_MEDALS[idx] ?? `**#${idx + 1}**`;
+      const userMention = entry.userId ? `<@${entry.userId}>` : `**${entry.username}**`;
       const bar   = '█'.repeat(Math.round((entry.score / (sorted[0]?.score || 1)) * 8)).padEnd(8, '░');
-      return `${medal}  **${entry.username}**\n╰  \`${bar}\`  ${entry.score} pts  ·  ${entry.correctCount}/${sampleQuestions.length} ✅`;
+      return `${medal}  ${userMention}\n╰  \`${bar}\`  ${entry.score} pts  ·  ${entry.correctCount}/${sampleQuestions.length} ✅`;
     })
     .join('\n\n');
 
