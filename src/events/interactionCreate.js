@@ -3,6 +3,7 @@
  * Routes every incoming interaction to the correct command handler.
  */
 
+import { MessageFlags } from 'discord.js';
 import { logger } from '../utils/logger.js';
 import { errorEmbed } from '../utils/embeds.js';
 import { handleQuizAnswerInteraction } from '../services/quiz/quizService.js';
@@ -19,7 +20,7 @@ export async function execute(interaction, client) {
       logger.warn(`Unknown slash command received`, { name: interaction.commandName });
       return interaction.reply({
         embeds: [errorEmbed('Unknown Command', `\`/${interaction.commandName}\` is not registered.`)],
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     }
 
@@ -40,7 +41,7 @@ export async function execute(interaction, client) {
 
       const errorReply = {
         embeds: [errorEmbed('Something went wrong', 'An unexpected error occurred. Please try again later.')],
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       };
 
       if (interaction.replied || interaction.deferred) {

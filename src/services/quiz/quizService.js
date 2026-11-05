@@ -23,54 +23,102 @@ import { upsertMember, getMemberByDiscordId } from '../../database/queries/membe
 import { submitQuizAttempt, hasMemberAttempted } from '../../database/queries/attempts.js';
 import { getDailyQuestion } from './questionBank.js';
 
+// ─── Visual constants ────────────────────────────────────────────────────────
+
+const CATEGORY_ICONS = {
+  javascript:   '🟨',
+  python:       '🐍',
+  dsa:          '🌳',
+  databases:    '🗄️',
+  git:          '🔀',
+  web:          '🌐',
+  http:         '🌐',
+  systems:      '⚙️',
+  default:      '💡',
+};
+
+const DIFFICULTY_CONFIG = {
+  beginner: { label: '🌱 Beginner', bar: '█░░░░', color: COLORS.success },
+  advanced: { label: '🔥 Advanced', bar: '█████', color: COLORS.warning },
+};
+
+const OPTION_STYLES = {
+  A: { emoji: '🅰️', style: ButtonStyle.Primary },
+  B: { emoji: '🅱️', style: ButtonStyle.Primary },
+  C: { emoji: '🇨',  style: ButtonStyle.Primary },
+  D: { emoji: '🇩',  style: ButtonStyle.Primary },
+};
+
+/** Returns the category icon for a quiz category string. */
+function categoryIcon(category = '') {
+  return CATEGORY_ICONS[category.toLowerCase()] ?? CATEGORY_ICONS.default;
+}
+
+/** Thin horizontal rule that works in Discord embeds. */
+const HR = '┄'.repeat(28);
+
+// ─── Quiz embed builder ───────────────────────────────────────────────────────
+
 /**
  * Builds the Discord Embed and ActionRow components for a quiz.
+ * Supports both snake_case (DB) and camelCase (in-memory) question shapes.
  */
 export function buildQuizMessage(quiz, question) {
-  const difficultyBadge =
-    quiz.difficulty === 'advanced' ? '🔥 Advanced' : '🌱 Beginner';
-
   // Support both snake_case (DB) and camelCase (memory)
-  const questionText = question.question_text || question.questionText || '';
-  const codeSnippet = question.code_snippet || question.codeSnippet;
-  const points = quiz.points_reward ?? quiz.pointsReward ?? 10;
-  const xp = quiz.xp_reward ?? quiz.xpReward ?? 20;
+  const questionText  = question.question_text || question.questionText || '';
+  const codeSnippet   = question.code_snippet  || question.codeSnippet;
+  const points        = quiz.points_reward ?? quiz.pointsReward ?? 10;
+  const xp            = quiz.xp_reward     ?? quiz.xpReward     ?? 20;
+  const category      = quiz.category      ?? 'general';
+  const difficulty    = quiz.difficulty    ?? 'beginner';
+  const diff          = DIFFICULTY_CONFIG[difficulty] ?? DIFFICULTY_CONFIG.beginner;
+  const catIcon       = categoryIcon(category);
 
-  // Format options text in the embed body
+  // ── Options block with clean layout ─────────────────────────────────────────
   const optionsText = (question.options || [])
-    .map((opt) => `**${opt.id})** ${opt.text}`)
+    .map((opt) => {
+      const cfg = OPTION_STYLES[opt.id] ?? { emoji: opt.id };
+      return `${cfg.emoji}  **${opt.id}.**  ${opt.text}`;
+    })
     .join('\n\n');
 
-  let description = `${questionText}\n\n`;
+  // ── Description assembly ────────────────────────────────────────────────────
+  let description = `### ${questionText}\n`;
   if (codeSnippet) {
-    description += `\`\`\`javascript\n${codeSnippet}\n\`\`\`\n`;
+    description += `\n\`\`\`javascript\n${codeSnippet}\n\`\`\`\n`;
   }
-  description += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n${optionsText}\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+  description += `\n${HR}\n\n${optionsText}\n\n${HR}`;
 
+  // ── Embed ───────────────────────────────────────────────────────────────────
   const embed = new EmbedBuilder()
-    .setColor(COLORS.primary)
-    .setTitle(`🧠 ${quiz.title}`)
+    .setColor(diff.color)
+    .setTitle(`${catIcon}  ${quiz.title}`)
     .setDescription(description)
     .addFields(
-      { name: '🎯 Difficulty', value: difficultyBadge, inline: true },
-      { name: '🎁 Reward', value: `+${points} Pts / +${xp} XP`, inline: true },
-      { name: '⏱️ Duration', value: '3–5 Minutes', inline: true }
+      { name: '🎯 Difficulty',   value: `${diff.label}\n\`${diff.bar}\``,       inline: true },
+      { name: '🎁 Reward',       value: `**+${points}** Pts\n**+${xp}** XP`,    inline: true },
+      { name: '📌 Category',     value: `${catIcon} ${category.toUpperCase()}`,  inline: true }
     )
-    .setFooter({ text: 'HCC AutoEngage • HackerRank Campus Crew | 1 attempt per member' })
+    .setFooter({
+      text: `HCC AutoEngage • HackerRank Campus Crew  │  1 attempt per member  │  Today at ${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`,
+    })
     .setTimestamp();
 
-  // 4 interactive option buttons: [ A ] [ B ] [ C ] [ D ]
-  const buttons = question.options.map((opt) =>
-    new ButtonBuilder()
+  // ── Buttons with emoji + label ───────────────────────────────────────────────
+  const buttons = (question.options || []).map((opt) => {
+    const cfg = OPTION_STYLES[opt.id] ?? { emoji: '', style: ButtonStyle.Primary };
+    return new ButtonBuilder()
       .setCustomId(`quiz_ans:${quiz.id}:${opt.id}`)
       .setLabel(`Option ${opt.id}`)
-      .setStyle(ButtonStyle.Primary)
-  );
+      .setEmoji(cfg.emoji)
+      .setStyle(cfg.style);
+  });
 
   const row = new ActionRowBuilder().addComponents(buttons);
-
   return { embeds: [embed], components: [row] };
 }
+
+// ─── Publish daily quiz ───────────────────────────────────────────────────────
 
 /**
  * Publishes a quiz to a Discord channel and records it in Supabase.
@@ -81,10 +129,8 @@ export async function publishDailyQuiz({ client, channelId, questionData = null,
     throw new Error(`Target channel ${channelId} not found or inaccessible by the bot.`);
   }
 
-  // Pick today's question if not explicitly provided
   const qData = questionData || getDailyQuestion();
 
-  // 1. Create quiz and question in Supabase
   const createdQuiz = await createQuiz({
     title: qData.title,
     description: `Daily ${qData.difficulty} quiz on ${qData.category}`,
@@ -106,12 +152,9 @@ export async function publishDailyQuiz({ client, channelId, questionData = null,
   });
 
   const question = createdQuiz.quiz_questions[0];
-
-  // 2. Build message & send to Discord
   const messagePayload = buildQuizMessage(createdQuiz, question);
   const sentMessage = await targetChannel.send(messagePayload);
 
-  // 3. Mark quiz active and link message ID
   const activeQuiz = await publishQuiz(createdQuiz.id, {
     messageId: sentMessage.id,
     channelId: targetChannel.id,
@@ -126,109 +169,133 @@ export async function publishDailyQuiz({ client, channelId, questionData = null,
   return { quiz: activeQuiz, message: sentMessage };
 }
 
+// ─── Answer interaction handler ───────────────────────────────────────────────
+
 /**
  * Handles button interactions when a member selects an answer button.
  */
 export async function handleQuizAnswerInteraction(interaction) {
-  // customId shape: quiz_ans:<quizId>:<selectedOption>
   const parts = interaction.customId.split(':');
   if (parts.length !== 3 || parts[0] !== 'quiz_ans') return;
 
   const [, quizId, selectedOption] = parts;
   const discordUser = interaction.user;
 
-  // Defer reply ephemerally so answers/feedback stay completely private
   await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
   try {
-    // 1. Ensure member profile exists in members table
+    // 1. Ensure member profile exists
     const member = await upsertMember({
       discordId: discordUser.id,
       username: discordUser.username,
       avatarUrl: discordUser.displayAvatarURL(),
     });
 
-    // 2. Perform duplicate check early for fast feedback
+    // 2. Duplicate-check
     const alreadyAnswered = await hasMemberAttempted(quizId, member.id);
     if (alreadyAnswered) {
       const duplicateEmbed = new EmbedBuilder()
         .setColor(COLORS.warning)
-        .setTitle('⚠️ Quiz Already Submitted')
+        .setTitle('⚠️  Already Submitted')
         .setDescription(
-          'You have already submitted an answer for this quiz!\n\n' +
-          'To ensure fair leaderboards, only **one submission** is permitted per member.'
+          '> You\'ve already locked in your answer for this quiz!\n\n' +
+          '**Fair Play Policy**\n' +
+          'Each member gets exactly **one attempt** per quiz to keep the leaderboard fair.\n\n' +
+          '_Use `/quiz stats` to see your submission history._'
         )
-        .setFooter({ text: 'HCC AutoEngage • HackerRank Campus Crew' });
+        .setFooter({ text: 'HCC AutoEngage • One attempt per member' });
 
       return interaction.editReply({ embeds: [duplicateEmbed] });
     }
 
     // 3. Submit attempt atomically via PostgreSQL RPC
-    const result = await submitQuizAttempt({
-      quizId,
-      discordId: discordUser.id,
-      selectedOption,
-    });
+    const result = await submitQuizAttempt({ quizId, discordId: discordUser.id, selectedOption });
 
     if (!result) {
       throw new Error('No result returned from quiz submission procedure.');
     }
 
-    // Fetch updated member for fresh streak/points info
+    // 4. Fetch fresh member data for streak
     const updatedMember = await getMemberByDiscordId(discordUser.id);
 
-    // 4. Build instant educational feedback embed
+    // 5. Build rich feedback embed
     const isCorrect = result.is_correct;
-    const title = isCorrect ? '🎉 Correct Answer!' : '❌ Incorrect Answer';
-    const color = isCorrect ? COLORS.success : COLORS.error;
+    const color     = isCorrect ? COLORS.success : COLORS.error;
+
+    // Streak fire string
+    const streak = updatedMember?.streak_current ?? 1;
+    const streakFire = streak >= 7 ? '🔥🔥🔥' : streak >= 3 ? '🔥🔥' : '🔥';
+
+    // Result banner
+    const banner = isCorrect
+      ? `## 🎉  Nailed it, ${discordUser.username}!`
+      : `## ❌  Not quite, ${discordUser.username}`;
+
+    // Answer comparison block
+    const yourIcon    = isCorrect ? '✅' : '❌';
+    const correctIcon = '✅';
+    const answerBlock =
+      `${yourIcon}  **Your Answer:** Option **${selectedOption}**\n` +
+      `${correctIcon}  **Correct Answer:** Option **${result.correct_option}**`;
+
+    // Explanation block
+    const explanationBlock =
+      `### 💡 Explanation\n${result.explanation}`;
+
+    const description = [banner, '', answerBlock, '', HR, '', explanationBlock].join('\n');
 
     const feedbackEmbed = new EmbedBuilder()
       .setColor(color)
-      .setTitle(title)
-      .setDescription(
-        `**Your Selection:** Option **${selectedOption}**\n` +
-        `**Correct Answer:** Option **${result.correct_option}**\n\n` +
-        `**💡 Educational Explanation:**\n${result.explanation}`
-      )
+      .setDescription(description)
       .addFields(
         {
-          name: '🎁 Points Awarded',
-          value: `**+${result.points_awarded} Points**`,
+          name: '🎁 Points',
+          value: result.points_awarded > 0
+            ? `**+${result.points_awarded}** pts`
+            : '`+0` pts',
           inline: true,
         },
         {
-          name: '⭐ XP Gained',
-          value: `**+${result.xp_awarded} XP**`,
+          name: '⭐ XP',
+          value: result.xp_awarded > 0
+            ? `**+${result.xp_awarded}** XP`
+            : '`+0` XP',
           inline: true,
         },
         {
-          name: '🔥 Current Streak',
-          value: `**${updatedMember?.streak_current || 1} Days**`,
+          name: `${streakFire} Streak`,
+          value: `**${streak}** day${streak !== 1 ? 's' : ''}`,
           inline: true,
         }
       )
-      .setFooter({ text: 'HCC AutoEngage • Feedback is private to you' })
+      .setThumbnail(
+        isCorrect
+          ? 'https://em-content.zobj.net/source/twitter/376/trophy_1f3c6.png'
+          : 'https://em-content.zobj.net/source/twitter/376/books_1f4da.png'
+      )
+      .setFooter({ text: 'HCC AutoEngage • Answer is private to you  │  Use /profile to see your stats' })
       .setTimestamp();
 
     await interaction.editReply({ embeds: [feedbackEmbed] });
 
     logger.info('Quiz answer processed', {
-      user: discordUser.tag,
+      user: discordUser.username,
       quizId,
       selectedOption,
       isCorrect,
     });
+
   } catch (err) {
     if (err.message === 'DUPLICATE_ATTEMPT') {
       const duplicateEmbed = new EmbedBuilder()
         .setColor(COLORS.warning)
-        .setTitle('⚠️ Quiz Already Submitted')
+        .setTitle('⚠️  Already Submitted')
         .setDescription('You have already submitted an answer for this quiz! Only one attempt is allowed.');
       return interaction.editReply({ embeds: [duplicateEmbed] });
     }
 
     logger.error('Error handling quiz answer interaction', {
-      user: discordUser.tag,
+      user: discordUser.username,
       quizId,
       error: err.message,
     });
@@ -238,4 +305,3 @@ export async function handleQuizAnswerInteraction(interaction) {
     });
   }
 }
-

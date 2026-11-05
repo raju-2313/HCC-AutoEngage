@@ -63,5 +63,5 @@ export async function execute(interaction) {
     embed.addFields({ name: group.name, value, inline: false });
   }
 
-  await interaction.reply({ embeds: [embed], ephemeral: false });
+  await interaction.reply({ embeds: [embed] });
 }

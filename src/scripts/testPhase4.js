@@ -66,3 +66,4 @@ try {
 console.log('========================================');
 console.log(' All Phase 4 smoke tests complete');
 console.log('========================================\n');
+
