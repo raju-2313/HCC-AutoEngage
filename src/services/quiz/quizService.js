@@ -153,7 +153,10 @@ export async function publishDailyQuiz({ client, channelId, questionData = null,
 
   const question = createdQuiz.quiz_questions[0];
   const messagePayload = buildQuizMessage(createdQuiz, question);
-  const sentMessage = await targetChannel.send(messagePayload);
+  const sentMessage = await targetChannel.send({
+    content: '🔔 **@everyone — Today\'s Daily Tech Challenge is Live!** 🧠\nTest your knowledge, keep your daily streak burning, and climb the leaderboard:',
+    ...messagePayload,
+  });
 
   const activeQuiz = await publishQuiz(createdQuiz.id, {
     messageId: sentMessage.id,

@@ -125,7 +125,7 @@ export async function runMonthlyWinnerJob(client) {
     if (targetChannel && winners.length > 0) {
       const embed = buildMonthlyWinnerAnnouncement(winners);
       await targetChannel.send({
-        content: '🎊 **CHAMPIONS CROWNED!** Announcing this month\'s top performers:',
+        content: '🏆 **@everyone — The Monthly HCC Champions Have Been Crowned!** 🎊\nGive it up for this month\'s top performers and community contributors:',
         embeds: [embed],
       });
       logger.info('Monthly winners announced', { count: winners.length, channelId: targetChannel.id });
