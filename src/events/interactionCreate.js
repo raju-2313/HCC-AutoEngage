@@ -7,6 +7,10 @@ import { MessageFlags } from 'discord.js';
 import { logger } from '../utils/logger.js';
 import { errorEmbed } from '../utils/embeds.js';
 import { handleQuizAnswerInteraction } from '../services/quiz/quizService.js';
+import {
+  buildOverallLeaderboardEmbed,
+  buildLeaderboardActionRow,
+} from '../services/recognition/engagementScoringService.js';
 
 export const name  = 'interactionCreate';
 export const once  = false;
@@ -62,6 +66,21 @@ export async function execute(interaction, client) {
 
     if (interaction.customId.startsWith('quiz_ans:')) {
       return handleQuizAnswerInteraction(interaction);
+    }
+
+    if (interaction.customId.startsWith('lb_view:')) {
+      const period = interaction.customId.replace('lb_view:', '');
+      try {
+        const embed = await buildOverallLeaderboardEmbed(period);
+        const row   = buildLeaderboardActionRow(period);
+        await interaction.update({
+          embeds: [embed],
+          components: [row],
+        });
+      } catch (err) {
+        logger.error('Error switching leaderboard period view', { period, error: err.message });
+      }
+      return;
     }
     return;
   }

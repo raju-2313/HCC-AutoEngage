@@ -577,3 +577,4 @@ BEGIN
     ORDER BY rank ASC;
 END;
 $$ LANGUAGE plpgsql STABLE;
+

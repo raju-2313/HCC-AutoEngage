@@ -16,3 +16,4 @@ export async function execute(oldState, newState) {
     logger.debug('Error in voiceStateUpdate event handler', { error: err.message });
   }
 }
+
