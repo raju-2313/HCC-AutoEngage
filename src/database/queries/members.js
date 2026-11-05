@@ -132,3 +132,77 @@ export async function updateMemberStreak(discordId, streakIncrement = true) {
   return data;
 }
 
+/**
+ * Resets streaks for members whose last activity was more than cutoffHours ago.
+ */
+export async function resetInactiveStreaks(cutoffHours = 48) {
+  const cutoff = new Date(Date.now() - cutoffHours * 60 * 60 * 1000).toISOString();
+
+  const { data, error } = await supabaseAdmin
+    .from('members')
+    .update({ streak_current: 0 })
+    .gt('streak_current', 0)
+    .lt('last_active_at', cutoff)
+    .select('id, discord_id, username, streak_max');
+
+  if (error) {
+    logger.error('Error resetting inactive streaks', { error: error.message });
+    throw error;
+  }
+  return data || [];
+}
+
+/**
+ * Explicitly resets a specific member's streak.
+ */
+export async function resetMemberStreak(discordId) {
+  const { data, error } = await supabaseAdmin
+    .from('members')
+    .update({ streak_current: 0 })
+    .eq('discord_id', discordId)
+    .select()
+    .single();
+
+  if (error) {
+    logger.error('Error resetting member streak', { discordId, error: error.message });
+    throw error;
+  }
+  return data;
+}
+
+/**
+ * Fetches server-wide aggregate stats (total members, total points, total XP, quizzes completed).
+ */
+export async function getServerMemberStats() {
+  const { data: members, error: mError } = await supabaseAdmin
+    .from('members')
+    .select('id, total_points, total_xp, quizzes_completed, streak_current');
+
+  if (mError) {
+    logger.error('Error fetching server member stats', { error: mError.message });
+    throw mError;
+  }
+
+  const { count: quizCount, error: qError } = await supabaseAdmin
+    .from('quizzes')
+    .select('id', { count: 'exact', head: true });
+
+  const { count: attemptCount, error: aError } = await supabaseAdmin
+    .from('quiz_attempts')
+    .select('id', { count: 'exact', head: true });
+
+  const totalMembers = members?.length || 0;
+  const totalPoints = members?.reduce((sum, m) => sum + (m.total_points || 0), 0) || 0;
+  const totalXP = members?.reduce((sum, m) => sum + (m.total_xp || 0), 0) || 0;
+  const activeStreaks = members?.filter((m) => (m.streak_current || 0) > 0).length || 0;
+
+  return {
+    totalMembers,
+    totalPoints,
+    totalXP,
+    activeStreaks,
+    totalQuizzes: quizCount || 0,
+    totalAttempts: attemptCount || 0,
+  };
+}
+

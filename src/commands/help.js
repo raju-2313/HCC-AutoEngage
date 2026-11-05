@@ -36,11 +36,14 @@ const COMMAND_GROUPS = [
     ],
   },
   {
-    name: '🛠️ Admin  *(restricted)*',
+    name: '🛠️ Admin  *(Restricted)*',
     commands: [
-      { name: '/admin quiz publish', desc: 'Publish a quiz to the quiz channel.' },
-      { name: '/admin stats',        desc: 'View participation statistics.' },
-      { name: '/admin announce',     desc: 'Post a winner announcement.' },
+      { name: '/admin stats',                 desc: 'View server health and quiz engagement metrics.' },
+      { name: '/admin quiz publish',         desc: 'Publish a daily quiz to the quiz channel.' },
+      { name: '/admin quiz close',           desc: 'Close the currently active quiz.' },
+      { name: '/admin points grant',         desc: 'Grant or adjust points/XP for a member.' },
+      { name: '/admin announce winners',     desc: 'Crown monthly champions and announce results.' },
+      { name: '/admin streak reset',         desc: 'Reset a member\'s daily streak.' },
     ],
   },
 ];
