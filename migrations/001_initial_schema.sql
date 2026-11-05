@@ -438,16 +438,19 @@ ALTER TABLE public.monthly_rewards ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.activity_logs ENABLE ROW LEVEL SECURITY;
 
 -- 1. Members: public read access; strictly no public write/update
+DROP POLICY IF EXISTS "Public read members" ON public.members;
 CREATE POLICY "Public read members"
     ON public.members FOR SELECT
     USING (true);
 
 -- 2. Quizzes: public read for active or closed quizzes only
+DROP POLICY IF EXISTS "Public read active or closed quizzes" ON public.quizzes;
 CREATE POLICY "Public read active or closed quizzes"
     ON public.quizzes FOR SELECT
     USING (status IN ('active', 'closed'));
 
 -- 3. Quiz Questions: public read only when quiz is closed (protects active question answer keys!)
+DROP POLICY IF EXISTS "Public read questions when quiz closed" ON public.quiz_questions;
 CREATE POLICY "Public read questions when quiz closed"
     ON public.quiz_questions FOR SELECT
     USING (
@@ -459,26 +462,31 @@ CREATE POLICY "Public read questions when quiz closed"
     );
 
 -- 4. Quiz Attempts: no public select
+DROP POLICY IF EXISTS "Deny public select attempts" ON public.quiz_attempts;
 CREATE POLICY "Deny public select attempts"
     ON public.quiz_attempts FOR SELECT
     USING (false);
 
 -- 5. Points History: public read for transparency
+DROP POLICY IF EXISTS "Public read points history" ON public.points_history;
 CREATE POLICY "Public read points history"
     ON public.points_history FOR SELECT
     USING (true);
 
 -- 6. Leaderboard Snapshots: public read
+DROP POLICY IF EXISTS "Public read leaderboards" ON public.leaderboard_snapshots;
 CREATE POLICY "Public read leaderboards"
     ON public.leaderboard_snapshots FOR SELECT
     USING (true);
 
 -- 7. Monthly Rewards: public read
+DROP POLICY IF EXISTS "Public read monthly rewards" ON public.monthly_rewards;
 CREATE POLICY "Public read monthly rewards"
     ON public.monthly_rewards FOR SELECT
     USING (true);
 
 -- 8. Activity Logs: no public access
+DROP POLICY IF EXISTS "Deny public activity logs" ON public.activity_logs;
 CREATE POLICY "Deny public activity logs"
     ON public.activity_logs FOR SELECT
     USING (false);
