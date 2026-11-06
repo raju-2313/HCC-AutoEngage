@@ -29,10 +29,11 @@ export const config = {
     guildId:  require_env('DISCORD_GUILD_ID'),
     channels: {
       announcements: optional_env('DISCORD_ANNOUNCEMENTS_CHANNEL_ID'),
-      quiz:          optional_env('DISCORD_QUIZ_CHANNEL_ID'),
+      // TESTING OVERRIDE: Bound strictly to autoengage-testing (1567916304118063124) during testing
+      quiz:          optional_env('TEST_CHANNEL_ID', '1567916304118063124'),
       leaderboard:   optional_env('DISCORD_LEADERBOARD_CHANNEL_ID'),
       logs:          optional_env('DISCORD_LOGS_CHANNEL_ID'),
-      test:          optional_env('TEST_CHANNEL_ID'),
+      test:          optional_env('TEST_CHANNEL_ID', '1567916304118063124'),
     },
   },
   supabase: {
