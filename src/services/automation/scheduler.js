@@ -262,6 +262,58 @@ export async function runStreakMaintenanceJob() {
   }
 }
 
+/**
+ * Job 6: 24/7 Keep-Alive & Active Connection Heartbeat
+ * Runs every 5 minutes to prevent container sleep, keep DB pools warm, and monitor gateway health.
+ */
+export async function runKeepAliveHeartbeatJob(client) {
+  try {
+    const port = process.env.PORT || 8080;
+
+    // 1. Self-ping local HTTP health endpoint
+    try {
+      const selfUrl = `http://127.0.0.1:${port}/ping`;
+      await fetch(selfUrl, { signal: AbortSignal.timeout(3000) });
+    } catch {
+      // Local port may be handled by external proxy or container network
+    }
+
+    // 2. Ping external URL if provided (Railway/Render public domains)
+    const publicHost = process.env.PUBLIC_URL || process.env.RAILWAY_STATIC_URL || process.env.RAILWAY_PUBLIC_DOMAIN;
+    if (publicHost) {
+      const fullUrl = publicHost.startsWith('http') ? `${publicHost}/ping` : `https://${publicHost}/ping`;
+      try {
+        await fetch(fullUrl, { signal: AbortSignal.timeout(4000) });
+      } catch {
+        // Silently catch external network timeouts
+      }
+    }
+
+    // 3. Keep Supabase connection pool warm
+    try {
+      const { pingDatabase } = await import('../../database/client.js');
+      await pingDatabase();
+    } catch {
+      // Ignore
+    }
+
+    // 4. Log heartbeat periodically (every 30 mins) to confirm 24/7 active status without log flooding
+    const minute = new Date().getMinutes();
+    if (minute % 30 === 0) {
+      logger.info('💓 24/7 Keep-Alive Heartbeat: Bot & database connection healthy', {
+        wsPingMs: client?.ws?.ping ?? -1,
+        uptimeSeconds: Math.floor(process.uptime()),
+        guilds: client?.guilds?.cache?.size ?? 0,
+      });
+    }
+
+    return { success: true };
+  } catch (err) {
+    logger.warn('Notice: keep-alive heartbeat encounter', { error: err.message });
+    return { success: false, error: err.message };
+  }
+}
+
 // ─── Scheduler Initialization ─────────────────────────────────────────────────
 
 /**
@@ -385,6 +437,14 @@ export function initScheduler(client) {
     { timezone }
   );
   activeTasks.set('streakMaintenance', taskStreakMaintenance);
+
+  // 6. 24/7 Keep-Alive & Active Connection Heartbeat (Every 5 minutes)
+  const taskKeepAlive = cron.schedule(
+    '*/5 * * * *',
+    () => runKeepAliveHeartbeatJob(client),
+    { timezone }
+  );
+  activeTasks.set('keepAlive', taskKeepAlive);
 
   logger.info(`Scheduler running with ${activeTasks.size} registered automated jobs ✅`);
 

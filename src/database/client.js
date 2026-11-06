@@ -103,3 +103,17 @@ export async function testDatabaseConnection() {
   }
 }
 
+/**
+ * Lightweight connection ping to keep the Supabase connection pool active and warm.
+ * Silent on success to prevent log flooding.
+ */
+export async function pingDatabase() {
+  try {
+    const client = getAdminClient();
+    const { error } = await client.from('members').select('id').limit(1);
+    return !error;
+  } catch {
+    return false;
+  }
+}
+
