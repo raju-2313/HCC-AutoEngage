@@ -92,6 +92,7 @@ export async function runDailyTimedSession({
     }
 
     const { meta, questions } = questionBank;
+    const activeQuestions = meta.singleQuestionTest ? questions.slice(0, 1) : questions;
     const targetChannel = await client.channels.fetch(channelId).catch(() => null);
     if (!targetChannel) {
       throw new Error(`Target quiz channel ${channelId} not found or inaccessible by the bot.`);
@@ -103,9 +104,10 @@ export async function runDailyTimedSession({
     logger.info(`Starting daily timed quiz session for ${dateStr}`, {
       topic: meta.topic,
       channelId,
-      questionsCount: questions.length,
+      questionsCount: activeQuestions.length,
       countdownSec,
       qTimeSec,
+      singleQuestionTest: Boolean(meta.singleQuestionTest),
     });
 
     // 1. Initialize or load existing master session record in Supabase
@@ -114,7 +116,7 @@ export async function runDailyTimedSession({
       topic: meta.topic,
       dayNumber: meta.dayNumber,
       channelId,
-      totalQuestions: questions.length,
+      totalQuestions: activeQuestions.length,
     });
 
     let state = sessionRecord.sessionState;
@@ -127,6 +129,7 @@ export async function runDailyTimedSession({
     // 2. Initial Announcement with First @everyone Ping (Phase 2 - 1 of 2 pings)
     if (!state.announcementSent) {
       const catEmoji = getCategoryIcon(meta.category);
+      const qCountLabel = activeQuestions.length === 1 ? '1 Rapid-Fire Verification Question' : '10 Rapid-Fire Questions';
       const announceEmbed = new EmbedBuilder()
         .setColor(0x00C853) // HackerRank vibrant green
         .setTitle(`🟢  Today's HCC Daily Tech Challenge is Live!  🟢`)
@@ -134,7 +137,7 @@ export async function runDailyTimedSession({
           `## 🚀  **Day ${meta.dayNumber} of 7: ${meta.topic}**\n\n` +
           `${HR}\n\n` +
           `📚  **Topic:** ${catEmoji}  **${meta.topic}**\n` +
-          `❓  **Questions:** **10 Rapid-Fire Questions**\n` +
+          `❓  **Questions:** **${qCountLabel}**\n` +
           `⏱️  **Time per question:** **${qTimeSec} seconds**\n` +
           `🎁  **Rewards:** **+10 Points & +20 XP** per correct answer\n` +
           `🔥  **Streaks:** Keep your daily streak burning!\n\n` +
@@ -172,10 +175,10 @@ export async function runDailyTimedSession({
     const startIndex = state.currentQuestionIndex >= 0 ? state.currentQuestionIndex : 0;
     const completedQuizIds = [...(state.completedQuestionRecordIds || [])];
 
-    for (let i = startIndex; i < questions.length; i++) {
-      const q = questions[i];
+    for (let i = startIndex; i < activeQuestions.length; i++) {
+      const q = activeQuestions[i];
       const qNumber = i + 1;
-      const totalQ = questions.length;
+      const totalQ = activeQuestions.length;
       const catEmoji = getCategoryIcon(meta.category);
 
       // Check if this question was already created in DB for this session
@@ -247,7 +250,7 @@ export async function runDailyTimedSession({
           { name: '🎁 Stakes',         value: `**+${q.pointsReward}** pts`, inline: true }
         )
         .setFooter({
-          text: `Q${qNumber}/${totalQ}  │  Click your answer below (private)  │  15 seconds!`,
+          text: `Q${qNumber}/${totalQ}  │  Click your answer below (private)  │  ${qTimeSec} seconds!`,
         })
         .setTimestamp();
 
@@ -276,17 +279,18 @@ export async function runDailyTimedSession({
 
       logger.info(`Question ${qNumber}/${totalQ} published (Quiz ID: ${questionQuiz.id})`);
 
-      // Wait for the 15-second answering window
+      // Wait for the answering window
       await sleep(qTimeSec * 1000);
 
       // Close question in Supabase immediately (rejects late submissions at DB level)
       await closeQuiz(questionQuiz.id);
       completedQuizIds.push(questionQuiz.id);
 
-      // Fetch attempts for this question
-      const { data: attempts } = await getSessionAttempts([questionQuiz.id]);
-      const totalAttempts = attempts ? attempts.length : 0;
-      const correctAttempts = attempts ? attempts.filter((a) => a.is_correct).length : 0;
+      // Fetch attempts for this question (guaranteed array handling)
+      const rawAttempts = await getSessionAttempts([questionQuiz.id]);
+      const attempts = Array.isArray(rawAttempts) ? rawAttempts : (rawAttempts?.data || []);
+      const totalAttempts = attempts.length;
+      const correctAttempts = attempts.filter((a) => a.is_correct).length;
       const accuracyStr = totalAttempts > 0 ? `${Math.round((correctAttempts / totalAttempts) * 100)}%` : '0%';
 
       // Reveal correct answer and disable buttons
@@ -336,7 +340,8 @@ export async function runDailyTimedSession({
 
     // 4. Final Results, Podium & Leaderboard Integration (Phase 5)
     await sleep(2000);
-    const allAttempts = await getSessionAttempts(completedQuizIds);
+    const rawAllAttempts = await getSessionAttempts(completedQuizIds);
+    const allAttempts = Array.isArray(rawAllAttempts) ? rawAllAttempts : (rawAllAttempts?.data || []);
 
     // Aggregate user scores for this 10-question session
     const participantMap = new Map();

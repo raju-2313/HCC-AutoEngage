@@ -45,7 +45,7 @@ export const config = {
     env:          process.env.NODE_ENV || 'development',
     logLevel:     process.env.LOG_LEVEL || 'info',
     timezone:     process.env.TZ || 'Asia/Kolkata',
-    quizPostTime: process.env.QUIZ_POST_TIME || '19:00',
+    quizPostTime: process.env.QUIZ_POST_TIME || '19:30',
     countdownSeconds: parseInt(process.env.QUIZ_START_COUNTDOWN_SECONDS || '30', 10),
     questionTimeSeconds: parseInt(process.env.QUIZ_QUESTION_TIME_SECONDS || '20', 10),
     adminRoleName: process.env.ADMIN_ROLE_NAME || 'HCC Admin',

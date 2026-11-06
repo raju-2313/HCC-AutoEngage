@@ -19,7 +19,8 @@ export const CHALLENGE_CALENDAR = {
     topic: 'Loops',
     fileName: 'day-03-loops.json',
     category: 'loops',
-    dateLabel: '6 Nov (Day 3 Test Run)',
+    dateLabel: '6 Nov (Single Question Verification)',
+    singleQuestionTest: true,
   },
   '2026-11-07': {
     dayNumber: 4,
