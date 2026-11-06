@@ -18,6 +18,7 @@ import { getActiveQuiz, closeQuiz, closeExpiredQuizzes, getQuizByScheduledDate }
 import { getKolkataDateString } from '../quiz/questionBank.js';
 import { getDayQuestionSet } from '../quiz/sessionQuestionManager.js';
 import { runDailyTimedSession, reconcileDailySessionOnStartup } from '../quiz/dailyTimedSessionEngine.js';
+import { getDailySessionRecord } from '../../database/queries/quizSessions.js';
 import {
   buildWeeklyLeaderboardEmbed,
   computeMonthlyWinners,
@@ -302,16 +303,27 @@ export async function reconcileMissedJobsOnStartup(client) {
 
     // 3. If it's past the scheduled post time today, check if today's quiz was published
     if (isPastScheduledTime) {
-      const existing = await getQuizByScheduledDate(today);
-      if (!existing) {
-        logger.warn(`Missed daily quiz detected for today (${today}). Initiating automatic recovery drop...`);
-        const dropResult = await runDailyQuizDropJob(client, { date: today });
-        logger.info('Startup recovery drop completed', { dropResult });
+      const hasTimedBank = getDayQuestionSet(today);
+      if (hasTimedBank) {
+        const sessionRecord = await getDailySessionRecord(today);
+        if (!sessionRecord || sessionRecord.sessionState.status !== 'completed') {
+          logger.warn(`Missed daily timed session detected for today (${today}). Initiating session...`);
+          await runDailyQuizDropJob(client, { date: today });
+        } else {
+          logger.info(`Today's timed session (${today}) already completed.`, { sessionId: sessionRecord.id });
+        }
       } else {
-        logger.info(`Today's quiz (${today}) already active/recorded. No startup catch-up required.`, {
-          quizId: existing.id,
-          status: existing.status,
-        });
+        const existing = await getQuizByScheduledDate(today);
+        if (!existing) {
+          logger.warn(`Missed daily quiz detected for today (${today}). Initiating automatic recovery drop...`);
+          const dropResult = await runDailyQuizDropJob(client, { date: today });
+          logger.info('Startup recovery drop completed', { dropResult });
+        } else {
+          logger.info(`Today's quiz (${today}) already active/recorded. No startup catch-up required.`, {
+            quizId: existing.id,
+            status: existing.status,
+          });
+        }
       }
     }
   } catch (err) {

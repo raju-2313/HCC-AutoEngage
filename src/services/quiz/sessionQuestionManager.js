@@ -14,6 +14,13 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const BANKS_DIR = join(__dirname, '..', '..', 'data', 'question-banks');
 
 export const CHALLENGE_CALENDAR = {
+  '2026-11-06': {
+    dayNumber: 1,
+    topic: 'Python Basics',
+    fileName: 'day-01-python.json',
+    category: 'python',
+    dateLabel: '6 Nov (Live Test Run)',
+  },
   '2026-11-09': {
     dayNumber: 1,
     topic: 'Python Basics',
