@@ -18,6 +18,7 @@ import {
   getActiveQuiz,
   publishQuiz,
   getQuizById,
+  getQuizByScheduledDate,
 } from '../../database/queries/quizzes.js';
 import { upsertMember, getMemberByDiscordId } from '../../database/queries/members.js';
 import { submitQuizAttempt, hasMemberAttempted } from '../../database/queries/attempts.js';
@@ -123,13 +124,28 @@ export function buildQuizMessage(quiz, question) {
 /**
  * Publishes a quiz to a Discord channel and records it in Supabase.
  */
-export async function publishDailyQuiz({ client, channelId, questionData = null, scheduledFor = null }) {
+export async function publishDailyQuiz({ client, channelId, questionData = null, scheduledFor = null, allowDuplicateForDate = false }) {
   const targetChannel = await client.channels.fetch(channelId).catch(() => null);
   if (!targetChannel) {
     throw new Error(`Target channel ${channelId} not found or inaccessible by the bot.`);
   }
 
-  const qData = questionData || getDailyQuestion();
+  const targetDate = scheduledFor || getKolkataDateString();
+
+  // Duplicate protection: prevent posting multiple daily quizzes for the same date
+  if (!allowDuplicateForDate) {
+    const existing = await getQuizByScheduledDate(targetDate);
+    if (existing && (existing.status === 'active' || existing.status === 'closed')) {
+      logger.warn('Daily quiz already exists for scheduled date. Skipping duplicate post.', {
+        date: targetDate,
+        existingQuizId: existing.id,
+        status: existing.status,
+      });
+      return { quiz: existing, alreadyExisted: true };
+    }
+  }
+
+  const qData = questionData || getDailyQuestion(targetDate);
 
   const createdQuiz = await createQuiz({
     title: qData.title,
@@ -138,7 +154,7 @@ export async function publishDailyQuiz({ client, channelId, questionData = null,
     difficulty: qData.difficulty,
     pointsReward: qData.pointsReward,
     xpReward: qData.xpReward,
-    scheduledFor: scheduledFor || getKolkataDateString(),
+    scheduledFor: targetDate,
     createdBy: 'system',
     questions: [
       {

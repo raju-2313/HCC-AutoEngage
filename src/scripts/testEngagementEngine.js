@@ -16,6 +16,8 @@ import {
   getMemberEngagementSummary,
 } from '../database/queries/engagement.js';
 
+import { config } from '../config/index.js';
+
 console.log('\n===============================================================');
 console.log('  HCC AutoEngage – Community Engagement Engine Test Suite');
 console.log('===============================================================\n');
@@ -39,7 +41,7 @@ console.log('   ✅ Migration 002 tables and RPC procedures verified in Supabase
 
 const TEST_DISCORD_A = 'test_engagement_user_01';
 const TEST_DISCORD_B = 'test_engagement_user_02';
-const TEST_CHANNEL   = '1567916304118063124';
+const TEST_CHANNEL   = config.discord.channels.test || '1567916304118063124';
 
 try {
   // ── Check 2: Channel Configuration ─────────────────────────────────────────

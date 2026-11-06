@@ -14,7 +14,8 @@ import cron from 'node-cron';
 import { config } from '../../config/index.js';
 import { logger } from '../../utils/logger.js';
 import { publishDailyQuiz } from '../quiz/quizService.js';
-import { getActiveQuiz, closeQuiz } from '../../database/queries/quizzes.js';
+import { getActiveQuiz, closeQuiz, closeExpiredQuizzes, getQuizByScheduledDate } from '../../database/queries/quizzes.js';
+import { getKolkataDateString } from '../quiz/questionBank.js';
 import {
   buildWeeklyLeaderboardEmbed,
   computeMonthlyWinners,
@@ -26,6 +27,11 @@ import { resetInactiveStreaks } from '../../database/queries/members.js';
 import { logActivity } from '../../database/queries/logs.js';
 
 const activeTasks = new Map();
+let isDailyQuizJobRunning = false;
+let isDailyCloseJobRunning = false;
+let isWeeklyJobRunning = false;
+let isMonthlyJobRunning = false;
+let isStreakJobRunning = false;
 
 /**
  * Resolves a channel by ID with fallback.
@@ -44,26 +50,99 @@ async function resolveChannel(client, ...channelIds) {
 /**
  * Job 1: Daily Quiz Drop
  */
-export async function runDailyQuizDropJob(client) {
-  logger.info('⏰ Running scheduled task: Daily Quiz Drop');
-  const channelId = config.discord.channels.quiz;
+export async function runDailyQuizDropJob(client, options = {}) {
+  const currentDate = options.date || getKolkataDateString();
+  const channelId = options.channelId || config.discord.channels.quiz;
+
+  logger.info('⏰ Running scheduled task: Daily Quiz Drop', {
+    targetDate: currentDate,
+    channelId,
+    retryAttempt: options.retryAttempt || 0,
+  });
+
+  if (isDailyQuizJobRunning && !options.force) {
+    logger.warn('Daily Quiz Drop already in progress. Skipping concurrent run.');
+    return { success: false, reason: 'JOB_ALREADY_RUNNING' };
+  }
 
   if (!channelId) {
     logger.warn('Skipping Daily Quiz Drop: DISCORD_QUIZ_CHANNEL_ID is not configured');
     return { success: false, reason: 'CHANNEL_NOT_CONFIGURED' };
   }
 
+  isDailyQuizJobRunning = true;
+
   try {
-    const result = await publishDailyQuiz({ client, channelId });
+    // 1. Auto-close any lingering active quizzes from previous dates
+    const closedCount = await closeExpiredQuizzes(currentDate).catch((err) => {
+      logger.warn('Notice: error during expired quiz cleanup before drop', { error: err.message });
+      return [];
+    });
+    if (closedCount.length > 0) {
+      logger.info(`Auto-closed ${closedCount.length} expired quiz(zes) from prior dates.`);
+    }
+
+    // 2. Check if today's quiz was already posted (duplicate protection & restart recovery)
+    const existingQuiz = await getQuizByScheduledDate(currentDate);
+    if (existingQuiz && (existingQuiz.status === 'active' || existingQuiz.status === 'closed')) {
+      logger.info('Today\'s quiz has already been posted. No duplicate publication needed.', {
+        quizId: existingQuiz.id,
+        scheduledFor: existingQuiz.scheduled_for,
+        status: existingQuiz.status,
+      });
+      return { success: true, quizId: existingQuiz.id, alreadyExisted: true };
+    }
+
+    // 3. Publish daily quiz with automatic retry mechanism (up to 3 attempts)
+    let result = null;
+    let lastError = null;
+    const maxRetries = options.maxRetries ?? 3;
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        result = await publishDailyQuiz({
+          client,
+          channelId,
+          scheduledFor: currentDate,
+        });
+        break; // Success
+      } catch (postErr) {
+        lastError = postErr;
+        logger.error(`Failed attempt ${attempt}/${maxRetries} to publish daily quiz`, {
+          error: postErr.message,
+          channelId,
+          date: currentDate,
+        });
+        if (attempt < maxRetries) {
+          const delayMs = attempt * 5000;
+          logger.info(`Retrying Daily Quiz Drop in ${delayMs / 1000}s...`);
+          await new Promise((resolve) => setTimeout(resolve, delayMs));
+        }
+      }
+    }
+
+    if (!result) {
+      throw lastError || new Error('Daily quiz publication failed after retries.');
+    }
+
     await logActivity('daily_quiz_scheduled_drop', 'scheduler', {
       quizId: result.quiz.id,
       channelId,
+      scheduledFor: currentDate,
     });
-    logger.info('Daily Quiz Drop completed successfully', { quizId: result.quiz.id });
+
+    logger.info('Daily Quiz Drop completed successfully ✅', {
+      quizId: result.quiz.id,
+      date: currentDate,
+      channelId,
+    });
+
     return { success: true, quizId: result.quiz.id };
   } catch (err) {
-    logger.error('Failed to run Daily Quiz Drop job', { error: err.message });
+    logger.error('Failed to run Daily Quiz Drop job', { error: err.message, stack: err.stack });
     return { success: false, error: err.message };
+  } finally {
+    isDailyQuizJobRunning = false;
   }
 }
 
@@ -72,6 +151,12 @@ export async function runDailyQuizDropJob(client) {
  */
 export async function runDailyQuizCloseJob() {
   logger.info('⏰ Running scheduled task: Daily Quiz Auto-Close');
+  if (isDailyCloseJobRunning) {
+    logger.warn('Daily Quiz Auto-Close job already running. Skipping.');
+    return { success: false, reason: 'JOB_ALREADY_RUNNING' };
+  }
+
+  isDailyCloseJobRunning = true;
   try {
     const active = await getActiveQuiz();
     if (!active) {
@@ -81,11 +166,13 @@ export async function runDailyQuizCloseJob() {
 
     await closeQuiz(active.id);
     await logActivity('daily_quiz_auto_close', 'scheduler', { quizId: active.id });
-    logger.info('Active quiz auto-closed', { quizId: active.id });
+    logger.info('Active quiz auto-closed successfully ✅', { quizId: active.id });
     return { success: true, closed: true, quizId: active.id };
   } catch (err) {
-    logger.error('Failed to auto-close active quiz', { error: err.message });
+    logger.error('Failed to auto-close active quiz', { error: err.message, stack: err.stack });
     return { success: false, error: err.message };
+  } finally {
+    isDailyCloseJobRunning = false;
   }
 }
 
@@ -160,6 +247,60 @@ export async function runStreakMaintenanceJob() {
 // ─── Scheduler Initialization ─────────────────────────────────────────────────
 
 /**
+ * Reconciles scheduler state on bot startup.
+ * Checks if today's quiz was missed (e.g. Due to downtime / restart around scheduled time)
+ * and safely publishes it without duplicates.
+ */
+export async function reconcileMissedJobsOnStartup(client) {
+  try {
+    const today = getKolkataDateString();
+    const [targetHourStr = '09', targetMinStr = '00'] = (config.app.quizPostTime || '09:00').split(':');
+    const targetHour = parseInt(targetHourStr, 10);
+    const targetMin = parseInt(targetMinStr, 10);
+
+    // Get current IST hour & minute
+    const nowISTParts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: config.app.timezone || 'Asia/Kolkata',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).formatToParts(new Date());
+
+    const currentHour = parseInt(nowISTParts.find((p) => p.type === 'hour')?.value || '0', 10);
+    const currentMin  = parseInt(nowISTParts.find((p) => p.type === 'minute')?.value || '0', 10);
+
+    const isPastScheduledTime = (currentHour > targetHour) || (currentHour === targetHour && currentMin >= targetMin);
+
+    logger.info('Checking for missed scheduled executions on startup...', {
+      today,
+      currentIST: `${String(currentHour).padStart(2, '0')}:${String(currentMin).padStart(2, '0')}`,
+      targetIST: `${targetHourStr}:${targetMinStr}`,
+      isPastScheduledTime,
+    });
+
+    // 1. Auto-close previous days' quizzes if still open
+    await closeExpiredQuizzes(today);
+
+    // 2. If it's past the scheduled post time today, check if today's quiz was published
+    if (isPastScheduledTime) {
+      const existing = await getQuizByScheduledDate(today);
+      if (!existing) {
+        logger.warn(`Missed daily quiz detected for today (${today}). Initiating automatic recovery drop...`);
+        const dropResult = await runDailyQuizDropJob(client, { date: today });
+        logger.info('Startup recovery drop completed', { dropResult });
+      } else {
+        logger.info(`Today's quiz (${today}) already active/recorded. No startup catch-up required.`, {
+          quizId: existing.id,
+          status: existing.status,
+        });
+      }
+    }
+  } catch (err) {
+    logger.error('Error during startup scheduler reconciliation', { error: err.message, stack: err.stack });
+  }
+}
+
+/**
  * Initializes and starts all recurring cron jobs.
  */
 export function initScheduler(client) {
@@ -169,6 +310,9 @@ export function initScheduler(client) {
   // Parse quiz post time (e.g., '09:00')
   const [hourStr = '09', minStr = '00'] = (config.app.quizPostTime || '09:00').split(':');
   const quizCron = `${parseInt(minStr, 10)} ${parseInt(hourStr, 10)} * * *`;
+
+  // Stop any existing active tasks before registering to avoid duplicates
+  stopScheduler();
 
   // 1. Daily Quiz Drop (Default: 09:00 AM IST)
   const taskDailyQuiz = cron.schedule(
@@ -211,6 +355,13 @@ export function initScheduler(client) {
   activeTasks.set('streakMaintenance', taskStreakMaintenance);
 
   logger.info(`Scheduler running with ${activeTasks.size} registered automated jobs ✅`);
+
+  // Run startup recovery check asynchronously so it doesn't block Gateway ready event
+  setTimeout(() => {
+    reconcileMissedJobsOnStartup(client).catch((err) => {
+      logger.error('Startup recovery error', { error: err.message });
+    });
+  }, 3000);
 }
 
 /**

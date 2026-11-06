@@ -32,6 +32,7 @@ export const config = {
       quiz:          optional_env('DISCORD_QUIZ_CHANNEL_ID'),
       leaderboard:   optional_env('DISCORD_LEADERBOARD_CHANNEL_ID'),
       logs:          optional_env('DISCORD_LOGS_CHANNEL_ID'),
+      test:          optional_env('TEST_CHANNEL_ID'),
     },
   },
   supabase: {
