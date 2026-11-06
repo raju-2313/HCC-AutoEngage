@@ -1,0 +1,183 @@
+[
+  {
+    "id": "day05-q01",
+    "topic": "Git & GitHub",
+    "difficulty": "easy",
+    "questionText": "Which command initializes a new Git repository in your current directory?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "git start" },
+      { "id": "B", "text": "git init" },
+      { "id": "C", "text": "git create" },
+      { "id": "D", "text": "git new" }
+    ],
+    "correctOption": "B",
+    "explanation": "'git init' creates a new .git subdirectory in the current folder, initializing version control.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day05-q02",
+    "topic": "Git & GitHub",
+    "difficulty": "easy",
+    "questionText": "Which command copies/downloads a remote repository to your local computer for the first time?",
+    "codeSnippet": "git ______ https://github.com/hcc-crew/repo.git",
+    "options": [
+      { "id": "A", "text": "clone" },
+      { "id": "B", "text": "copy" },
+      { "id": "C", "text": "download" },
+      { "id": "D", "text": "pull" }
+    ],
+    "correctOption": "A",
+    "explanation": "'git clone <url>' copies the entire repository including its full commit history to your local machine.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day05-q03",
+    "topic": "Git & GitHub",
+    "difficulty": "easy",
+    "questionText": "Which command stages ALL modified and new files for the next commit?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "git commit -a" },
+      { "id": "B", "text": "git stage all" },
+      { "id": "C", "text": "git add ." },
+      { "id": "D", "text": "git save" }
+    ],
+    "correctOption": "C",
+    "explanation": "'git add .' adds all modified and newly created files in the current directory and subdirectories to the staging area.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day05-q04",
+    "topic": "Git & GitHub",
+    "difficulty": "easy",
+    "questionText": "Which flag is used with `git commit` to write an inline commit message?",
+    "codeSnippet": "git commit ___ \"Add feature\"",
+    "options": [
+      { "id": "A", "text": "-m" },
+      { "id": "B", "text": "-msg" },
+      { "id": "C", "text": "-text" },
+      { "id": "D", "text": "-c" }
+    ],
+    "correctOption": "A",
+    "explanation": "The -m flag specifies the commit message directly on the command line without opening a text editor.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day05-q05",
+    "topic": "Git & GitHub",
+    "difficulty": "easy",
+    "questionText": "Which command shows the status of staged, unstaged, and untracked files?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "git check" },
+      { "id": "B", "text": "git status" },
+      { "id": "C", "text": "git info" },
+      { "id": "D", "text": "git log" }
+    ],
+    "correctOption": "B",
+    "explanation": "'git status' displays working tree status, showing staged changes, modified files, and untracked files.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day05-q06",
+    "topic": "Git & GitHub",
+    "difficulty": "easy",
+    "questionText": "Which command uploads your local commits to a remote repository like GitHub?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "git upload" },
+      { "id": "B", "text": "git pull" },
+      { "id": "C", "text": "git push" },
+      { "id": "D", "text": "git send" }
+    ],
+    "correctOption": "C",
+    "explanation": "'git push' publishes your local branch commits to the associated remote repository.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day05-q07",
+    "topic": "Git & GitHub",
+    "difficulty": "medium",
+    "questionText": "Which file is used to tell Git which files or directories to intentionally ignore and not track?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": ".gitexclude" },
+      { "id": "B", "text": ".gitignore" },
+      { "id": "C", "text": "config.git" },
+      { "id": "D", "text": ".gitrules" }
+    ],
+    "correctOption": "B",
+    "explanation": "A .gitignore file specifies intentionally untracked files (such as node_modules or .env) that Git should ignore.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day05-q08",
+    "topic": "Git & GitHub",
+    "difficulty": "medium",
+    "questionText": "Which command creates a new branch named `feature` AND immediately switches to it?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "git branch -new feature" },
+      { "id": "B", "text": "git checkout -b feature" },
+      { "id": "C", "text": "git switch -create feature" },
+      { "id": "D", "text": "git make branch feature" }
+    ],
+    "correctOption": "B",
+    "explanation": "'git checkout -b <branch>' (or 'git switch -c <branch>') creates a new branch and switches your working directory to it.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day05-q09",
+    "topic": "Git & GitHub",
+    "difficulty": "medium",
+    "questionText": "What does `git pull` actually do behind the scenes?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "git push followed by git merge" },
+      { "id": "B", "text": "git fetch followed by git merge" },
+      { "id": "C", "text": "git clone followed by git init" },
+      { "id": "D", "text": "git commit followed by git status" }
+    ],
+    "correctOption": "B",
+    "explanation": "'git pull' is shorthand for running 'git fetch' (download remote commits) immediately followed by 'git merge' into your current branch.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day05-q10",
+    "topic": "Git & GitHub",
+    "difficulty": "challenge",
+    "questionText": "How can you temporarily save uncommitted local changes without committing them, so you can work on something else?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "git stash" },
+      { "id": "B", "text": "git pause" },
+      { "id": "C", "text": "git hold" },
+      { "id": "D", "text": "git save --temp" }
+    ],
+    "correctOption": "A",
+    "explanation": "'git stash' takes your uncommitted modifications (both staged and unstaged), records them onto a stack, and restores a clean working directory.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  }
+]
+

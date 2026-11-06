@@ -1,0 +1,183 @@
+[
+  {
+    "id": "day04-q01",
+    "topic": "Arrays & DSA",
+    "difficulty": "easy",
+    "questionText": "In Python, C, Java, and JavaScript, what index accesses the FIRST element of an array?",
+    "codeSnippet": "arr = [10, 20, 30]\nfirst = arr[?]",
+    "options": [
+      { "id": "A", "text": "0" },
+      { "id": "B", "text": "1" },
+      { "id": "C", "text": "-1" },
+      { "id": "D", "text": "first" }
+    ],
+    "correctOption": "A",
+    "explanation": "Modern programming languages use zero-based indexing, so the first element is located at index 0.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day04-q02",
+    "topic": "Arrays & DSA",
+    "difficulty": "easy",
+    "questionText": "What is the time complexity to access an element by its index in an array?",
+    "codeSnippet": "element = arr[i]",
+    "options": [
+      { "id": "A", "text": "O(1)" },
+      { "id": "B", "text": "O(n)" },
+      { "id": "C", "text": "O(log n)" },
+      { "id": "D", "text": "O(n^2)" }
+    ],
+    "correctOption": "A",
+    "explanation": "Arrays occupy contiguous memory, allowing immediate calculation of memory offsets in constant O(1) time.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day04-q03",
+    "topic": "Arrays & DSA",
+    "difficulty": "easy",
+    "questionText": "Which data structure follows the LIFO (Last In, First Out) principle?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "Queue" },
+      { "id": "B", "text": "Stack" },
+      { "id": "C", "text": "Tree" },
+      { "id": "D", "text": "Graph" }
+    ],
+    "correctOption": "B",
+    "explanation": "A Stack operates on Last-In, First-Out (LIFO), where the last item added is the first one removed.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day04-q04",
+    "topic": "Arrays & DSA",
+    "difficulty": "easy",
+    "questionText": "Which data structure follows the FIFO (First In, First Out) principle?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "Stack" },
+      { "id": "B", "text": "Queue" },
+      { "id": "C", "text": "Heap" },
+      { "id": "D", "text": "Matrix" }
+    ],
+    "correctOption": "B",
+    "explanation": "A Queue operates on First-In, First-Out (FIFO), exactly like a line of people waiting for a ticket.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day04-q05",
+    "topic": "Arrays & DSA",
+    "difficulty": "easy",
+    "questionText": "What does Python's `list.pop()` method do by default?",
+    "codeSnippet": "nums = [1, 2, 3]\nnums.pop()",
+    "options": [
+      { "id": "A", "text": "Removes and returns the first element" },
+      { "id": "B", "text": "Removes and returns the last element" },
+      { "id": "C", "text": "Clears the entire list" },
+      { "id": "D", "text": "Deletes the smallest element" }
+    ],
+    "correctOption": "B",
+    "explanation": "Calling pop() without an argument removes and returns the last item of the list.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day04-q06",
+    "topic": "Arrays & DSA",
+    "difficulty": "easy",
+    "questionText": "How do you find the number of elements in a Python list named `data`?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "data.length" },
+      { "id": "B", "text": "data.size()" },
+      { "id": "C", "text": "len(data)" },
+      { "id": "D", "text": "count(data)" }
+    ],
+    "correctOption": "C",
+    "explanation": "len() is Python's standard built-in function to get the number of items in a sequence.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day04-q07",
+    "topic": "Arrays & DSA",
+    "difficulty": "medium",
+    "questionText": "What is the worst-case time complexity of Linear Search on an unsorted array of size N?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "O(1)" },
+      { "id": "B", "text": "O(log n)" },
+      { "id": "C", "text": "O(n)" },
+      { "id": "D", "text": "O(n log n)" }
+    ],
+    "correctOption": "C",
+    "explanation": "In the worst case, Linear Search inspects every single element from 0 to N-1, giving O(n) complexity.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day04-q08",
+    "topic": "Arrays & DSA",
+    "difficulty": "medium",
+    "questionText": "What is the time complexity of Binary Search on a SORTED array?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "O(n)" },
+      { "id": "B", "text": "O(log n)" },
+      { "id": "C", "text": "O(n^2)" },
+      { "id": "D", "text": "O(1)" }
+    ],
+    "correctOption": "B",
+    "explanation": "Binary Search divides the remaining search interval in half at every step, running in O(log n) time.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day04-q09",
+    "topic": "Arrays & DSA",
+    "difficulty": "medium",
+    "questionText": "What is the result of slicing `numbers[1:4]`?",
+    "codeSnippet": "numbers = [10, 20, 30, 40, 50]\nprint(numbers[1:4])",
+    "options": [
+      { "id": "A", "text": "[10, 20, 30]" },
+      { "id": "B", "text": "[20, 30, 40]" },
+      { "id": "C", "text": "[20, 30, 40, 50]" },
+      { "id": "D", "text": "[10, 20, 30, 40]" }
+    ],
+    "correctOption": "B",
+    "explanation": "Slicing [start:stop] takes elements from index 1 up to (excluding) index 4: elements at index 1 (20), 2 (30), and 3 (40).",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day04-q10",
+    "topic": "Arrays & DSA",
+    "difficulty": "challenge",
+    "questionText": "What will be printed after swapping elements using two pointers?",
+    "codeSnippet": "arr = [1, 2, 3, 4]\nleft, right = 0, len(arr) - 1\nwhile left < right:\n    arr[left], arr[right] = arr[right], arr[left]\n    left += 1\n    right -= 1\nprint(arr)",
+    "options": [
+      { "id": "A", "text": "[4, 3, 2, 1]" },
+      { "id": "B", "text": "[1, 2, 3, 4]" },
+      { "id": "C", "text": "[4, 2, 3, 1]" },
+      { "id": "D", "text": "[2, 1, 4, 3]" }
+    ],
+    "correctOption": "A",
+    "explanation": "This standard two-pointer loop reverses an array in-place by swapping opposite ends until the pointers meet, resulting in [4, 3, 2, 1].",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  }
+]
+
