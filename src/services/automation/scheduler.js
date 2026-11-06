@@ -55,7 +55,8 @@ async function resolveChannel(client, ...channelIds) {
  */
 export async function runDailyQuizDropJob(client, options = {}) {
   const currentDate = options.date || getKolkataDateString();
-  const channelId = options.channelId || config.discord.channels.quiz;
+  // Safe test channel resolution: During testing, strictly prioritize test channel
+  const channelId = options.channelId || config.discord.channels.test || config.discord.channels.quiz;
 
   logger.info('⏰ Running scheduled task: Daily Quiz Drop', {
     targetDate: currentDate,
@@ -69,7 +70,7 @@ export async function runDailyQuizDropJob(client, options = {}) {
   }
 
   if (!channelId) {
-    logger.warn('Skipping Daily Quiz Drop: DISCORD_QUIZ_CHANNEL_ID is not configured');
+    logger.warn('Skipping Daily Quiz Drop: No target channel is configured');
     return { success: false, reason: 'CHANNEL_NOT_CONFIGURED' };
   }
 
@@ -88,11 +89,12 @@ export async function runDailyQuizDropJob(client, options = {}) {
     // Check if a 10-question timed challenge session is scheduled for this date
     const timedBank = getDayQuestionSet(currentDate);
     if (timedBank) {
+      const isTestRun = channelId === config.discord.channels.test || currentDate === '2026-11-06';
       const sessionResult = await runDailyTimedSession({
         client,
         channelId,
         dateStr: currentDate,
-        suppressEveryonePing: options.suppressEveryonePing || false,
+        suppressEveryonePing: options.suppressEveryonePing ?? isTestRun,
         customCountdownSeconds: options.customCountdownSeconds,
         customQuestionTimeSeconds: options.customQuestionTimeSeconds,
       });

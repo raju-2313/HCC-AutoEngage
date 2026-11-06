@@ -124,6 +124,8 @@ export async function runDailyTimedSession({
       return { success: true, completed: true, alreadyCompleted: true };
     }
 
+    const shouldSuppressPing = suppressEveryonePing || channelId === config.discord.channels.test || dateStr === '2026-11-06';
+
     // 2. Initial Announcement with Single @everyone Ping (Phase 2)
     if (!state.announcementSent) {
       const catEmoji = getCategoryIcon(meta.category);
@@ -145,14 +147,14 @@ export async function runDailyTimedSession({
         .setFooter({ text: 'HCC AutoEngage • HackerRank Campus Crew  │  Single announcement mention' })
         .setTimestamp();
 
-      const mentionContent = suppressEveryonePing
-        ? '🔔 **Today\'s Daily Tech Challenge is about to begin!**'
+      const mentionContent = shouldSuppressPing
+        ? '🔔 **[TEST MODE] Today\'s Daily Tech Challenge is about to begin!**'
         : '🔔 **@everyone — Today\'s Daily Tech Challenge is about to begin!**';
 
       const announcementMsg = await targetChannel.send({
         content: mentionContent,
         embeds: [announceEmbed],
-        allowedMentions: suppressEveryonePing ? { parse: [] } : { parse: ['everyone'] },
+        allowedMentions: shouldSuppressPing ? { parse: [] } : { parse: ['everyone'] },
       });
 
       state.announcementSent = true;
