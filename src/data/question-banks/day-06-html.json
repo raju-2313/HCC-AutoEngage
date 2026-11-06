@@ -1,0 +1,183 @@
+[
+  {
+    "id": "day06-q01",
+    "topic": "HTML Basics",
+    "difficulty": "easy",
+    "questionText": "What does the acronym HTML stand for?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "HyperText Markup Language" },
+      { "id": "B", "text": "HighTech Machine Learning" },
+      { "id": "C", "text": "Hyper Transfer Mode Link" },
+      { "id": "D", "text": "Home Tool Markup Language" }
+    ],
+    "correctOption": "A",
+    "explanation": "HTML stands for HyperText Markup Language, the standard markup language for creating web documents.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day06-q02",
+    "topic": "HTML Basics",
+    "difficulty": "easy",
+    "questionText": "Which HTML tag is used to define the largest heading?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "<h6>" },
+      { "id": "B", "text": "<heading>" },
+      { "id": "C", "text": "<h1>" },
+      { "id": "D", "text": "<head>" }
+    ],
+    "correctOption": "C",
+    "explanation": "<h1> defines the most important and largest heading, whereas <h6> defines the smallest heading.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day06-q03",
+    "topic": "HTML Basics",
+    "difficulty": "easy",
+    "questionText": "Which HTML tag creates a clickable hyperlink to another web page?",
+    "codeSnippet": "<a href=\"https://hackerrank.com\">Visit HCC</a>",
+    "options": [
+      { "id": "A", "text": "<a>" },
+      { "id": "B", "text": "<link>" },
+      { "id": "C", "text": "<href>" },
+      { "id": "D", "text": "<url>" }
+    ],
+    "correctOption": "A",
+    "explanation": "The <a> (anchor) tag combined with the href attribute creates a clickable hyperlink.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day06-q04",
+    "topic": "HTML Basics",
+    "difficulty": "easy",
+    "questionText": "Which attribute is required on an `<img>` tag to provide alternative text for screen readers?",
+    "codeSnippet": "<img src=\"logo.png\" ____=\"HCC Logo\">",
+    "options": [
+      { "id": "A", "text": "title" },
+      { "id": "B", "text": "alt" },
+      { "id": "C", "text": "desc" },
+      { "id": "D", "text": "caption" }
+    ],
+    "correctOption": "B",
+    "explanation": "The 'alt' attribute provides accessible alternative text if the image fails to load and for assistive screen readers.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day06-q05",
+    "topic": "HTML Basics",
+    "difficulty": "easy",
+    "questionText": "Which tag creates an unordered (bulleted) list in HTML?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "<ol>" },
+      { "id": "B", "text": "<ul>" },
+      { "id": "C", "text": "<list>" },
+      { "id": "D", "text": "<li>" }
+    ],
+    "correctOption": "B",
+    "explanation": "<ul> defines an unordered (bulleted) list, while <ol> defines an ordered (numbered) list. List items use <li>.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day06-q06",
+    "topic": "HTML Basics",
+    "difficulty": "easy",
+    "questionText": "Which HTML tag is used to create a single-line text input field inside a form?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "<textfield>" },
+      { "id": "B", "text": "<input type=\"text\">" },
+      { "id": "C", "text": "<textarea>" },
+      { "id": "D", "text": "<text>" }
+    ],
+    "correctOption": "B",
+    "explanation": "<input type=\"text\"> creates a single-line text input field, whereas <textarea> creates a multi-line input.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day06-q07",
+    "topic": "HTML Basics",
+    "difficulty": "medium",
+    "questionText": "What is the key difference between `<div>` and `<span>` in default HTML rendering?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "<div> is inline-level, <span> is block-level" },
+      { "id": "B", "text": "<div> is block-level, <span> is inline-level" },
+      { "id": "C", "text": "<div> only holds text, <span> holds elements" },
+      { "id": "D", "text": "There is no difference in default styling" }
+    ],
+    "correctOption": "B",
+    "explanation": "By default, <div> is a block-level container that starts on a new line and spans full width; <span> is an inline container.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day06-q08",
+    "topic": "HTML Basics",
+    "difficulty": "medium",
+    "questionText": "Which HTML5 semantic element is intended to hold self-contained content, such as a blog post or news story?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "<section>" },
+      { "id": "B", "text": "<article>" },
+      { "id": "C", "text": "<aside>" },
+      { "id": "D", "text": "<main>" }
+    ],
+    "correctOption": "B",
+    "explanation": "The <article> element specifies independent, self-contained content that could be distributed or reused on its own.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day06-q09",
+    "topic": "HTML Basics",
+    "difficulty": "medium",
+    "questionText": "How do you open a hyperlink in a new browser tab in HTML?",
+    "codeSnippet": "<a href=\"https://google.com\" ______=\"_blank\">Search</a>",
+    "options": [
+      { "id": "A", "text": "target" },
+      { "id": "B", "text": "window" },
+      { "id": "C", "text": "rel" },
+      { "id": "D", "text": "open" }
+    ],
+    "correctOption": "A",
+    "explanation": "Setting target=\"_blank\" instructs the browser to open the linked document in a new tab or window.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day06-q10",
+    "topic": "HTML Basics",
+    "difficulty": "challenge",
+    "questionText": "What does the `<!DOCTYPE html>` declaration at the very top of an HTML document do?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "It links an external CSS stylesheet" },
+      { "id": "B", "text": "It tells the web browser to render the page in standard modern HTML5 mode rather than quirks mode" },
+      { "id": "C", "text": "It encrypts the HTML page with HTTPS" },
+      { "id": "D", "text": "It is an HTML tag that creates the document title" }
+    ],
+    "correctOption": "B",
+    "explanation": "<!DOCTYPE html> is an instruction that informs the browser of the document type, ensuring standard-compliant HTML5 rendering without quirks mode.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  }
+]
+

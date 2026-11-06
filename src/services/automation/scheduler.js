@@ -16,6 +16,8 @@ import { logger } from '../../utils/logger.js';
 import { publishDailyQuiz } from '../quiz/quizService.js';
 import { getActiveQuiz, closeQuiz, closeExpiredQuizzes, getQuizByScheduledDate } from '../../database/queries/quizzes.js';
 import { getKolkataDateString } from '../quiz/questionBank.js';
+import { getDayQuestionSet } from '../quiz/sessionQuestionManager.js';
+import { runDailyTimedSession, reconcileDailySessionOnStartup } from '../quiz/dailyTimedSessionEngine.js';
 import {
   buildWeeklyLeaderboardEmbed,
   computeMonthlyWinners,
@@ -80,6 +82,20 @@ export async function runDailyQuizDropJob(client, options = {}) {
     });
     if (closedCount.length > 0) {
       logger.info(`Auto-closed ${closedCount.length} expired quiz(zes) from prior dates.`);
+    }
+
+    // Check if a 10-question timed challenge session is scheduled for this date
+    const timedBank = getDayQuestionSet(currentDate);
+    if (timedBank) {
+      const sessionResult = await runDailyTimedSession({
+        client,
+        channelId,
+        dateStr: currentDate,
+        suppressEveryonePing: options.suppressEveryonePing || false,
+        customCountdownSeconds: options.customCountdownSeconds,
+        customQuestionTimeSeconds: options.customQuestionTimeSeconds,
+      });
+      return sessionResult;
     }
 
     // 2. Check if today's quiz was already posted (duplicate protection & restart recovery)
@@ -281,7 +297,10 @@ export async function reconcileMissedJobsOnStartup(client) {
     // 1. Auto-close previous days' quizzes if still open
     await closeExpiredQuizzes(today);
 
-    // 2. If it's past the scheduled post time today, check if today's quiz was published
+    // 2. Resume any active or interrupted daily timed session
+    await reconcileDailySessionOnStartup(client);
+
+    // 3. If it's past the scheduled post time today, check if today's quiz was published
     if (isPastScheduledTime) {
       const existing = await getQuizByScheduledDate(today);
       if (!existing) {

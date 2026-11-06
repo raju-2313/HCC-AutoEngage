@@ -1,0 +1,183 @@
+[
+  {
+    "id": "day01-q01",
+    "topic": "Python Basics",
+    "difficulty": "easy",
+    "questionText": "What will be the output of the following Python code?",
+    "codeSnippet": "x = 5\nprint(x * 2)",
+    "options": [
+      { "id": "A", "text": "10" },
+      { "id": "B", "text": "25" },
+      { "id": "C", "text": "55" },
+      { "id": "D", "text": "52" }
+    ],
+    "correctOption": "A",
+    "explanation": "In Python, the * operator multiplies integers, so 5 * 2 results in 10.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day01-q02",
+    "topic": "Python Basics",
+    "difficulty": "easy",
+    "questionText": "Which symbol is used to write single-line comments in Python?",
+    "codeSnippet": "# This is an example comment\nprint(\"Hello, HCC!\")",
+    "options": [
+      { "id": "A", "text": "//" },
+      { "id": "B", "text": "/*" },
+      { "id": "C", "text": "#" },
+      { "id": "D", "text": "<!--" }
+    ],
+    "correctOption": "C",
+    "explanation": "Python uses the hash character (#) to start single-line comments.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day01-q03",
+    "topic": "Python Basics",
+    "difficulty": "easy",
+    "questionText": "What is the data type of the variable `score`?",
+    "codeSnippet": "score = 98.5\nprint(type(score))",
+    "options": [
+      { "id": "A", "text": "int" },
+      { "id": "B", "text": "float" },
+      { "id": "C", "text": "double" },
+      { "id": "D", "text": "decimal" }
+    ],
+    "correctOption": "B",
+    "explanation": "Numbers with a decimal point in Python are represented by the float data type.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day01-q04",
+    "topic": "Python Basics",
+    "difficulty": "easy",
+    "questionText": "Which function in Python is used to display output on the console?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "console.log()" },
+      { "id": "B", "text": "System.out.println()" },
+      { "id": "C", "text": "echo()" },
+      { "id": "D", "text": "print()" }
+    ],
+    "correctOption": "D",
+    "explanation": "print() is Python's standard built-in function to display text or values to the console.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day01-q05",
+    "topic": "Python Basics",
+    "difficulty": "easy",
+    "questionText": "What is the output of the following boolean expression?",
+    "codeSnippet": "is_active = True\nprint(not is_active)",
+    "options": [
+      { "id": "A", "text": "False" },
+      { "id": "B", "text": "True" },
+      { "id": "C", "text": "None" },
+      { "id": "D", "text": "Error" }
+    ],
+    "correctOption": "A",
+    "explanation": "The 'not' operator negates boolean values; 'not True' evaluates to False.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day01-q06",
+    "topic": "Python Basics",
+    "difficulty": "easy",
+    "questionText": "What does the following integer division return?",
+    "codeSnippet": "print(17 // 5)",
+    "options": [
+      { "id": "A", "text": "3.4" },
+      { "id": "B", "text": "3" },
+      { "id": "C", "text": "2" },
+      { "id": "D", "text": "4" }
+    ],
+    "correctOption": "B",
+    "explanation": "The floor division operator (//) truncates the decimal part and returns the quotient 3.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day01-q07",
+    "topic": "Python Basics",
+    "difficulty": "medium",
+    "questionText": "What will be printed by the following code?",
+    "codeSnippet": "a = [1, 2]\nb = a\nb.append(3)\nprint(len(a))",
+    "options": [
+      { "id": "A", "text": "2" },
+      { "id": "B", "text": "3" },
+      { "id": "C", "text": "1" },
+      { "id": "D", "text": "Error" }
+    ],
+    "correctOption": "B",
+    "explanation": "In Python, lists are mutable and variable assignments copy references. Both 'a' and 'b' point to the same list.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day01-q08",
+    "topic": "Python Basics",
+    "difficulty": "medium",
+    "questionText": "What is the result of the following string and integer multiplication?",
+    "codeSnippet": "val = \"3\" * 3\nprint(val)",
+    "options": [
+      { "id": "A", "text": "9" },
+      { "id": "B", "text": "333" },
+      { "id": "C", "text": "TypeError" },
+      { "id": "D", "text": "(\"3\", \"3\", \"3\")" }
+    ],
+    "correctOption": "B",
+    "explanation": "Multiplying a string by an integer repeats the string. \"3\" repeated 3 times is \"333\".",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day01-q09",
+    "topic": "Python Basics",
+    "difficulty": "medium",
+    "questionText": "What will the following code output?",
+    "codeSnippet": "x = 10\ndef update():\n    x = 20\nupdate()\nprint(x)",
+    "options": [
+      { "id": "A", "text": "20" },
+      { "id": "B", "text": "10" },
+      { "id": "C", "text": "UnboundLocalError" },
+      { "id": "D", "text": "None" }
+    ],
+    "correctOption": "B",
+    "explanation": "The variable 'x' defined inside update() is local to that function. The global 'x' remains 10.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day01-q10",
+    "topic": "Python Basics",
+    "difficulty": "challenge",
+    "questionText": "What will be printed when checking equality and identity?",
+    "codeSnippet": "x = [1, 2]\ny = [1, 2]\nprint(x == y, x is y)",
+    "options": [
+      { "id": "A", "text": "True True" },
+      { "id": "B", "text": "False False" },
+      { "id": "C", "text": "True False" },
+      { "id": "D", "text": "False True" }
+    ],
+    "correctOption": "C",
+    "explanation": "== checks if the contents are equal (True), while 'is' checks if both variables refer to the exact same object in memory (False).",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  }
+]
+

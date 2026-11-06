@@ -1,0 +1,183 @@
+[
+  {
+    "id": "day07-q01",
+    "topic": "Strings",
+    "difficulty": "easy",
+    "questionText": "What will be printed by the following Python code?",
+    "codeSnippet": "word = \"Code\"\nprint(len(word))",
+    "options": [
+      { "id": "A", "text": "4" },
+      { "id": "B", "text": "3" },
+      { "id": "C", "text": "5" },
+      { "id": "D", "text": "\"Code\"" }
+    ],
+    "correctOption": "A",
+    "explanation": "len() returns the total number of characters in the string. \"Code\" has exactly 4 characters.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day07-q02",
+    "topic": "Strings",
+    "difficulty": "easy",
+    "questionText": "What does string concatenation with the `+` operator produce?",
+    "codeSnippet": "greeting = \"Hello \" + \"World\"\nprint(greeting)",
+    "options": [
+      { "id": "A", "text": "Hello World" },
+      { "id": "B", "text": "HelloWorld" },
+      { "id": "C", "text": "Hello + World" },
+      { "id": "D", "text": "TypeError" }
+    ],
+    "correctOption": "A",
+    "explanation": "The + operator joins the two strings together: \"Hello \" and \"World\" become \"Hello World\".",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day07-q03",
+    "topic": "Strings",
+    "difficulty": "easy",
+    "questionText": "Which method in Python converts all characters in a string to uppercase?",
+    "codeSnippet": "text = \"hackerrank\"\nprint(text._____())",
+    "options": [
+      { "id": "A", "text": "toUpperCase()" },
+      { "id": "B", "text": "upper()" },
+      { "id": "C", "text": "capitalize()" },
+      { "id": "D", "text": "caps()" }
+    ],
+    "correctOption": "B",
+    "explanation": "In Python, string.upper() returns a copy of the string with all cased characters converted to uppercase.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day07-q04",
+    "topic": "Strings",
+    "difficulty": "easy",
+    "questionText": "In Python, which character accesses the LAST character of a string using negative indexing?",
+    "codeSnippet": "s = \"PYTHON\"\nlast_char = s[?]",
+    "options": [
+      { "id": "A", "text": "-1" },
+      { "id": "B", "text": "0" },
+      { "id": "C", "text": "len(s)" },
+      { "id": "D", "text": "-0" }
+    ],
+    "correctOption": "A",
+    "explanation": "Python supports negative indexing, where -1 refers to the last element of the sequence ('N').",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day07-q05",
+    "topic": "Strings",
+    "difficulty": "easy",
+    "questionText": "Are string objects in Python mutable or immutable?",
+    "codeSnippet": "s = \"cat\"\ns[0] = \"b\" # What happens?",
+    "options": [
+      { "id": "A", "text": "Mutable (s becomes \"bat\")" },
+      { "id": "B", "text": "Immutable (TypeError: 'str' object does not support item assignment)" },
+      { "id": "C", "text": "Dynamically mutable" },
+      { "id": "D", "text": "Mutable only inside lists" }
+    ],
+    "correctOption": "B",
+    "explanation": "Strings in Python are immutable; once created, individual characters cannot be changed in-place.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day07-q06",
+    "topic": "Strings",
+    "difficulty": "easy",
+    "questionText": "Which method strips leading and trailing whitespace from a string in Python?",
+    "codeSnippet": "text = \"   hello   \"\nclean = text._____()",
+    "options": [
+      { "id": "A", "text": "strip()" },
+      { "id": "B", "text": "trim()" },
+      { "id": "C", "text": "clean()" },
+      { "id": "D", "text": "removeSpaces()" }
+    ],
+    "correctOption": "A",
+    "explanation": "In Python, strip() removes leading and trailing whitespace (trim() is used in JavaScript).",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day07-q07",
+    "topic": "Strings",
+    "difficulty": "medium",
+    "questionText": "What does the following slice operation return in Python?",
+    "codeSnippet": "text = \"CampusCrew\"\nprint(text[0:6])",
+    "options": [
+      { "id": "A", "text": "\"Campus\"" },
+      { "id": "B", "text": "\"CampusC\"" },
+      { "id": "C", "text": "\"Campu\"" },
+      { "id": "D", "text": "\"Crew\"" }
+    ],
+    "correctOption": "A",
+    "explanation": "text[0:6] extracts indices 0, 1, 2, 3, 4, 5, which forms \"Campus\".",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day07-q08",
+    "topic": "Strings",
+    "difficulty": "medium",
+    "questionText": "What is the output of the following `.split()` operation?",
+    "codeSnippet": "data = \"apple,banana,mango\"\nitems = data.split(\",\")\nprint(len(items))",
+    "options": [
+      { "id": "A", "text": "1" },
+      { "id": "B", "text": "3" },
+      { "id": "C", "text": "2" },
+      { "id": "D", "text": "17" }
+    ],
+    "correctOption": "B",
+    "explanation": "split(\",\") splits the string at each comma delimiter into a list of 3 items: ['apple', 'banana', 'mango'].",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day07-q09",
+    "topic": "Strings",
+    "difficulty": "medium",
+    "questionText": "What does `\"-\".join([\"a\", \"b\", \"c\"])` produce?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "\"a-b-c\"" },
+      { "id": "B", "text": "\"-a-b-c-\"" },
+      { "id": "C", "text": "[\"a\", \"-\", \"b\", \"-\", \"c\"]" },
+      { "id": "D", "text": "\"abc-\"" }
+    ],
+    "correctOption": "A",
+    "explanation": "join() concatenates elements of an iterable separated by the string delimiter, resulting in \"a-b-c\".",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day07-q10",
+    "topic": "Strings",
+    "difficulty": "challenge",
+    "questionText": "What idiom is commonly used in Python to reverse a string?",
+    "codeSnippet": "s = \"racecar\"\nreversed_s = s[?]",
+    "options": [
+      { "id": "A", "text": "[::-1]" },
+      { "id": "B", "text": "[-1:0]" },
+      { "id": "C", "text": "[reverse]" },
+      { "id": "D", "text": "[0:-1:-1]" }
+    ],
+    "correctOption": "A",
+    "explanation": "The slice step syntax [start:stop:step] with a step of -1 (s[::-1]) steps through the string backwards, producing the reversed string.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  }
+]
+

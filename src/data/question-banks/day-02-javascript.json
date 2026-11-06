@@ -1,0 +1,183 @@
+[
+  {
+    "id": "day02-q01",
+    "topic": "JavaScript",
+    "difficulty": "easy",
+    "questionText": "Which keyword in modern JavaScript declares a variable that CANNOT be reassigned?",
+    "codeSnippet": "const PI = 3.14159;\n// Attempting to reassign PI throws TypeError",
+    "options": [
+      { "id": "A", "text": "let" },
+      { "id": "B", "text": "var" },
+      { "id": "C", "text": "const" },
+      { "id": "D", "text": "immutable" }
+    ],
+    "correctOption": "C",
+    "explanation": "const creates a block-scoped read-only reference that cannot be reassigned after declaration.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day02-q02",
+    "topic": "JavaScript",
+    "difficulty": "easy",
+    "questionText": "What does the `typeof` operator return for `\"Hello World\"`?",
+    "codeSnippet": "console.log(typeof \"Hello World\");",
+    "options": [
+      { "id": "A", "text": "\"string\"" },
+      { "id": "B", "text": "\"text\"" },
+      { "id": "C", "text": "\"char\"" },
+      { "id": "D", "text": "\"object\"" }
+    ],
+    "correctOption": "A",
+    "explanation": "The typeof operator in JavaScript returns the string primitive type as \"string\".",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day02-q03",
+    "topic": "JavaScript",
+    "difficulty": "easy",
+    "questionText": "What will be printed to the console?",
+    "codeSnippet": "console.log(2 + \"2\");",
+    "options": [
+      { "id": "A", "text": "4" },
+      { "id": "B", "text": "\"22\"" },
+      { "id": "C", "text": "NaN" },
+      { "id": "D", "text": "TypeError" }
+    ],
+    "correctOption": "B",
+    "explanation": "When the + operator has a string operand, JavaScript coerces the number into a string and concatenates them into \"22\".",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day02-q04",
+    "topic": "JavaScript",
+    "difficulty": "easy",
+    "questionText": "Which method adds one or more elements to the END of an array?",
+    "codeSnippet": "const fruits = [\"apple\", \"banana\"];\nfruits._____(\"mango\");",
+    "options": [
+      { "id": "A", "text": "push()" },
+      { "id": "B", "text": "pop()" },
+      { "id": "C", "text": "shift()" },
+      { "id": "D", "text": "unshift()" }
+    ],
+    "correctOption": "A",
+    "explanation": "push() appends new elements to the end of an array and returns the new length.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day02-q05",
+    "topic": "JavaScript",
+    "difficulty": "easy",
+    "questionText": "What is the boolean value of an empty string `\"\"` in an if statement?",
+    "codeSnippet": "if (\"\") {\n  console.log(\"Yes\");\n} else {\n  console.log(\"No\");\n}",
+    "options": [
+      { "id": "A", "text": "Yes" },
+      { "id": "B", "text": "No" },
+      { "id": "C", "text": "undefined" },
+      { "id": "D", "text": "Throws Error" }
+    ],
+    "correctOption": "B",
+    "explanation": "An empty string is a falsy value in JavaScript, so the else branch executes and prints \"No\".",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day02-q06",
+    "topic": "JavaScript",
+    "difficulty": "easy",
+    "questionText": "What does the strict equality operator `===` compare?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "Values only (with type coercion)" },
+      { "id": "B", "text": "Both values and data types without coercion" },
+      { "id": "C", "text": "Memory addresses only" },
+      { "id": "D", "text": "Variable names" }
+    ],
+    "correctOption": "B",
+    "explanation": "=== (strict equality) checks that both the value and the type are identical without converting types.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day02-q07",
+    "topic": "JavaScript",
+    "difficulty": "medium",
+    "questionText": "What will be printed to the console?",
+    "codeSnippet": "console.log(typeof NaN);",
+    "options": [
+      { "id": "A", "text": "\"number\"" },
+      { "id": "B", "text": "\"nan\"" },
+      { "id": "C", "text": "\"undefined\"" },
+      { "id": "D", "text": "\"object\"" }
+    ],
+    "correctOption": "A",
+    "explanation": "In IEEE 754 floating point and JavaScript specifications, NaN (Not a Number) is technically a numeric data type.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day02-q08",
+    "topic": "JavaScript",
+    "difficulty": "medium",
+    "questionText": "What will the following code output?",
+    "codeSnippet": "const person = { name: \"Alex\" };\nperson.name = \"Sam\";\nconsole.log(person.name);",
+    "options": [
+      { "id": "A", "text": "\"Alex\"" },
+      { "id": "B", "text": "\"Sam\"" },
+      { "id": "C", "text": "TypeError" },
+      { "id": "D", "text": "undefined" }
+    ],
+    "correctOption": "B",
+    "explanation": "const prevents reassigning the variable reference, but the properties of an object declared with const can still be modified.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day02-q09",
+    "topic": "JavaScript",
+    "difficulty": "medium",
+    "questionText": "What will this array mapping return?",
+    "codeSnippet": "const nums = [1, 2, 3];\nconst res = nums.map(n => n * 2);\nconsole.log(res);",
+    "options": [
+      { "id": "A", "text": "[2, 4, 6]" },
+      { "id": "B", "text": "[1, 2, 3]" },
+      { "id": "C", "text": "6" },
+      { "id": "D", "text": "[2, 2, 2]" }
+    ],
+    "correctOption": "A",
+    "explanation": ".map() creates a new array by applying the callback function to each element. 1*2, 2*2, 3*2 yields [2, 4, 6].",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day02-q10",
+    "topic": "JavaScript",
+    "difficulty": "challenge",
+    "questionText": "What will be printed to the console?",
+    "codeSnippet": "console.log([] == ![]);",
+    "options": [
+      { "id": "A", "text": "false" },
+      { "id": "B", "text": "true" },
+      { "id": "C", "text": "TypeError" },
+      { "id": "D", "text": "undefined" }
+    ],
+    "correctOption": "B",
+    "explanation": "![] converts the truthy array to boolean false. Then [] == false triggers coercion: [] becomes \"\" and false becomes 0, \"\" becomes 0, so 0 == 0 evaluates to true.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  }
+]
+
