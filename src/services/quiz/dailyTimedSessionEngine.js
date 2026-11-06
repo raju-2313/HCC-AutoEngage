@@ -98,7 +98,7 @@ export async function runDailyTimedSession({
     }
 
     const countdownSec = customCountdownSeconds ?? config.app.countdownSeconds ?? 30;
-    const qTimeSec = customQuestionTimeSeconds ?? config.app.questionTimeSeconds ?? 15;
+    const qTimeSec = customQuestionTimeSeconds ?? config.app.questionTimeSeconds ?? 20;
 
     logger.info(`Starting daily timed quiz session for ${dateStr}`, {
       topic: meta.topic,
@@ -124,9 +124,7 @@ export async function runDailyTimedSession({
       return { success: true, completed: true, alreadyCompleted: true };
     }
 
-    const shouldSuppressPing = suppressEveryonePing || channelId === config.discord.channels.test || dateStr === '2026-11-06';
-
-    // 2. Initial Announcement with Single @everyone Ping (Phase 2)
+    // 2. Initial Announcement with First @everyone Ping (Phase 2 - 1 of 2 pings)
     if (!state.announcementSent) {
       const catEmoji = getCategoryIcon(meta.category);
       const announceEmbed = new EmbedBuilder()
@@ -141,20 +139,18 @@ export async function runDailyTimedSession({
           `🎁  **Rewards:** **+10 Points & +20 XP** per correct answer\n` +
           `🔥  **Streaks:** Keep your daily streak burning!\n\n` +
           `${HR}\n\n` +
-          `Get ready! The challenge starts in **<t:${Math.floor((Date.now() + countdownSec * 1000) / 1000)}:R>**.\n\n` +
+          `⚡ **Get ready! The quiz is starting in <t:${Math.floor((Date.now() + countdownSec * 1000) / 1000)}:R>!**\n\n` +
           `> _React fast, think sharp, and good luck!_ 🎯`
         )
-        .setFooter({ text: 'HCC AutoEngage • HackerRank Campus Crew  │  Single announcement mention' })
+        .setFooter({ text: 'HCC AutoEngage • HackerRank Campus Crew  │  Start announcement (Ping 1 of 2)' })
         .setTimestamp();
 
-      const mentionContent = shouldSuppressPing
-        ? '🔔 **[TEST MODE] Today\'s Daily Tech Challenge is about to begin!**'
-        : '🔔 **@everyone — Today\'s Daily Tech Challenge is about to begin!**';
+      const mentionContent = `🔔 **@everyone — The HCC Daily Tech Challenge (${meta.topic}) is starting now! Get ready — Question 1 drops in ${countdownSec} seconds!**`;
 
       const announcementMsg = await targetChannel.send({
         content: mentionContent,
         embeds: [announceEmbed],
-        allowedMentions: shouldSuppressPing ? { parse: [] } : { parse: ['everyone'] },
+        allowedMentions: { parse: ['everyone'] },
       });
 
       state.announcementSent = true;
@@ -368,41 +364,63 @@ export async function runDailyTimedSession({
     );
 
     const PODIUM_MEDALS = ['🥇', '🥈', '🥉'];
+    let podiumSection = '';
     let standingsText = '';
 
     if (sortedRankings.length === 0) {
-      standingsText = '> *No answers were submitted during today\'s session.*\n> Be sure to join tomorrow at 9:00 AM IST!';
+      standingsText = '> *No answers were submitted during today\'s session.*\n> Be ready for the next challenge at 09:00 AM IST!';
     } else {
+      const top3 = sortedRankings.slice(0, 3);
+      podiumSection = top3
+        .map((p, idx) => {
+          const medal = PODIUM_MEDALS[idx];
+          const title = idx === 0 ? '👑 **CHAMPION**' : idx === 1 ? '🥈 **RUNNER-UP**' : '🥉 **3RD PLACE**';
+          return `${medal} ${title}: <@${p.discordId}>  —  **${p.totalPoints} pts**  ·  ${p.correctCount}/10 correct (${Math.round((p.correctCount / 10) * 100)}% accuracy)`;
+        })
+        .join('\n');
+
       standingsText = sortedRankings
         .slice(0, 10)
         .map((p, idx) => {
-          const medal = PODIUM_MEDALS[idx] ?? `**#${idx + 1}**`;
+          const medal = PODIUM_MEDALS[idx] ?? `\`#${String(idx + 1).padStart(2, '0')}\``;
           const mention = `<@${p.discordId}>`;
           return `${medal}  ${mention}  —  **${p.totalPoints} pts**  ·  ${p.correctCount}/10 correct ✅`;
         })
-        .join('\n\n');
+        .join('\n');
     }
+
+    const totalAnswersLogged = Array.from(participantMap.values()).reduce((sum, p) => sum + p.totalAttempted, 0);
+    const totalCorrectLogged = Array.from(participantMap.values()).reduce((sum, p) => sum + p.correctCount, 0);
+
+    let desc = `## 🏁  **Day ${meta.dayNumber} of 7: ${meta.topic} — Final Results**\n\n${HR}\n\n`;
+    if (podiumSection) {
+      desc += `### 🌟  **TODAY'S WINNERS & PODIUM**  🌟\n\n${podiumSection}\n\n${HR}\n\n`;
+    }
+    desc += `### 📊  **SESSION LEADERBOARD (TOP 10)**\n\n${standingsText}\n\n${HR}\n\n` +
+      `🎉  Huge shoutout to all **${sortedRankings.length}** participants for testing your skills today!\n` +
+      `⚡  **Rewards:** All points, XP, and daily streaks have been locked into your profile.\n\n` +
+      `> _Check your rank anytime with \`/leaderboard\` and inspect your badges with \`/profile\`!_`;
 
     const finalEmbed = new EmbedBuilder()
       .setColor(0xFFD700) // Championship Gold
-      .setTitle(`🏆  Day ${meta.dayNumber} Challenge Complete: ${meta.topic}  🏆`)
-      .setDescription(
-        `## 🏁  **Final Session Leaderboard**\n\n` +
-        `${HR}\n\n` +
-        `${standingsText}\n\n` +
-        `${HR}\n\n` +
-        `🎉  Fantastic effort by all **${sortedRankings.length}** participant${sortedRankings.length !== 1 ? 's' : ''}!\n` +
-        `All points, XP, and daily streaks have been locked into the permanent community leaderboard.\n\n` +
-        `_Check your updated stats using \`/profile\` or view all-time rankings with \`/leaderboard\`._`
+      .setTitle(`🏆  HCC Daily Tech Challenge: ${meta.topic} — Complete!  🏆`)
+      .setDescription(desc)
+      .addFields(
+        { name: '👥 Challengers', value: `${sortedRankings.length} members`, inline: true },
+        { name: '🎯 Total Answers', value: `${totalAnswersLogged} (${totalCorrectLogged} correct)`, inline: true },
+        { name: '🔥 Next Challenge', value: 'Tomorrow @ 09:00 AM IST', inline: true }
       )
       .setFooter({
-        text: `HCC AutoEngage • Day ${meta.dayNumber}/7 Complete  │  Tomorrow: 09:00 AM IST`,
+        text: `HCC AutoEngage • Day ${meta.dayNumber}/7 Complete  │  Wrap-up announcement (Ping 2 of 2)`,
       })
       .setTimestamp();
 
+    const finalMention = `🏆 **@everyone — That's a wrap! The HCC Daily Tech Challenge (${meta.topic}) is complete! Check out today's Champions & Leaderboard below!** 🎊`;
+
     await targetChannel.send({
+      content: finalMention,
       embeds: [finalEmbed],
-      allowedMentions: { parse: [] }, // Never mention @everyone in results
+      allowedMentions: { parse: ['everyone'] }, // Final announcement ping #2 of 2
     });
 
     // Mark master session completed in Supabase

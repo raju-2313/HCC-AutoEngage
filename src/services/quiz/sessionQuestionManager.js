@@ -131,7 +131,7 @@ export function validateQuestionSet(questions, meta = {}) {
     }
 
     if (!q.explanation) throw new Error(`Question ${q.id} missing explanation`);
-    if (q.timeLimitSeconds !== 15) throw new Error(`Question ${q.id} timeLimitSeconds must be 15`);
+    if (q.timeLimitSeconds && ![15, 20].includes(q.timeLimitSeconds)) throw new Error(`Question ${q.id} timeLimitSeconds must be 15 or 20`);
 
     const diff = (q.difficulty || '').toLowerCase();
     if (!['easy', 'medium', 'challenge'].includes(diff)) {

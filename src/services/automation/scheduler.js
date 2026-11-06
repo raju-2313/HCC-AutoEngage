@@ -89,12 +89,11 @@ export async function runDailyQuizDropJob(client, options = {}) {
     // Check if a 10-question timed challenge session is scheduled for this date
     const timedBank = getDayQuestionSet(currentDate);
     if (timedBank) {
-      const isTestRun = channelId === config.discord.channels.test || currentDate === '2026-11-06';
       const sessionResult = await runDailyTimedSession({
         client,
         channelId,
         dateStr: currentDate,
-        suppressEveryonePing: options.suppressEveryonePing ?? isTestRun,
+        suppressEveryonePing: options.suppressEveryonePing ?? false,
         customCountdownSeconds: options.customCountdownSeconds,
         customQuestionTimeSeconds: options.customQuestionTimeSeconds,
       });
