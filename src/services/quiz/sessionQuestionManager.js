@@ -15,11 +15,18 @@ const BANKS_DIR = join(__dirname, '..', '..', 'data', 'question-banks');
 
 export const CHALLENGE_CALENDAR = {
   '2026-11-06': {
-    dayNumber: 2,
-    topic: 'JavaScript',
-    fileName: 'day-02-javascript.json',
-    category: 'javascript',
-    dateLabel: '6 Nov (Day 2 Test Run)',
+    dayNumber: 3,
+    topic: 'Loops',
+    fileName: 'day-03-loops.json',
+    category: 'loops',
+    dateLabel: '6 Nov (Day 3 Test Run)',
+  },
+  '2026-11-07': {
+    dayNumber: 4,
+    topic: 'Arrays & DSA',
+    fileName: 'day-04-arrays-dsa.json',
+    category: 'dsa',
+    dateLabel: '7 Nov (Day 4 Test Run)',
   },
   '2026-11-09': {
     dayNumber: 1,
