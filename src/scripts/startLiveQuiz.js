@@ -12,7 +12,7 @@ import { config } from '../config/index.js';
 import { logger } from '../utils/logger.js';
 
 async function main() {
-  const channelId = process.argv[2] || config.discord.channels.quiz || '1567916304118063124';
+  const channelId = process.argv[2] || config.discord.channels.test || config.discord.channels.quiz;
   const questionCount = parseInt(process.argv[3], 10) || 10;
   const secondsPerQuestion = parseInt(process.argv[4], 10) || 25;
 

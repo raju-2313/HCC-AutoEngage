@@ -133,6 +133,49 @@ export async function publishQuiz(quizId, { messageId, channelId }) {
 }
 
 /**
+ * Gets a quiz scheduled for a specific date (YYYY-MM-DD).
+ */
+export async function getQuizByScheduledDate(scheduledDate) {
+  const { data, error } = await supabaseAdmin
+    .from('quizzes')
+    .select(`
+      *,
+      quiz_questions (*)
+    `)
+    .eq('scheduled_for', scheduledDate)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    logger.error('Error fetching quiz by scheduled date', { scheduledDate, error: error.message });
+    throw error;
+  }
+  return data;
+}
+
+/**
+ * Closes all active quizzes that were scheduled for prior dates.
+ */
+export async function closeExpiredQuizzes(currentDate) {
+  const { data, error } = await supabaseAdmin
+    .from('quizzes')
+    .update({
+      status: 'closed',
+      closed_at: new Date().toISOString(),
+    })
+    .eq('status', 'active')
+    .lt('scheduled_for', currentDate)
+    .select();
+
+  if (error) {
+    logger.error('Error closing expired quizzes', { currentDate, error: error.message });
+    throw error;
+  }
+  return data || [];
+}
+
+/**
  * Closes an active quiz.
  */
 export async function closeQuiz(quizId) {

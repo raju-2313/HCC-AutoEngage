@@ -459,17 +459,26 @@ export function getRandomSampleQuestions(count = 10) {
 }
 
 /**
- * Curated 7-day scheduled questions for community testing sprint.
+ * Curated 7-day scheduled questions for community testing sprint (Nov 9 - Nov 15, 2026).
  * Maps 'YYYY-MM-DD' (Asia/Kolkata) to Question Bank ID.
+ *
+ * Schedule:
+ *   9 Nov  - Python Basics (beg-001)
+ *   10 Nov - JavaScript (beg-002)
+ *   11 Nov - Loops (beg-003)
+ *   12 Nov - Arrays & DSA (beg-004)
+ *   13 Nov - Git & GitHub (beg-005)
+ *   14 Nov - HTML Basics (beg-006)
+ *   15 Nov - Strings (beg-007)
  */
 export const SCHEDULED_QUESTIONS = {
-  '2026-11-06': 'beg-001',   // Day 1 (Thu): Python Multiplication Basics (x * 2)
-  '2026-11-07': 'beg-002',   // Day 2 (Fri): JavaScript Constant Declaration (const)
-  '2026-11-08': 'beg-003',   // Day 3 (Sat): Python For Loop Iterations (range(3))
-  '2026-11-09': 'beg-004',   // Day 4 (Sun): Zero-Based Array Indexing (index 0)
-  '2026-11-10': 'beg-005',   // Day 5 (Mon): Git Clone Command (git clone)
-  '2026-11-11': 'beg-006',   // Day 6 (Tue): HTML Hyperlink Tag (<a>)
-  '2026-11-12': 'beg-007',   // Day 7 (Wed): Python String Length (len("Code"))
+  '2026-11-09': 'beg-001',   // 9 Nov  - Python Basics: Multiplication Basics (x * 2)
+  '2026-11-10': 'beg-002',   // 10 Nov - JavaScript: Constant Declaration (const)
+  '2026-11-11': 'beg-003',   // 11 Nov - Loops: Python For Loop (range(3))
+  '2026-11-12': 'beg-004',   // 12 Nov - Arrays & DSA: Zero-Based Array Indexing (index 0)
+  '2026-11-13': 'beg-005',   // 13 Nov - Git & GitHub: Git Clone Command (git clone)
+  '2026-11-14': 'beg-006',   // 14 Nov - HTML Basics: HTML Hyperlink Tag (<a>)
+  '2026-11-15': 'beg-007',   // 15 Nov - Strings: Python String Length (len("Code"))
 };
 
 /**
