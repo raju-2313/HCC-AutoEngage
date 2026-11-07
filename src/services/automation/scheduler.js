@@ -11,6 +11,7 @@
  */
 
 import cron from 'node-cron';
+import { EmbedBuilder } from 'discord.js';
 import { config } from '../../config/index.js';
 import { logger } from '../../utils/logger.js';
 import { publishDailyQuiz } from '../quiz/quizService.js';
@@ -314,6 +315,61 @@ export async function runKeepAliveHeartbeatJob(client) {
   }
 }
 
+/**
+ * Job 7: Channel Self-Test & Diagnostic Check
+ * Posts a silent diagnostic embed (zero user/role mentions) to verify the channel,
+ * then automatically deletes the message after autoDeleteSeconds (default 10s).
+ */
+export async function runChannelSelfTestJob(client, options = {}) {
+  const channelId = options.channelId || config.discord.channels.general || config.discord.channels.quiz;
+  const autoDeleteSeconds = options.autoDeleteSeconds ?? 10;
+
+  logger.info('⏰ Running scheduled task: Channel Self-Test', { channelId, autoDeleteSeconds });
+
+  if (!channelId) {
+    logger.warn('Skipping Channel Self-Test: No target channel configured');
+    return { success: false, reason: 'CHANNEL_NOT_CONFIGURED' };
+  }
+
+  try {
+    const channel = await client.channels.fetch(channelId).catch(() => null);
+    if (!channel) {
+      throw new Error(`Target channel ${channelId} not found or inaccessible by bot.`);
+    }
+
+    const testEmbed = new EmbedBuilder()
+      .setColor(0x00C853)
+      .setTitle('🟢  HCC AutoEngage — System Diagnostic Check')
+      .setDescription(
+        '> Automated connection and channel pipeline test.\n\n' +
+        '• **Status:** Operational ✅\n' +
+        '• **Scheduler:** Active (Asia/Kolkata)\n' +
+        '• **Channel:** Verified\n' +
+        '• **Mentions:** Disabled (Silent)\n\n' +
+        `_This diagnostic notice will automatically delete in **${autoDeleteSeconds} seconds**._`
+      )
+      .setFooter({ text: `HCC AutoEngage • Automated Health Check • Auto-deleting in ${autoDeleteSeconds}s` })
+      .setTimestamp();
+
+    const msg = await channel.send({
+      embeds: [testEmbed],
+      allowedMentions: { parse: [] }, // Strict zero mentions
+    });
+
+    logger.info(`Channel self-test message sent (ID: ${msg.id}) to ${channelId} — auto-deleting in ${autoDeleteSeconds}s`);
+
+    setTimeout(async () => {
+      await msg.delete().catch(() => {});
+      logger.info(`Channel self-test message (${msg.id}) auto-deleted successfully ✅`);
+    }, autoDeleteSeconds * 1000);
+
+    return { success: true, messageId: msg.id, channelId };
+  } catch (err) {
+    logger.error('Channel Self-Test job failed', { error: err.message });
+    return { success: false, error: err.message };
+  }
+}
+
 // ─── Scheduler Initialization ─────────────────────────────────────────────────
 
 /**
@@ -445,6 +501,17 @@ export function initScheduler(client) {
     { timezone }
   );
   activeTasks.set('keepAlive', taskKeepAlive);
+
+  // 7. Channel Self-Test & Diagnostic Check (e.g. Pre-quiz test or custom cron)
+  const channelTestCron = process.env.CHANNEL_TEST_CRON;
+  if (channelTestCron) {
+    const taskChannelTest = cron.schedule(
+      channelTestCron,
+      () => runChannelSelfTestJob(client),
+      { timezone }
+    );
+    activeTasks.set('channelSelfTest', taskChannelTest);
+  }
 
   logger.info(`Scheduler running with ${activeTasks.size} registered automated jobs ✅`);
 
