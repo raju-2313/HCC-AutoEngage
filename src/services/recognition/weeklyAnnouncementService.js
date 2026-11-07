@@ -10,6 +10,7 @@ import { takeLeaderboardSnapshot } from './leaderboardService.js';
 import { logActivity } from '../../database/queries/logs.js';
 import { logger } from '../../utils/logger.js';
 import { config } from '../../config/index.js';
+import { getRandomLeaderboardTip } from '../../utils/leaderboardTips.js';
 
 const HR = '───────────────────────';
 
@@ -88,6 +89,8 @@ export async function buildWeeklyDigestEmbeds() {
       `> Congratulations to our top students for exceptional participation across **Learning**, **Discussions**, **Voice Study**, and **Collaboration**!\n${HR}\n\n` +
       leaderLines.join('\n\n') +
       `\n\n${HR}\n` +
+      `💡  **Whispers from the Mod:**\n` +
+      `> ${getRandomLeaderboardTip()}\n\n` +
       `-# ⚖️ *Scores are normalized across all categories so daily learning and helpful discussions carry real impact.*`
     );
   }

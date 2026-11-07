@@ -27,6 +27,7 @@ import {
 } from '../../database/queries/quizSessions.js';
 import { createQuiz, publishQuiz, closeQuiz, getQuizById } from '../../database/queries/quizzes.js';
 import { getKolkataDateString } from './questionBank.js';
+import { getRandomLeaderboardTip } from '../../utils/leaderboardTips.js';
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -405,7 +406,9 @@ export async function runDailyTimedSession({
     desc += `### 📊  **SESSION LEADERBOARD (TOP 10)**\n\n${standingsText}\n\n${HR}\n\n` +
       `🎉  Huge shoutout to all **${sortedRankings.length}** participants for testing your skills today!\n` +
       `⚡  **Rewards:** All points, XP, and daily streaks have been locked into your profile.\n\n` +
-      `> _Check your rank anytime with \`/leaderboard\` and inspect your badges with \`/profile\`!_`;
+      `💡  **Whispers from the Mod:**\n` +
+      `> ${getRandomLeaderboardTip()}\n\n` +
+      `> _Check your overall rank anytime with \`/leaderboard\` and inspect your badges with \`/profile\`!_`;
 
     const finalEmbed = new EmbedBuilder()
       .setColor(0xFFD700) // Championship Gold

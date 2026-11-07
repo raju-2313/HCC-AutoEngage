@@ -10,6 +10,7 @@ import {
   ButtonStyle,
 } from 'discord.js';
 import { fetchEngagementLeaderboard, getMemberEngagementSummary } from '../../database/queries/engagement.js';
+import { getRandomLeaderboardTip } from '../../utils/leaderboardTips.js';
 
 const HR = '───────────────────────';
 
@@ -123,6 +124,8 @@ export async function buildOverallLeaderboardEmbed(periodType = 'weekly') {
     `> Overall rankings balancing **Learning** (40%), **Discussions** (25%), **Voice** (15%), **Reactions** (10%), and **Contributions** (10%).\n${HR}\n\n` +
     cards.join('\n\n') +
     `\n\n${HR}\n` +
+    `💡  **Whispers from the Mod:**\n` +
+    `> ${getRandomLeaderboardTip()}\n\n` +
     `-# ⚖️ **Fair Scoring:** Scores are normalized against community benchmarks so learning and teamwork matter most.`
   );
 
