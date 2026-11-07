@@ -77,6 +77,7 @@ export async function runDailyTimedSession({
   suppressEveryonePing = false, // Used during automated testing
   customCountdownSeconds = null,
   customQuestionTimeSeconds = null,
+  customIntermissionSeconds = null,
 }) {
   if (isSessionRunning) {
     logger.warn('A daily quiz session is already actively running. Skipping concurrent start.');
@@ -336,7 +337,8 @@ export async function runDailyTimedSession({
 
       // Intermission before next question
       if (qNumber < totalQ) {
-        await sleep(4000);
+        const gap = customIntermissionSeconds !== null ? customIntermissionSeconds * 1000 : 4000;
+        await sleep(gap);
       }
     }
 
