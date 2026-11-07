@@ -1,0 +1,183 @@
+[
+  {
+    "id": "day02-q01",
+    "topic": "C Programming Basics",
+    "difficulty": "easy",
+    "questionText": "Which header file is required to use the standard printf() and scanf() functions in C?",
+    "codeSnippet": "#include <_____>\nint main() {\n    printf(\"Hello, First Years!\");\n    return 0;\n}",
+    "options": [
+      { "id": "A", "text": "stdio.h" },
+      { "id": "B", "text": "conio.h" },
+      { "id": "C", "text": "stdlib.h" },
+      { "id": "D", "text": "math.h" }
+    ],
+    "correctOption": "A",
+    "explanation": "<stdio.h> stands for Standard Input Output header and defines printf() and scanf().",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day02-q02",
+    "topic": "C Programming Basics",
+    "difficulty": "easy",
+    "questionText": "What will be printed to the console by the following C code?",
+    "codeSnippet": "int a = 15;\nint b = 25;\nprintf(\"%d\", a + b);",
+    "options": [
+      { "id": "A", "text": "1525" },
+      { "id": "B", "text": "40" },
+      { "id": "C", "text": "a + b" },
+      { "id": "D", "text": "Error" }
+    ],
+    "correctOption": "B",
+    "explanation": "In C, %d prints an integer, and 15 + 25 evaluates to 40.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day02-q03",
+    "topic": "C Programming Basics",
+    "difficulty": "easy",
+    "questionText": "Which format specifier is used in printf() to display a single character in C?",
+    "codeSnippet": "char grade = 'A';\nprintf(\"%__\", grade);",
+    "options": [
+      { "id": "A", "text": "%s" },
+      { "id": "B", "text": "%d" },
+      { "id": "C", "text": "%c" },
+      { "id": "D", "text": "%ch" }
+    ],
+    "correctOption": "C",
+    "explanation": "%c is the format specifier for a single character (char) in C.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day02-q04",
+    "topic": "C Programming Basics",
+    "difficulty": "easy",
+    "questionText": "What character must every executable statement in a C program end with?",
+    "codeSnippet": "int count = 10__",
+    "options": [
+      { "id": "A", "text": "Colon (:)" },
+      { "id": "B", "text": "Period (.)" },
+      { "id": "C", "text": "Semicolon (;)" },
+      { "id": "D", "text": "Comma (,)" }
+    ],
+    "correctOption": "C",
+    "explanation": "In C syntax, every statement must terminate with a semicolon (;).",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day02-q05",
+    "topic": "C Programming Basics",
+    "difficulty": "easy",
+    "questionText": "What is the output of the modulus (%) operator in this C snippet?",
+    "codeSnippet": "int remainder = 17 % 5;\nprintf(\"%d\", remainder);",
+    "options": [
+      { "id": "A", "text": "3" },
+      { "id": "B", "text": "2" },
+      { "id": "C", "text": "3.4" },
+      { "id": "D", "text": "0" }
+    ],
+    "correctOption": "B",
+    "explanation": "The modulus operator (%) returns the remainder of division: 17 divided by 5 is 3 with remainder 2.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day02-q06",
+    "topic": "C Programming Basics",
+    "difficulty": "easy",
+    "questionText": "What is the memory size of a 'char' data type in C on standard systems?",
+    "codeSnippet": "printf(\"%lu\", sizeof(char));",
+    "options": [
+      { "id": "A", "text": "1 byte" },
+      { "id": "B", "text": "2 bytes" },
+      { "id": "C", "text": "4 bytes" },
+      { "id": "D", "text": "8 bytes" }
+    ],
+    "correctOption": "A",
+    "explanation": "In standard C, sizeof(char) is guaranteed to be exactly 1 byte (8 bits).",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day02-q07",
+    "topic": "C Programming Basics",
+    "difficulty": "medium",
+    "questionText": "What will be printed by the post-increment operator in this snippet?",
+    "codeSnippet": "int x = 5;\nprintf(\"%d \", x++);\nprintf(\"%d\", x);",
+    "options": [
+      { "id": "A", "text": "5 5" },
+      { "id": "B", "text": "6 6" },
+      { "id": "C", "text": "5 6" },
+      { "id": "D", "text": "6 5" }
+    ],
+    "correctOption": "C",
+    "explanation": "Post-increment (x++) uses the current value (5) first, and increments x to 6 immediately after.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day02-q08",
+    "topic": "C Programming Basics",
+    "difficulty": "medium",
+    "questionText": "What will be the value stored in 'result' due to integer division?",
+    "codeSnippet": "int result = 9 / 2;\nprintf(\"%d\", result);",
+    "options": [
+      { "id": "A", "text": "4.5" },
+      { "id": "B", "text": "4" },
+      { "id": "C", "text": "5" },
+      { "id": "D", "text": "Error" }
+    ],
+    "correctOption": "B",
+    "explanation": "Division between two integers truncates the fractional part, resulting in integer 4.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day02-q09",
+    "topic": "C Programming Basics",
+    "difficulty": "medium",
+    "questionText": "Which symbol is required before the variable name in scanf() to pass its memory address?",
+    "codeSnippet": "int age;\nscanf(\"%d\", __age);",
+    "options": [
+      { "id": "A", "text": "*" },
+      { "id": "B", "text": "&" },
+      { "id": "C", "text": "%" },
+      { "id": "D", "text": "$" }
+    ],
+    "correctOption": "B",
+    "explanation": "The & (address-of) operator gives the memory address of 'age' so scanf() can write input into it.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day02-q10",
+    "topic": "C Programming Basics",
+    "difficulty": "challenge",
+    "questionText": "What will be output by this conditional statement?",
+    "codeSnippet": "int a = 10;\nif (a = 0) {\n    printf(\"True\");\n} else {\n    printf(\"False\");\n}",
+    "options": [
+      { "id": "A", "text": "True" },
+      { "id": "B", "text": "False" },
+      { "id": "C", "text": "Compilation Error" },
+      { "id": "D", "text": "No output" }
+    ],
+    "correctOption": "B",
+    "explanation": "The expression uses assignment (a = 0) instead of equality (==). It assigns 0 to 'a', which evaluates to 0 (False), so the else block executes printing 'False'.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  }
+]
+

@@ -44,11 +44,14 @@ const OPTION_STYLES = {
 
 const CATEGORY_ICONS = {
   python: '🐍',
-  javascript: '🟨',
+  c: '💻',
   loops: '🔄',
-  dsa: '🌳',
+  conditionals: '⚖️',
   git: '🔀',
   web: '🌐',
+  fundamentals: '🖥️',
+  javascript: '🟨',
+  dsa: '🌳',
   strings: '🔤',
   default: '🧠',
 };

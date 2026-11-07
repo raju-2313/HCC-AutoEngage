@@ -1,0 +1,182 @@
+[
+  {
+    "id": "day07-q01",
+    "topic": "Tech & Computer Basics",
+    "difficulty": "easy",
+    "questionText": "How many bits make up one standard byte in computer memory?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "4 bits" },
+      { "id": "B", "text": "8 bits" },
+      { "id": "C", "text": "16 bits" },
+      { "id": "D", "text": "32 bits" }
+    ],
+    "correctOption": "B",
+    "explanation": "1 byte consists of exactly 8 bits, capable of representing 256 unique values (0 to 255).",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day07-q02",
+    "topic": "Tech & Computer Basics",
+    "difficulty": "easy",
+    "questionText": "What does the abbreviation 'CPU' stand for?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "Central Processing Unit" },
+      { "id": "B", "text": "Computer Personal Unit" },
+      { "id": "C", "text": "Control Power Usage" },
+      { "id": "D", "text": "Core Program Utility" }
+    ],
+    "correctOption": "A",
+    "explanation": "The CPU (Central Processing Unit) is the primary component of a computer that executes program instructions.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day07-q03",
+    "topic": "Tech & Computer Basics",
+    "difficulty": "easy",
+    "questionText": "Which type of computer memory is volatile and clears its data when power is turned off?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "Hard Disk Drive (HDD)" },
+      { "id": "B", "text": "Random Access Memory (RAM)" },
+      { "id": "C", "text": "Read-Only Memory (ROM)" },
+      { "id": "D", "text": "Solid State Drive (SSD)" }
+    ],
+    "correctOption": "B",
+    "explanation": "RAM is temporary/volatile memory used by the operating system and running programs. When powered off, its data is lost.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day07-q04",
+    "topic": "Tech & Computer Basics",
+    "difficulty": "easy",
+    "questionText": "What number base system uses only two digits, 0 and 1, to represent all data?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "Decimal (Base 10)" },
+      { "id": "B", "text": "Octal (Base 8)" },
+      { "id": "C", "text": "Binary (Base 2)" },
+      { "id": "D", "text": "Hexadecimal (Base 16)" }
+    ],
+    "correctOption": "C",
+    "explanation": "The Binary number system (Base 2) uses only 0s and 1s, which correspond to electronic off/on states.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day07-q05",
+    "topic": "Tech & Computer Basics",
+    "difficulty": "easy",
+    "questionText": "Which of the following is a widely used open-source operating system kernel created by Linus Torvalds?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "Windows" },
+      { "id": "B", "text": "macOS" },
+      { "id": "C", "text": "Linux" },
+      { "id": "D", "text": "iOS" }
+    ],
+    "correctOption": "C",
+    "explanation": "Linux is a free, open-source operating system kernel that powers servers, Android phones, and supercomputers.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day07-q06",
+    "topic": "Tech & Computer Basics",
+    "difficulty": "easy",
+    "questionText": "What does the letter 'S' stand for in the secure web browsing protocol 'HTTPS'?",
+    "codeSnippet": "https://hackerrank.com",
+    "options": [
+      { "id": "A", "text": "Speed" },
+      { "id": "B", "text": "Standard" },
+      { "id": "C", "text": "Server" },
+      { "id": "D", "text": "Secure" }
+    ],
+    "correctOption": "D",
+    "explanation": "HTTPS stands for HyperText Transfer Protocol Secure, encrypting communication using SSL/TLS.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day07-q07",
+    "topic": "Tech & Computer Basics",
+    "difficulty": "medium",
+    "questionText": "What is the decimal equivalent of the binary number (1010)₂?",
+    "codeSnippet": "1*2³ + 0*2² + 1*2¹ + 0*2⁰ = ?",
+    "options": [
+      { "id": "A", "text": "8" },
+      { "id": "B", "text": "10" },
+      { "id": "C", "text": "12" },
+      { "id": "D", "text": "14" }
+    ],
+    "correctOption": "B",
+    "explanation": "(1*8) + (0*4) + (1*2) + (0*1) = 8 + 2 = 10 in decimal.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day07-q08",
+    "topic": "Tech & Computer Basics",
+    "difficulty": "medium",
+    "questionText": "Why are Solid-State Drives (SSDs) significantly faster than traditional Hard Disk Drives (HDDs)?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "They use spinning magnetic platters" },
+      { "id": "B", "text": "They have no moving mechanical parts and use flash memory" },
+      { "id": "C", "text": "They only store text files" },
+      { "id": "D", "text": "They require no electrical power" }
+    ],
+    "correctOption": "B",
+    "explanation": "SSDs use flash memory with zero moving parts, providing near-instantaneous read/write access times compared to mechanical magnetic heads.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day07-q09",
+    "topic": "Tech & Computer Basics",
+    "difficulty": "medium",
+    "questionText": "Which service acts as the internet's phonebook by translating domain names to IP addresses?",
+    "codeSnippet": "hackerrank.com  →  104.16.132.229",
+    "options": [
+      { "id": "A", "text": "DNS (Domain Name System)" },
+      { "id": "B", "text": "FTP (File Transfer Protocol)" },
+      { "id": "C", "text": "DHCP (Dynamic Host Configuration)" },
+      { "id": "D", "text": "SMTP (Simple Mail Transfer)" }
+    ],
+    "correctOption": "A",
+    "explanation": "DNS (Domain Name System) translates human-friendly domain names (like google.com) into machine-routable IP addresses.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day07-q10",
+    "topic": "Tech & Computer Basics",
+    "difficulty": "challenge",
+    "questionText": "What is the fastest type of memory storage located directly inside the CPU processor chip?",
+    "codeSnippet": null,
+    "options": [
+      { "id": "A", "text": "DDR5 RAM" },
+      { "id": "B", "text": "CPU Registers / Cache (L1/L2/L3)" },
+      { "id": "C", "text": "Virtual Memory" },
+      { "id": "D", "text": "NVMe SSD" }
+    ],
+    "correctOption": "B",
+    "explanation": "CPU registers and on-die cache memory (L1, L2, L3) operate at the speed of the processor core itself, making them orders of magnitude faster than system RAM.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  }
+]

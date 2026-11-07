@@ -186,175 +186,186 @@ print(x == y, x is y)
 
 ---
 
-## 📅 Day 2: JavaScript Core — Tuesday, 10 Nov 2026 @ 09:00 AM IST (Day 2)
+## 📅 Day 2: C Programming Basics — Tuesday, 10 Nov 2026 @ 09:00 AM IST (Day 2)
 
 - **Date & Time:** `2026-11-10 @ 09:00 AM IST`
-- **Category:** `javascript`
+- **Category:** `c`
 - **Total Questions:** 10 Questions (6 Beginner, 3 Intermediate, 1 Advanced/Challenge)
 
-### Q1. [EASY] Which keyword in modern JavaScript declares a variable that CANNOT be reassigned?
+### Q1. [EASY] Which header file is required to use the standard printf() and scanf() functions in C?
 
 ```javascript
-const PI = 3.14159;
-// Attempting to reassign PI throws TypeError
-```
-
-- **[Option A]** let
-- **[Option B]** var
-- **[Option C]** const **(Correct Answer ✅)**
-- **[Option D]** immutable
-
-- **✅ Correct Option:** **Option C**
-- **💡 Explanation:** const creates a block-scoped read-only reference that cannot be reassigned after declaration.
-- **⏱️ Question Timer:** 15 seconds
-- **🎁 Rewards:** +10 Points / +20 XP
-
-### Q2. [EASY] What does the `typeof` operator return for `"Hello World"`?
-
-```javascript
-console.log(typeof "Hello World");
-```
-
-- **[Option A]** "string" **(Correct Answer ✅)**
-- **[Option B]** "text"
-- **[Option C]** "char"
-- **[Option D]** "object"
-
-- **✅ Correct Option:** **Option A**
-- **💡 Explanation:** The typeof operator in JavaScript returns the string primitive type as "string".
-- **⏱️ Question Timer:** 15 seconds
-- **🎁 Rewards:** +10 Points / +20 XP
-
-### Q3. [EASY] What will be printed to the console?
-
-```javascript
-console.log(2 + "2");
-```
-
-- **[Option A]** 4
-- **[Option B]** "22" **(Correct Answer ✅)**
-- **[Option C]** NaN
-- **[Option D]** TypeError
-
-- **✅ Correct Option:** **Option B**
-- **💡 Explanation:** When the + operator has a string operand, JavaScript coerces the number into a string and concatenates them into "22".
-- **⏱️ Question Timer:** 15 seconds
-- **🎁 Rewards:** +10 Points / +20 XP
-
-### Q4. [EASY] Which method adds one or more elements to the END of an array?
-
-```javascript
-const fruits = ["apple", "banana"];
-fruits._____("mango");
-```
-
-- **[Option A]** push() **(Correct Answer ✅)**
-- **[Option B]** pop()
-- **[Option C]** shift()
-- **[Option D]** unshift()
-
-- **✅ Correct Option:** **Option A**
-- **💡 Explanation:** push() appends new elements to the end of an array and returns the new length.
-- **⏱️ Question Timer:** 15 seconds
-- **🎁 Rewards:** +10 Points / +20 XP
-
-### Q5. [EASY] What is the boolean value of an empty string `""` in an if statement?
-
-```javascript
-if ("") {
-  console.log("Yes");
-} else {
-  console.log("No");
+#include <_____>
+int main() {
+    printf("Hello, First Years!");
+    return 0;
 }
 ```
 
-- **[Option A]** Yes
-- **[Option B]** No **(Correct Answer ✅)**
-- **[Option C]** undefined
-- **[Option D]** Throws Error
-
-- **✅ Correct Option:** **Option B**
-- **💡 Explanation:** An empty string is a falsy value in JavaScript, so the else branch executes and prints "No".
-- **⏱️ Question Timer:** 15 seconds
-- **🎁 Rewards:** +10 Points / +20 XP
-
-### Q6. [EASY] What does the strict equality operator `===` compare?
-
-- **[Option A]** Values only (with type coercion)
-- **[Option B]** Both values and data types without coercion **(Correct Answer ✅)**
-- **[Option C]** Memory addresses only
-- **[Option D]** Variable names
-
-- **✅ Correct Option:** **Option B**
-- **💡 Explanation:** === (strict equality) checks that both the value and the type are identical without converting types.
-- **⏱️ Question Timer:** 15 seconds
-- **🎁 Rewards:** +10 Points / +20 XP
-
-### Q7. [MEDIUM] What will be printed to the console?
-
-```javascript
-console.log(typeof NaN);
-```
-
-- **[Option A]** "number" **(Correct Answer ✅)**
-- **[Option B]** "nan"
-- **[Option C]** "undefined"
-- **[Option D]** "object"
+- **[Option A]** stdio.h **(Correct Answer ✅)**
+- **[Option B]** conio.h
+- **[Option C]** stdlib.h
+- **[Option D]** math.h
 
 - **✅ Correct Option:** **Option A**
-- **💡 Explanation:** In IEEE 754 floating point and JavaScript specifications, NaN (Not a Number) is technically a numeric data type.
+- **💡 Explanation:** <stdio.h> stands for Standard Input Output header and defines printf() and scanf().
 - **⏱️ Question Timer:** 15 seconds
 - **🎁 Rewards:** +10 Points / +20 XP
 
-### Q8. [MEDIUM] What will the following code output?
+### Q2. [EASY] What will be printed to the console by the following C code?
 
 ```javascript
-const person = { name: "Alex" };
-person.name = "Sam";
-console.log(person.name);
+int a = 15;
+int b = 25;
+printf("%d", a + b);
 ```
 
-- **[Option A]** "Alex"
-- **[Option B]** "Sam" **(Correct Answer ✅)**
-- **[Option C]** TypeError
-- **[Option D]** undefined
+- **[Option A]** 1525
+- **[Option B]** 40 **(Correct Answer ✅)**
+- **[Option C]** a + b
+- **[Option D]** Error
 
 - **✅ Correct Option:** **Option B**
-- **💡 Explanation:** const prevents reassigning the variable reference, but the properties of an object declared with const can still be modified.
+- **💡 Explanation:** In C, %d prints an integer, and 15 + 25 evaluates to 40.
 - **⏱️ Question Timer:** 15 seconds
 - **🎁 Rewards:** +10 Points / +20 XP
 
-### Q9. [MEDIUM] What will this array mapping return?
+### Q3. [EASY] Which format specifier is used in printf() to display a single character in C?
 
 ```javascript
-const nums = [1, 2, 3];
-const res = nums.map(n => n * 2);
-console.log(res);
+char grade = 'A';
+printf("%__", grade);
 ```
 
-- **[Option A]** [2, 4, 6] **(Correct Answer ✅)**
-- **[Option B]** [1, 2, 3]
-- **[Option C]** 6
-- **[Option D]** [2, 2, 2]
+- **[Option A]** %s
+- **[Option B]** %d
+- **[Option C]** %c **(Correct Answer ✅)**
+- **[Option D]** %ch
+
+- **✅ Correct Option:** **Option C**
+- **💡 Explanation:** %c is the format specifier for a single character (char) in C.
+- **⏱️ Question Timer:** 15 seconds
+- **🎁 Rewards:** +10 Points / +20 XP
+
+### Q4. [EASY] What character must every executable statement in a C program end with?
+
+```javascript
+int count = 10__
+```
+
+- **[Option A]** Colon (:)
+- **[Option B]** Period (.)
+- **[Option C]** Semicolon (;) **(Correct Answer ✅)**
+- **[Option D]** Comma (,)
+
+- **✅ Correct Option:** **Option C**
+- **💡 Explanation:** In C syntax, every statement must terminate with a semicolon (;).
+- **⏱️ Question Timer:** 15 seconds
+- **🎁 Rewards:** +10 Points / +20 XP
+
+### Q5. [EASY] What is the output of the modulus (%) operator in this C snippet?
+
+```javascript
+int remainder = 17 % 5;
+printf("%d", remainder);
+```
+
+- **[Option A]** 3
+- **[Option B]** 2 **(Correct Answer ✅)**
+- **[Option C]** 3.4
+- **[Option D]** 0
+
+- **✅ Correct Option:** **Option B**
+- **💡 Explanation:** The modulus operator (%) returns the remainder of division: 17 divided by 5 is 3 with remainder 2.
+- **⏱️ Question Timer:** 15 seconds
+- **🎁 Rewards:** +10 Points / +20 XP
+
+### Q6. [EASY] What is the memory size of a 'char' data type in C on standard systems?
+
+```javascript
+printf("%lu", sizeof(char));
+```
+
+- **[Option A]** 1 byte **(Correct Answer ✅)**
+- **[Option B]** 2 bytes
+- **[Option C]** 4 bytes
+- **[Option D]** 8 bytes
 
 - **✅ Correct Option:** **Option A**
-- **💡 Explanation:** .map() creates a new array by applying the callback function to each element. 1*2, 2*2, 3*2 yields [2, 4, 6].
+- **💡 Explanation:** In standard C, sizeof(char) is guaranteed to be exactly 1 byte (8 bits).
 - **⏱️ Question Timer:** 15 seconds
 - **🎁 Rewards:** +10 Points / +20 XP
 
-### Q10. [CHALLENGE] What will be printed to the console?
+### Q7. [MEDIUM] What will be printed by the post-increment operator in this snippet?
 
 ```javascript
-console.log([] == ![]);
+int x = 5;
+printf("%d ", x++);
+printf("%d", x);
 ```
 
-- **[Option A]** false
-- **[Option B]** true **(Correct Answer ✅)**
-- **[Option C]** TypeError
-- **[Option D]** undefined
+- **[Option A]** 5 5
+- **[Option B]** 6 6
+- **[Option C]** 5 6 **(Correct Answer ✅)**
+- **[Option D]** 6 5
+
+- **✅ Correct Option:** **Option C**
+- **💡 Explanation:** Post-increment (x++) uses the current value (5) first, and increments x to 6 immediately after.
+- **⏱️ Question Timer:** 15 seconds
+- **🎁 Rewards:** +10 Points / +20 XP
+
+### Q8. [MEDIUM] What will be the value stored in 'result' due to integer division?
+
+```javascript
+int result = 9 / 2;
+printf("%d", result);
+```
+
+- **[Option A]** 4.5
+- **[Option B]** 4 **(Correct Answer ✅)**
+- **[Option C]** 5
+- **[Option D]** Error
 
 - **✅ Correct Option:** **Option B**
-- **💡 Explanation:** ![] converts the truthy array to boolean false. Then [] == false triggers coercion: [] becomes "" and false becomes 0, "" becomes 0, so 0 == 0 evaluates to true.
+- **💡 Explanation:** Division between two integers truncates the fractional part, resulting in integer 4.
+- **⏱️ Question Timer:** 15 seconds
+- **🎁 Rewards:** +10 Points / +20 XP
+
+### Q9. [MEDIUM] Which symbol is required before the variable name in scanf() to pass its memory address?
+
+```javascript
+int age;
+scanf("%d", __age);
+```
+
+- **[Option A]** *
+- **[Option B]** & **(Correct Answer ✅)**
+- **[Option C]** %
+- **[Option D]** $
+
+- **✅ Correct Option:** **Option B**
+- **💡 Explanation:** The & (address-of) operator gives the memory address of 'age' so scanf() can write input into it.
+- **⏱️ Question Timer:** 15 seconds
+- **🎁 Rewards:** +10 Points / +20 XP
+
+### Q10. [CHALLENGE] What will be output by this conditional statement?
+
+```javascript
+int a = 10;
+if (a = 0) {
+    printf("True");
+} else {
+    printf("False");
+}
+```
+
+- **[Option A]** True
+- **[Option B]** False **(Correct Answer ✅)**
+- **[Option C]** Compilation Error
+- **[Option D]** No output
+
+- **✅ Correct Option:** **Option B**
+- **💡 Explanation:** The expression uses assignment (a = 0) instead of equality (==). It assigns 0 to 'a', which evaluates to 0 (False), so the else block executes printing 'False'.
 - **⏱️ Question Timer:** 15 seconds
 - **🎁 Rewards:** +10 Points / +20 XP
 
@@ -541,158 +552,193 @@ else:
 
 ---
 
-## 📅 Day 4: Arrays & DSA — Thursday, 12 Nov 2026 @ 09:00 AM IST (Day 4)
+## 📅 Day 4: Conditionals & Logic — Thursday, 12 Nov 2026 @ 09:00 AM IST (Day 4)
 
 - **Date & Time:** `2026-11-12 @ 09:00 AM IST`
-- **Category:** `dsa`
+- **Category:** `conditionals`
 - **Total Questions:** 10 Questions (6 Beginner, 3 Intermediate, 1 Advanced/Challenge)
 
-### Q1. [EASY] In Python, C, Java, and JavaScript, what index accesses the FIRST element of an array?
+### Q1. [EASY] Which basic programming keyword is used to execute code only when a condition is true?
 
 ```javascript
-arr = [10, 20, 30]
-first = arr[?]
+____ (marks >= 40) {
+    printf("Passed!");
+}
 ```
 
-- **[Option A]** 0 **(Correct Answer ✅)**
-- **[Option B]** 1
-- **[Option C]** -1
-- **[Option D]** first
+- **[Option A]** if **(Correct Answer ✅)**
+- **[Option B]** for
+- **[Option C]** while
+- **[Option D]** def
 
 - **✅ Correct Option:** **Option A**
-- **💡 Explanation:** Modern programming languages use zero-based indexing, so the first element is located at index 0.
+- **💡 Explanation:** The 'if' keyword evaluates a boolean condition and executes its block if the condition is true.
 - **⏱️ Question Timer:** 15 seconds
 - **🎁 Rewards:** +10 Points / +20 XP
 
-### Q2. [EASY] What is the time complexity to access an element by its index in an array?
+### Q2. [EASY] What will be printed to the console by this code snippet?
 
 ```javascript
-element = arr[i]
+x = 10
+if x > 5:
+    print("Greater")
+else:
+    print("Smaller")
 ```
 
-- **[Option A]** O(1) **(Correct Answer ✅)**
-- **[Option B]** O(n)
-- **[Option C]** O(log n)
-- **[Option D]** O(n^2)
-
-- **✅ Correct Option:** **Option A**
-- **💡 Explanation:** Arrays occupy contiguous memory, allowing immediate calculation of memory offsets in constant O(1) time.
-- **⏱️ Question Timer:** 15 seconds
-- **🎁 Rewards:** +10 Points / +20 XP
-
-### Q3. [EASY] Which data structure follows the LIFO (Last In, First Out) principle?
-
-- **[Option A]** Queue
-- **[Option B]** Stack **(Correct Answer ✅)**
-- **[Option C]** Tree
-- **[Option D]** Graph
+- **[Option A]** Smaller
+- **[Option B]** Greater **(Correct Answer ✅)**
+- **[Option C]** Greater Smaller
+- **[Option D]** Error
 
 - **✅ Correct Option:** **Option B**
-- **💡 Explanation:** A Stack operates on Last-In, First-Out (LIFO), where the last item added is the first one removed.
+- **💡 Explanation:** Since 10 > 5 is True, the 'if' block executes printing 'Greater'.
 - **⏱️ Question Timer:** 15 seconds
 - **🎁 Rewards:** +10 Points / +20 XP
 
-### Q4. [EASY] Which data structure follows the FIFO (First In, First Out) principle?
-
-- **[Option A]** Stack
-- **[Option B]** Queue **(Correct Answer ✅)**
-- **[Option C]** Heap
-- **[Option D]** Matrix
-
-- **✅ Correct Option:** **Option B**
-- **💡 Explanation:** A Queue operates on First-In, First-Out (FIFO), exactly like a line of people waiting for a ticket.
-- **⏱️ Question Timer:** 15 seconds
-- **🎁 Rewards:** +10 Points / +20 XP
-
-### Q5. [EASY] What does Python's `list.pop()` method do by default?
+### Q3. [EASY] Which comparison operator checks if two values are equal in C, Python, and Java?
 
 ```javascript
-nums = [1, 2, 3]
-nums.pop()
+if (a __ b)
 ```
 
-- **[Option A]** Removes and returns the first element
-- **[Option B]** Removes and returns the last element **(Correct Answer ✅)**
-- **[Option C]** Clears the entire list
-- **[Option D]** Deletes the smallest element
+- **[Option A]** =
+- **[Option B]** == **(Correct Answer ✅)**
+- **[Option C]** equals
+- **[Option D]** :=
 
 - **✅ Correct Option:** **Option B**
-- **💡 Explanation:** Calling pop() without an argument removes and returns the last item of the list.
+- **💡 Explanation:** Double equals (==) is the equality comparison operator, whereas single equals (=) is assignment.
 - **⏱️ Question Timer:** 15 seconds
 - **🎁 Rewards:** +10 Points / +20 XP
 
-### Q6. [EASY] How do you find the number of elements in a Python list named `data`?
+### Q4. [EASY] Which block executes when the 'if' condition evaluates to false?
 
-- **[Option A]** data.length
-- **[Option B]** data.size()
-- **[Option C]** len(data) **(Correct Answer ✅)**
-- **[Option D]** count(data)
+```javascript
+if (is_member) {
+    printf("Welcome!");
+} _____ {
+    printf("Please sign up.");
+}
+```
+
+- **[Option A]** then
+- **[Option B]** stop
+- **[Option C]** else **(Correct Answer ✅)**
+- **[Option D]** default
 
 - **✅ Correct Option:** **Option C**
-- **💡 Explanation:** len() is Python's standard built-in function to get the number of items in a sequence.
+- **💡 Explanation:** The 'else' block provides the alternative code to run when the condition is false.
 - **⏱️ Question Timer:** 15 seconds
 - **🎁 Rewards:** +10 Points / +20 XP
 
-### Q7. [MEDIUM] What is the worst-case time complexity of Linear Search on an unsorted array of size N?
-
-- **[Option A]** O(1)
-- **[Option B]** O(log n)
-- **[Option C]** O(n) **(Correct Answer ✅)**
-- **[Option D]** O(n log n)
-
-- **✅ Correct Option:** **Option C**
-- **💡 Explanation:** In the worst case, Linear Search inspects every single element from 0 to N-1, giving O(n) complexity.
-- **⏱️ Question Timer:** 15 seconds
-- **🎁 Rewards:** +10 Points / +20 XP
-
-### Q8. [MEDIUM] What is the time complexity of Binary Search on a SORTED array?
-
-- **[Option A]** O(n)
-- **[Option B]** O(log n) **(Correct Answer ✅)**
-- **[Option C]** O(n^2)
-- **[Option D]** O(1)
-
-- **✅ Correct Option:** **Option B**
-- **💡 Explanation:** Binary Search divides the remaining search interval in half at every step, running in O(log n) time.
-- **⏱️ Question Timer:** 15 seconds
-- **🎁 Rewards:** +10 Points / +20 XP
-
-### Q9. [MEDIUM] What is the result of slicing `numbers[1:4]`?
+### Q5. [EASY] What does the 'not equal to' operator look like in C and Python?
 
 ```javascript
-numbers = [10, 20, 30, 40, 50]
-print(numbers[1:4])
+if (x __ 0)
 ```
 
-- **[Option A]** [10, 20, 30]
-- **[Option B]** [20, 30, 40] **(Correct Answer ✅)**
-- **[Option C]** [20, 30, 40, 50]
-- **[Option D]** [10, 20, 30, 40]
+- **[Option A]** <>
+- **[Option B]** != **(Correct Answer ✅)**
+- **[Option C]** not=
+- **[Option D]** /=
 
 - **✅ Correct Option:** **Option B**
-- **💡 Explanation:** Slicing [start:stop] takes elements from index 1 up to (excluding) index 4: elements at index 1 (20), 2 (30), and 3 (40).
+- **💡 Explanation:** != is the standard inequality operator in C, C++, Java, and Python.
 - **⏱️ Question Timer:** 15 seconds
 - **🎁 Rewards:** +10 Points / +20 XP
 
-### Q10. [CHALLENGE] What will be printed after swapping elements using two pointers?
+### Q6. [EASY] Which logical operator requires BOTH conditions to be true?
 
 ```javascript
-arr = [1, 2, 3, 4]
-left, right = 0, len(arr) - 1
-while left < right:
-    arr[left], arr[right] = arr[right], arr[left]
-    left += 1
-    right -= 1
-print(arr)
+if (age >= 18 __ has_id == True)
 ```
 
-- **[Option A]** [4, 3, 2, 1] **(Correct Answer ✅)**
-- **[Option B]** [1, 2, 3, 4]
-- **[Option C]** [4, 2, 3, 1]
-- **[Option D]** [2, 1, 4, 3]
+- **[Option A]** || (OR)
+- **[Option B]** && (AND) **(Correct Answer ✅)**
+- **[Option C]** ! (NOT)
+- **[Option D]** ^ (XOR)
 
-- **✅ Correct Option:** **Option A**
-- **💡 Explanation:** This standard two-pointer loop reverses an array in-place by swapping opposite ends until the pointers meet, resulting in [4, 3, 2, 1].
+- **✅ Correct Option:** **Option B**
+- **💡 Explanation:** The logical AND operator (&& in C/Java, 'and' in Python) evaluates to true only if both operands are true.
+- **⏱️ Question Timer:** 15 seconds
+- **🎁 Rewards:** +10 Points / +20 XP
+
+### Q7. [MEDIUM] What will be the output of this grade checker?
+
+```javascript
+score = 75
+if score >= 90:
+    print("Grade A")
+elif score >= 70:
+    print("Grade B")
+else:
+    print("Grade C")
+```
+
+- **[Option A]** Grade A
+- **[Option B]** Grade B **(Correct Answer ✅)**
+- **[Option C]** Grade C
+- **[Option D]** Grade A Grade B
+
+- **✅ Correct Option:** **Option B**
+- **💡 Explanation:** 75 is not >= 90, but 75 >= 70 is True, so 'Grade B' is printed and the remaining blocks are skipped.
+- **⏱️ Question Timer:** 15 seconds
+- **🎁 Rewards:** +10 Points / +20 XP
+
+### Q8. [MEDIUM] Which operator returns true if AT LEAST ONE of the conditions is true?
+
+```javascript
+if (is_weekend || is_holiday)
+```
+
+- **[Option A]** && (AND)
+- **[Option B]** || (OR) **(Correct Answer ✅)**
+- **[Option C]** == (EQUAL)
+- **[Option D]** != (NOT EQUAL)
+
+- **✅ Correct Option:** **Option B**
+- **💡 Explanation:** The logical OR operator (|| in C, 'or' in Python) evaluates to true if either condition is true.
+- **⏱️ Question Timer:** 15 seconds
+- **🎁 Rewards:** +10 Points / +20 XP
+
+### Q9. [MEDIUM] What will be printed by this nested condition?
+
+```javascript
+num = 8
+if num > 0:
+    if num % 2 == 0:
+        print("Positive Even")
+    else:
+        print("Positive Odd")
+```
+
+- **[Option A]** Positive Odd
+- **[Option B]** Positive Even **(Correct Answer ✅)**
+- **[Option C]** 8
+- **[Option D]** No output
+
+- **✅ Correct Option:** **Option B**
+- **💡 Explanation:** 8 is greater than 0, and 8 % 2 == 0 is True, so 'Positive Even' is printed.
+- **⏱️ Question Timer:** 15 seconds
+- **🎁 Rewards:** +10 Points / +20 XP
+
+### Q10. [CHALLENGE] What does the following boolean logic expression evaluate to?
+
+```javascript
+a = True
+b = False
+c = False
+print((a or b) and (not c))
+```
+
+- **[Option A]** False
+- **[Option B]** True **(Correct Answer ✅)**
+- **[Option C]** None
+- **[Option D]** Error
+
+- **✅ Correct Option:** **Option B**
+- **💡 Explanation:** (a or b) is (True or False) = True. (not c) is (not False) = True. True and True evaluates to True.
 - **⏱️ Question Timer:** 15 seconds
 - **🎁 Rewards:** +10 Points / +20 XP
 
@@ -974,175 +1020,141 @@ git commit ___ "Add feature"
 
 ---
 
-## 📅 Day 7: Strings & Text Processing — Sunday, 15 Nov 2026 @ 09:00 AM IST (Day 7)
+## 📅 Day 7: Tech & Computer Basics — Sunday, 15 Nov 2026 @ 09:00 AM IST (Day 7)
 
 - **Date & Time:** `2026-11-15 @ 09:00 AM IST`
-- **Category:** `strings`
+- **Category:** `fundamentals`
 - **Total Questions:** 10 Questions (6 Beginner, 3 Intermediate, 1 Advanced/Challenge)
 
-### Q1. [EASY] What will be printed by the following Python code?
+### Q1. [EASY] How many bits make up one standard byte in computer memory?
 
-```javascript
-word = "Code"
-print(len(word))
-```
-
-- **[Option A]** 4 **(Correct Answer ✅)**
-- **[Option B]** 3
-- **[Option C]** 5
-- **[Option D]** "Code"
-
-- **✅ Correct Option:** **Option A**
-- **💡 Explanation:** len() returns the total number of characters in the string. "Code" has exactly 4 characters.
-- **⏱️ Question Timer:** 15 seconds
-- **🎁 Rewards:** +10 Points / +20 XP
-
-### Q2. [EASY] What does string concatenation with the `+` operator produce?
-
-```javascript
-greeting = "Hello " + "World"
-print(greeting)
-```
-
-- **[Option A]** Hello World **(Correct Answer ✅)**
-- **[Option B]** HelloWorld
-- **[Option C]** Hello + World
-- **[Option D]** TypeError
-
-- **✅ Correct Option:** **Option A**
-- **💡 Explanation:** The + operator joins the two strings together: "Hello " and "World" become "Hello World".
-- **⏱️ Question Timer:** 15 seconds
-- **🎁 Rewards:** +10 Points / +20 XP
-
-### Q3. [EASY] Which method in Python converts all characters in a string to uppercase?
-
-```javascript
-text = "hackerrank"
-print(text._____())
-```
-
-- **[Option A]** toUpperCase()
-- **[Option B]** upper() **(Correct Answer ✅)**
-- **[Option C]** capitalize()
-- **[Option D]** caps()
+- **[Option A]** 4 bits
+- **[Option B]** 8 bits **(Correct Answer ✅)**
+- **[Option C]** 16 bits
+- **[Option D]** 32 bits
 
 - **✅ Correct Option:** **Option B**
-- **💡 Explanation:** In Python, string.upper() returns a copy of the string with all cased characters converted to uppercase.
+- **💡 Explanation:** 1 byte consists of exactly 8 bits, capable of representing 256 unique values (0 to 255).
 - **⏱️ Question Timer:** 15 seconds
 - **🎁 Rewards:** +10 Points / +20 XP
 
-### Q4. [EASY] In Python, which character accesses the LAST character of a string using negative indexing?
+### Q2. [EASY] What does the abbreviation 'CPU' stand for?
 
-```javascript
-s = "PYTHON"
-last_char = s[?]
-```
-
-- **[Option A]** -1 **(Correct Answer ✅)**
-- **[Option B]** 0
-- **[Option C]** len(s)
-- **[Option D]** -0
+- **[Option A]** Central Processing Unit **(Correct Answer ✅)**
+- **[Option B]** Computer Personal Unit
+- **[Option C]** Control Power Usage
+- **[Option D]** Core Program Utility
 
 - **✅ Correct Option:** **Option A**
-- **💡 Explanation:** Python supports negative indexing, where -1 refers to the last element of the sequence ('N').
+- **💡 Explanation:** The CPU (Central Processing Unit) is the primary component of a computer that executes program instructions.
 - **⏱️ Question Timer:** 15 seconds
 - **🎁 Rewards:** +10 Points / +20 XP
 
-### Q5. [EASY] Are string objects in Python mutable or immutable?
+### Q3. [EASY] Which type of computer memory is volatile and clears its data when power is turned off?
 
-```javascript
-s = "cat"
-s[0] = "b" # What happens?
-```
-
-- **[Option A]** Mutable (s becomes "bat")
-- **[Option B]** Immutable (TypeError: 'str' object does not support item assignment) **(Correct Answer ✅)**
-- **[Option C]** Dynamically mutable
-- **[Option D]** Mutable only inside lists
+- **[Option A]** Hard Disk Drive (HDD)
+- **[Option B]** Random Access Memory (RAM) **(Correct Answer ✅)**
+- **[Option C]** Read-Only Memory (ROM)
+- **[Option D]** Solid State Drive (SSD)
 
 - **✅ Correct Option:** **Option B**
-- **💡 Explanation:** Strings in Python are immutable; once created, individual characters cannot be changed in-place.
+- **💡 Explanation:** RAM is temporary/volatile memory used by the operating system and running programs. When powered off, its data is lost.
 - **⏱️ Question Timer:** 15 seconds
 - **🎁 Rewards:** +10 Points / +20 XP
 
-### Q6. [EASY] Which method strips leading and trailing whitespace from a string in Python?
+### Q4. [EASY] What number base system uses only two digits, 0 and 1, to represent all data?
 
-```javascript
-text = "   hello   "
-clean = text._____()
-```
+- **[Option A]** Decimal (Base 10)
+- **[Option B]** Octal (Base 8)
+- **[Option C]** Binary (Base 2) **(Correct Answer ✅)**
+- **[Option D]** Hexadecimal (Base 16)
 
-- **[Option A]** strip() **(Correct Answer ✅)**
-- **[Option B]** trim()
-- **[Option C]** clean()
-- **[Option D]** removeSpaces()
-
-- **✅ Correct Option:** **Option A**
-- **💡 Explanation:** In Python, strip() removes leading and trailing whitespace (trim() is used in JavaScript).
+- **✅ Correct Option:** **Option C**
+- **💡 Explanation:** The Binary number system (Base 2) uses only 0s and 1s, which correspond to electronic off/on states.
 - **⏱️ Question Timer:** 15 seconds
 - **🎁 Rewards:** +10 Points / +20 XP
 
-### Q7. [MEDIUM] What does the following slice operation return in Python?
+### Q5. [EASY] Which of the following is a widely used open-source operating system kernel created by Linus Torvalds?
 
-```javascript
-text = "CampusCrew"
-print(text[0:6])
-```
+- **[Option A]** Windows
+- **[Option B]** macOS
+- **[Option C]** Linux **(Correct Answer ✅)**
+- **[Option D]** iOS
 
-- **[Option A]** "Campus" **(Correct Answer ✅)**
-- **[Option B]** "CampusC"
-- **[Option C]** "Campu"
-- **[Option D]** "Crew"
-
-- **✅ Correct Option:** **Option A**
-- **💡 Explanation:** text[0:6] extracts indices 0, 1, 2, 3, 4, 5, which forms "Campus".
+- **✅ Correct Option:** **Option C**
+- **💡 Explanation:** Linux is a free, open-source operating system kernel that powers servers, Android phones, and supercomputers.
 - **⏱️ Question Timer:** 15 seconds
 - **🎁 Rewards:** +10 Points / +20 XP
 
-### Q8. [MEDIUM] What is the output of the following `.split()` operation?
+### Q6. [EASY] What does the letter 'S' stand for in the secure web browsing protocol 'HTTPS'?
 
 ```javascript
-data = "apple,banana,mango"
-items = data.split(",")
-print(len(items))
+https://hackerrank.com
 ```
 
-- **[Option A]** 1
-- **[Option B]** 3 **(Correct Answer ✅)**
-- **[Option C]** 2
-- **[Option D]** 17
+- **[Option A]** Speed
+- **[Option B]** Standard
+- **[Option C]** Server
+- **[Option D]** Secure **(Correct Answer ✅)**
+
+- **✅ Correct Option:** **Option D**
+- **💡 Explanation:** HTTPS stands for HyperText Transfer Protocol Secure, encrypting communication using SSL/TLS.
+- **⏱️ Question Timer:** 15 seconds
+- **🎁 Rewards:** +10 Points / +20 XP
+
+### Q7. [MEDIUM] What is the decimal equivalent of the binary number (1010)₂?
+
+```javascript
+1*2³ + 0*2² + 1*2¹ + 0*2⁰ = ?
+```
+
+- **[Option A]** 8
+- **[Option B]** 10 **(Correct Answer ✅)**
+- **[Option C]** 12
+- **[Option D]** 14
 
 - **✅ Correct Option:** **Option B**
-- **💡 Explanation:** split(",") splits the string at each comma delimiter into a list of 3 items: ['apple', 'banana', 'mango'].
+- **💡 Explanation:** (1*8) + (0*4) + (1*2) + (0*1) = 8 + 2 = 10 in decimal.
 - **⏱️ Question Timer:** 15 seconds
 - **🎁 Rewards:** +10 Points / +20 XP
 
-### Q9. [MEDIUM] What does `"-".join(["a", "b", "c"])` produce?
+### Q8. [MEDIUM] Why are Solid-State Drives (SSDs) significantly faster than traditional Hard Disk Drives (HDDs)?
 
-- **[Option A]** "a-b-c" **(Correct Answer ✅)**
-- **[Option B]** "-a-b-c-"
-- **[Option C]** ["a", "-", "b", "-", "c"]
-- **[Option D]** "abc-"
+- **[Option A]** They use spinning magnetic platters
+- **[Option B]** They have no moving mechanical parts and use flash memory **(Correct Answer ✅)**
+- **[Option C]** They only store text files
+- **[Option D]** They require no electrical power
 
-- **✅ Correct Option:** **Option A**
-- **💡 Explanation:** join() concatenates elements of an iterable separated by the string delimiter, resulting in "a-b-c".
+- **✅ Correct Option:** **Option B**
+- **💡 Explanation:** SSDs use flash memory with zero moving parts, providing near-instantaneous read/write access times compared to mechanical magnetic heads.
 - **⏱️ Question Timer:** 15 seconds
 - **🎁 Rewards:** +10 Points / +20 XP
 
-### Q10. [CHALLENGE] What idiom is commonly used in Python to reverse a string?
+### Q9. [MEDIUM] Which service acts as the internet's phonebook by translating domain names to IP addresses?
 
 ```javascript
-s = "racecar"
-reversed_s = s[?]
+hackerrank.com  →  104.16.132.229
 ```
 
-- **[Option A]** [::-1] **(Correct Answer ✅)**
-- **[Option B]** [-1:0]
-- **[Option C]** [reverse]
-- **[Option D]** [0:-1:-1]
+- **[Option A]** DNS (Domain Name System) **(Correct Answer ✅)**
+- **[Option B]** FTP (File Transfer Protocol)
+- **[Option C]** DHCP (Dynamic Host Configuration)
+- **[Option D]** SMTP (Simple Mail Transfer)
 
 - **✅ Correct Option:** **Option A**
-- **💡 Explanation:** The slice step syntax [start:stop:step] with a step of -1 (s[::-1]) steps through the string backwards, producing the reversed string.
+- **💡 Explanation:** DNS (Domain Name System) translates human-friendly domain names (like google.com) into machine-routable IP addresses.
+- **⏱️ Question Timer:** 15 seconds
+- **🎁 Rewards:** +10 Points / +20 XP
+
+### Q10. [CHALLENGE] What is the fastest type of memory storage located directly inside the CPU processor chip?
+
+- **[Option A]** DDR5 RAM
+- **[Option B]** CPU Registers / Cache (L1/L2/L3) **(Correct Answer ✅)**
+- **[Option C]** Virtual Memory
+- **[Option D]** NVMe SSD
+
+- **✅ Correct Option:** **Option B**
+- **💡 Explanation:** CPU registers and on-die cache memory (L1, L2, L3) operate at the speed of the processor core itself, making them orders of magnitude faster than system RAM.
 - **⏱️ Question Timer:** 15 seconds
 - **🎁 Rewards:** +10 Points / +20 XP
 

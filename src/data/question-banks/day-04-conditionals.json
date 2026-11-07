@@ -1,0 +1,182 @@
+[
+  {
+    "id": "day04-q01",
+    "topic": "Conditionals & Logic",
+    "difficulty": "easy",
+    "questionText": "Which basic programming keyword is used to execute code only when a condition is true?",
+    "codeSnippet": "____ (marks >= 40) {\n    printf(\"Passed!\");\n}",
+    "options": [
+      { "id": "A", "text": "if" },
+      { "id": "B", "text": "for" },
+      { "id": "C", "text": "while" },
+      { "id": "D", "text": "def" }
+    ],
+    "correctOption": "A",
+    "explanation": "The 'if' keyword evaluates a boolean condition and executes its block if the condition is true.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day04-q02",
+    "topic": "Conditionals & Logic",
+    "difficulty": "easy",
+    "questionText": "What will be printed to the console by this code snippet?",
+    "codeSnippet": "x = 10\nif x > 5:\n    print(\"Greater\")\nelse:\n    print(\"Smaller\")",
+    "options": [
+      { "id": "A", "text": "Smaller" },
+      { "id": "B", "text": "Greater" },
+      { "id": "C", "text": "Greater Smaller" },
+      { "id": "D", "text": "Error" }
+    ],
+    "correctOption": "B",
+    "explanation": "Since 10 > 5 is True, the 'if' block executes printing 'Greater'.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day04-q03",
+    "topic": "Conditionals & Logic",
+    "difficulty": "easy",
+    "questionText": "Which comparison operator checks if two values are equal in C, Python, and Java?",
+    "codeSnippet": "if (a __ b)",
+    "options": [
+      { "id": "A", "text": "=" },
+      { "id": "B", "text": "==" },
+      { "id": "C", "text": "equals" },
+      { "id": "D", "text": ":=" }
+    ],
+    "correctOption": "B",
+    "explanation": "Double equals (==) is the equality comparison operator, whereas single equals (=) is assignment.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day04-q04",
+    "topic": "Conditionals & Logic",
+    "difficulty": "easy",
+    "questionText": "Which block executes when the 'if' condition evaluates to false?",
+    "codeSnippet": "if (is_member) {\n    printf(\"Welcome!\");\n} _____ {\n    printf(\"Please sign up.\");\n}",
+    "options": [
+      { "id": "A", "text": "then" },
+      { "id": "B", "text": "stop" },
+      { "id": "C", "text": "else" },
+      { "id": "D", "text": "default" }
+    ],
+    "correctOption": "C",
+    "explanation": "The 'else' block provides the alternative code to run when the condition is false.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day04-q05",
+    "topic": "Conditionals & Logic",
+    "difficulty": "easy",
+    "questionText": "What does the 'not equal to' operator look like in C and Python?",
+    "codeSnippet": "if (x __ 0)",
+    "options": [
+      { "id": "A", "text": "<>" },
+      { "id": "B", "text": "!=" },
+      { "id": "C", "text": "not=" },
+      { "id": "D", "text": "/=" }
+    ],
+    "correctOption": "B",
+    "explanation": "!= is the standard inequality operator in C, C++, Java, and Python.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day04-q06",
+    "topic": "Conditionals & Logic",
+    "difficulty": "easy",
+    "questionText": "Which logical operator requires BOTH conditions to be true?",
+    "codeSnippet": "if (age >= 18 __ has_id == True)",
+    "options": [
+      { "id": "A", "text": "|| (OR)" },
+      { "id": "B", "text": "&& (AND)" },
+      { "id": "C", "text": "! (NOT)" },
+      { "id": "D", "text": "^ (XOR)" }
+    ],
+    "correctOption": "B",
+    "explanation": "The logical AND operator (&& in C/Java, 'and' in Python) evaluates to true only if both operands are true.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day04-q07",
+    "topic": "Conditionals & Logic",
+    "difficulty": "medium",
+    "questionText": "What will be the output of this grade checker?",
+    "codeSnippet": "score = 75\nif score >= 90:\n    print(\"Grade A\")\nelif score >= 70:\n    print(\"Grade B\")\nelse:\n    print(\"Grade C\")",
+    "options": [
+      { "id": "A", "text": "Grade A" },
+      { "id": "B", "text": "Grade B" },
+      { "id": "C", "text": "Grade C" },
+      { "id": "D", "text": "Grade A Grade B" }
+    ],
+    "correctOption": "B",
+    "explanation": "75 is not >= 90, but 75 >= 70 is True, so 'Grade B' is printed and the remaining blocks are skipped.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day04-q08",
+    "topic": "Conditionals & Logic",
+    "difficulty": "medium",
+    "questionText": "Which operator returns true if AT LEAST ONE of the conditions is true?",
+    "codeSnippet": "if (is_weekend || is_holiday)",
+    "options": [
+      { "id": "A", "text": "&& (AND)" },
+      { "id": "B", "text": "|| (OR)" },
+      { "id": "C", "text": "== (EQUAL)" },
+      { "id": "D", "text": "!= (NOT EQUAL)" }
+    ],
+    "correctOption": "B",
+    "explanation": "The logical OR operator (|| in C, 'or' in Python) evaluates to true if either condition is true.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day04-q09",
+    "topic": "Conditionals & Logic",
+    "difficulty": "medium",
+    "questionText": "What will be printed by this nested condition?",
+    "codeSnippet": "num = 8\nif num > 0:\n    if num % 2 == 0:\n        print(\"Positive Even\")\n    else:\n        print(\"Positive Odd\")",
+    "options": [
+      { "id": "A", "text": "Positive Odd" },
+      { "id": "B", "text": "Positive Even" },
+      { "id": "C", "text": "8" },
+      { "id": "D", "text": "No output" }
+    ],
+    "correctOption": "B",
+    "explanation": "8 is greater than 0, and 8 % 2 == 0 is True, so 'Positive Even' is printed.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "day04-q10",
+    "topic": "Conditionals & Logic",
+    "difficulty": "challenge",
+    "questionText": "What does the following boolean logic expression evaluate to?",
+    "codeSnippet": "a = True\nb = False\nc = False\nprint((a or b) and (not c))",
+    "options": [
+      { "id": "A", "text": "False" },
+      { "id": "B", "text": "True" },
+      { "id": "C", "text": "None" },
+      { "id": "D", "text": "Error" }
+    ],
+    "correctOption": "B",
+    "explanation": "(a or b) is (True or False) = True. (not c) is (not False) = True. True and True evaluates to True.",
+    "pointsReward": 10,
+    "xpReward": 20,
+    "timeLimitSeconds": 15
+  }
+]
