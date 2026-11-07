@@ -128,12 +128,11 @@ export async function recordVoiceSessionStart({ discordId, username, channelId }
   const member = await upsertMember({ discordId, username: username || discordId }).catch(() => null);
   if (!member) return null;
 
-  // Mark any older open sessions as reconciled
-  await supabaseAdmin
-    .from('voice_sessions')
-    .update({ status: 'reconciled', left_at: new Date().toISOString() })
-    .eq('discord_id', discordId)
-    .eq('status', 'active');
+  // Gracefully conclude any existing active sessions so previous duration is not lost
+  const existingActive = await getActiveVoiceSession(discordId);
+  if (existingActive) {
+    await recordVoiceSessionEnd(existingActive.id, new Date().toISOString()).catch(() => {});
+  }
 
   const { data, error } = await supabaseAdmin
     .from('voice_sessions')
@@ -161,11 +160,10 @@ export async function getActiveVoiceSession(discordId) {
     .eq('discord_id', discordId)
     .eq('status', 'active')
     .order('joined_at', { ascending: false })
-    .limit(1)
-    .maybeSingle();
+    .limit(1);
 
-  if (error) return null;
-  return data;
+  if (error || !data || data.length === 0) return null;
+  return data[0];
 }
 
 export async function recordVoiceSessionEnd(sessionId, leftAt = new Date().toISOString()) {
@@ -184,20 +182,28 @@ export async function recordVoiceSessionEnd(sessionId, leftAt = new Date().toISO
 }
 
 export async function reconcileOrphanedVoiceSessions() {
-  const { data, error } = await supabaseAdmin
+  const { data: activeList, error: listError } = await supabaseAdmin
     .from('voice_sessions')
-    .update({
-      status: 'reconciled',
-      left_at: new Date().toISOString(),
-    })
-    .eq('status', 'active')
-    .select('id, discord_id, channel_id');
+    .select('id, discord_id, channel_id, joined_at')
+    .eq('status', 'active');
 
-  if (error) {
-    logger.warn('Error reconciling orphaned voice sessions', { error: error.message });
+  if (listError || !activeList || activeList.length === 0) {
     return [];
   }
-  return data || [];
+
+  const nowIso = new Date().toISOString();
+  const results = [];
+  for (const session of activeList) {
+    try {
+      const res = await recordVoiceSessionEnd(session.id, nowIso);
+      results.push({ id: session.id, discord_id: session.discord_id, ...res });
+    } catch (err) {
+      logger.warn('Failed to gracefully close orphaned voice session', { sessionId: session.id, error: err.message });
+    }
+  }
+
+  logger.info(`Reconciled ${results.length} active voice sessions safely with earned points.`);
+  return results;
 }
 
 // ─── Contribution Recognitions ────────────────────────────────────────────────
@@ -286,33 +292,163 @@ export async function awardCommunityContribution({
 // ─── Engagement Leaderboard & Profiles ────────────────────────────────────────
 
 export async function fetchEngagementLeaderboard(periodType = 'weekly', limit = 10) {
-  let since;
+  let sinceDate;
+  let sinceIso;
   const now = new Date();
 
   if (periodType === 'weekly') {
-    since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    sinceIso = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    sinceDate = sinceIso.split('T')[0];
   } else if (periodType === 'monthly') {
-    since = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+    sinceIso = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+    sinceDate = sinceIso.split('T')[0];
   } else {
     // all_time: 1 year lookback
-    since = new Date(now.getFullYear() - 1, 0, 1).toISOString();
+    sinceIso = new Date(now.getFullYear() - 1, 0, 1).toISOString();
+    sinceDate = sinceIso.split('T')[0];
   }
 
-  const periodId = periodType === 'weekly' ? `${now.getFullYear()}-W${Math.ceil(now.getDate() / 7)}` : `${now.getFullYear()}-${now.getMonth() + 1}`;
+  try {
+    // 1. Fetch score settings (weights)
+    const settings = await getEngagementScoreSettings();
+    const learningWeight = Number(settings?.learning_weight ?? 0.40);
+    const textWeight     = Number(settings?.text_weight ?? 0.25);
+    const reactionWeight = Number(settings?.reaction_weight ?? 0.10);
+    const voiceWeight    = Number(settings?.voice_weight ?? 0.15);
+    const contribWeight  = Number(settings?.contribution_weight ?? 0.10);
 
-  const { data, error } = await supabaseAdmin.rpc('calculate_engagement_leaderboard', {
-    p_period_type: periodType,
-    p_period_identifier: periodId,
-    p_since: since,
-  });
+    // Benchmarks for 0-100 normalization
+    const bLearning = 80.0;
+    const bText     = 120.0;
+    const bReaction = 30.0;
+    const bVoice    = 60.0;
+    const bContrib  = 40.0;
 
-  if (error) {
-    logger.error('Error calculating engagement leaderboard', { periodType, error: error.message });
-    throw error;
+    // 2. Fetch all members
+    const { data: members, error: mErr } = await supabaseAdmin
+      .from('members')
+      .select('id, discord_id, username');
+    if (mErr) throw mErr;
+
+    // 3. Independent queries for each category (prevents Cartesian join explosion)
+    const [learningRes, dailyStatsRes, contribRes, activeVoiceRes] = await Promise.all([
+      supabaseAdmin
+        .from('points_history')
+        .select('member_id, amount')
+        .gte('created_at', sinceIso)
+        .ilike('reason', '%quiz%'),
+      supabaseAdmin
+        .from('engagement_daily_stats')
+        .select('member_id, text_points, reaction_points, voice_points')
+        .gte('stat_date', sinceDate),
+      supabaseAdmin
+        .from('contribution_recognitions')
+        .select('recipient_member_id, points')
+        .gte('created_at', sinceIso)
+        .eq('verified', true),
+      supabaseAdmin
+        .from('voice_sessions')
+        .select('member_id, joined_at')
+        .eq('status', 'active'),
+    ]);
+
+    const memberMap = new Map();
+    for (const m of (members || [])) {
+      memberMap.set(m.id, {
+        member_id: m.id,
+        discord_id: m.discord_id,
+        username: m.username,
+        raw_learning: 0,
+        raw_text: 0,
+        raw_reaction: 0,
+        raw_voice: 0,
+        raw_contribution: 0,
+      });
+    }
+
+    for (const l of (learningRes.data || [])) {
+      const entry = memberMap.get(l.member_id);
+      if (entry) entry.raw_learning += Number(l.amount || 0);
+    }
+
+    for (const d of (dailyStatsRes.data || [])) {
+      const entry = memberMap.get(d.member_id);
+      if (entry) {
+        entry.raw_text += Number(d.text_points || 0);
+        entry.raw_reaction += Number(d.reaction_points || 0);
+        entry.raw_voice += Number(d.voice_points || 0);
+      }
+    }
+
+    for (const c of (contribRes.data || [])) {
+      const entry = memberMap.get(c.recipient_member_id);
+      if (entry) entry.raw_contribution += Number(c.points || 0);
+    }
+
+    // Account for ongoing live voice sessions
+    for (const av of (activeVoiceRes.data || [])) {
+      const entry = memberMap.get(av.member_id);
+      if (entry && av.joined_at) {
+        const liveSec = Math.max(0, Math.floor((Date.now() - new Date(av.joined_at).getTime()) / 1000));
+        entry.raw_voice += (liveSec / 60) * 0.5;
+      }
+    }
+
+    const rows = [];
+    for (const e of memberMap.values()) {
+      const norm_learning = Math.min(100, (e.raw_learning / bLearning) * 100);
+      const norm_text = Math.min(100, (e.raw_text / bText) * 100);
+      const norm_reaction = Math.min(100, (e.raw_reaction / bReaction) * 100);
+      const norm_voice = Math.min(100, (e.raw_voice / bVoice) * 100);
+      const norm_contribution = Math.min(100, (e.raw_contribution / bContrib) * 100);
+
+      let activeCategories = 0;
+      if (e.raw_learning > 0) activeCategories++;
+      if (e.raw_text > 0) activeCategories++;
+      if (e.raw_reaction > 0) activeCategories++;
+      if (e.raw_voice > 0) activeCategories++;
+      if (e.raw_contribution > 0) activeCategories++;
+
+      const baseScore =
+        (norm_learning * learningWeight) +
+        (norm_text * textWeight) +
+        (norm_reaction * reactionWeight) +
+        (norm_voice * voiceWeight) +
+        (norm_contribution * contribWeight);
+
+      const synergy = activeCategories >= 4 ? 1.05 : 1.00;
+      const overall = Number((baseScore * synergy).toFixed(2));
+
+      if (overall > 0) {
+        rows.push({
+          member_id: e.member_id,
+          discord_id: e.discord_id,
+          username: e.username,
+          learning_score: Number(norm_learning.toFixed(1)),
+          text_score: Number(norm_text.toFixed(1)),
+          reaction_score: Number(norm_reaction.toFixed(1)),
+          voice_score: Number(norm_voice.toFixed(1)),
+          contribution_score: Number(norm_contribution.toFixed(1)),
+          overall_score: overall,
+        });
+      }
+    }
+
+    rows.sort((a, b) => b.overall_score - a.overall_score);
+    rows.forEach((r, idx) => { r.rank = idx + 1; });
+
+    return rows.slice(0, limit);
+  } catch (err) {
+    logger.error('Error fetching engagement leaderboard via direct aggregation', { error: err.message });
+    // Fallback to RPC if necessary
+    const periodId = periodType === 'weekly' ? `${now.getFullYear()}-W${Math.ceil(now.getDate() / 7)}` : `${now.getFullYear()}-${now.getMonth() + 1}`;
+    const { data: rpcData } = await supabaseAdmin.rpc('calculate_engagement_leaderboard', {
+      p_period_type: periodType,
+      p_period_identifier: periodId,
+      p_since: sinceIso,
+    });
+    return (rpcData || []).slice(0, limit);
   }
-
-  const rows = data || [];
-  return rows.slice(0, limit);
 }
 
 export async function getMemberEngagementSummary(discordId) {
@@ -337,8 +473,8 @@ export async function getMemberEngagementSummary(discordId) {
   const stats = dailyStats || [];
   const textPoints = stats.reduce((acc, d) => acc + Number(d.text_points || 0), 0);
   const reactionPoints = stats.reduce((acc, d) => acc + Number(d.reaction_points || 0), 0);
-  const voicePoints = stats.reduce((acc, d) => acc + Number(d.voice_points || 0), 0);
-  const voiceSeconds = stats.reduce((acc, d) => acc + Number(d.voice_seconds || 0), 0);
+  let voicePoints = stats.reduce((acc, d) => acc + Number(d.voice_points || 0), 0);
+  let voiceSeconds = stats.reduce((acc, d) => acc + Number(d.voice_seconds || 0), 0);
   const messageCount = stats.reduce((acc, d) => acc + Number(d.message_count || 0), 0);
   const reactionCount = stats.reduce((acc, d) => acc + Number(d.reaction_count || 0), 0);
   const activeDays = stats.filter((d) => (d.message_count > 0 || d.reaction_count > 0 || d.voice_seconds > 0 || d.learning_points > 0)).length;
@@ -351,17 +487,36 @@ export async function getMemberEngagementSummary(discordId) {
 
   const contributionPoints = (contributions || []).reduce((acc, c) => acc + Number(c.points || 0), 0);
 
+  // Real-time active voice session check
+  const activeVoice = await getActiveVoiceSession(discordId);
+  let isCurrentlyInVoice = false;
+  let activeVoiceMinutes = 0;
+  let liveVoiceSeconds = 0;
+  let liveVoicePoints = 0;
+
+  if (activeVoice && activeVoice.joined_at) {
+    isCurrentlyInVoice = true;
+    liveVoiceSeconds = Math.max(0, Math.floor((Date.now() - new Date(activeVoice.joined_at).getTime()) / 1000));
+    activeVoiceMinutes = Math.floor(liveVoiceSeconds / 60);
+    // 0.5 points per minute
+    liveVoicePoints = Number(((liveVoiceSeconds / 60) * 0.5).toFixed(2));
+    voiceSeconds += liveVoiceSeconds;
+    voicePoints += liveVoicePoints;
+  }
+
   return {
     member: m,
     thirtyDays: {
       textPoints: Math.round(textPoints),
       reactionPoints: Math.round(reactionPoints),
-      voicePoints: Math.round(voicePoints),
+      voicePoints: Number(voicePoints.toFixed(1)),
       voiceMinutes: Math.round(voiceSeconds / 60),
       contributionPoints: Math.round(contributionPoints),
       messageCount,
       reactionCount,
-      activeDays,
+      activeDays: activeDays + (isCurrentlyInVoice && activeDays === 0 ? 1 : 0),
+      isCurrentlyInVoice,
+      activeVoiceMinutes,
     },
   };
 }

@@ -10,6 +10,7 @@ import {
   getActiveVoiceSession,
   reconcileOrphanedVoiceSessions,
 } from '../../database/queries/engagement.js';
+import { recordDailyParticipation } from '../../database/queries/members.js';
 
 /**
  * Handles voice channel state transitions.
@@ -40,6 +41,23 @@ export async function handleVoiceStateChange(oldState, newState) {
         durationSeconds: res.duration_seconds,
         points: res.points_awarded,
       });
+
+      // Synchronize points ledger for completed voice session
+      if (res?.points_awarded > 0) {
+        try {
+          const { supabaseAdmin } = await import('../../database/client.js');
+          await supabaseAdmin.rpc('record_points_transaction', {
+            p_discord_id: discordId,
+            p_points_delta: Math.round(res.points_awarded),
+            p_xp_delta: Math.round(res.points_awarded * 2),
+            p_reason: 'voice_study_session',
+            p_reference_id: active.id,
+            p_awarded_by: 'system',
+          });
+        } catch (err) {
+          logger.warn('Points ledger sync for voice session skipped', { error: err.message });
+        }
+      }
     }
     return;
   }
@@ -49,7 +67,22 @@ export async function handleVoiceStateChange(oldState, newState) {
     if (!isAfkChannel(oldChannel)) {
       const active = await getActiveVoiceSession(discordId);
       if (active) {
-        await recordVoiceSessionEnd(active.id);
+        const res = await recordVoiceSessionEnd(active.id);
+        if (res?.points_awarded > 0) {
+          try {
+            const { supabaseAdmin } = await import('../../database/client.js');
+            await supabaseAdmin.rpc('record_points_transaction', {
+              p_discord_id: discordId,
+              p_points_delta: Math.round(res.points_awarded),
+              p_xp_delta: Math.round(res.points_awarded * 2),
+              p_reason: 'voice_study_session',
+              p_reference_id: active.id,
+              p_awarded_by: 'system',
+            });
+          } catch (err) {
+            logger.warn('Points ledger sync for channel switch skipped', { error: err.message });
+          }
+        }
       }
     }
     if (!isAfkChannel(newChannel)) {
@@ -64,6 +97,7 @@ export async function handleVoiceStateChange(oldState, newState) {
 
   // ── Scenario C: Joined voice from disconnected state ───────────────────────
   if (!oldChannel && newChannel && !isAfkChannel(newChannel)) {
+    recordDailyParticipation(discordId, 'voice_study').catch(() => {});
     await recordVoiceSessionStart({
       discordId,
       username,

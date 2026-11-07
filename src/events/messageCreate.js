@@ -10,6 +10,7 @@
 
 import { logger } from '../utils/logger.js';
 import { recordEngagementEvent } from '../database/queries/engagement.js';
+import { recordDailyParticipation } from '../database/queries/members.js';
 
 export const name = 'messageCreate';
 export const once = false;
@@ -25,6 +26,9 @@ export async function execute(message) {
     const username   = message.author.username;
     const channelId  = message.channelId;
     const hasAttachments = message.attachments?.size > 0;
+
+    // Record daily participation streak for active chat engagement
+    recordDailyParticipation(discordId, 'chat_message').catch(() => {});
 
     // Record engagement event atomically via RPC
     const result = await recordEngagementEvent({

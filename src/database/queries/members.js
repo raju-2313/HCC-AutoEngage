@@ -104,14 +104,69 @@ export async function updateMemberPoints(
   return data;
 }
 
+export function getKolkataDateString(date = new Date()) {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Kolkata',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date);
+}
+
 /**
- * Updates a member's daily activity streak.
+ * Records daily active participation and calculates calendar-based consecutive streak.
+ * Ensures a member can only increment streak once per calendar day (Asia/Kolkata).
+ * Active participation includes:
+ *   - Daily login & slash commands
+ *   - Quiz answering
+ *   - Sending chat messages in channels
+ *   - Adding emoji reactions
+ *   - Joining voice study sessions
  */
-export async function updateMemberStreak(discordId, streakIncrement = true) {
+export async function recordDailyParticipation(discordId, activityType = 'general_activity') {
+  // Try atomic PostgreSQL procedure first
+  try {
+    const { data: rpcData, error: rpcErr } = await supabaseAdmin.rpc('update_member_streak_atomic', {
+      p_discord_id: discordId,
+    });
+    if (!rpcErr && rpcData && rpcData.length > 0) {
+      return rpcData[0];
+    }
+  } catch {
+    // Fallback to JS logic below
+  }
+
   const member = await getMemberByDiscordId(discordId);
   if (!member) return null;
 
-  const newStreak = streakIncrement ? (member.streak_current || 0) + 1 : 1;
+  const now = new Date();
+  const todayStr = getKolkataDateString(now);
+
+  const yesterdayDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+  const yesterdayStr = getKolkataDateString(yesterdayDate);
+
+  let lastActiveStr = null;
+  if (member.last_active_at) {
+    lastActiveStr = getKolkataDateString(new Date(member.last_active_at));
+  }
+
+  let newStreak = member.streak_current || 0;
+  let incremented = false;
+
+  if (lastActiveStr === todayStr) {
+    // Already active today; streak stays unchanged, but guaranteed at least 1
+    newStreak = Math.max(1, member.streak_current || 1);
+    incremented = false;
+  } else if (lastActiveStr === yesterdayStr) {
+    // Consecutive day participation!
+    newStreak = (member.streak_current || 0) + 1;
+    incremented = true;
+  } else {
+    // First time or missed more than 1 day
+    newStreak = 1;
+    incremented = (member.streak_current === 0);
+  }
+
   const newMaxStreak = Math.max(member.streak_max || 0, newStreak);
 
   const { data, error } = await supabaseAdmin
@@ -119,17 +174,32 @@ export async function updateMemberStreak(discordId, streakIncrement = true) {
     .update({
       streak_current: newStreak,
       streak_max: newMaxStreak,
-      last_active_at: new Date().toISOString(),
+      last_active_at: now.toISOString(),
     })
     .eq('discord_id', discordId)
     .select()
     .single();
 
   if (error) {
-    logger.error('Error updating member streak', { discordId, error: error.message });
-    throw error;
+    logger.error('Error updating member daily participation streak', { discordId, error: error.message });
+    return member;
   }
+
+  logger.debug('Daily participation streak updated', {
+    user: member.username,
+    activityType,
+    streak: newStreak,
+    incremented,
+  });
+
   return data;
+}
+
+/**
+ * Updates a member's daily activity streak.
+ */
+export async function updateMemberStreak(discordId, streakIncrement = true) {
+  return recordDailyParticipation(discordId, 'manual_streak_update');
 }
 
 /**

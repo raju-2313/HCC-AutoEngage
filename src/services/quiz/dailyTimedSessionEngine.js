@@ -99,7 +99,8 @@ export async function runDailyTimedSession({
     }
 
     const countdownSec = customCountdownSeconds ?? config.app.countdownSeconds ?? 30;
-    const qTimeSec = customQuestionTimeSeconds ?? config.app.questionTimeSeconds ?? 20;
+    // Always respect per-question time from env (QUIZ_QUESTION_TIME_SECONDS=15) unless overridden by caller
+    const qTimeSec = customQuestionTimeSeconds ?? config.app.questionTimeSeconds ?? 15;
 
     logger.info(`Starting daily timed quiz session for ${dateStr}`, {
       topic: meta.topic,

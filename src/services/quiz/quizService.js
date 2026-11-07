@@ -20,7 +20,7 @@ import {
   getQuizById,
   getQuizByScheduledDate,
 } from '../../database/queries/quizzes.js';
-import { upsertMember, getMemberByDiscordId } from '../../database/queries/members.js';
+import { upsertMember, getMemberByDiscordId, recordDailyParticipation } from '../../database/queries/members.js';
 import { submitQuizAttempt, hasMemberAttempted } from '../../database/queries/attempts.js';
 import { getDailyQuestion, getKolkataDateString } from './questionBank.js';
 
@@ -234,8 +234,8 @@ export async function handleQuizAnswerInteraction(interaction) {
       throw new Error('No result returned from quiz submission procedure.');
     }
 
-    // 4. Fetch fresh member data for streak
-    const updatedMember = await getMemberByDiscordId(discordUser.id);
+    // 4. Update and normalize calendar-based daily streak
+    const updatedMember = await recordDailyParticipation(discordUser.id, 'quiz_attempt') || await getMemberByDiscordId(discordUser.id);
 
     // 5. Build rich feedback embed
     const isCorrect = result.is_correct;

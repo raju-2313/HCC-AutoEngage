@@ -11,7 +11,7 @@ import { logActivity } from '../../database/queries/logs.js';
 import { logger } from '../../utils/logger.js';
 import { config } from '../../config/index.js';
 
-const HR = '┄'.repeat(32);
+const HR = '───────────────────────';
 
 const MEDALS = {
   1: { emoji: '🥇', label: 'WEEKLY CHAMPION', color: 0xF1C40F, title: 'Grand Champion 👑' },

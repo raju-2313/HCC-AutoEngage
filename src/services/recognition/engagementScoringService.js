@@ -11,7 +11,7 @@ import {
 } from 'discord.js';
 import { fetchEngagementLeaderboard, getMemberEngagementSummary } from '../../database/queries/engagement.js';
 
-const HR = '┄'.repeat(32);
+const HR = '───────────────────────';
 
 const RANK_BADGES = {
   1: { medal: '🥇', label: 'Champion', title: 'Season Leader 👑' },
@@ -142,52 +142,44 @@ export async function buildMemberEngagementCard(discordUser) {
     messageCount: 0,
     reactionCount: 0,
     activeDays: 0,
+    isCurrentlyInVoice: false,
+    activeVoiceMinutes: 0,
   };
   const member = summary?.member || {};
+
+  const voiceStatusLine = s.isCurrentlyInVoice
+    ? `• Status: 🟢 **Active Voice Session** (${s.activeVoiceMinutes}m in voice call)\n`
+    : `• Status: ⚪ Disconnected\n`;
+
+  const description = [
+    `> **Activity Scorecard for** <@${discordUser.id}>`,
+    `> Balanced across Learning, Discussions, Voice Study, Reactions & Peer Help.\n`,
+    `${HR}\n`,
+    `### 🧠  Learning & Quizzes (40% Weight)`,
+    `• Quizzes: **${member.quizzes_completed || 0}** completed (${member.quizzes_won || 0} won)`,
+    `• Level & XP: **${member.total_xp || 0}** Total XP  ·  **Level ${member.level || 1}**\n`,
+    `### 💬  Text Discussions (25% Weight)`,
+    `• Participation: **${s.textPoints}** pts earned  ·  **${s.messageCount}** messages sent\n`,
+    `### 🎙️  Voice & Study (15% Weight)`,
+    `• Connected Time: **${s.voicePoints}** pts earned  ·  **${s.voiceMinutes}** minutes`,
+    voiceStatusLine,
+    `### ❤️  Support & Reactions (10% Weight)`,
+    `• Community Support: **${s.reactionPoints}** pts  ·  **${s.reactionCount}** reactions added\n`,
+    `### 🤝  Contributions & Peer Thanks (10% Weight)`,
+    `• Recognition: **${s.contributionPoints}** pts from peer thanks & awards\n`,
+    `${HR}\n`,
+    `🔥 **Daily Streak:** **${member.streak_current || 0} day${(member.streak_current || 0) !== 1 ? 's' : ''}**  ·  📅 **Active Days:** **${s.activeDays} / 30**`,
+  ].join('\n');
 
   const embed = new EmbedBuilder()
     .setColor(0x00C853)
     .setAuthor({
-      name: 'HCC Community Engagement Profile',
+      name: `${discordUser.username} — Community Engagement Scorecard`,
       iconURL: discordUser.displayAvatarURL({ size: 128 }),
     })
-    .setTitle(`📊  ${discordUser.username}'s 30-Day Activity Breakdown`)
+    .setTitle(`📊  30-Day Activity Breakdown`)
     .setThumbnail(discordUser.displayAvatarURL({ size: 256 }))
-    .setDescription(
-      `> Activity scorecard for <@${discordUser.id}>\n${HR}`
-    )
-    .addFields(
-      {
-        name: '🧠  Learning & Quizzes (40%)',
-        value: `**${member.quizzes_completed || 0}** quizzes completed\n**${member.total_xp || 0}** Total XP  ·  Level ${member.level || 1}`,
-        inline: true,
-      },
-      {
-        name: '💬  Text Participation (25%)',
-        value: `**${s.textPoints}** points earned\n${s.messageCount} messages across channels`,
-        inline: true,
-      },
-      {
-        name: '🎙️  Voice & Study (15%)',
-        value: `**${s.voicePoints}** points earned\n${s.voiceMinutes} connected minutes`,
-        inline: true,
-      },
-      {
-        name: '❤️  Support & Reactions (10%)',
-        value: `**${s.reactionPoints}** points\n${s.reactionCount} reactions added`,
-        inline: true,
-      },
-      {
-        name: '🤝  Contributions (10%)',
-        value: `**${s.contributionPoints}** points\nPeer thanks & moderator awards`,
-        inline: true,
-      },
-      {
-        name: '📅  Consistency & Streak',
-        value: `**${s.activeDays}** active days in last 30d\n**${member.streak_current || 0}** day daily streak 🔥`,
-        inline: true,
-      }
-    )
+    .setDescription(description)
     .setFooter({
       text: 'HCC AutoEngage • Balanced scores reward learning, discussion & collaboration!',
     })

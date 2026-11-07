@@ -27,6 +27,8 @@ async function resetAllToZero() {
     'activity_logs',
     'quiz_questions',
     'quizzes',
+    // Note: daily session records are stored in the quizzes table (category='daily_timed_session')
+    // and are already cleared above — no separate table needed.
   ];
 
   for (const table of tablesToClear) {

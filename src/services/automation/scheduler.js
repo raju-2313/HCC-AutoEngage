@@ -55,8 +55,8 @@ async function resolveChannel(client, ...channelIds) {
  */
 export async function runDailyQuizDropJob(client, options = {}) {
   const currentDate = options.date || getKolkataDateString();
-  // Safe test channel resolution: During testing, strictly prioritize test channel
-  const channelId = options.channelId || config.discord.channels.test || config.discord.channels.quiz;
+  // Channel resolution: use explicitly passed channelId → production quiz channel (never test channel in production)
+  const channelId = options.channelId || config.discord.channels.quiz;
 
   logger.info('⏰ Running scheduled task: Daily Quiz Drop', {
     targetDate: currentDate,

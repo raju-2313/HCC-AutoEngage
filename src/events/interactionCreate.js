@@ -7,6 +7,7 @@ import { MessageFlags } from 'discord.js';
 import { logger } from '../utils/logger.js';
 import { errorEmbed } from '../utils/embeds.js';
 import { handleQuizAnswerInteraction } from '../services/quiz/quizService.js';
+import { recordDailyParticipation } from '../database/queries/members.js';
 import {
   buildOverallLeaderboardEmbed,
   buildLeaderboardActionRow,
@@ -18,6 +19,9 @@ export const once  = false;
 export async function execute(interaction, client) {
   // ── Slash Commands ──────────────────────────────────────────────────────────
   if (interaction.isChatInputCommand()) {
+    // Record daily login & participation streak asynchronously
+    recordDailyParticipation(interaction.user.id, 'command_login').catch(() => {});
+
     const command = client.commands.get(interaction.commandName);
 
     if (!command) {

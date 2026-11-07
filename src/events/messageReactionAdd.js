@@ -10,6 +10,7 @@
 
 import { logger } from '../utils/logger.js';
 import { recordEngagementEvent } from '../database/queries/engagement.js';
+import { recordDailyParticipation } from '../database/queries/members.js';
 
 export const name = 'messageReactionAdd';
 export const once = false;
@@ -21,6 +22,9 @@ export async function execute(reaction, user) {
   }
 
   try {
+    // Record daily participation streak for active reaction engagement
+    recordDailyParticipation(user.id, 'reaction_add').catch(() => {});
+
     // If partial reaction or message, fetch details
     if (reaction.partial) {
       await reaction.fetch().catch(() => null);
