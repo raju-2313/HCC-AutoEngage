@@ -84,7 +84,6 @@ export async function buildOverallLeaderboardEmbed(periodType = 'weekly') {
       `> Real-time rankings balancing **Learning**, **Discussions**, **Voice**, **Reactions**, and **Contributions**.\n${HR}\n\n` +
       `### 📭  No Activity Recorded Yet\n` +
       `Be the first to step onto the podium!\n\n` +
-      `• Solve today's technical challenge with \`/quiz today\`\n` +
       `• Participate in technical discussions in server channels\n` +
       `• Join voice study sessions and help peers\n\n${HR}`
     );

@@ -56,7 +56,7 @@ function leaderboardFooter(count, period) {
 /** Formats podium + table rows for standard leaderboard embeds */
 function formatLeaderboardRows(rows, showPeriodPoints = false) {
   if (!rows || rows.length === 0) {
-    return '> *No quiz activity recorded yet for this period!*\n> _Take today\'s quiz via `/quiz today` to be the first on the board!_';
+    return '> *No activity recorded yet for this period!*';
   }
 
   const maxPoints = Math.max(1, rows[0]?.period_points ?? rows[0]?.total_points ?? 1);

@@ -164,7 +164,7 @@ export async function execute(interaction) {
             .setDescription(
               `> You haven\'t completed any quizzes yet, **${interaction.user.username}**!\n\n` +
               `${HR}\n\n` +
-              `🎯  Use \`/quiz today\` to take your first quiz and start building your streak.\n` +
+              `🎯  Join our daily live challenge sessions at 09:00 AM IST to build your streak.\n` +
               `🏆  Correct answers earn Points and XP toward your profile rank.\n` +
               `📈  Streaks multiply your standing on the weekly leaderboard.`
             )
