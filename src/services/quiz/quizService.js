@@ -124,7 +124,14 @@ export function buildQuizMessage(quiz, question) {
 /**
  * Publishes a quiz to a Discord channel and records it in Supabase.
  */
-export async function publishDailyQuiz({ client, channelId, questionData = null, scheduledFor = null, allowDuplicateForDate = false }) {
+export async function publishDailyQuiz({
+  client,
+  channelId,
+  questionData = null,
+  scheduledFor = null,
+  allowDuplicateForDate = false,
+  suppressEveryonePing = true,
+}) {
   const targetChannel = await client.channels.fetch(channelId).catch(() => null);
   if (!targetChannel) {
     throw new Error(`Target channel ${channelId} not found or inaccessible by the bot.`);
@@ -169,9 +176,14 @@ export async function publishDailyQuiz({ client, channelId, questionData = null,
 
   const question = createdQuiz.quiz_questions[0];
   const messagePayload = buildQuizMessage(createdQuiz, question);
+  const mentionContent = suppressEveryonePing
+    ? '🔔 **Today\'s Daily Tech Challenge is Live!** 🧠\nTest your knowledge, keep your daily streak burning, and climb the leaderboard:'
+    : '🔔 **@everyone — Today\'s Daily Tech Challenge is Live!** 🧠\nTest your knowledge, keep your daily streak burning, and climb the leaderboard:';
+
   const sentMessage = await targetChannel.send({
-    content: '🔔 **@everyone — Today\'s Daily Tech Challenge is Live!** 🧠\nTest your knowledge, keep your daily streak burning, and climb the leaderboard:',
+    content: mentionContent,
     ...messagePayload,
+    allowedMentions: suppressEveryonePing ? { parse: [] } : { parse: ['everyone'] },
   });
 
   const activeQuiz = await publishQuiz(createdQuiz.id, {

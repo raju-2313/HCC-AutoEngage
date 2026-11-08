@@ -17,7 +17,7 @@ import { logger } from '../../utils/logger.js';
 import { publishDailyQuiz } from '../quiz/quizService.js';
 import { getActiveQuiz, closeQuiz, closeExpiredQuizzes, getQuizByScheduledDate } from '../../database/queries/quizzes.js';
 import { getKolkataDateString } from '../quiz/questionBank.js';
-import { getDayQuestionSet } from '../quiz/sessionQuestionManager.js';
+import { getDayQuestionSet, isSprintDate } from '../quiz/sessionQuestionManager.js';
 import { runDailyTimedSession, reconcileDailySessionOnStartup } from '../quiz/dailyTimedSessionEngine.js';
 import { getDailySessionRecord } from '../../database/queries/quizSessions.js';
 import {
@@ -101,7 +101,22 @@ export async function runDailyQuizDropJob(client, options = {}) {
       return sessionResult;
     }
 
-    // 2. Check if today's quiz was already posted (duplicate protection & restart recovery)
+    // CRITICAL GUARD: Outside the curated 7-day challenge window (Nov 9 - Nov 15, 2026),
+    // NEVER fall back to uncurated single quizzes or broadcast @everyone pings!
+    if (!options.forceLegacyQuiz) {
+      logger.info(`[QUIZ DROP SKIPPED] No curated 7-day challenge scheduled for ${currentDate}. Quiz drop cleanly bypassed.`, {
+        currentDate,
+        channelId,
+      });
+      return {
+        success: true,
+        reason: 'NO_CHALLENGE_SCHEDULED_FOR_DATE',
+        skipped: true,
+        date: currentDate,
+      };
+    }
+
+    // 2. Check if today's quiz was already posted (duplicate protection & restart recovery - ONLY if forceLegacyQuiz is true)
     const existingQuiz = await getQuizByScheduledDate(currentDate);
     if (existingQuiz && (existingQuiz.status === 'active' || existingQuiz.status === 'closed')) {
       logger.info('Today\'s quiz has already been posted. No duplicate publication needed.', {
@@ -123,6 +138,7 @@ export async function runDailyQuizDropJob(client, options = {}) {
           client,
           channelId,
           scheduledFor: currentDate,
+          suppressEveryonePing: options.suppressEveryonePing ?? true,
         });
         break; // Success
       } catch (postErr) {
@@ -201,6 +217,14 @@ export async function runDailyQuizCloseJob() {
 export async function runWeeklyLeaderboardJob(client) {
   logger.info('⏰ Running scheduled task: Weekly Community Roundup & Leaderboard');
   try {
+    const today = getKolkataDateString();
+    // Guard: Only post weekly announcement on Sunday Nov 15 (conclusion of 7-day sprint) or beyond.
+    // Prevents posting premature/empty roundup on Sunday Nov 8 before sprint starts.
+    if (today < '2026-11-15') {
+      logger.info(`Weekly roundup skipped for ${today}: Sprint begins Nov 9 and concludes on Nov 15.`);
+      return { success: true, reason: 'SPRINT_NOT_YET_CONCLUDED', skipped: true };
+    }
+
     const result = await postWeeklyAnnouncement({ client });
     return result;
   } catch (err) {
@@ -422,17 +446,7 @@ export async function reconcileMissedJobsOnStartup(client) {
           logger.info(`Today's timed session (${today}) already completed.`, { sessionId: sessionRecord.id });
         }
       } else {
-        const existing = await getQuizByScheduledDate(today);
-        if (!existing) {
-          logger.warn(`Missed daily quiz detected for today (${today}). Initiating automatic recovery drop...`);
-          const dropResult = await runDailyQuizDropJob(client, { date: today });
-          logger.info('Startup recovery drop completed', { dropResult });
-        } else {
-          logger.info(`Today's quiz (${today}) already active/recorded. No startup catch-up required.`, {
-            quizId: existing.id,
-            status: existing.status,
-          });
-        }
+        logger.info(`No 7-day challenge scheduled for today (${today}). Skipping startup quiz recovery.`);
       }
     }
   } catch (err) {

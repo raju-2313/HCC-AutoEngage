@@ -167,3 +167,24 @@ export function validateAllBanks() {
   return results;
 }
 
+/**
+ * Checks whether a given date (YYYY-MM-DD) falls within the active 7-Day Sprint calendar.
+ */
+export function isSprintDate(dateStr) {
+  return Boolean(CHALLENGE_CALENDAR[dateStr]);
+}
+
+/**
+ * Returns metadata about the active 7-Day Sprint schedule.
+ */
+export function getSprintInfo() {
+  const dates = Object.keys(CHALLENGE_CALENDAR).sort();
+  return {
+    startDate: dates[0],
+    endDate: dates[dates.length - 1],
+    totalDays: dates.length,
+    calendar: CHALLENGE_CALENDAR,
+  };
+}
+
+
