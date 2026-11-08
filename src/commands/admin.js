@@ -38,6 +38,7 @@ import { QUESTION_BANK } from '../services/quiz/questionBank.js';
 import { runMonthlyWinnerJob } from '../services/automation/scheduler.js';
 import { postWeeklyAnnouncement } from '../services/recognition/weeklyAnnouncementService.js';
 import { logActivity } from '../database/queries/logs.js';
+import { executePurge } from './purge.js';
 
 const HR = '┄'.repeat(28);
 
@@ -48,6 +49,19 @@ export const data = new SlashCommandBuilder()
     sub
       .setName('stats')
       .setDescription('View server-wide community engagement and quiz metrics.')
+  )
+  .addSubcommand((sub) =>
+    sub
+      .setName('purge')
+      .setDescription('Purge messages sent exclusively by this bot in this channel.')
+      .addIntegerOption((opt) =>
+        opt
+          .setName('amount')
+          .setDescription('Number of bot messages to delete (1-100). Default is 50.')
+          .setMinValue(1)
+          .setMaxValue(100)
+          .setRequired(false)
+      )
   )
   .addSubcommandGroup((group) =>
     group
@@ -225,6 +239,12 @@ export async function execute(interaction) {
   await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
   try {
+    // ── 0. /admin purge ───────────────────────────────────────────────────────
+    if (!group && sub === 'purge') {
+      const amount = interaction.options.getInteger('amount') || 50;
+      return executePurge(interaction, amount);
+    }
+
     // ── 1. /admin stats ───────────────────────────────────────────────────────
     if (!group && sub === 'stats') {
       const stats = await getServerMemberStats();

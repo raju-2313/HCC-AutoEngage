@@ -50,6 +50,8 @@ const COMMAND_GROUPS = [
       { name: '/admin points grant',         desc: 'Grant or adjust points/XP for a member.' },
       { name: '/admin announce winners',     desc: 'Crown monthly champions and announce results.' },
       { name: '/admin streak reset',         desc: 'Reset a member\'s daily streak.' },
+      { name: '/admin purge [amount]',       desc: 'Delete bot messages in this channel (1–100, default 50).' },
+      { name: '/purge [amount]',             desc: 'Shortcut to delete bot messages in this channel (1–100, default 50).' },
     ],
   },
 ];
