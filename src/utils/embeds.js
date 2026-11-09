@@ -7,12 +7,16 @@ import { EmbedBuilder } from 'discord.js';
 
 // HCC brand colours
 export const COLORS = {
-  primary:  0x00C853, // HackerRank green
-  success:  0x43A047,
-  warning:  0xFB8C00,
-  error:    0xE53935,
-  info:     0x1E88E5,
-  neutral:  0x546E7A,
+  primary:   0x00C853, // HackerRank green
+  success:   0x43A047,
+  warning:   0xFB8C00,
+  error:     0xE53935,
+  info:      0x1E88E5,
+  neutral:   0x546E7A,
+  HCC_GREEN: 0x00C853,
+  HCC_BLUE:  0x1E88E5,
+  HCC_AMBER: 0xFB8C00,
+  HCC_RED:   0xE53935,
 };
 
 export function successEmbed(title, description) {
