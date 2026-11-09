@@ -33,6 +33,13 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function buildCountdownProgressBar(remainingSec, totalSec, length = 10) {
+  const fraction = Math.max(0, Math.min(1, remainingSec / totalSec));
+  const filled = Math.round(fraction * length);
+  const empty = length - filled;
+  return '▰'.repeat(filled) + '▱'.repeat(empty);
+}
+
 const HR = '┄'.repeat(28);
 
 const OPTION_STYLES = {
@@ -193,9 +200,6 @@ export async function runDailyTimedSession({
         questionQuiz = await getQuizById(state.currentQuizRecordId);
       }
 
-      const now = Date.now();
-      const questionEndUnix = Math.floor((now + qTimeSec * 1000) / 1000);
-
       if (!questionQuiz) {
         questionQuiz = await createQuiz({
           title: `Day ${meta.dayNumber} (Q${qNumber}/${totalQ}): ${q.title || q.questionText.slice(0, 45)}`,
@@ -223,7 +227,6 @@ export async function runDailyTimedSession({
         });
       }
 
-      // Update state checkpoint before publishing
       state.currentQuestionIndex = i;
       state.currentQuizRecordId = questionQuiz.id;
       state.questionStartTime = new Date(now).toISOString();
@@ -246,20 +249,6 @@ export async function runDailyTimedSession({
 
       const diffLabel = q.difficulty === 'challenge' ? '🔥 Challenge' : q.difficulty === 'medium' ? '⚡ Medium' : '🌱 Easy';
 
-      const qEmbed = new EmbedBuilder()
-        .setColor(COLORS.primary)
-        .setTitle(`${catEmoji}  Question ${qNumber} of ${totalQ}  ·  ${meta.topic}`)
-        .setDescription(desc)
-        .addFields(
-          { name: '⏳ Time Remaining', value: `<t:${questionEndUnix}:R>`, inline: true },
-          { name: '🎯 Tier',           value: diffLabel,                 inline: true },
-          { name: '🎁 Stakes',         value: `**+${q.pointsReward}** pts`, inline: true }
-        )
-        .setFooter({
-          text: `Q${qNumber}/${totalQ}  │  Click your answer below (private)  │  ${qTimeSec} seconds!`,
-        })
-        .setTimestamp();
-
       const activeButtons = q.options.map((opt) => {
         const cfg = OPTION_STYLES[opt.id] ?? { emoji: '', style: ButtonStyle.Primary };
         return new ButtonBuilder()
@@ -270,6 +259,44 @@ export async function runDailyTimedSession({
       });
       const row = new ActionRowBuilder().addComponents(activeButtons);
 
+      // ─── PUBLISH: Compute timer RIGHT before .send() so Discord countdown is accurate ──
+      const questionEndUnix = Math.floor((Date.now() + qTimeSec * 1000) / 1000);
+
+      // Builder for dynamic, responsive question embeds that update live
+      const makeQuestionEmbed = (secondsLeft, isClosed = false) => {
+        const isUrgent = secondsLeft <= 5 && !isClosed;
+        const bar = buildCountdownProgressBar(isClosed ? 0 : secondsLeft, qTimeSec, 10);
+        const timerColor = isClosed ? 0x95A5A6 : isUrgent ? 0xE74C3C : secondsLeft <= 10 ? 0xE67E22 : COLORS.primary;
+
+        const timeHeader = isClosed
+          ? `🔒 **Closed** \`${bar}\``
+          : isUrgent
+          ? `🚨 **${secondsLeft}s LEFT!** \`${bar}\``
+          : `⏳ **${secondsLeft}s** \`${bar}\``;
+
+        const timeValue = isClosed
+          ? `${timeHeader}\nTime's up!`
+          : `${timeHeader}\nEnds <t:${questionEndUnix}:R>`;
+
+        return new EmbedBuilder()
+          .setColor(timerColor)
+          .setTitle(`${catEmoji}  Question ${qNumber} of ${totalQ}  ·  ${meta.topic}`)
+          .setDescription(desc)
+          .addFields(
+            { name: '⏱️ Time Remaining', value: timeValue,                            inline: true },
+            { name: '🎯 Tier',           value: diffLabel,                             inline: true },
+            { name: '🎁 Stakes',         value: `**+${q.pointsReward}** pts`,          inline: true }
+          )
+          .setFooter({
+            text: isClosed
+              ? `Q${qNumber}/${totalQ}  │  Submissions closed`
+              : `Q${qNumber}/${totalQ}  │  Click your answer below (private)  │  ${qTimeSec}s limit`,
+          })
+          .setTimestamp();
+      };
+
+      const qEmbed = makeQuestionEmbed(qTimeSec);
+
       // Publish question message (NEVER mention @everyone on questions)
       const qMessage = await targetChannel.send({
         embeds: [qEmbed],
@@ -277,7 +304,7 @@ export async function runDailyTimedSession({
         allowedMentions: { parse: [] },
       });
 
-      // Mark quiz question active in Supabase
+      // Update the message ID in Supabase now that we have it
       await publishQuiz(questionQuiz.id, {
         messageId: qMessage.id,
         channelId: targetChannel.id,
@@ -285,8 +312,31 @@ export async function runDailyTimedSession({
 
       logger.info(`Question ${qNumber}/${totalQ} published (Quiz ID: ${questionQuiz.id})`);
 
-      // Wait for the answering window
-      await sleep(qTimeSec * 1000);
+      // ─── DYNAMIC LIVE COUNTDOWN LOOP ───
+      // Updates the embed at safe 5-second intervals to show the progress bar shrinking
+      // and urgency colors shifting (Blue -> Orange -> Red), preventing the "stuck" feeling
+      // while staying strictly under Discord's 5 edits / 5s rate limit.
+      let secondsRemaining = qTimeSec;
+      const stepSeconds = 5;
+
+      while (secondsRemaining > stepSeconds) {
+        await sleep(stepSeconds * 1000);
+        secondsRemaining -= stepSeconds;
+
+        const liveEmbed = makeQuestionEmbed(secondsRemaining);
+        await qMessage.edit({
+          embeds: [liveEmbed],
+          components: [row],
+        }).catch((editErr) => {
+          logger.debug('Non-critical live timer embed update failed', { error: editErr.message });
+        });
+      }
+
+      // Wait for EXACTLY the remaining answering window to finish
+      const exactRemainingMs = Math.max(0, (questionEndUnix * 1000) - Date.now());
+      if (exactRemainingMs > 0) {
+        await sleep(exactRemainingMs);
+      }
 
       // Close question in Supabase immediately (rejects late submissions at DB level)
       await closeQuiz(questionQuiz.id);
@@ -327,8 +377,9 @@ export async function runDailyTimedSession({
             : '🏆  Calculating final standings...',
         });
 
+      const finalQEmbed = makeQuestionEmbed(0, true);
       await qMessage.edit({
-        embeds: [qEmbed, resultEmbed],
+        embeds: [finalQEmbed, resultEmbed],
         components: [disabledRow],
       }).catch((editErr) => {
         logger.warn('Failed to edit expired question message', { error: editErr.message });
@@ -380,7 +431,7 @@ export async function runDailyTimedSession({
     let standingsText = '';
 
     if (sortedRankings.length === 0) {
-      standingsText = '> *No answers were submitted during today\'s session.*\n> Be ready for the next challenge at 09:00 AM IST!';
+      standingsText = '> *No answers were submitted during today\'s session.*\n> Be ready for the next challenge at 07:00 PM IST!';
     } else {
       const top3 = sortedRankings.slice(0, 3);
       podiumSection = top3
