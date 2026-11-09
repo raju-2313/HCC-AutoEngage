@@ -29,6 +29,10 @@ import {
 import { postWeeklyAnnouncement } from '../recognition/weeklyAnnouncementService.js';
 import { resetInactiveStreaks } from '../../database/queries/members.js';
 import { logActivity } from '../../database/queries/logs.js';
+import { discoveryService } from '../stickers/discoveryService.js';
+import { getPendingCandidates } from '../../database/queries/stickers.js';
+import { emojiDiscoveryService } from '../emojis/discoveryService.js';
+import { getPendingEmojiCandidates } from '../../database/queries/emojis.js';
 
 const activeTasks = new Map();
 let isDailyQuizJobRunning = false;
@@ -36,6 +40,8 @@ let isDailyCloseJobRunning = false;
 let isWeeklyJobRunning = false;
 let isMonthlyJobRunning = false;
 let isStreakJobRunning = false;
+let isWeeklyStickerJobRunning = false;
+let isWeeklyEmojiJobRunning = false;
 
 /**
  * Resolves a channel by ID with fallback.
@@ -394,6 +400,135 @@ export async function runChannelSelfTestJob(client, options = {}) {
   }
 }
 
+/**
+ * Job 8: Weekly Sticker Discovery & Administrator Notification
+ * Finds new sticker candidates, verifies content & licensing, and prepares the review queue.
+ * NEVER uploads automatically; notifies admins to use /sticker review.
+ */
+export async function runWeeklyStickerDiscoveryJob(client, options = {}) {
+  logger.info('⏰ Running scheduled task: Weekly Sticker Discovery');
+
+  if (isWeeklyStickerJobRunning && !options.force) {
+    logger.warn('Weekly Sticker Discovery job already running. Skipping concurrent run.');
+    return { success: false, reason: 'JOB_ALREADY_RUNNING' };
+  }
+
+  isWeeklyStickerJobRunning = true;
+
+  try {
+    const scanResult = await discoveryService.runDiscoveryScan({
+      limit: config.stickers?.maxScanCount || 15,
+    });
+
+    const pending = await getPendingCandidates({ limit: 50 });
+
+    if (scanResult.inserted > 0 || pending.length > 0) {
+      const targetChannel = await resolveChannel(
+        client,
+        config.discord.channels.logs,
+        config.discord.channels.announcements,
+        config.discord.channels.test
+      );
+
+      if (targetChannel) {
+        const adminMentions = (config.app.adminUserIds || [])
+          .map((id) => `<@${id}>`)
+          .join(' ');
+
+        const notificationEmbed = new EmbedBuilder()
+          .setColor(0x00E676)
+          .setTitle('🎨 Weekly Sticker Discovery: Candidates Ready for Review')
+          .setDescription(
+            `The automated weekly sticker scan has completed!\n` +
+            `• **${scanResult.inserted}** new candidates discovered & verified.\n` +
+            `• **${pending.length}** total candidates currently awaiting review.\n\n` +
+            `🛡️ *The bot will NEVER upload stickers without human approval.*\n` +
+            `Authorized administrators can run \`/sticker review\` to inspect and approve/reject candidates.`
+          )
+          .setFooter({ text: 'HCC AutoEngage • Sticker Moderation Queue' })
+          .setTimestamp();
+
+        await targetChannel.send({
+          content: adminMentions ? `📢 Attention: ${adminMentions}` : undefined,
+          embeds: [notificationEmbed],
+        }).catch((err) => {
+          logger.warn('Failed to send sticker discovery notification message', { error: err.message });
+        });
+      }
+    }
+
+    return { success: true, scanResult, pendingCount: pending.length };
+  } catch (err) {
+    logger.error('Weekly Sticker Discovery job encountered an error', { error: err.message });
+    return { success: false, error: err.message };
+  } finally {
+    isWeeklyStickerJobRunning = false;
+  }
+}
+
+/**
+ * Job 9: Weekly Emoji Discovery & Administrator Notification
+ * Finds 50 popular, non-vulgar emojis, verifies content & licensing, and prepares review queue.
+ * NEVER uploads automatically; notifies admins to use /emoji review.
+ */
+export async function runWeeklyEmojiDiscoveryJob(client, options = {}) {
+  logger.info('⏰ Running scheduled task: Weekly Emoji Discovery');
+
+  if (isWeeklyEmojiJobRunning && !options.force) {
+    logger.warn('Weekly Emoji Discovery job already running. Skipping concurrent run.');
+    return { success: false, reason: 'JOB_ALREADY_RUNNING' };
+  }
+
+  isWeeklyEmojiJobRunning = true;
+
+  try {
+    const scanResult = await emojiDiscoveryService.runDiscoveryScan({ limit: 50 });
+    const pending = await getPendingEmojiCandidates({ limit: 50 });
+
+    if (scanResult.inserted > 0 || pending.length > 0) {
+      const targetChannel = await resolveChannel(
+        client,
+        config.discord.channels.logs,
+        config.discord.channels.announcements,
+        config.discord.channels.test
+      );
+
+      if (targetChannel) {
+        const adminMentions = (config.app.adminUserIds || [])
+          .map((id) => `<@${id}>`)
+          .join(' ');
+
+        const notificationEmbed = new EmbedBuilder()
+          .setColor(0x3B82F6)
+          .setTitle('😀 Weekly Emoji Discovery: 50 Popular Emojis Ready')
+          .setDescription(
+            `The automated weekly emoji scan has completed!\n` +
+            `• **${scanResult.inserted}** new clean Gen Z and tech emojis discovered.\n` +
+            `• **${pending.length}** total emojis currently awaiting review.\n\n` +
+            `🛡️ *The bot will NEVER upload emojis without human approval.*\n` +
+            `Authorized administrators can run \`/emoji review\` to inspect and approve.`
+          )
+          .setFooter({ text: 'HCC AutoEngage • Emoji Moderation Queue' })
+          .setTimestamp();
+
+        await targetChannel.send({
+          content: adminMentions ? `📢 Attention: ${adminMentions}` : undefined,
+          embeds: [notificationEmbed],
+        }).catch((err) => {
+          logger.warn('Failed to send emoji discovery notification message', { error: err.message });
+        });
+      }
+    }
+
+    return { success: true, scanResult, pendingCount: pending.length };
+  } catch (err) {
+    logger.error('Weekly Emoji Discovery job encountered an error', { error: err.message });
+    return { success: false, error: err.message };
+  } finally {
+    isWeeklyEmojiJobRunning = false;
+  }
+}
+
 // ─── Scheduler Initialization ─────────────────────────────────────────────────
 
 /**
@@ -526,6 +661,23 @@ export function initScheduler(client) {
     );
     activeTasks.set('channelSelfTest', taskChannelTest);
   }
+
+  // 8. Weekly Sticker Discovery (Administrator-configurable schedule)
+  const stickerCron = config.stickers?.discoveryCron || '0 11 * * 1';
+  const taskStickerDiscovery = cron.schedule(
+    stickerCron,
+    () => runWeeklyStickerDiscoveryJob(client),
+    { timezone }
+  );
+  activeTasks.set('weeklyStickerDiscovery', taskStickerDiscovery);
+
+  // 9. Weekly Emoji Discovery (Administrator-configurable schedule, 10 mins after stickers)
+  const taskEmojiDiscovery = cron.schedule(
+    '10 11 * * 1',
+    () => runWeeklyEmojiDiscoveryJob(client),
+    { timezone }
+  );
+  activeTasks.set('weeklyEmojiDiscovery', taskEmojiDiscovery);
 
   logger.info(`Scheduler running with ${activeTasks.size} registered automated jobs ✅`);
 

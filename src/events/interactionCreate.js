@@ -12,6 +12,8 @@ import {
   buildOverallLeaderboardEmbed,
   buildLeaderboardActionRow,
 } from '../services/recognition/engagementScoringService.js';
+import { handleStickerButtonInteraction } from '../services/stickers/reviewService.js';
+import { handleEmojiButtonInteraction } from '../services/emojis/reviewService.js';
 
 export const name  = 'interactionCreate';
 export const once  = false;
@@ -70,6 +72,14 @@ export async function execute(interaction, client) {
 
     if (interaction.customId.startsWith('quiz_ans:')) {
       return handleQuizAnswerInteraction(interaction);
+    }
+
+    if (interaction.customId.startsWith('sticker:')) {
+      return handleStickerButtonInteraction(interaction);
+    }
+
+    if (interaction.customId.startsWith('emoji:')) {
+      return handleEmojiButtonInteraction(interaction);
     }
 
     if (interaction.customId.startsWith('lb_view:')) {

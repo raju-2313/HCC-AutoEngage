@@ -42,6 +42,30 @@ const COMMAND_GROUPS = [
     ],
   },
   {
+    name: '🎨 Sticker Discovery & Moderation',
+    commands: [
+      { name: '/sticker slots',               desc: 'View server sticker capacity, used slots, and free slots.' },
+      { name: '/sticker list',                desc: 'List all custom stickers installed on this server.' },
+      { name: '/sticker discover [limit]',    desc: 'Scan for new trending Gen Z developer & college stickers (Admin).' },
+      { name: '/sticker review',              desc: 'Interactive administrator queue to review and approve stickers (Admin).' },
+      { name: '/sticker approve [id|pack]',   desc: 'Approve selected candidate or pack and upload to Discord (Admin).' },
+      { name: '/sticker reject [id|pack]',    desc: 'Reject selected candidate or pack with reason (Admin).' },
+      { name: '/sticker scan',                desc: 'Re-run content safety and licensing checks on pending candidates (Admin).' },
+    ],
+  },
+  {
+    name: '😀 Custom Emoji Discovery & Management',
+    commands: [
+      { name: '/emoji slots',                 desc: 'View server emoji capacity (50 static/animated), used, and remaining slots.' },
+      { name: '/emoji list',                  desc: 'List all custom emojis installed on this server.' },
+      { name: '/emoji discover [limit]',      desc: 'Scan 50 popular, non-vulgar Gen Z and tech emojis (Admin).' },
+      { name: '/emoji review',                desc: 'Interactive administrator queue to review and approve emojis (Admin).' },
+      { name: '/emoji approve [id|pack]',     desc: 'Approve selected emoji candidate or pack and upload to Discord (Admin).' },
+      { name: '/emoji reject [id|pack]',      desc: 'Reject selected emoji candidate or pack with reason (Admin).' },
+      { name: '/emoji scan',                  desc: 'Re-run safety and licensing checks on pending emoji candidates (Admin).' },
+    ],
+  },
+  {
     name: '🛠️ Admin  *(Restricted)*',
     commands: [
       { name: '/admin stats',                 desc: 'View server health and quiz engagement metrics.' },

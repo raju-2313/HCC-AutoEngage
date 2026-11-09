@@ -52,6 +52,14 @@ export const config = {
     countdownSeconds: parseInt(process.env.QUIZ_START_COUNTDOWN_SECONDS || '30', 10),
     questionTimeSeconds: parseInt(process.env.QUIZ_QUESTION_TIME_SECONDS || '20', 10),
     adminRoleName: process.env.ADMIN_ROLE_NAME || 'HCC Admin',
+    adminUserIds: (optional_env('ADMIN_USER_IDS', ''))
+      .split(',')
+      .map((id) => id.trim())
+      .filter(Boolean),
+  },
+  stickers: {
+    discoveryCron: optional_env('STICKER_DISCOVERY_CRON', '0 11 * * 1'),
+    maxScanCount: parseInt(optional_env('STICKER_MAX_SCAN_COUNT', '15'), 10),
   },
 };
 

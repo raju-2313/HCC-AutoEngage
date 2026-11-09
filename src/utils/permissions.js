@@ -41,12 +41,16 @@ export function isAdmin(interaction) {
 
   // Check member role cache (GuildMemberRoleManager)
   if (interaction.member.roles?.cache) {
-    const hasRoleByName = interaction.member.roles.cache.some((role) =>
-      ALLOWED_ADMIN_ROLES.some((name) => name.toLowerCase() === role.name.toLowerCase())
-    );
+    const cache = interaction.member.roles.cache;
+    const cacheValues = typeof cache.values === 'function' ? Array.from(cache.values()) : [];
+    const hasRoleByName = typeof cache.some === 'function'
+      ? cache.some((role) => ALLOWED_ADMIN_ROLES.some((name) => name.toLowerCase() === role?.name?.toLowerCase()))
+      : cacheValues.some((role) => ALLOWED_ADMIN_ROLES.some((name) => name.toLowerCase() === role?.name?.toLowerCase()));
     if (hasRoleByName) return true;
 
-    const hasRoleById = targetRoleIds.some((id) => interaction.member.roles.cache.has(id));
+    const hasRoleById = targetRoleIds.some((id) =>
+      typeof cache.has === 'function' ? cache.has(id) : cacheValues.some((r) => r.id === id)
+    );
     if (hasRoleById) return true;
   }
 
@@ -58,3 +62,23 @@ export function isAdmin(interaction) {
 
   return false;
 }
+
+/**
+ * Returns true if the user is authorized to review, approve, or reject sticker candidates.
+ * Checks the configurable ADMIN_USER_IDS list first. If unset, falls back to isAdmin().
+ */
+export function isStickerAdmin(interaction) {
+  const userId = interaction.user?.id;
+  if (!userId) return false;
+
+  // 1. Configured ADMIN_USER_IDS list takes precedence
+  if (config.app.adminUserIds && config.app.adminUserIds.length > 0) {
+    if (config.app.adminUserIds.includes(userId)) return true;
+    if (interaction.guild && interaction.guild.ownerId === userId) return true;
+    return false;
+  }
+
+  // 2. Fallback to standard admin permissions if ADMIN_USER_IDS is not explicitly configured
+  return isAdmin(interaction);
+}
+
