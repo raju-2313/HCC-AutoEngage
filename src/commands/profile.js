@@ -178,7 +178,7 @@ function renderAchievements(member) {
 // ─── Main command ──────────────────────────────────────────────────────────────
 
 export async function execute(interaction) {
-  await interaction.deferReply();
+  await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
   const targetUser = interaction.options.getUser('user') ?? interaction.user;
   const discordId  = targetUser.id;

@@ -3,7 +3,7 @@
  * /ping – Tests bot responsiveness and reports round-trip latency.
  */
 
-import { SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder, MessageFlags } from 'discord.js';
 import { successEmbed } from '../utils/embeds.js';
 
 export const data = new SlashCommandBuilder()
@@ -12,7 +12,7 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction) {
   // Defer so we can include the actual round-trip time
-  const sent = await interaction.reply({ content: '🏓 Measuring…', fetchReply: true });
+  const sent = await interaction.reply({ content: '🏓 Measuring…', fetchReply: true, flags: MessageFlags.Ephemeral });
 
   const roundTrip = sent.createdTimestamp - interaction.createdTimestamp;
   const wsHeartbeat = interaction.client.ws.ping;

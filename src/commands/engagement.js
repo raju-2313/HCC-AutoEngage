@@ -51,7 +51,7 @@ export async function execute(interaction) {
 
   // ── /engagement me ───────────────────────────────────────────────────────────
   if (sub === 'me') {
-    await interaction.deferReply();
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     try {
       const embed = await buildMemberEngagementCard(interaction.user);
       return interaction.editReply({ embeds: [embed] });
@@ -65,7 +65,7 @@ export async function execute(interaction) {
 
   // ── /engagement stats [user] ─────────────────────────────────────────────────
   if (sub === 'stats') {
-    await interaction.deferReply();
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     const targetUser = interaction.options.getUser('user', true);
     try {
       const embed = await buildMemberEngagementCard(targetUser);
@@ -80,7 +80,7 @@ export async function execute(interaction) {
 
   // ── /engagement thank <user> <reason> ────────────────────────────────────────
   if (sub === 'thank') {
-    await interaction.deferReply();
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     const targetUser = interaction.options.getUser('user', true);
     const reason     = interaction.options.getString('reason', true);
 

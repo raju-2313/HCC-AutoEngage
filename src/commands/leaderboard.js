@@ -6,7 +6,7 @@
  * Reactions (10%), and Contributions (10%) with interactive timeframe switching.
  */
 
-import { SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder, MessageFlags } from 'discord.js';
 import {
   buildOverallLeaderboardEmbed,
   buildLeaderboardActionRow,
@@ -30,7 +30,7 @@ export const data = new SlashCommandBuilder()
   );
 
 export async function execute(interaction) {
-  await interaction.deferReply();
+  await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
   const timeframe = interaction.options.getString('timeframe') || 'weekly';
 

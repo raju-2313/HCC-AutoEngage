@@ -3,7 +3,7 @@
  * /help – Lists all available commands with descriptions.
  */
 
-import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder, EmbedBuilder, MessageFlags } from 'discord.js';
 import { COLORS } from '../utils/embeds.js';
 
 export const data = new SlashCommandBuilder()
@@ -74,5 +74,5 @@ export async function execute(interaction) {
     embed.addFields({ name: group.name, value, inline: false });
   }
 
-  await interaction.reply({ embeds: [embed] });
+  await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
 }
