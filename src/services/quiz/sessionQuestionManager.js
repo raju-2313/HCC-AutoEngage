@@ -2,6 +2,9 @@
  * src/services/quiz/sessionQuestionManager.js
  * Manages daily 10-question banks for the 7-day challenge (Nov 9 - Nov 15, 2026).
  *
+ * Day 1  (Nov 9)  ran at 09:00 AM IST (already completed).
+ * Days 2–7 (Nov 10–15) run at 07:00 PM IST (19:00).
+ *
  * Source of truth: src/data/question-banks/day-0X-<topic>.json
  */
 
@@ -27,48 +30,48 @@ export const CHALLENGE_CALENDAR = {
     topic: 'C Programming Basics',
     fileName: 'day-02-c-basics.json',
     category: 'c',
-    dateLabel: 'Tuesday, 10 Nov 2026 @ 09:00 AM IST (Day 2)',
-    startTime: '09:00 AM IST',
+    dateLabel: 'Tuesday, 10 Nov 2026 @ 07:00 PM IST (Day 2)',
+    startTime: '07:00 PM IST',
   },
   '2026-11-11': {
     dayNumber: 3,
     topic: 'Loops & Iterations',
     fileName: 'day-03-loops.json',
     category: 'loops',
-    dateLabel: 'Wednesday, 11 Nov 2026 @ 09:00 AM IST (Day 3)',
-    startTime: '09:00 AM IST',
+    dateLabel: 'Wednesday, 11 Nov 2026 @ 07:00 PM IST (Day 3)',
+    startTime: '07:00 PM IST',
   },
   '2026-11-12': {
     dayNumber: 4,
     topic: 'Conditionals & Logic',
     fileName: 'day-04-conditionals.json',
     category: 'conditionals',
-    dateLabel: 'Thursday, 12 Nov 2026 @ 09:00 AM IST (Day 4)',
-    startTime: '09:00 AM IST',
+    dateLabel: 'Thursday, 12 Nov 2026 @ 07:00 PM IST (Day 4)',
+    startTime: '07:00 PM IST',
   },
   '2026-11-13': {
     dayNumber: 5,
     topic: 'Git & GitHub',
     fileName: 'day-05-git-github.json',
     category: 'git',
-    dateLabel: 'Friday, 13 Nov 2026 @ 09:00 AM IST (Day 5)',
-    startTime: '09:00 AM IST',
+    dateLabel: 'Friday, 13 Nov 2026 @ 07:00 PM IST (Day 5)',
+    startTime: '07:00 PM IST',
   },
   '2026-11-14': {
     dayNumber: 6,
     topic: 'HTML & Web Foundations',
     fileName: 'day-06-html.json',
     category: 'web',
-    dateLabel: 'Saturday, 14 Nov 2026 @ 09:00 AM IST (Day 6)',
-    startTime: '09:00 AM IST',
+    dateLabel: 'Saturday, 14 Nov 2026 @ 07:00 PM IST (Day 6)',
+    startTime: '07:00 PM IST',
   },
   '2026-11-15': {
     dayNumber: 7,
     topic: 'Tech & Computer Basics',
     fileName: 'day-07-tech-fundamentals.json',
     category: 'fundamentals',
-    dateLabel: 'Sunday, 15 Nov 2026 @ 09:00 AM IST (Day 7)',
-    startTime: '09:00 AM IST',
+    dateLabel: 'Sunday, 15 Nov 2026 @ 07:00 PM IST (Day 7)',
+    startTime: '07:00 PM IST',
   },
 };
 

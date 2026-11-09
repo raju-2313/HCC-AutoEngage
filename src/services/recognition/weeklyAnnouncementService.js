@@ -130,7 +130,7 @@ export async function buildWeeklyDigestEmbeds() {
       },
       {
         name: '🚀  Next Week\'s Target',
-        value: `Daily quizzes drop at **09:00 AM IST**`,
+        value: `Daily challenges at **07:00 PM IST**`,
         inline: true,
       }
     )

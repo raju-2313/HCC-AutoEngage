@@ -3,7 +3,7 @@
  * Automated Cron and Scheduling System (Phase 5).
  *
  * Runs background jobs in Asia/Kolkata timezone:
- *   1. Daily Quiz Drop (09:00 AM IST)
+ *   1. Daily Quiz Drop (19:00 / 07:00 PM IST from Day 2 onward)
  *   2. Daily Quiz Auto-Close (23:59 IST)
  *   3. Weekly Sunday Leaderboard Post & DB Snapshot (Sunday 21:00 IST)
  *   4. Monthly Winner Crowning & Champion Announcement (1st of month 00:05 IST)
@@ -404,7 +404,7 @@ export async function runChannelSelfTestJob(client, options = {}) {
 export async function reconcileMissedJobsOnStartup(client) {
   try {
     const today = getKolkataDateString();
-    const [targetHourStr = '09', targetMinStr = '00'] = (config.app.quizPostTime || '09:00').split(':');
+    const [targetHourStr = '19', targetMinStr = '00'] = (config.app.quizPostTime || '19:00').split(':');
     const targetHour = parseInt(targetHourStr, 10);
     const targetMin = parseInt(targetMinStr, 10);
 
@@ -461,14 +461,14 @@ export function initScheduler(client) {
   const timezone = config.app.timezone || 'Asia/Kolkata';
   logger.info(`Initializing HCC automation scheduler (Timezone: ${timezone})…`);
 
-  // Parse quiz post time (e.g., '09:00')
-  const [hourStr = '09', minStr = '00'] = (config.app.quizPostTime || '09:00').split(':');
+  // Parse quiz post time from env (e.g., '19:00')
+  const [hourStr = '19', minStr = '00'] = (config.app.quizPostTime || '19:00').split(':');
   const quizCron = `${parseInt(minStr, 10)} ${parseInt(hourStr, 10)} * * *`;
 
   // Stop any existing active tasks before registering to avoid duplicates
   stopScheduler();
 
-  // 1. Daily Quiz Drop (Default: 09:00 AM IST)
+  // 1. Daily Quiz Drop (Configured via QUIZ_POST_TIME — now 07:00 PM IST / 19:00)
   const taskDailyQuiz = cron.schedule(
     quizCron,
     () => runDailyQuizDropJob(client),

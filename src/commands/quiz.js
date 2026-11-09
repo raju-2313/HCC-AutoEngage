@@ -126,7 +126,7 @@ export async function execute(interaction) {
             .setColor(COLORS.info)
             .setTitle('📭  No Active Quiz Right Now')
             .setDescription(
-              `> Daily quizzes drop every morning at **09:00 AM** IST!\n\n` +
+              `> Daily quizzes drop every evening at **07:00 PM IST**!\n\n` +
               `${HR}\n\n` +
               `📌  **What to do next:**\n` +
               `• Use \`/quiz stats\` to review your past performance\n` +
@@ -164,7 +164,7 @@ export async function execute(interaction) {
             .setDescription(
               `> You haven\'t completed any quizzes yet, **${interaction.user.username}**!\n\n` +
               `${HR}\n\n` +
-              `🎯  Join our daily live challenge sessions at 09:00 AM IST to build your streak.\n` +
+              `🎯  Join our daily live challenge sessions at 07:00 PM IST to join the daily challenge.\n` +
               `🏆  Correct answers earn Points and XP toward your profile rank.\n` +
               `📈  Streaks multiply your standing on the weekly leaderboard.`
             )
