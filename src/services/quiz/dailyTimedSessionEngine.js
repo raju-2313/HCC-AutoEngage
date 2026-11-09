@@ -33,13 +33,6 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function buildCountdownProgressBar(remainingSec, totalSec, length = 10) {
-  const fraction = Math.max(0, Math.min(1, remainingSec / totalSec));
-  const filled = Math.round(fraction * length);
-  const empty = length - filled;
-  return '▰'.repeat(filled) + '▱'.repeat(empty);
-}
-
 const HR = '┄'.repeat(28);
 
 const OPTION_STYLES = {
@@ -259,43 +252,29 @@ export async function runDailyTimedSession({
       });
       const row = new ActionRowBuilder().addComponents(activeButtons);
 
-      // ─── PUBLISH: Compute timer RIGHT before .send() so Discord countdown is accurate ──
-      const questionEndUnix = Math.floor((Date.now() + qTimeSec * 1000) / 1000);
+      // ─── PUBLISH: Precise 15-second timer calculation ──
+      // Calculate target expiry milliseconds right at send time for exact synchronization.
+      const startNow = Date.now();
+      const expiryTimestampMs = startNow + (qTimeSec * 1000);
+      const questionEndUnix = Math.floor(expiryTimestampMs / 1000);
 
-      // Builder for dynamic, responsive question embeds that update live
-      const makeQuestionEmbed = (secondsLeft, isClosed = false) => {
-        const isUrgent = secondsLeft <= 5 && !isClosed;
-        const bar = buildCountdownProgressBar(isClosed ? 0 : secondsLeft, qTimeSec, 10);
-        const timerColor = isClosed ? 0x95A5A6 : isUrgent ? 0xE74C3C : secondsLeft <= 10 ? 0xE67E22 : COLORS.primary;
-
-        const timeHeader = isClosed
-          ? `🔒 **Closed** \`${bar}\``
-          : isUrgent
-          ? `🚨 **${secondsLeft}s LEFT!** \`${bar}\``
-          : `⏳ **${secondsLeft}s** \`${bar}\``;
-
-        const timeValue = isClosed
-          ? `${timeHeader}\nTime's up!`
-          : `${timeHeader}\nEnds <t:${questionEndUnix}:R>`;
-
-        return new EmbedBuilder()
-          .setColor(timerColor)
-          .setTitle(`${catEmoji}  Question ${qNumber} of ${totalQ}  ·  ${meta.topic}`)
-          .setDescription(desc)
-          .addFields(
-            { name: '⏱️ Time Remaining', value: timeValue,                            inline: true },
-            { name: '🎯 Tier',           value: diffLabel,                             inline: true },
-            { name: '🎁 Stakes',         value: `**+${q.pointsReward}** pts`,          inline: true }
-          )
-          .setFooter({
-            text: isClosed
-              ? `Q${qNumber}/${totalQ}  │  Submissions closed`
-              : `Q${qNumber}/${totalQ}  │  Click your answer below (private)  │  ${qTimeSec}s limit`,
-          })
-          .setTimestamp();
-      };
-
-      const qEmbed = makeQuestionEmbed(qTimeSec);
+      const qEmbed = new EmbedBuilder()
+        .setColor(COLORS.primary)
+        .setTitle(`${catEmoji}  Question ${qNumber} of ${totalQ}  ·  ${meta.topic}`)
+        .setDescription(desc)
+        .addFields(
+          {
+            name: '⏱️ Time Limit',
+            value: `**${qTimeSec} Seconds**\nCloses <t:${questionEndUnix}:R>`,
+            inline: true,
+          },
+          { name: '🎯 Tier',           value: diffLabel,                   inline: true },
+          { name: '🎁 Stakes',         value: `**+${q.pointsReward}** pts`, inline: true }
+        )
+        .setFooter({
+          text: `Q${qNumber}/${totalQ}  │  Click your answer below (private)  │  ${qTimeSec}s limit`,
+        })
+        .setTimestamp();
 
       // Publish question message (NEVER mention @everyone on questions)
       const qMessage = await targetChannel.send({
@@ -312,31 +291,12 @@ export async function runDailyTimedSession({
 
       logger.info(`Question ${qNumber}/${totalQ} published (Quiz ID: ${questionQuiz.id})`);
 
-      // ─── DYNAMIC LIVE COUNTDOWN LOOP ───
-      // Updates the embed at safe 5-second intervals to show the progress bar shrinking
-      // and urgency colors shifting (Blue -> Orange -> Red), preventing the "stuck" feeling
-      // while staying strictly under Discord's 5 edits / 5s rate limit.
-      let secondsRemaining = qTimeSec;
-      const stepSeconds = 5;
-
-      while (secondsRemaining > stepSeconds) {
-        await sleep(stepSeconds * 1000);
-        secondsRemaining -= stepSeconds;
-
-        const liveEmbed = makeQuestionEmbed(secondsRemaining);
-        await qMessage.edit({
-          embeds: [liveEmbed],
-          components: [row],
-        }).catch((editErr) => {
-          logger.debug('Non-critical live timer embed update failed', { error: editErr.message });
-        });
-      }
-
-      // Wait for EXACTLY the remaining answering window to finish
-      const exactRemainingMs = Math.max(0, (questionEndUnix * 1000) - Date.now());
-      if (exactRemainingMs > 0) {
-        await sleep(exactRemainingMs);
-      }
+      // ─── PRECISE SYNCHRONIZED COUNTDOWN ───
+      // Sleeps for the exact remaining milliseconds until expiryTimestampMs.
+      // Avoids intermediate message edits so Discord REST rate-limits are never triggered,
+      // ensuring zero lag, zero queue delays, and an exact 15-second window.
+      const remainingMs = Math.max(0, expiryTimestampMs - Date.now());
+      await sleep(remainingMs);
 
       // Close question in Supabase immediately (rejects late submissions at DB level)
       await closeQuiz(questionQuiz.id);
@@ -377,9 +337,24 @@ export async function runDailyTimedSession({
             : '🏆  Calculating final standings...',
         });
 
-      const finalQEmbed = makeQuestionEmbed(0, true);
+      const closedQEmbed = new EmbedBuilder()
+        .setColor(0x95A5A6)
+        .setTitle(`${catEmoji}  Question ${qNumber} of ${totalQ}  ·  ${meta.topic}`)
+        .setDescription(desc)
+        .addFields(
+          {
+            name: '⏱️ Time Limit',
+            value: `🔒 **Time's Up!**\nClosed <t:${questionEndUnix}:R>`,
+            inline: true,
+          },
+          { name: '🎯 Tier',           value: diffLabel,                   inline: true },
+          { name: '🎁 Stakes',         value: `**+${q.pointsReward}** pts`, inline: true }
+        )
+        .setFooter({ text: `Q${qNumber}/${totalQ}  │  Submissions closed` })
+        .setTimestamp();
+
       await qMessage.edit({
-        embeds: [finalQEmbed, resultEmbed],
+        embeds: [closedQEmbed, resultEmbed],
         components: [disabledRow],
       }).catch((editErr) => {
         logger.warn('Failed to edit expired question message', { error: editErr.message });
