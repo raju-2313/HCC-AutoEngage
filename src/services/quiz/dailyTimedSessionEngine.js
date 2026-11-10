@@ -81,6 +81,8 @@ export async function runDailyTimedSession({
   customCountdownSeconds = null,
   customQuestionTimeSeconds = null,
   customIntermissionSeconds = null,
+  forceNewAnnouncement = false,
+  customAnnouncementText = null,
 }) {
   if (isSessionRunning) {
     logger.warn('A daily quiz session is already actively running. Skipping concurrent start.');
@@ -133,7 +135,7 @@ export async function runDailyTimedSession({
     }
 
     // 2. Initial Announcement with First @everyone Ping (Phase 2 - 1 of 2 pings)
-    if (!state.announcementSent) {
+    if (!state.announcementSent || forceNewAnnouncement) {
       const catEmoji = getCategoryIcon(meta.category);
       const qCountLabel = activeQuestions.length === 1 ? '1 Rapid-Fire Verification Question' : '10 Rapid-Fire Questions';
       const announceEmbed = new EmbedBuilder()
@@ -154,12 +156,16 @@ export async function runDailyTimedSession({
         .setFooter({ text: 'HCC AutoEngage • HackerRank Campus Crew  │  Start announcement (Ping 1 of 2)' })
         .setTimestamp();
 
-      const mentionContent = `🔔 **@everyone — The HCC Daily Tech Challenge (${meta.topic}) is starting now! Get ready — Question 1 drops in ${countdownSec} seconds!**`;
+      const mentionContent = customAnnouncementText
+        ? customAnnouncementText
+        : suppressEveryonePing
+        ? `🔔 **The HCC Daily Tech Challenge (${meta.topic}) is starting now! Get ready — Question 1 drops in ${countdownSec} seconds!**`
+        : `🔔 **@everyone — The HCC Daily Tech Challenge (${meta.topic}) is starting now! Get ready — Question 1 drops in ${countdownSec} seconds!**`;
 
       const announcementMsg = await targetChannel.send({
         content: mentionContent,
         embeds: [announceEmbed],
-        allowedMentions: { parse: ['everyone'] },
+        allowedMentions: suppressEveryonePing ? { parse: [] } : { parse: ['everyone'] },
       });
 
       state.announcementSent = true;
@@ -186,6 +192,7 @@ export async function runDailyTimedSession({
       const qNumber = i + 1;
       const totalQ = activeQuestions.length;
       const catEmoji = getCategoryIcon(meta.category);
+      const now = Date.now();
 
       // Check if this question was already created in DB for this session
       let questionQuiz = null;
@@ -236,7 +243,8 @@ export async function runDailyTimedSession({
 
       let desc = `### ${q.questionText}\n`;
       if (q.codeSnippet) {
-        desc += `\n\`\`\`javascript\n${q.codeSnippet}\n\`\`\`\n`;
+        const lang = meta.category === 'c' ? 'c' : meta.category === 'python' ? 'python' : meta.category === 'web' ? 'html' : 'javascript';
+        desc += `\n\`\`\`${lang}\n${q.codeSnippet}\n\`\`\`\n`;
       }
       desc += `\n${HR}\n\n${optionsText}\n\n${HR}`;
 
@@ -322,6 +330,8 @@ export async function runDailyTimedSession({
       });
       const disabledRow = new ActionRowBuilder().addComponents(disabledButtons);
 
+      const intermissionSec = customIntermissionSeconds !== null ? customIntermissionSeconds : 5;
+
       const resultEmbed = new EmbedBuilder()
         .setColor(COLORS.success)
         .setTitle(`⏰  Time's Up! — Question ${qNumber} of ${totalQ}`)
@@ -333,7 +343,7 @@ export async function runDailyTimedSession({
         )
         .setFooter({
           text: qNumber < totalQ
-            ? `⏭️  Next question in 4 seconds...  (Q${qNumber + 1}/${totalQ})`
+            ? `⏭️  Next question in ${intermissionSec} seconds...  (Q${qNumber + 1}/${totalQ})`
             : '🏆  Calculating final standings...',
         });
 
@@ -366,8 +376,7 @@ export async function runDailyTimedSession({
 
       // Intermission before next question
       if (qNumber < totalQ) {
-        const gap = customIntermissionSeconds !== null ? customIntermissionSeconds * 1000 : 4000;
-        await sleep(gap);
+        await sleep(intermissionSec * 1000);
       }
     }
 
