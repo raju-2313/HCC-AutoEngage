@@ -23,6 +23,13 @@ export async function submitQuizAttempt({ quizId, discordId, selectedOption }) {
       logger.warn('Duplicate quiz attempt prevented via RPC', { quizId, discordId });
       throw new Error('DUPLICATE_ATTEMPT');
     }
+    // Quiz was closed between button click and server processing (last-second race condition)
+    if (error.message?.includes('not active for submissions') || error.message?.includes('is not active')) {
+      logger.warn('Late attempt rejected — quiz closed before submission arrived', { quizId, discordId });
+      const lateErr = new Error('QUIZ_EXPIRED');
+      lateErr.code = 'QUIZ_EXPIRED';
+      throw lateErr;
+    }
     logger.error('Error in submitQuizAttempt RPC', { quizId, discordId, error: error.message });
     throw error;
   }

@@ -327,8 +327,38 @@ export async function handleQuizAnswerInteraction(interaction) {
       return interaction.editReply({ embeds: [duplicateEmbed] });
     }
 
+    // Quiz was closed on the server just as this user tapped — the last-second race condition.
+    // The Supabase RPC raises: "Quiz <id> is not active for submissions"
+    const isExpiredQuiz =
+      err.message === 'QUIZ_EXPIRED' ||
+      err.code === 'QUIZ_EXPIRED' ||
+      err.message?.includes('not active for submissions') ||
+      err.message?.includes('is not active') ||
+      err?.code === 'P0001'; // Postgres RAISE EXCEPTION code
+
+    if (isExpiredQuiz) {
+      logger.info('Late submission rejected — quiz closed just before answer arrived', {
+        user: discordUser?.username,
+        quizId,
+        selectedOption,
+      });
+      const tooLateEmbed = new EmbedBuilder()
+        .setColor(0xFF6B35)
+        .setTitle('⏰  Just a Fraction Too Late!')
+        .setDescription(
+          `> Your answer for **Option ${selectedOption}** was received, but the **15-second window** had already closed by the time it reached the server.\n\n` +
+          `**What happened?**\n` +
+          `When you tap in the last 1–2 seconds, your click travels via the internet to Discord, then to our server — which can take longer than the remaining time allows.\n\n` +
+          `**💡 Tip:** Try to answer with **at least 3 seconds remaining** on the timer for safe submission.\n\n` +
+          `> _Your answer was **NOT** marked as wrong — this was a network timing issue, not a wrong answer._`
+        )
+        .setFooter({ text: 'HCC AutoEngage • Tap a bit earlier next time ⚡' })
+        .setTimestamp();
+      return interaction.editReply({ embeds: [tooLateEmbed] });
+    }
+
     logger.error('Error handling quiz answer interaction', {
-      user: discordUser.username,
+      user: discordUser?.username,
       quizId,
       error: err.message,
     });
