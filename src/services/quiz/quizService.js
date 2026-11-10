@@ -86,7 +86,8 @@ export function buildQuizMessage(quiz, question) {
   // ── Description assembly ────────────────────────────────────────────────────
   let description = `### ${questionText}\n`;
   if (codeSnippet) {
-    const lang = category === 'c' ? 'c' : category === 'python' ? 'python' : category === 'web' ? 'html' : 'javascript';
+    const c = (category || '').toLowerCase();
+    const lang = c === 'c' ? 'c' : (c === 'python' || c === 'loops') ? 'python' : c === 'web' ? 'html' : c === 'git' ? 'bash' : c === 'sql' ? 'sql' : 'python';
     description += `\n\`\`\`${lang}\n${codeSnippet}\n\`\`\`\n`;
   }
   description += `\n${HR}\n\n${optionsText}\n\n${HR}`;

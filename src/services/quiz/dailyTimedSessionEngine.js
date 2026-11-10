@@ -67,6 +67,18 @@ function mapDifficultyToDb(diff = '') {
   return 'beginner';
 }
 
+export function getSnippetLanguage(cat = '', snippet = '') {
+  const c = (cat || '').toLowerCase();
+  if (c === 'c') return 'c';
+  if (c === 'python' || c === 'loops') return 'python';
+  if (c === 'web' || (snippet.includes('<') && snippet.includes('>'))) return 'html';
+  if (c === 'git' || snippet.trim().startsWith('git ')) return 'bash';
+  if (c === 'sql' || c === 'database') return 'sql';
+  if (snippet.includes('for i in range') || snippet.includes('def ') || snippet.includes('print(') || snippet.includes('while ')) return 'python';
+  if (snippet.includes('#include') || snippet.includes('printf(') || snippet.includes('int main(')) return 'c';
+  return 'python';
+}
+
 // Global in-memory lock to prevent concurrent sessions on the same process
 let isSessionRunning = false;
 
@@ -243,7 +255,7 @@ export async function runDailyTimedSession({
 
       let desc = `### ${q.questionText}\n`;
       if (q.codeSnippet) {
-        const lang = meta.category === 'c' ? 'c' : meta.category === 'python' ? 'python' : meta.category === 'web' ? 'html' : 'javascript';
+        const lang = getSnippetLanguage(meta.category, q.codeSnippet);
         desc += `\n\`\`\`${lang}\n${q.codeSnippet}\n\`\`\`\n`;
       }
       desc += `\n${HR}\n\n${optionsText}\n\n${HR}`;
