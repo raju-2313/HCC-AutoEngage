@@ -467,7 +467,7 @@ export async function runDailyTimedSession({
       .addFields(
         { name: '👥 Challengers', value: `${sortedRankings.length} members`, inline: true },
         { name: '🎯 Total Answers', value: `${totalAnswersLogged} (${totalCorrectLogged} correct)`, inline: true },
-        { name: '🔥 Next Challenge', value: 'Tomorrow @ 07:00 PM IST', inline: true }
+        { name: '🔥 Next Challenge', value: meta.dayNumber >= 7 ? '7-Day Sprint Concluded! 🏆' : 'Tomorrow @ 07:00 PM IST', inline: true }
       )
       .setFooter({
         text: `HCC AutoEngage • Day ${meta.dayNumber}/7 Complete  │  Wrap-up announcement (Ping 2 of 2)`,
