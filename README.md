@@ -1,228 +1,228 @@
 # HCC AutoEngage 🚀
 
-**Discord automation bot for HackerRank Campus Crew (HCC)**
+**Autonomous Community Gamification & Engagement Engine for HackerRank Campus Crew (HCC)**
 
-Automates community engagement through daily quizzes, coding challenges, XP points, leaderboards, and achievement tracking — built for both beginners and experienced developers.
-
----
-
-## Table of Contents
-
-- [Features](#features)
-- [Technology Stack](#technology-stack)
-- [Project Structure](#project-structure)
-- [Quick Start](#quick-start)
-- [Environment Variables](#environment-variables)
-- [Slash Commands](#slash-commands)
-- [Deployment Script](#deployment-script)
-- [Hosting Options](#hosting-options)
-- [Development Phases](#development-phases)
-- [Contributing](#contributing)
+HCC AutoEngage is a cloud-hosted Discord automation platform designed to drive active, competitive peer learning. It powers synchronized daily coding challenges, XP point balances, streak multipliers, voice study session tracking, administrative moderation suites, and real-time community leaderboards.
 
 ---
 
-## Features
+## 📌 Project Status: Phase 1 Sprint Concluded (Nov 9 – 15, 2026)
 
-| Phase | Feature | Status |
-|-------|---------|--------|
-| 1 | Discord bot foundation (`/ping`, `/help`) | ✅ Complete |
-| 2 | Supabase database integration | ✅ Complete |
-| 3 | Daily quiz engine | ✅ Complete |
-| 4 | Points, XP, leaderboards | 🔜 Planned |
-| 5 | Automated activities (8 types) | 🔜 Planned |
-| 6 | Admin commands | 🔜 Planned |
+The initial **7-Day Daily Tech Challenge Sprint** has successfully concluded. All 6 development phases are implemented. 
+Automated background cron drops are currently **SUSPENDED** (`AUTOMATION_SUSPENDED = true`) in standby mode while Phase 2 planning commences.
 
----
-
-## Technology Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Runtime | Node.js (LTS) |
-| Discord SDK | discord.js v14 |
-| Language | JavaScript ES Modules |
-| Database | Supabase (PostgreSQL) |
-| Scheduling | Supabase Cron |
-| Config | dotenv |
-| Version Control | Git / GitHub |
+### 🏆 7-Day Sprint Highlights
+* **Duration:** 7 Consecutive Days (Nov 9 – Nov 15, 2026).
+* **Participation:** 30 Unique Campus Members.
+* **Activity:** 639 Total Submissions · 428 Correct Answers (67% Community Accuracy).
+* **Official Podium:**
+  * 🥇 **Champion:** `karan20071` — **530 pts** · 1,135 XP (73% accuracy)
+  * 🥈 **Runner-Up:** `krishnaacharya08` — **520 pts** · 1,115 XP (75% accuracy)
+  * 🥉 **3rd Place:** `samiksha_2007` — **450 pts** · 935 XP (83% accuracy)
 
 ---
 
-## Project Structure
+## 📑 Table of Contents
+
+- [Architecture & Tech Stack](#architecture--tech-stack)
+- [Feature Implementation Matrix](#feature-implementation-matrix)
+- [7-Day Challenge Sprint Calendar](#7-day-challenge-sprint-calendar)
+- [Project Directory Structure](#project-directory-structure)
+- [Slash Command Reference](#slash-command-reference)
+- [Environment Configuration](#environment-configuration)
+- [Error Resolutions & Hardening](#error-resolutions--hardening)
+- [Quick Start & Local Development](#quick-start--local-development)
+- [License & Disclaimer](#license--disclaimer)
+
+---
+
+## 🛠️ Architecture & Tech Stack
+
+| Component | Technology | Purpose |
+| :--- | :--- | :--- |
+| **Runtime** | Node.js v20+ (ES Modules) | Asynchronous event loop & process management |
+| **Discord SDK** | `discord.js` v14 | Gateway interactions, button components, and embeds |
+| **Database** | Supabase (PostgreSQL 15) | Relational persistence, atomic RPC procedures, and RLS |
+| **Scheduler** | `node-cron` | Timezone-aware (Asia/Kolkata) cron triggers |
+| **Production Hosting** | Railway | 24/7 containerized cloud deployment with auto-CI |
+| **Health Monitoring** | Native HTTP Server | Lightweight `/ping` & `/health` endpoints on port 8080 |
+
+---
+
+## ✅ Feature Implementation Matrix
+
+| Phase | Milestone | Features & Capabilities | Status |
+| :---: | :--- | :--- | :---: |
+| **1** | **Foundation** | Client bootstrap, gateway connection, `/ping`, `/help`, structured logging | ✅ Complete |
+| **2** | **Data Layer** | Supabase client singleton, migration schemas, member profiles, logs | ✅ Complete |
+| **3** | **Quiz Engine** | 10-question timed sessions, 15s answer clocks, Discord buttons, ephemeral feedback | ✅ Complete |
+| **4** | **Gamification** | Points (+10), XP (+20), streak tracking, level calculations, `/profile`, `/leaderboard` | ✅ Complete |
+| **5** | **Automation** | Cron scheduler (19:00 IST drops), expired quiz auto-close, recovery reconciler | ✅ Complete |
+| **6** | **Admin Suite** | `/admin points`, `/admin quiz`, `/admin announce`, `/admin stats`, `/purge` | ✅ Complete |
+| **★** | **Engagement Engine** | Voice study session duration tracking, custom channel multipliers | ✅ Complete |
+| **★** | **Media Curation** | Moderated Sticker & Emoji discovery pipelines with human review queues | ✅ Complete |
+
+---
+
+## 📅 7-Day Challenge Sprint Calendar
+
+| Date | Day | Topic | Category | Format | Status |
+| :--- | :---: | :--- | :---: | :--- | :---: |
+| **Nov 9** | Day 1 | Python Basics | `python` | 10 Rapid Questions | ✅ Complete |
+| **Nov 10** | Day 2 | C Programming Basics | `c` | 10 Rapid Questions | ✅ Complete |
+| **Nov 11** | Day 3 | Loops & Iterations | `python` | 10 Rapid Questions | ✅ Complete |
+| **Nov 12** | Day 4 | Conditionals & Logic | `python` / logic | 10 Rapid Questions | ✅ Complete |
+| **Nov 13** | Day 5 | Git & GitHub | `bash` | 10 Rapid Questions | ✅ Complete |
+| **Nov 14** | Day 6 | HTML & Web Foundations | `html` | 10 Rapid Questions | ✅ Complete |
+| **Nov 15** | Day 7 | Tech & Computer Basics | `plain / cs` | 10 Rapid Questions (Finale) | ✅ Complete |
+
+---
+
+## 📂 Project Directory Structure
 
 ```
 HCC-AutoEngage/
 ├── src/
-│   ├── index.js              ← Main entry point
-│   ├── config/
-│   │   └── index.js          ← Config loader & validation
+│   ├── index.js                     ← Main application entry point & graceful shutdown
 │   ├── bot/
-│   │   ├── client.js         ← Discord client factory
-│   │   ├── commandLoader.js  ← Dynamic command discovery
-│   │   └── eventLoader.js    ← Dynamic event discovery
-│   ├── commands/
-│   │   ├── ping.js           ← /ping command
-│   │   └── help.js           ← /help command
-│   ├── events/
-│   │   ├── ready.js          ← Bot online handler
-│   │   ├── interactionCreate.js ← Command/button router
-│   │   ├── error.js          ← Discord error handler
-│   │   └── warn.js           ← Discord warning handler
-│   ├── services/             ← Business logic (Phase 3+)
-│   ├── database/             ← Supabase client & queries (Phase 2+)
-│   ├── scheduler/            ← Cron job definitions (Phase 5+)
-│   ├── scripts/
-│   │   └── deployCommands.js ← Slash command registration
-│   └── utils/
-│       ├── logger.js         ← Structured logger
-│       ├── embeds.js         ← Reusable Discord embeds
-│       └── permissions.js    ← Admin role check helper
-├── migrations/               ← Supabase SQL migrations (Phase 2+)
-├── .env.example              ← Template for environment variables
-├── .gitignore
-├── package.json
-└── README.md
+│   │   ├── client.js                ← Discord client factory & intent flags
+│   │   ├── commandLoader.js         ← Dynamic slash command registry
+│   │   └── eventLoader.js           ← Dynamic gateway event router
+│   ├── commands/                    ← Slash command handlers
+│   │   ├── admin.js                 ← Full administrative suite (/admin)
+│   │   ├── emoji.js                 ← Emoji curation & approval (/emoji)
+│   │   ├── engagement.js            ← Personal engagement metrics (/engagement)
+│   │   ├── help.js                  ← Interactive help catalog (/help)
+│   │   ├── leaderboard.js           ← Public & ephemeral rankings (/leaderboard)
+│   │   ├── ping.js                  ← Round-trip latency check (/ping)
+│   │   ├── profile.js               ← Member card with streak & level (/profile)
+│   │   ├── purge.js                 ← Channel cleanup utility (/purge)
+│   │   ├── quiz.js                  ← Quiz status & manual triggers (/quiz)
+│   │   └── sticker.js               ← Sticker catalog & review (/sticker)
+│   ├── config/                      ← Centralized environment configuration
+│   ├── data/question-banks/         ← Curated 10-question JSON banks for Days 1–7
+│   ├── database/                    ← Supabase client & SQL access layer
+│   │   └── queries/                 ← Domain queries (attempts, members, quizzes, logs)
+│   ├── events/                      ← Discord event listeners (clientReady, interactionCreate, messageCreate)
+│   ├── scripts/                     ← Deployment, diagnostic, and gap analysis scripts
+│   ├── services/
+│   │   ├── automation/              ← scheduler.js (node-cron job definitions)
+│   │   ├── emojis/                  ← Emoji discovery & review service
+│   │   ├── quiz/                    ← dailyTimedSessionEngine.js, sessionQuestionManager.js
+│   │   ├── recognition/             ← leaderboardService.js, weeklyAnnouncementService.js
+│   │   ├── stickers/                ← Sticker discovery & curation service
+│   │   └── voice/                   ← voiceService.js (voice study session tracking)
+│   └── utils/                       ← Logger, embed factories, permission helpers
+├── scripts/                         ← Independent verification & data audit scripts
+├── migrations/                      ← PostgreSQL schemas & functions
+├── .env.example                     ← Template for required environment variables
+├── Dockerfile                       ← Production container specification
+├── package.json                     ← Dependencies and npm scripts
+├── PROJECT_HANDOFF.md               ← Comprehensive architectural handoff guide
+└── README.md                        ← This documentation
 ```
 
 ---
 
-## Quick Start
+## 🤖 Slash Command Reference
 
-### Prerequisites
+### Member Commands
+| Command | Options | Description |
+| :--- | :--- | :--- |
+| `/profile` | `[user]` | View points, total XP, current level, streak, and quiz stats |
+| `/leaderboard` | `[timeframe]` | View current server standings (All-time, Weekly, Monthly) |
+| `/quiz stats` | — | Check personal quiz completion numbers and win rates |
+| `/engagement me` | — | View text chat, reaction, and voice study session scores |
+| `/ping` | — | Verify bot connectivity and measure Discord API latency |
+| `/help` | — | Explore command documentation and instructions |
 
-- Node.js ≥ 20
-- A Discord application with a bot token ([Discord Developer Portal](https://discord.com/developers/applications))
-- The bot invited to your server with the correct permissions
+### Administrator Commands (`HCC Admin` / Administrator Role Required)
+| Command | Options | Description |
+| :--- | :--- | :--- |
+| `/admin announce leaderboard` | `[channel] [ping_everyone] [top]` | Broadcast official Final Leaderboard with podium and @everyone ping |
+| `/admin announce weekly` | — | Broadcast the weekly community digest and honors |
+| `/admin points` | `<user> <amount> [xp] [reason]` | Manually award or deduct points/XP with audit trail |
+| `/admin quiz publish` | `[question_id]` | Manually drop a daily quiz into the quiz channel |
+| `/admin quiz close` | — | Force-close the active quiz challenge immediately |
+| `/admin streak reset` | `<user>` | Reset a member's daily participation streak |
+| `/admin stats` | — | Inspect server-wide participation and health metrics |
+| `/purge` | `[amount]` | Bulk-delete bot-authored messages in the current channel |
 
-### 1. Clone the repo
+---
 
-```bash
-git clone https://github.com/your-org/hcc-autoengage.git
-cd hcc-autoengage
+## ⚙️ Environment Configuration
+
+Copy `.env.example` to `.env` and populate your secrets:
+
+```env
+# Discord Gateway Credentials
+DISCORD_TOKEN="your_bot_token"
+DISCORD_CLIENT_ID="your_client_id"
+DISCORD_GUILD_ID="your_guild_id"
+
+# Key Channel Identifiers
+DISCORD_QUIZ_CHANNEL_ID="1538470672722952303"          # #💬・general
+DISCORD_ANNOUNCEMENTS_CHANNEL_ID="1538470372918165587"   # #📢・announcements
+TEST_CHANNEL_ID="1567916304118063124"                   # #autoengage-testing
+
+# Supabase PostgreSQL
+SUPABASE_URL="https://your-project.supabase.co"
+SUPABASE_ANON_KEY="your_anon_key"
+SUPABASE_SERVICE_ROLE_KEY="your_service_role_key"
+
+# Application Settings
+TZ="Asia/Kolkata"
+QUIZ_POST_TIME="19:00"
+ADMIN_ROLE_NAME="HCC Admin"
 ```
 
-### 2. Install dependencies
+---
 
+## 🛡️ Error Resolutions & Hardening (Phase 1 Retrospective)
+
+During live sprint execution, four system challenges were resolved to protect competitive fairness:
+
+1. **Discord 3s Gateway ACK Timeout (`(!) This interaction failed`):**
+   * *Challenge:* When 20+ students clicked answer buttons simultaneously, network latency to Supabase occasionally exceeded Discord's 3000ms acknowledgment window.
+   * *Resolution:* Executed an **Interior Gap Detection audit** across 639 submissions. Identified 27 participants whose responses were dropped between active questions and awarded full compensation (+10 pts / +20 XP per dropped question, total 1,570 pts).
+2. **Late-Click Race Conditions:**
+   * *Challenge:* Clicks submitted with <2s remaining arrived while the question was closing, throwing unhandled exceptions.
+   * *Resolution:* Handled `QUIZ_EXPIRED` cleanly, delivering an ephemeral advisory to tap earlier.
+3. **Announcement Permissions:**
+   * *Challenge:* `#📢・announcements` denied message permissions to `@everyone`, blocking automated winner posts.
+   * *Resolution:* Added `HCC Moderator` role to the bot and hardcoded safe channel resolution fallbacks.
+4. **Railway Environment Variable Typos:**
+   * *Challenge:* A malformed channel ID in Railway's dashboard caused `Channel Not Found`.
+   * *Resolution:* Enforced verified constant channel routing in code.
+
+---
+
+## 💻 Quick Start & Local Development
+
+### 1. Clone & Install
 ```bash
+git clone https://github.com/raju-2313/HCC-AutoEngage.git
+cd HCC-AutoEngage
 npm install
 ```
 
-### 3. Configure environment
-
-```bash
-cp .env.example .env
-# Edit .env and fill in all required values
-```
-
-### 4. Deploy slash commands (once)
-
+### 2. Register Slash Commands
 ```bash
 node src/scripts/deployCommands.js
 ```
 
-### 5. Start the bot
-
+### 3. Launch the Bot
 ```bash
+# Production mode:
 npm start
-# or for auto-reload during development:
+
+# Development mode (with file watcher):
 npm run dev
 ```
 
 ---
 
-## Environment Variables
+## ⚖️ License & Disclaimer
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `DISCORD_TOKEN` | ✅ | Bot token from the Developer Portal |
-| `DISCORD_CLIENT_ID` | ✅ | Application ID (General Information page) |
-| `DISCORD_GUILD_ID` | ✅ | Your HCC server ID |
-| `DISCORD_ANNOUNCEMENTS_CHANNEL_ID` | Phase 3 | Channel for daily quiz announcements |
-| `DISCORD_QUIZ_CHANNEL_ID` | Phase 3 | Channel where quizzes are posted |
-| `DISCORD_LEADERBOARD_CHANNEL_ID` | Phase 4 | Channel for leaderboard posts |
-| `DISCORD_LOGS_CHANNEL_ID` | Optional | Channel for bot activity logs |
-| `SUPABASE_URL` | Phase 2 | Supabase project URL |
-| `SUPABASE_ANON_KEY` | Phase 2 | Supabase anon/public key |
-| `SUPABASE_SERVICE_ROLE_KEY` | Phase 2 | Supabase service role key (keep secret!) |
-| `TZ` | Optional | Timezone for scheduling (default: `Asia/Kolkata`) |
-| `QUIZ_POST_TIME` | Phase 3 | Daily quiz time in HH:MM format |
-| `ADMIN_ROLE_NAME` | Phase 6 | Discord role name with admin access |
-
----
-
-## Slash Commands
-
-### Phase 1 (available now)
-
-| Command | Description |
-|---------|-------------|
-| `/ping` | Check bot status and measure round-trip latency |
-| `/help` | Show all available commands |
-
-### Planned (future phases)
-
-| Command | Phase |
-|---------|-------|
-| `/quiz today` | 3 |
-| `/quiz answer` | 3 |
-| `/quiz history` | 3 |
-| `/leaderboard weekly` | 4 |
-| `/leaderboard monthly` | 4 |
-| `/profile` | 4 |
-| `/admin quiz publish` | 6 |
-| `/admin stats` | 6 |
-
----
-
-## Deployment Script
-
-Slash commands must be registered with Discord before they appear in the client.
-
-```bash
-# Guild-scoped (instant, recommended during development)
-node src/scripts/deployCommands.js
-
-# To switch to global commands, edit deployCommands.js:
-# Change Routes.applicationGuildCommands → Routes.applicationCommands
-# Global commands take up to 1 hour to propagate globally
-```
-
----
-
-## Hosting Options
-
-The bot requires a persistent Node.js process. Options:
-
-| Option | Cost | Recommended for |
-|--------|------|-----------------|
-| **Railway** | ~$5/mo free tier | Easy setup, production-ready |
-| **Render** | Free (spins down) / $7/mo | Development and staging |
-| **Fly.io** | ~$2–3/mo | Small production bots |
-| **VPS (Hetzner/DigitalOcean)** | ~$4–6/mo | Full control, production |
-| **Local machine** | Free | Development only |
-
-> ⚠️ Do not use Supabase Edge Functions to run the Discord Gateway connection — they are serverless and will time out.
-
----
-
-## Development Phases
-
-1. **Phase 1** – Bot foundation: login, `/ping`, `/help` ✅
-2. **Phase 2** – Supabase schema & migrations
-3. **Phase 3** – Daily quiz engine with button interactions
-4. **Phase 4** – XP, points, weekly/monthly leaderboards
-5. **Phase 5** – 8 activity types (Daily Tech Quiz active, rest modular)
-6. **Phase 6** – Admin commands with permission checks
-
----
-
-## Contributing
-
-This project is maintained by the HackerRank Campus Crew core team.
-
-For questions, reach out in the HCC Discord server.
-
----
-
-*HCC AutoEngage is an open-source community project. It is not affiliated with or endorsed by HackerRank.*
-
+Maintained by the **HackerRank Campus Crew (HCC)** core team.  
+*HCC AutoEngage is an open-source community initiative. It is not officially affiliated with or endorsed by HackerRank.*
