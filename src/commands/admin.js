@@ -474,17 +474,12 @@ export async function execute(interaction) {
         return `\`#${String(rank).padStart(2)}\` <@${m.discord_id}> — **${m.total_points} pts** · ${s.correct}/${s.total} ✅ · ${acc}%`;
       }).join('\n');
 
-      const sprintEnd  = new Date('2026-11-15T13:30:00.000Z'); // 19:00 IST
-      const totalPts   = sprintMembers.reduce((s, m) => s + (m.total_points || 0), 0);
-      const totalQs    = Object.values(statsByDid).reduce((s, v) => s + v.total, 0);
-      const totalRight = Object.values(statsByDid).reduce((s, v) => s + v.correct, 0);
-
       const embed = new EmbedBuilder()
         .setColor(0xFFD700)   // Gold
         .setTitle('🏆  HackerRank Campus Community — 7-Day Sprint Final Results!')
         .setDescription(
-          `> **Sprint Period:** Nov 9 – Nov 15, 2026 · **${sprintMembers.length} Participants** · **${totalQs} Answers Submitted**\n` +
-          `> *Scores include bug-fix compensation for Discord interaction timeouts across all 7 days.*\n` +
+          `> **Sprint Period:** Nov 9 – Nov 15, 2026\n` +
+          `> *Official standings and winners for the 7-Day Learning Sprint.*\n` +
           `┄`.repeat(28)
         )
         .addFields(
@@ -500,29 +495,10 @@ export async function execute(interaction) {
                 inline: false,
               }]
             : []
-          ),
-          {
-            name: '📊  Sprint Statistics',
-            value: [
-              `• **Total Participants:** ${sprintMembers.length}`,
-              `• **Total Questions Answered:** ${totalQs}`,
-              `• **Total Correct:** ${totalRight} (${Math.round(totalRight / totalQs * 100)}% community accuracy)`,
-              `• **Total Points Distributed:** ${totalPts} pts`,
-              `• **Top Accuracy:** ${(() => {
-                const best = sprintMembers.reduce((best, m) => {
-                  const s = statsByDid[m.discord_id] || { total: 0, correct: 0 };
-                  if (s.total < 3) return best;
-                  const acc = s.correct / s.total;
-                  return acc > best.acc ? { acc, name: m.username } : best;
-                }, { acc: 0, name: '?' });
-                return `${best.name} (${Math.round(best.acc * 100)}%)`;
-              })()}`,
-            ].join('\n'),
-            inline: false,
-          }
+          )
         )
-        .setFooter({ text: 'HCC AutoEngage · 7-Day Sprint · Final Official Results — Bug-Fix Compensated' })
-        .setTimestamp(sprintEnd);
+        .setFooter({ text: 'HCC AutoEngage • Final Official Results' })
+        .setTimestamp();
 
       // Send to the channel where admin ran the command
       const pingContent = pingEveryone ? '@everyone\n' : '';
