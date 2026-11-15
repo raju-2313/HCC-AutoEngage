@@ -133,6 +133,12 @@ export const data = new SlashCommandBuilder()
         sub
           .setName('leaderboard')
           .setDescription('📢 Post the official 7-Day Sprint Final Leaderboard with @everyone ping.')
+          .addChannelOption((opt) =>
+            opt
+              .setName('channel')
+              .setDescription('Channel to broadcast to (defaults to #📢・announcements)')
+              .setRequired(false)
+          )
           .addBooleanOption((opt) =>
             opt
               .setName('ping_everyone')
@@ -427,9 +433,12 @@ export async function execute(interaction) {
     if (group === 'announce' && sub === 'leaderboard') {
       const pingEveryone = interaction.options.getBoolean('ping_everyone') ?? true;
       const topN         = interaction.options.getInteger('top') ?? 10;
-      const targetChannelId = config.discord.channels.announcements || '1538470372918165587';
+      
+      // Always target the official announcement channel (1538470372918165587) unless explicitly passed
+      const chosenChannel = interaction.options.getChannel('channel');
+      const targetChannelId = chosenChannel?.id || '1538470372918165587';
+      const targetChannel = chosenChannel || await interaction.guild.channels.fetch(targetChannelId).catch(() => null) || interaction.channel;
 
-      const targetChannel = await interaction.client.channels.fetch(targetChannelId).catch(() => null);
       if (!targetChannel) {
         return interaction.editReply({
           embeds: [errorEmbed('Channel Not Found', `Could not find announcement channel \`${targetChannelId}\`.`)],
