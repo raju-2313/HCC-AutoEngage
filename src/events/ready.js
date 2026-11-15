@@ -28,11 +28,11 @@ export function execute(client) {
   // Initialize Voice Session Recovery (Community Engine)
   initializeVoiceRecovery(client);
 
-  // Set a rotating presence
+  // Set a rotating presence reflecting Phase 1 completion
   const activities = [
-    { name: 'Daily Tech Quizzes 🧠', type: ActivityType.Playing },
-    { name: 'HCC Community 🚀',      type: ActivityType.Watching },
-    { name: '/help for commands',    type: ActivityType.Listening },
+    { name: 'Phase 1 Complete 🏆', type: ActivityType.Watching },
+    { name: 'HCC Community 🚀',   type: ActivityType.Watching },
+    { name: '/help for commands', type: ActivityType.Listening },
   ];
 
   let index = 0;

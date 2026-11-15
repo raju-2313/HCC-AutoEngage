@@ -1,0 +1,2167 @@
+{
+  "generated_at": "2026-11-15T14:05:04.747Z",
+  "sprint_days": [
+    "2026-11-09",
+    "2026-11-10",
+    "2026-11-11",
+    "2026-11-12",
+    "2026-11-13",
+    "2026-11-14",
+    "2026-11-15"
+  ],
+  "total_quizzes": 78,
+  "total_attempts": 639,
+  "total_members": 30,
+  "affected_members_count": 27,
+  "reportRows": [
+    {
+      "discord_id": "1567816071438803054",
+      "username": "snehal00170",
+      "current_points": 160,
+      "current_xp": 435,
+      "days_affected": 6,
+      "total_missing_qs": 15,
+      "total_points_to_add": 150,
+      "total_xp_to_add": 300,
+      "gap_details": [
+        {
+          "day": "2026-11-09",
+          "total_qs": 11,
+          "answered_positions": [
+            4,
+            7,
+            9,
+            11
+          ],
+          "answered_count": 4,
+          "correct_answered": 1,
+          "correct_rate_pct": "25",
+          "missing_interior_positions": [
+            5,
+            6,
+            8,
+            10
+          ],
+          "missing_quiz_titles": [
+            "Day 1 (Q4/10): Which function in Python is used to display o",
+            "Day 1 (Q5/10): What is the output of the following boolean e",
+            "Day 1 (Q7/10): What will be printed by the following code?",
+            "Day 1 (Q9/10): What will the following code output?"
+          ],
+          "points_to_add": 40,
+          "xp_to_add": 80
+        },
+        {
+          "day": "2026-11-10",
+          "total_qs": 12,
+          "answered_positions": [
+            4,
+            7,
+            10
+          ],
+          "answered_count": 3,
+          "correct_answered": 1,
+          "correct_rate_pct": "33",
+          "missing_interior_positions": [
+            5,
+            6,
+            8,
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 2 (Q3/10): Which format specifier is used in printf() to",
+            "Day 2 (Q4/10): What character must every executable statemen",
+            "Day 2 (Q6/10): What is the memory size of a 'char' data type",
+            "Day 2 (Q7/10): What will be printed by the post-increment op"
+          ],
+          "points_to_add": 40,
+          "xp_to_add": 80
+        },
+        {
+          "day": "2026-11-11",
+          "total_qs": 11,
+          "answered_positions": [
+            7,
+            8,
+            10,
+            11
+          ],
+          "answered_count": 4,
+          "correct_answered": 2,
+          "correct_rate_pct": "50",
+          "missing_interior_positions": [
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 3 (Q8/10): What will be the output of this loop with a c"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        },
+        {
+          "day": "2026-11-12",
+          "total_qs": 11,
+          "answered_positions": [
+            4,
+            6,
+            7,
+            8,
+            10
+          ],
+          "answered_count": 5,
+          "correct_answered": 3,
+          "correct_rate_pct": "60",
+          "missing_interior_positions": [
+            5,
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 4 (Q4/10): Which block executes when the 'if' condition ",
+            "Day 4 (Q8/10): Which operator returns true if AT LEAST ONE o"
+          ],
+          "points_to_add": 20,
+          "xp_to_add": 40
+        },
+        {
+          "day": "2026-11-13",
+          "total_qs": 11,
+          "answered_positions": [
+            3,
+            4,
+            6,
+            8,
+            10
+          ],
+          "answered_count": 5,
+          "correct_answered": 1,
+          "correct_rate_pct": "20",
+          "missing_interior_positions": [
+            5,
+            7,
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 5 (Q4/10): Which flag is used with `git commit` to write",
+            "Day 5 (Q6/10): Which command uploads your local commits to a",
+            "Day 5 (Q8/10): Which command creates a new branch named `fea"
+          ],
+          "points_to_add": 30,
+          "xp_to_add": 60
+        },
+        {
+          "day": "2026-11-15",
+          "total_qs": 11,
+          "answered_positions": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 8,
+          "correct_answered": 4,
+          "correct_rate_pct": "50",
+          "missing_interior_positions": [
+            8
+          ],
+          "missing_quiz_titles": [
+            "Day 7 (Q7/10): What is the decimal equivalent of the binary "
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        }
+      ]
+    },
+    {
+      "discord_id": "846379972134174730",
+      "username": "karan20071",
+      "current_points": 410,
+      "current_xp": 895,
+      "days_affected": 5,
+      "total_missing_qs": 12,
+      "total_points_to_add": 120,
+      "total_xp_to_add": 240,
+      "gap_details": [
+        {
+          "day": "2026-11-09",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 9,
+          "correct_answered": 6,
+          "correct_rate_pct": "67",
+          "missing_interior_positions": [
+            3
+          ],
+          "missing_quiz_titles": [
+            "Day 1 (Q2/10): Which symbol is used to write single-line com"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        },
+        {
+          "day": "2026-11-11",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            6,
+            8,
+            11
+          ],
+          "answered_count": 5,
+          "correct_answered": 3,
+          "correct_rate_pct": "60",
+          "missing_interior_positions": [
+            4,
+            5,
+            7,
+            9,
+            10
+          ],
+          "missing_quiz_titles": [
+            "Day 3 (Q3/10): What does the `continue` statement do inside ",
+            "Day 3 (Q4/10): What will be printed by this while loop?",
+            "Day 3 (Q6/10): How many times will this JavaScript loop exec",
+            "Day 3 (Q8/10): What will be the output of this loop with a c",
+            "Day 3 (Q9/10): How many times does the inner loop run in tot"
+          ],
+          "points_to_add": 50,
+          "xp_to_add": 100
+        },
+        {
+          "day": "2026-11-13",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 9,
+          "correct_answered": 5,
+          "correct_rate_pct": "56",
+          "missing_interior_positions": [
+            8
+          ],
+          "missing_quiz_titles": [
+            "Day 5 (Q7/10): Which file is used to tell Git which files or"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        },
+        {
+          "day": "2026-11-14",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 9,
+          "correct_answered": 5,
+          "correct_rate_pct": "56",
+          "missing_interior_positions": [
+            4
+          ],
+          "missing_quiz_titles": [
+            "Day 6 (Q3/10): Which HTML tag creates a clickable hyperlink "
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        },
+        {
+          "day": "2026-11-15",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            8,
+            9
+          ],
+          "answered_count": 4,
+          "correct_answered": 3,
+          "correct_rate_pct": "75",
+          "missing_interior_positions": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "missing_quiz_titles": [
+            "Day 7 (Q3/10): Which type of computer memory is volatile and",
+            "Day 7 (Q4/10): What number base system uses only two digits,",
+            "Day 7 (Q5/10): Which of the following is a widely used open-",
+            "Day 7 (Q6/10): What does the letter 'S' stand for in the sec"
+          ],
+          "points_to_add": 40,
+          "xp_to_add": 80
+        }
+      ]
+    },
+    {
+      "discord_id": "1552654083549040642",
+      "username": "akanksha_4709",
+      "current_points": 160,
+      "current_xp": 410,
+      "days_affected": 6,
+      "total_missing_qs": 12,
+      "total_points_to_add": 120,
+      "total_xp_to_add": 240,
+      "gap_details": [
+        {
+          "day": "2026-11-09",
+          "total_qs": 11,
+          "answered_positions": [
+            7,
+            10
+          ],
+          "answered_count": 2,
+          "correct_answered": 2,
+          "correct_rate_pct": "100",
+          "missing_interior_positions": [
+            8,
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 1 (Q7/10): What will be printed by the following code?",
+            "Day 1 (Q8/10): What is the result of the following string an"
+          ],
+          "points_to_add": 20,
+          "xp_to_add": 40
+        },
+        {
+          "day": "2026-11-10",
+          "total_qs": 12,
+          "answered_positions": [
+            5,
+            6,
+            7,
+            8,
+            10,
+            11
+          ],
+          "answered_count": 6,
+          "correct_answered": 4,
+          "correct_rate_pct": "67",
+          "missing_interior_positions": [
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 2 (Q7/10): What will be printed by the post-increment op"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        },
+        {
+          "day": "2026-11-11",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            6,
+            7,
+            9
+          ],
+          "answered_count": 6,
+          "correct_answered": 1,
+          "correct_rate_pct": "17",
+          "missing_interior_positions": [
+            5,
+            8
+          ],
+          "missing_quiz_titles": [
+            "Day 3 (Q4/10): What will be printed by this while loop?",
+            "Day 3 (Q7/10): What will be printed by the following code?"
+          ],
+          "points_to_add": 20,
+          "xp_to_add": 40
+        },
+        {
+          "day": "2026-11-12",
+          "total_qs": 11,
+          "answered_positions": [
+            3,
+            4,
+            6,
+            7,
+            10
+          ],
+          "answered_count": 5,
+          "correct_answered": 3,
+          "correct_rate_pct": "60",
+          "missing_interior_positions": [
+            5,
+            8,
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 4 (Q4/10): Which block executes when the 'if' condition ",
+            "Day 4 (Q7/10): What will be the output of this grade checker",
+            "Day 4 (Q8/10): Which operator returns true if AT LEAST ONE o"
+          ],
+          "points_to_add": 30,
+          "xp_to_add": 60
+        },
+        {
+          "day": "2026-11-13",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 7,
+          "correct_answered": 3,
+          "correct_rate_pct": "43",
+          "missing_interior_positions": [
+            3,
+            4,
+            5
+          ],
+          "missing_quiz_titles": [
+            "Day 5 (Q2/10): Which command copies/downloads a remote repos",
+            "Day 5 (Q3/10): Which command stages ALL modified and new fil",
+            "Day 5 (Q4/10): Which flag is used with `git commit` to write"
+          ],
+          "points_to_add": 30,
+          "xp_to_add": 60
+        },
+        {
+          "day": "2026-11-15",
+          "total_qs": 11,
+          "answered_positions": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 8,
+          "correct_answered": 3,
+          "correct_rate_pct": "38",
+          "missing_interior_positions": [
+            8
+          ],
+          "missing_quiz_titles": [
+            "Day 7 (Q7/10): What is the decimal equivalent of the binary "
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        }
+      ]
+    },
+    {
+      "discord_id": "1566346476718919800",
+      "username": "vvglow_07",
+      "current_points": 110,
+      "current_xp": 280,
+      "days_affected": 4,
+      "total_missing_qs": 10,
+      "total_points_to_add": 100,
+      "total_xp_to_add": 200,
+      "gap_details": [
+        {
+          "day": "2026-11-09",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            5,
+            7
+          ],
+          "answered_count": 3,
+          "correct_answered": 0,
+          "correct_rate_pct": "0",
+          "missing_interior_positions": [
+            3,
+            4,
+            6
+          ],
+          "missing_quiz_titles": [
+            "Day 1 (Q2/10): Which symbol is used to write single-line com",
+            "Day 1 (Q3/10): What is the data type of the variable `score`",
+            "Day 1 (Q5/10): What is the output of the following boolean e"
+          ],
+          "points_to_add": 30,
+          "xp_to_add": 60
+        },
+        {
+          "day": "2026-11-10",
+          "total_qs": 12,
+          "answered_positions": [
+            3,
+            5,
+            7,
+            8,
+            11
+          ],
+          "answered_count": 5,
+          "correct_answered": 2,
+          "correct_rate_pct": "40",
+          "missing_interior_positions": [
+            4,
+            6,
+            9,
+            10
+          ],
+          "missing_quiz_titles": [
+            "Day 2 (Q2/10): What will be printed to the console by the fo",
+            "Day 2 (Q4/10): What character must every executable statemen",
+            "Day 2 (Q7/10): What will be printed by the post-increment op",
+            "Day 2 (Q8/10): What will be the value stored in 'result' due"
+          ],
+          "points_to_add": 40,
+          "xp_to_add": 80
+        },
+        {
+          "day": "2026-11-14",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            6,
+            7,
+            8,
+            9
+          ],
+          "answered_count": 7,
+          "correct_answered": 4,
+          "correct_rate_pct": "57",
+          "missing_interior_positions": [
+            5
+          ],
+          "missing_quiz_titles": [
+            "Day 6 (Q4/10): Which attribute is required on an `<img>` tag"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        },
+        {
+          "day": "2026-11-15",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            5,
+            6,
+            7,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 8,
+          "correct_answered": 5,
+          "correct_rate_pct": "63",
+          "missing_interior_positions": [
+            4,
+            8
+          ],
+          "missing_quiz_titles": [
+            "Day 7 (Q3/10): Which type of computer memory is volatile and",
+            "Day 7 (Q7/10): What is the decimal equivalent of the binary "
+          ],
+          "points_to_add": 20,
+          "xp_to_add": 40
+        }
+      ]
+    },
+    {
+      "discord_id": "1563064549593063586",
+      "username": "sakshammali.",
+      "current_points": 220,
+      "current_xp": 485,
+      "days_affected": 4,
+      "total_missing_qs": 10,
+      "total_points_to_add": 100,
+      "total_xp_to_add": 200,
+      "gap_details": [
+        {
+          "day": "2026-11-10",
+          "total_qs": 12,
+          "answered_positions": [
+            4,
+            5,
+            6,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "answered_count": 8,
+          "correct_answered": 6,
+          "correct_rate_pct": "75",
+          "missing_interior_positions": [
+            7
+          ],
+          "missing_quiz_titles": [
+            "Day 2 (Q5/10): What is the output of the modulus (%) operato"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        },
+        {
+          "day": "2026-11-12",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "answered_count": 8,
+          "correct_answered": 7,
+          "correct_rate_pct": "88",
+          "missing_interior_positions": [
+            5
+          ],
+          "missing_quiz_titles": [
+            "Day 4 (Q4/10): Which block executes when the 'if' condition "
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        },
+        {
+          "day": "2026-11-13",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            8,
+            10,
+            11
+          ],
+          "answered_count": 5,
+          "correct_answered": 2,
+          "correct_rate_pct": "40",
+          "missing_interior_positions": [
+            4,
+            5,
+            6,
+            7,
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 5 (Q3/10): Which command stages ALL modified and new fil",
+            "Day 5 (Q4/10): Which flag is used with `git commit` to write",
+            "Day 5 (Q5/10): Which command shows the status of staged, uns",
+            "Day 5 (Q6/10): Which command uploads your local commits to a",
+            "Day 5 (Q8/10): Which command creates a new branch named `fea"
+          ],
+          "points_to_add": 50,
+          "xp_to_add": 100
+        },
+        {
+          "day": "2026-11-15",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            5,
+            6,
+            7,
+            9,
+            11
+          ],
+          "answered_count": 7,
+          "correct_answered": 5,
+          "correct_rate_pct": "71",
+          "missing_interior_positions": [
+            4,
+            8,
+            10
+          ],
+          "missing_quiz_titles": [
+            "Day 7 (Q3/10): Which type of computer memory is volatile and",
+            "Day 7 (Q7/10): What is the decimal equivalent of the binary ",
+            "Day 7 (Q9/10): Which service acts as the internet's phoneboo"
+          ],
+          "points_to_add": 30,
+          "xp_to_add": 60
+        }
+      ]
+    },
+    {
+      "discord_id": "1554487457192345621",
+      "username": "samiksha_2007",
+      "current_points": 350,
+      "current_xp": 735,
+      "days_affected": 5,
+      "total_missing_qs": 10,
+      "total_points_to_add": 100,
+      "total_xp_to_add": 200,
+      "gap_details": [
+        {
+          "day": "2026-11-10",
+          "total_qs": 12,
+          "answered_positions": [
+            5,
+            6,
+            8,
+            10,
+            11,
+            12
+          ],
+          "answered_count": 6,
+          "correct_answered": 6,
+          "correct_rate_pct": "100",
+          "missing_interior_positions": [
+            7,
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 2 (Q5/10): What is the output of the modulus (%) operato",
+            "Day 2 (Q7/10): What will be printed by the post-increment op"
+          ],
+          "points_to_add": 20,
+          "xp_to_add": 40
+        },
+        {
+          "day": "2026-11-11",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            7,
+            10
+          ],
+          "answered_count": 5,
+          "correct_answered": 4,
+          "correct_rate_pct": "80",
+          "missing_interior_positions": [
+            5,
+            6,
+            8,
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 3 (Q4/10): What will be printed by this while loop?",
+            "Day 3 (Q5/10): What sequence does `range(1, 5)` generate in ",
+            "Day 3 (Q7/10): What will be printed by the following code?",
+            "Day 3 (Q8/10): What will be the output of this loop with a c"
+          ],
+          "points_to_add": 40,
+          "xp_to_add": 80
+        },
+        {
+          "day": "2026-11-12",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "answered_count": 8,
+          "correct_answered": 8,
+          "correct_rate_pct": "100",
+          "missing_interior_positions": [
+            3
+          ],
+          "missing_quiz_titles": [
+            "Day 4 (Q2/10): What will be printed to the console by this c"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        },
+        {
+          "day": "2026-11-13",
+          "total_qs": 11,
+          "answered_positions": [
+            6,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 4,
+          "correct_answered": 2,
+          "correct_rate_pct": "50",
+          "missing_interior_positions": [
+            7,
+            8
+          ],
+          "missing_quiz_titles": [
+            "Day 5 (Q6/10): Which command uploads your local commits to a",
+            "Day 5 (Q7/10): Which file is used to tell Git which files or"
+          ],
+          "points_to_add": 20,
+          "xp_to_add": 40
+        },
+        {
+          "day": "2026-11-15",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 9,
+          "correct_answered": 7,
+          "correct_rate_pct": "78",
+          "missing_interior_positions": [
+            8
+          ],
+          "missing_quiz_titles": [
+            "Day 7 (Q7/10): What is the decimal equivalent of the binary "
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        }
+      ]
+    },
+    {
+      "discord_id": "1521821940338266182",
+      "username": "pranjalmane",
+      "current_points": 70,
+      "current_xp": 175,
+      "days_affected": 3,
+      "total_missing_qs": 10,
+      "total_points_to_add": 100,
+      "total_xp_to_add": 200,
+      "gap_details": [
+        {
+          "day": "2026-11-10",
+          "total_qs": 12,
+          "answered_positions": [
+            6,
+            8
+          ],
+          "answered_count": 2,
+          "correct_answered": 1,
+          "correct_rate_pct": "50",
+          "missing_interior_positions": [
+            7
+          ],
+          "missing_quiz_titles": [
+            "Day 2 (Q5/10): What is the output of the modulus (%) operato"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        },
+        {
+          "day": "2026-11-11",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            6,
+            8,
+            11
+          ],
+          "answered_count": 4,
+          "correct_answered": 1,
+          "correct_rate_pct": "25",
+          "missing_interior_positions": [
+            3,
+            4,
+            5,
+            7,
+            9,
+            10
+          ],
+          "missing_quiz_titles": [
+            "Day 3 (Q2/10): Which keyword immediately terminates and exit",
+            "Day 3 (Q3/10): What does the `continue` statement do inside ",
+            "Day 3 (Q4/10): What will be printed by this while loop?",
+            "Day 3 (Q6/10): How many times will this JavaScript loop exec",
+            "Day 3 (Q8/10): What will be the output of this loop with a c",
+            "Day 3 (Q9/10): How many times does the inner loop run in tot"
+          ],
+          "points_to_add": 60,
+          "xp_to_add": 120
+        },
+        {
+          "day": "2026-11-13",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            8,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 7,
+          "correct_answered": 4,
+          "correct_rate_pct": "57",
+          "missing_interior_positions": [
+            5,
+            6,
+            7
+          ],
+          "missing_quiz_titles": [
+            "Day 5 (Q4/10): Which flag is used with `git commit` to write",
+            "Day 5 (Q5/10): Which command shows the status of staged, uns",
+            "Day 5 (Q6/10): Which command uploads your local commits to a"
+          ],
+          "points_to_add": 30,
+          "xp_to_add": 60
+        }
+      ]
+    },
+    {
+      "discord_id": "1563126658712469585",
+      "username": "sharadpatil0435_86845",
+      "current_points": 100,
+      "current_xp": 240,
+      "days_affected": 3,
+      "total_missing_qs": 9,
+      "total_points_to_add": 90,
+      "total_xp_to_add": 180,
+      "gap_details": [
+        {
+          "day": "2026-11-11",
+          "total_qs": 11,
+          "answered_positions": [
+            3,
+            4,
+            6,
+            10
+          ],
+          "answered_count": 4,
+          "correct_answered": 3,
+          "correct_rate_pct": "75",
+          "missing_interior_positions": [
+            5,
+            7,
+            8,
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 3 (Q4/10): What will be printed by this while loop?",
+            "Day 3 (Q6/10): How many times will this JavaScript loop exec",
+            "Day 3 (Q7/10): What will be printed by the following code?",
+            "Day 3 (Q8/10): What will be the output of this loop with a c"
+          ],
+          "points_to_add": 40,
+          "xp_to_add": 80
+        },
+        {
+          "day": "2026-11-12",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            6,
+            7,
+            9,
+            10
+          ],
+          "answered_count": 7,
+          "correct_answered": 7,
+          "correct_rate_pct": "100",
+          "missing_interior_positions": [
+            5,
+            8
+          ],
+          "missing_quiz_titles": [
+            "Day 4 (Q4/10): Which block executes when the 'if' condition ",
+            "Day 4 (Q7/10): What will be the output of this grade checker"
+          ],
+          "points_to_add": 20,
+          "xp_to_add": 40
+        },
+        {
+          "day": "2026-11-13",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            4,
+            6,
+            7,
+            8,
+            9,
+            11
+          ],
+          "answered_count": 7,
+          "correct_answered": 0,
+          "correct_rate_pct": "0",
+          "missing_interior_positions": [
+            3,
+            5,
+            10
+          ],
+          "missing_quiz_titles": [
+            "Day 5 (Q2/10): Which command copies/downloads a remote repos",
+            "Day 5 (Q4/10): Which flag is used with `git commit` to write",
+            "Day 5 (Q9/10): What does `git pull` actually do behind the s"
+          ],
+          "points_to_add": 30,
+          "xp_to_add": 60
+        }
+      ]
+    },
+    {
+      "discord_id": "1567817875023073343",
+      "username": "krishnaacharya08",
+      "current_points": 440,
+      "current_xp": 955,
+      "days_affected": 4,
+      "total_missing_qs": 8,
+      "total_points_to_add": 80,
+      "total_xp_to_add": 160,
+      "gap_details": [
+        {
+          "day": "2026-11-09",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            9,
+            10
+          ],
+          "answered_count": 8,
+          "correct_answered": 6,
+          "correct_rate_pct": "75",
+          "missing_interior_positions": [
+            8
+          ],
+          "missing_quiz_titles": [
+            "Day 1 (Q7/10): What will be printed by the following code?"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        },
+        {
+          "day": "2026-11-10",
+          "total_qs": 12,
+          "answered_positions": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            11,
+            12
+          ],
+          "answered_count": 8,
+          "correct_answered": 6,
+          "correct_rate_pct": "75",
+          "missing_interior_positions": [
+            9,
+            10
+          ],
+          "missing_quiz_titles": [
+            "Day 2 (Q7/10): What will be printed by the post-increment op",
+            "Day 2 (Q8/10): What will be the value stored in 'result' due"
+          ],
+          "points_to_add": 20,
+          "xp_to_add": 40
+        },
+        {
+          "day": "2026-11-11",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            4,
+            5,
+            6,
+            10
+          ],
+          "answered_count": 5,
+          "correct_answered": 2,
+          "correct_rate_pct": "40",
+          "missing_interior_positions": [
+            3,
+            7,
+            8,
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 3 (Q2/10): Which keyword immediately terminates and exit",
+            "Day 3 (Q6/10): How many times will this JavaScript loop exec",
+            "Day 3 (Q7/10): What will be printed by the following code?",
+            "Day 3 (Q8/10): What will be the output of this loop with a c"
+          ],
+          "points_to_add": 40,
+          "xp_to_add": 80
+        },
+        {
+          "day": "2026-11-13",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 9,
+          "correct_answered": 5,
+          "correct_rate_pct": "56",
+          "missing_interior_positions": [
+            8
+          ],
+          "missing_quiz_titles": [
+            "Day 5 (Q7/10): Which file is used to tell Git which files or"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        }
+      ]
+    },
+    {
+      "discord_id": "1563090306570784808",
+      "username": "bhagymane20",
+      "current_points": 40,
+      "current_xp": 90,
+      "days_affected": 2,
+      "total_missing_qs": 8,
+      "total_points_to_add": 80,
+      "total_xp_to_add": 160,
+      "gap_details": [
+        {
+          "day": "2026-11-10",
+          "total_qs": 12,
+          "answered_positions": [
+            4,
+            11
+          ],
+          "answered_count": 2,
+          "correct_answered": 1,
+          "correct_rate_pct": "50",
+          "missing_interior_positions": [
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "missing_quiz_titles": [
+            "Day 2 (Q3/10): Which format specifier is used in printf() to",
+            "Day 2 (Q4/10): What character must every executable statemen",
+            "Day 2 (Q5/10): What is the output of the modulus (%) operato",
+            "Day 2 (Q6/10): What is the memory size of a 'char' data type",
+            "Day 2 (Q7/10): What will be printed by the post-increment op",
+            "Day 2 (Q8/10): What will be the value stored in 'result' due"
+          ],
+          "points_to_add": 60,
+          "xp_to_add": 120
+        },
+        {
+          "day": "2026-11-14",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            6,
+            7
+          ],
+          "answered_count": 4,
+          "correct_answered": 3,
+          "correct_rate_pct": "75",
+          "missing_interior_positions": [
+            4,
+            5
+          ],
+          "missing_quiz_titles": [
+            "Day 6 (Q3/10): Which HTML tag creates a clickable hyperlink ",
+            "Day 6 (Q4/10): Which attribute is required on an `<img>` tag"
+          ],
+          "points_to_add": 20,
+          "xp_to_add": 40
+        }
+      ]
+    },
+    {
+      "discord_id": "1567806200341340250",
+      "username": "ranveerpawar0909",
+      "current_points": 190,
+      "current_xp": 385,
+      "days_affected": 3,
+      "total_missing_qs": 7,
+      "total_points_to_add": 70,
+      "total_xp_to_add": 140,
+      "gap_details": [
+        {
+          "day": "2026-11-10",
+          "total_qs": 12,
+          "answered_positions": [
+            3,
+            5,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 5,
+          "correct_answered": 5,
+          "correct_rate_pct": "100",
+          "missing_interior_positions": [
+            4,
+            6,
+            7,
+            8
+          ],
+          "missing_quiz_titles": [
+            "Day 2 (Q2/10): What will be printed to the console by the fo",
+            "Day 2 (Q4/10): What character must every executable statemen",
+            "Day 2 (Q5/10): What is the output of the modulus (%) operato",
+            "Day 2 (Q6/10): What is the memory size of a 'char' data type"
+          ],
+          "points_to_add": 40,
+          "xp_to_add": 80
+        },
+        {
+          "day": "2026-11-12",
+          "total_qs": 11,
+          "answered_positions": [
+            3,
+            4,
+            6,
+            7,
+            9,
+            10
+          ],
+          "answered_count": 6,
+          "correct_answered": 6,
+          "correct_rate_pct": "100",
+          "missing_interior_positions": [
+            5,
+            8
+          ],
+          "missing_quiz_titles": [
+            "Day 4 (Q4/10): Which block executes when the 'if' condition ",
+            "Day 4 (Q7/10): What will be the output of this grade checker"
+          ],
+          "points_to_add": 20,
+          "xp_to_add": 40
+        },
+        {
+          "day": "2026-11-15",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            11
+          ],
+          "answered_count": 9,
+          "correct_answered": 8,
+          "correct_rate_pct": "89",
+          "missing_interior_positions": [
+            10
+          ],
+          "missing_quiz_titles": [
+            "Day 7 (Q9/10): Which service acts as the internet's phoneboo"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        }
+      ]
+    },
+    {
+      "discord_id": "1567863965856309268",
+      "username": "pranitachougule",
+      "current_points": 150,
+      "current_xp": 320,
+      "days_affected": 2,
+      "total_missing_qs": 6,
+      "total_points_to_add": 60,
+      "total_xp_to_add": 120,
+      "gap_details": [
+        {
+          "day": "2026-11-10",
+          "total_qs": 12,
+          "answered_positions": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            10,
+            12
+          ],
+          "answered_count": 8,
+          "correct_answered": 8,
+          "correct_rate_pct": "100",
+          "missing_interior_positions": [
+            9,
+            11
+          ],
+          "missing_quiz_titles": [
+            "Day 2 (Q7/10): What will be printed by the post-increment op",
+            "Day 2 (Q9/10): Which symbol is required before the variable "
+          ],
+          "points_to_add": 20,
+          "xp_to_add": 40
+        },
+        {
+          "day": "2026-11-11",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            4,
+            7,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 6,
+          "correct_answered": 4,
+          "correct_rate_pct": "67",
+          "missing_interior_positions": [
+            3,
+            5,
+            6,
+            8
+          ],
+          "missing_quiz_titles": [
+            "Day 3 (Q2/10): Which keyword immediately terminates and exit",
+            "Day 3 (Q4/10): What will be printed by this while loop?",
+            "Day 3 (Q5/10): What sequence does `range(1, 5)` generate in ",
+            "Day 3 (Q7/10): What will be printed by the following code?"
+          ],
+          "points_to_add": 40,
+          "xp_to_add": 80
+        }
+      ]
+    },
+    {
+      "discord_id": "1567388827201310782",
+      "username": "danammasharanabasappaaland",
+      "current_points": 100,
+      "current_xp": 215,
+      "days_affected": 2,
+      "total_missing_qs": 5,
+      "total_points_to_add": 50,
+      "total_xp_to_add": 100,
+      "gap_details": [
+        {
+          "day": "2026-11-12",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            10
+          ],
+          "answered_count": 6,
+          "correct_answered": 5,
+          "correct_rate_pct": "83",
+          "missing_interior_positions": [
+            7,
+            8,
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 4 (Q6/10): Which logical operator requires BOTH conditio",
+            "Day 4 (Q7/10): What will be the output of this grade checker",
+            "Day 4 (Q8/10): Which operator returns true if AT LEAST ONE o"
+          ],
+          "points_to_add": 30,
+          "xp_to_add": 60
+        },
+        {
+          "day": "2026-11-14",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            7,
+            8,
+            9
+          ],
+          "answered_count": 6,
+          "correct_answered": 4,
+          "correct_rate_pct": "67",
+          "missing_interior_positions": [
+            5,
+            6
+          ],
+          "missing_quiz_titles": [
+            "Day 6 (Q4/10): Which attribute is required on an `<img>` tag",
+            "Day 6 (Q5/10): Which tag creates an unordered (bulleted) lis"
+          ],
+          "points_to_add": 20,
+          "xp_to_add": 40
+        }
+      ]
+    },
+    {
+      "discord_id": "1514542421210435584",
+      "username": "herobinesiva",
+      "current_points": 280,
+      "current_xp": 660,
+      "days_affected": 2,
+      "total_missing_qs": 4,
+      "total_points_to_add": 40,
+      "total_xp_to_add": 80,
+      "gap_details": [
+        {
+          "day": "2026-11-11",
+          "total_qs": 11,
+          "answered_positions": [
+            3,
+            4,
+            6,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 6,
+          "correct_answered": 5,
+          "correct_rate_pct": "83",
+          "missing_interior_positions": [
+            5,
+            7,
+            8
+          ],
+          "missing_quiz_titles": [
+            "Day 3 (Q4/10): What will be printed by this while loop?",
+            "Day 3 (Q6/10): How many times will this JavaScript loop exec",
+            "Day 3 (Q7/10): What will be printed by the following code?"
+          ],
+          "points_to_add": 30,
+          "xp_to_add": 60
+        },
+        {
+          "day": "2026-11-15",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 9,
+          "correct_answered": 5,
+          "correct_rate_pct": "56",
+          "missing_interior_positions": [
+            8
+          ],
+          "missing_quiz_titles": [
+            "Day 7 (Q7/10): What is the decimal equivalent of the binary "
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        }
+      ]
+    },
+    {
+      "discord_id": "1360147081225830430",
+      "username": "aizen070284",
+      "current_points": 40,
+      "current_xp": 85,
+      "days_affected": 1,
+      "total_missing_qs": 4,
+      "total_points_to_add": 40,
+      "total_xp_to_add": 80,
+      "gap_details": [
+        {
+          "day": "2026-11-11",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            4,
+            6,
+            7,
+            10
+          ],
+          "answered_count": 5,
+          "correct_answered": 4,
+          "correct_rate_pct": "80",
+          "missing_interior_positions": [
+            3,
+            5,
+            8,
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 3 (Q2/10): Which keyword immediately terminates and exit",
+            "Day 3 (Q4/10): What will be printed by this while loop?",
+            "Day 3 (Q7/10): What will be printed by the following code?",
+            "Day 3 (Q8/10): What will be the output of this loop with a c"
+          ],
+          "points_to_add": 40,
+          "xp_to_add": 80
+        }
+      ]
+    },
+    {
+      "discord_id": "1299298730356244515",
+      "username": "amogh_mahadik45",
+      "current_points": 180,
+      "current_xp": 390,
+      "days_affected": 3,
+      "total_missing_qs": 4,
+      "total_points_to_add": 40,
+      "total_xp_to_add": 80,
+      "gap_details": [
+        {
+          "day": "2026-11-11",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            10,
+            11
+          ],
+          "answered_count": 9,
+          "correct_answered": 6,
+          "correct_rate_pct": "67",
+          "missing_interior_positions": [
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 3 (Q8/10): What will be the output of this loop with a c"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        },
+        {
+          "day": "2026-11-12",
+          "total_qs": 11,
+          "answered_positions": [
+            3,
+            4,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 8,
+          "correct_answered": 7,
+          "correct_rate_pct": "88",
+          "missing_interior_positions": [
+            5
+          ],
+          "missing_quiz_titles": [
+            "Day 4 (Q4/10): Which block executes when the 'if' condition "
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        },
+        {
+          "day": "2026-11-15",
+          "total_qs": 11,
+          "answered_positions": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            10,
+            11
+          ],
+          "answered_count": 7,
+          "correct_answered": 5,
+          "correct_rate_pct": "71",
+          "missing_interior_positions": [
+            8,
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 7 (Q7/10): What is the decimal equivalent of the binary ",
+            "Day 7 (Q8/10): Why are Solid-State Drives (SSDs) significant"
+          ],
+          "points_to_add": 20,
+          "xp_to_add": 40
+        }
+      ]
+    },
+    {
+      "discord_id": "1563090797082058752",
+      "username": "raunakriyajmujawar_53413",
+      "current_points": 30,
+      "current_xp": 85,
+      "days_affected": 1,
+      "total_missing_qs": 4,
+      "total_points_to_add": 40,
+      "total_xp_to_add": 80,
+      "gap_details": [
+        {
+          "day": "2026-11-11",
+          "total_qs": 11,
+          "answered_positions": [
+            4,
+            7,
+            10,
+            11
+          ],
+          "answered_count": 4,
+          "correct_answered": 2,
+          "correct_rate_pct": "50",
+          "missing_interior_positions": [
+            5,
+            6,
+            8,
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 3 (Q4/10): What will be printed by this while loop?",
+            "Day 3 (Q5/10): What sequence does `range(1, 5)` generate in ",
+            "Day 3 (Q7/10): What will be printed by the following code?",
+            "Day 3 (Q8/10): What will be the output of this loop with a c"
+          ],
+          "points_to_add": 40,
+          "xp_to_add": 80
+        }
+      ]
+    },
+    {
+      "discord_id": "1552657749123272790",
+      "username": "ayanshaikh_08",
+      "current_points": 250,
+      "current_xp": 515,
+      "days_affected": 2,
+      "total_missing_qs": 3,
+      "total_points_to_add": 30,
+      "total_xp_to_add": 60,
+      "gap_details": [
+        {
+          "day": "2026-11-10",
+          "total_qs": 12,
+          "answered_positions": [
+            3,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            12
+          ],
+          "answered_count": 8,
+          "correct_answered": 6,
+          "correct_rate_pct": "75",
+          "missing_interior_positions": [
+            4,
+            11
+          ],
+          "missing_quiz_titles": [
+            "Day 2 (Q2/10): What will be printed to the console by the fo",
+            "Day 2 (Q9/10): Which symbol is required before the variable "
+          ],
+          "points_to_add": 20,
+          "xp_to_add": 40
+        },
+        {
+          "day": "2026-11-12",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 9,
+          "correct_answered": 9,
+          "correct_rate_pct": "100",
+          "missing_interior_positions": [
+            5
+          ],
+          "missing_quiz_titles": [
+            "Day 4 (Q4/10): Which block executes when the 'if' condition "
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        }
+      ]
+    },
+    {
+      "discord_id": "1551593450518876240",
+      "username": "pari_3178",
+      "current_points": 100,
+      "current_xp": 220,
+      "days_affected": 2,
+      "total_missing_qs": 3,
+      "total_points_to_add": 30,
+      "total_xp_to_add": 60,
+      "gap_details": [
+        {
+          "day": "2026-11-10",
+          "total_qs": 12,
+          "answered_positions": [
+            5,
+            6,
+            7,
+            9,
+            10,
+            11,
+            12
+          ],
+          "answered_count": 7,
+          "correct_answered": 6,
+          "correct_rate_pct": "86",
+          "missing_interior_positions": [
+            8
+          ],
+          "missing_quiz_titles": [
+            "Day 2 (Q6/10): What is the memory size of a 'char' data type"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        },
+        {
+          "day": "2026-11-11",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            10
+          ],
+          "answered_count": 7,
+          "correct_answered": 4,
+          "correct_rate_pct": "57",
+          "missing_interior_positions": [
+            8,
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 3 (Q7/10): What will be printed by the following code?",
+            "Day 3 (Q8/10): What will be the output of this loop with a c"
+          ],
+          "points_to_add": 20,
+          "xp_to_add": 40
+        }
+      ]
+    },
+    {
+      "discord_id": "1551519801594351728",
+      "username": "tanvii.318",
+      "current_points": 320,
+      "current_xp": 700,
+      "days_affected": 3,
+      "total_missing_qs": 3,
+      "total_points_to_add": 30,
+      "total_xp_to_add": 60,
+      "gap_details": [
+        {
+          "day": "2026-11-10",
+          "total_qs": 12,
+          "answered_positions": [
+            6,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "answered_count": 6,
+          "correct_answered": 4,
+          "correct_rate_pct": "67",
+          "missing_interior_positions": [
+            7
+          ],
+          "missing_quiz_titles": [
+            "Day 2 (Q5/10): What is the output of the modulus (%) operato"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        },
+        {
+          "day": "2026-11-11",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            11
+          ],
+          "answered_count": 9,
+          "correct_answered": 6,
+          "correct_rate_pct": "67",
+          "missing_interior_positions": [
+            10
+          ],
+          "missing_quiz_titles": [
+            "Day 3 (Q9/10): How many times does the inner loop run in tot"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        },
+        {
+          "day": "2026-11-12",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 9,
+          "correct_answered": 8,
+          "correct_rate_pct": "89",
+          "missing_interior_positions": [
+            5
+          ],
+          "missing_quiz_titles": [
+            "Day 4 (Q4/10): Which block executes when the 'if' condition "
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        }
+      ]
+    },
+    {
+      "discord_id": "1546987472586539019",
+      "username": "frustratedguy0695",
+      "current_points": 330,
+      "current_xp": 740,
+      "days_affected": 2,
+      "total_missing_qs": 2,
+      "total_points_to_add": 20,
+      "total_xp_to_add": 40,
+      "gap_details": [
+        {
+          "day": "2026-11-09",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 9,
+          "correct_answered": 5,
+          "correct_rate_pct": "56",
+          "missing_interior_positions": [
+            3
+          ],
+          "missing_quiz_titles": [
+            "Day 1 (Q2/10): Which symbol is used to write single-line com"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        },
+        {
+          "day": "2026-11-12",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            9,
+            10,
+            11
+          ],
+          "answered_count": 9,
+          "correct_answered": 8,
+          "correct_rate_pct": "89",
+          "missing_interior_positions": [
+            8
+          ],
+          "missing_quiz_titles": [
+            "Day 4 (Q7/10): What will be the output of this grade checker"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        }
+      ]
+    },
+    {
+      "discord_id": "1504466608587018351",
+      "username": "farheens25",
+      "current_points": 70,
+      "current_xp": 145,
+      "days_affected": 1,
+      "total_missing_qs": 2,
+      "total_points_to_add": 20,
+      "total_xp_to_add": 40,
+      "gap_details": [
+        {
+          "day": "2026-11-10",
+          "total_qs": 12,
+          "answered_positions": [
+            3,
+            4,
+            6,
+            7,
+            8,
+            10,
+            11,
+            12
+          ],
+          "answered_count": 8,
+          "correct_answered": 7,
+          "correct_rate_pct": "88",
+          "missing_interior_positions": [
+            5,
+            9
+          ],
+          "missing_quiz_titles": [
+            "Day 2 (Q3/10): Which format specifier is used in printf() to",
+            "Day 2 (Q7/10): What will be printed by the post-increment op"
+          ],
+          "points_to_add": 20,
+          "xp_to_add": 40
+        }
+      ]
+    },
+    {
+      "discord_id": "1551586816820256851",
+      "username": "vaishnavipatil0523",
+      "current_points": 20,
+      "current_xp": 45,
+      "days_affected": 1,
+      "total_missing_qs": 2,
+      "total_points_to_add": 20,
+      "total_xp_to_add": 40,
+      "gap_details": [
+        {
+          "day": "2026-11-14",
+          "total_qs": 11,
+          "answered_positions": [
+            2,
+            3,
+            6
+          ],
+          "answered_count": 3,
+          "correct_answered": 2,
+          "correct_rate_pct": "67",
+          "missing_interior_positions": [
+            4,
+            5
+          ],
+          "missing_quiz_titles": [
+            "Day 6 (Q3/10): Which HTML tag creates a clickable hyperlink ",
+            "Day 6 (Q4/10): Which attribute is required on an `<img>` tag"
+          ],
+          "points_to_add": 20,
+          "xp_to_add": 40
+        }
+      ]
+    },
+    {
+      "discord_id": "1566785459466670211",
+      "username": "aditi_mali_24",
+      "current_points": 0,
+      "current_xp": 10,
+      "days_affected": 1,
+      "total_missing_qs": 1,
+      "total_points_to_add": 10,
+      "total_xp_to_add": 20,
+      "gap_details": [
+        {
+          "day": "2026-11-09",
+          "total_qs": 11,
+          "answered_positions": [
+            7,
+            9
+          ],
+          "answered_count": 2,
+          "correct_answered": 0,
+          "correct_rate_pct": "0",
+          "missing_interior_positions": [
+            8
+          ],
+          "missing_quiz_titles": [
+            "Day 1 (Q7/10): What will be printed by the following code?"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        }
+      ]
+    },
+    {
+      "discord_id": "1567568095701106901",
+      "username": "6072008",
+      "current_points": 0,
+      "current_xp": 15,
+      "days_affected": 1,
+      "total_missing_qs": 1,
+      "total_points_to_add": 10,
+      "total_xp_to_add": 20,
+      "gap_details": [
+        {
+          "day": "2026-11-10",
+          "total_qs": 12,
+          "answered_positions": [
+            9,
+            10,
+            12
+          ],
+          "answered_count": 3,
+          "correct_answered": 0,
+          "correct_rate_pct": "0",
+          "missing_interior_positions": [
+            11
+          ],
+          "missing_quiz_titles": [
+            "Day 2 (Q9/10): Which symbol is required before the variable "
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        }
+      ]
+    },
+    {
+      "discord_id": "732845497819070466",
+      "username": "netineti_",
+      "current_points": 70,
+      "current_xp": 140,
+      "days_affected": 1,
+      "total_missing_qs": 1,
+      "total_points_to_add": 10,
+      "total_xp_to_add": 20,
+      "gap_details": [
+        {
+          "day": "2026-11-12",
+          "total_qs": 11,
+          "answered_positions": [
+            3,
+            4,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "answered_count": 7,
+          "correct_answered": 7,
+          "correct_rate_pct": "100",
+          "missing_interior_positions": [
+            5
+          ],
+          "missing_quiz_titles": [
+            "Day 4 (Q4/10): Which block executes when the 'if' condition "
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        }
+      ]
+    },
+    {
+      "discord_id": "1371482830558728222",
+      "username": "ajinkya00071",
+      "current_points": 20,
+      "current_xp": 60,
+      "days_affected": 1,
+      "total_missing_qs": 1,
+      "total_points_to_add": 10,
+      "total_xp_to_add": 20,
+      "gap_details": [
+        {
+          "day": "2026-11-12",
+          "total_qs": 11,
+          "answered_positions": [
+            3,
+            4,
+            5,
+            6,
+            8,
+            9
+          ],
+          "answered_count": 6,
+          "correct_answered": 2,
+          "correct_rate_pct": "33",
+          "missing_interior_positions": [
+            7
+          ],
+          "missing_quiz_titles": [
+            "Day 4 (Q6/10): Which logical operator requires BOTH conditio"
+          ],
+          "points_to_add": 10,
+          "xp_to_add": 20
+        }
+      ]
+    }
+  ],
+  "error_logs": []
+}

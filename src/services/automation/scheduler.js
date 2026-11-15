@@ -34,6 +34,13 @@ import { getPendingCandidates } from '../../database/queries/stickers.js';
 import { emojiDiscoveryService } from '../emojis/discoveryService.js';
 import { getPendingEmojiCandidates } from '../../database/queries/emojis.js';
 
+/**
+ * MASTER SWITCH: Phase 1 Testing Completed (Nov 15, 2026).
+ * All automated background crons, daily drops, checkers, and discovery jobs are suspended.
+ * Set to false when Phase 2 is ready to launch.
+ */
+export const AUTOMATION_SUSPENDED = true;
+
 const activeTasks = new Map();
 let isDailyQuizJobRunning = false;
 let isDailyCloseJobRunning = false;
@@ -61,6 +68,11 @@ async function resolveChannel(client, ...channelIds) {
  * Job 1: Daily Quiz Drop
  */
 export async function runDailyQuizDropJob(client, options = {}) {
+  if (AUTOMATION_SUSPENDED && !options.force) {
+    logger.info('🛑 [AUTOMATION SUSPENDED] Daily Quiz Drop bypassed. Phase 1 sprint testing completed.');
+    return { success: true, reason: 'AUTOMATION_SUSPENDED' };
+  }
+
   const currentDate = options.date || getKolkataDateString();
   // Channel resolution: use explicitly passed channelId → production quiz channel (never test channel in production)
   const channelId = options.channelId || config.discord.channels.quiz;
@@ -544,6 +556,11 @@ export async function runWeeklyEmojiDiscoveryJob(client, options = {}) {
  * and safely publishes it without duplicates.
  */
 export async function reconcileMissedJobsOnStartup(client) {
+  if (AUTOMATION_SUSPENDED) {
+    logger.info('🛑 [RECONCILIATION SUSPENDED] Automation is suspended (Phase 1 testing complete). Startup recovery skipped.');
+    return;
+  }
+
   try {
     const today = getKolkataDateString();
     const [targetHourStr = '19', targetMinStr = '00'] = (config.app.quizPostTime || '19:00').split(':');
@@ -600,15 +617,16 @@ export async function reconcileMissedJobsOnStartup(client) {
  * Initializes and starts all recurring cron jobs.
  */
 export function initScheduler(client) {
-  const timezone = config.app.timezone || 'Asia/Kolkata';
-  logger.info(`Initializing HCC automation scheduler (Timezone: ${timezone})…`);
-
-  // Parse quiz post time from env (e.g., '19:00')
-  const [hourStr = '19', minStr = '00'] = (config.app.quizPostTime || '19:00').split(':');
-  const quizCron = `${parseInt(minStr, 10)} ${parseInt(hourStr, 10)} * * *`;
-
   // Stop any existing active tasks before registering to avoid duplicates
   stopScheduler();
+
+  if (AUTOMATION_SUSPENDED) {
+    logger.info('🛑 [AUTOMATION SUSPENDED] Phase 1 sprint testing complete (Nov 9–15, 2026). All automated cron jobs and background checkers are suspended.');
+    return;
+  }
+
+  const timezone = config.app.timezone || 'Asia/Kolkata';
+  logger.info(`Initializing HCC automation scheduler (Timezone: ${timezone})…`);
 
   // 1. Daily Quiz Drop (Configured via QUIZ_POST_TIME — now 07:00 PM IST / 19:00)
   const taskDailyQuiz = cron.schedule(

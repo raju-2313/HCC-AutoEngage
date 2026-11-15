@@ -1,101 +1,94 @@
 # HCC-AutoEngage: Project Handoff & Architecture Guide
 
-> **Document Version:** 1.0.0  
+> **Document Version:** 2.0.0 (Phase 1 Testing Concluded)  
+> **Status:** All Automated Schedulers & Checkers SUSPENDED (Dormant Mode)  
 > **Target Date:** November 15, 2026  
 > **Maintainer:** `raju-2313` (`kumbharraju784@gmail.com`)  
 > **Repository:** `https://github.com/raju-2313/HCC-AutoEngage.git`
 
 ---
 
-## 1. Project Overview
+## 1. Project Overview & Current Operating Status
 
-**HCC-AutoEngage** is the automated Discord community engagement and gamification engine for the **HackerRank Campus Crew (HCC)**. Its flagship feature is the **7-Day Daily Tech Challenge Sprint** running from **November 9 to November 15, 2026**.
+**HCC-AutoEngage** is the automated Discord community engagement and gamification engine for the **HackerRank Campus Crew (HCC)**. 
 
-* **Runtime Environment:** Cloud-hosted container on **Railway** (24/7 keep-alive).
-* **Database:** **Supabase (PostgreSQL)** with atomic RPC procedures (`submit_quiz_attempt`).
-* **Discord Integration:** `discord.js` v14 with slash commands, interactive buttons, and ephemeral responses.
+### Phase 1 7-Day Sprint Testing Concluded (Nov 9 – Nov 15, 2026)
+* **Sprint Window:** November 9 – November 15, 2026.
+* **Sprint Participants:** 30 unique members, 639 total answers submitted, 428 correct answers (67% community accuracy).
+* **Current Operating State:** **DORMANT / SUSPENDED**.
+  * `AUTOMATION_SUSPENDED = true` is set in `src/services/automation/scheduler.js`.
+  * **Zero automated background crons** are registered or running.
+  * **Zero daily drops** will occur tomorrow or on future dates.
+  * **Zero startup recovery tasks** will execute on container restarts.
+  * The bot remains online in standby mode (`Phase 1 Complete 🏆 | /help`) responding only to manual admin commands (`/admin ...`).
 
 ---
 
-## 2. Infrastructure & Credentials
+## 2. Infrastructure & Verified Channels
 
-### Cloud Deployments
-* **Railway:** Automatically watches and deploys from `origin/main` on GitHub (`raju-2313/HCC-AutoEngage`).
-* **Supabase:** Houses member profiles, points, XP, streaks, quiz definitions, questions, and attempt logs.
-
-### Key Discord Channels
+* **Runtime:** Container hosted on **Railway** (deploys automatically from `origin/main`).
+* **Database:** **Supabase (PostgreSQL)** housing all member accounts, historical attempts, and consolidated balances.
 * **Main Quiz / Discussion Channel (`#💬・general`):** `1538470672722952303`
-  * *Purpose:* Public home for daily challenge drops, announcements, and final podiums.
-* **Testing Channel (`#autoengage-testing`):** `1567916304118063124`
-  * *Purpose:* Isolated sandbox for test sessions and health checks.
-
-### Git Identity
-* **User Name:** `raju-2313`
-* **User Email:** `kumbharraju784@gmail.com`
-* *Note:* All 67+ repository commits are credited to this GitHub identity to ensure full contribution graph tracking.
+* **Official Announcement Channel (`#📢・announcements`):** `1538470372918165587`
+* **Sandbox / Testing Channel (`#autoengage-testing`):** `1567916304118063124`
 
 ---
 
-## 3. 7-Day Sprint Calendar & Schedule
+## 3. 7-Day Sprint Summary & Results
 
-All remaining challenges trigger automatically at **19:00:00 IST (07:00 PM)**.
+All 7 days were executed and completed:
 
-| Date | Day | Topic | Category & Syntax | Status |
-| :--- | :---: | :--- | :--- | :--- |
-| **Nov 9** | Day 1 | Python Basics | `python` | Completed |
-| **Nov 10** | Day 2 | C Programming Basics | `c` | Completed (21 participants) |
-| **Nov 11** | Day 3 | Loops & Iterations | `python` | Completed |
-| **Nov 12** | Day 4 | Conditionals & Logic | `python` / logic | Completed |
-| **Nov 13** | Day 5 | Git & GitHub | `bash` | Completed |
-| **Nov 14** | Day 6 | HTML & Web Foundations | `html` | Completed |
-| **Nov 15** | **Day 7** | **Tech & Computer Basics** | **plain / CS** | **Active / Scheduled @ 19:00 IST (Grand Finale)** |
+| Date | Day | Topic | Total Questions | Status |
+| :--- | :---: | :--- | :---: | :--- |
+| **Nov 9** | Day 1 | Python Basics | 10 | Completed |
+| **Nov 10** | Day 2 | C Programming Basics | 10 | Completed |
+| **Nov 11** | Day 3 | Loops & Iterations | 10 | Completed |
+| **Nov 12** | Day 4 | Conditionals & Logic | 10 | Completed |
+| **Nov 13** | Day 5 | Git & GitHub | 10 | Completed |
+| **Nov 14** | Day 6 | HTML & Web Foundations | 10 | Completed |
+| **Nov 15** | Day 7 | Tech & Computer Basics | 10 | Completed (Finale) |
 
-> **Post-Challenge Automation Policy:** Following the conclusion of the Day 7 Grand Finale quiz (after Ping 2 at ~19:04 IST), all automated public events stop completely. The 21:00 IST automated weekly digest is disabled. All final winners, podiums, and leaderboard honors will be published manually by administrators using `/admin announce weekly` or custom announcements.
-
-> **Morning Quiet Hours:** There are **zero tasks** scheduled at 09:00 AM IST. The bot remains in keep-alive mode until 19:00 IST.
-
----
-
-## 4. Daily Challenge Execution Lifecycle (19:00 IST)
-
-The automated sequence inside `src/services/quiz/dailyTimedSessionEngine.js` follows three distinct phases:
-
-```
-19:00:00 IST  ───▶  Phase 1: Warmup Announcement (@everyone Ping 1 of 2)
-                    • 30-Second Countdown with dynamic relative timestamp: <t:...:R>
-                    • Displays Day #, Topic, 10 Questions, +10 pts & +20 XP rewards
-                    • Initializes session in Supabase (status: 'in_progress')
-
-19:00:30 IST  ───▶  Phase 2: 10 Rapid-Fire Questions (Zero Pings)
-                    • 15 Seconds Timer per Question (synchronized via <t:expiry:R>)
-                    • Language-specific markdown syntax highlighting in code snippets
-                    • 4 Interactive Buttons (Option A, B, C, D)
-                    • Ephemeral feedback: Only the clicking student sees their result
-                    • Exact 15s lock: Buttons disable & Green Answer Reveal embed appears
-                    • 5-Second intermission before the next question drops
-
-~19:04:15 IST ───▶  Phase 3: Championship Wrap-up (@everyone Ping 2 of 2)
-                    • Top 3 Podium (Champion 🥇, Runner-Up 🥈, 3rd Place 🥉)
-                    • Session Leaderboard (Top 10) with points and accuracy
-                    • Displays: '7-Day Sprint Concluded! 🏆'
-                    • On Day 7: Stops immediately after Ping 2 (zero follow-up hint cards)
-                    • Locks all points, XP, and streaks into Supabase (status: 'completed')
-                    • All post-sprint community announcements are strictly admin-managed
-```
+### Official Final Podium (Post Bug-Fix Compensation)
+* 🥇 **1st Place:** `karan20071` (`846379972134174730`) — **530 pts** · 1,135 XP (41/56 correct, 73% acc)
+* 🥈 **2nd Place:** `krishnaacharya08` (`1567817875023073343`) — **520 pts** · 1,115 XP (44/59 correct, 75% acc)
+* 🥉 **3rd Place:** `samiksha_2007` (`1554487457192345621`) — **450 pts** · 935 XP (35/42 correct, 83% acc)
 
 ---
 
-## 5. Critical Fixes Implemented
+## 4. Phase 1 Errors Encountered & How They Were Resolved
 
-1. **`ReferenceError: now is not defined` (Fixed in commit `15b6437`)**:
-   * Restored `const now = Date.now();` inside the question loop in `dailyTimedSessionEngine.js`.
-2. **Last-Second Tap Race Condition (Fixed in commit `b595c8e`)**:
-   * In `attempts.js` and `quizService.js`, late clicks (arriving after the question closed in DB) are caught as `QUIZ_EXPIRED`.
-   * Instead of a generic error message, the user receives an informative private card explaining they tapped a fraction of a second too late and advising to tap with ~3s remaining.
-3. **Smart Language Snippet Highlighting (Fixed in commit `19674c6`)**:
-   * Uses `getSnippetLanguage(category, snippet)` to ensure Python, C, Bash, and HTML blocks format with correct Discord syntax coloring.
-4. **User Commands Privacy**:
-   * All user-facing commands (`/profile`, `/leaderboard`, `/engagement me`, `/quiz stats`, etc.) use `MessageFlags.Ephemeral` so results are private to the caller and keep channels clean.
+During Phase 1 sprint testing, four primary system and operational errors were uncovered and systematically fixed:
+
+### Issue 1: Discord 3-Second ACK Timeout on High Concurrency (`(!) This interaction failed`)
+* **Root Cause:** When 20+ students tapped answer buttons simultaneously within a 15-second window, backend verification and Supabase RPC transactions occasionally took longer than Discord Gateway's hard 3000ms acknowledgment window before responding. This caused Discord on mobile/desktop to show `(!) This interaction failed` to students, even though they had chosen the right answer.
+* **Resolution:** 
+  1. Ran an exhaustive audit across all 78 questions and 639 submissions in Supabase (`scripts/analyze_gaps_v2.mjs`).
+  2. Applied an **Interior Gap Detection algorithm** (identifying participants who answered questions before and after a missing question, proving they were active and experiencing interaction dropouts).
+  3. Identified **27 affected participants** and applied atomic compensation (+10 pts / +20 XP per missed interior question, total 1,570 pts / 3,140 XP) to live member balances.
+  4. Fairly resolved the leaderboard: `karan20071` (verified with screenshot evidence of interaction failures on Day 7 Q4) rightfully secured 1st place with 530 pts.
+
+### Issue 2: Last-Second Click Race Condition
+* **Root Cause:** Clicks submitted with <2 seconds remaining arrived at the server as the question was closing, generating `Quiz is not active for submissions`.
+* **Resolution:** Caught `QUIZ_EXPIRED` gracefully in `attempts.js` and `quizService.js`, returning a helpful ephemeral guidance card advising participants to tap with ~3s remaining.
+
+### Issue 3: Announcement Channel Missing Permissions (`DiscordAPIError[50013]: Missing Permissions`)
+* **Root Cause:** `#📢・announcements` (`1538470372918165587`) had `@everyone` denied `Send Messages`. The bot lacked an explicit role or permission override allowing message posting in announcements, throwing `Missing Permissions`. Because slash commands defer as ephemeral receipts for admins, the error appeared as a private ephemeral failure box.
+* **Resolution:** Added `HCC Moderator` role to `HCC AutoEngage`, hardcoded target channel ID `1538470372918165587`, and verified permissions (`canSend: true`, `canEmbed: true`, `canMention: true`).
+
+### Issue 4: Railway Malformed Environment Variable
+* **Root Cause:** Railway environment configuration contained a clipped ID (`567916304118063124` missing the leading `1`), overriding code fallbacks and causing `Channel Not Found`.
+* **Resolution:** Hardcoded verified channel constants in `src/commands/admin.js` to ensure the bot directly targets `#📢・announcements` without relying on erroneous environment variables, and added an optional `channel:` slash command picker.
+
+---
+
+## 5. Automation Suspension Policy (From Nov 16 Onward)
+
+To prevent any unexpected automated posts or database modifications:
+
+1. **`AUTOMATION_SUSPENDED = true`** in `src/services/automation/scheduler.js`.
+2. **`initScheduler()`** logs suspension notice and returns immediately (0 crons active).
+3. **`reconcileMissedJobsOnStartup()`** is bypassed on all container boots.
+4. **All community announcements and leaderboards** are strictly manually controlled via `/admin announce leaderboard` and `/admin announce weekly`.
 
 ---
 
