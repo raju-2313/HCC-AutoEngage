@@ -1,7 +1,7 @@
 # HCC-AutoEngage: Project Handoff & Architecture Guide
 
 > **Document Version:** 1.0.0  
-> **Target Date:** November 11, 2026  
+> **Target Date:** November 15, 2026  
 > **Maintainer:** `raju-2313` (`kumbharraju784@gmail.com`)  
 > **Repository:** `https://github.com/raju-2313/HCC-AutoEngage.git`
 
@@ -44,11 +44,13 @@ All remaining challenges trigger automatically at **19:00:00 IST (07:00 PM)**.
 | :--- | :---: | :--- | :--- | :--- |
 | **Nov 9** | Day 1 | Python Basics | `python` | Completed |
 | **Nov 10** | Day 2 | C Programming Basics | `c` | Completed (21 participants) |
-| **Nov 11** | **Day 3** | **Loops & Iterations** | `python` | **Active / Scheduled @ 19:00 IST** |
-| **Nov 12** | Day 4 | Conditionals & Logic | `python` / logic | Scheduled @ 19:00 IST |
-| **Nov 13** | Day 5 | Git & GitHub | `bash` | Scheduled @ 19:00 IST |
-| **Nov 14** | Day 6 | HTML & Web Foundations | `html` | Scheduled @ 19:00 IST |
-| **Nov 15** | Day 7 | Tech & Computer Basics | plain / CS | Scheduled @ 19:00 IST (Grand Finale) |
+| **Nov 11** | Day 3 | Loops & Iterations | `python` | Completed |
+| **Nov 12** | Day 4 | Conditionals & Logic | `python` / logic | Completed |
+| **Nov 13** | Day 5 | Git & GitHub | `bash` | Completed |
+| **Nov 14** | Day 6 | HTML & Web Foundations | `html` | Completed |
+| **Nov 15** | **Day 7** | **Tech & Computer Basics** | **plain / CS** | **Active / Scheduled @ 19:00 IST (Grand Finale)** |
+
+> **Post-Challenge Automation Policy:** Following the conclusion of the Day 7 Grand Finale quiz (after Ping 2 at ~19:04 IST), all automated public events stop completely. The 21:00 IST automated weekly digest is disabled. All final winners, podiums, and leaderboard honors will be published manually by administrators using `/admin announce weekly` or custom announcements.
 
 > **Morning Quiet Hours:** There are **zero tasks** scheduled at 09:00 AM IST. The bot remains in keep-alive mode until 19:00 IST.
 
@@ -75,8 +77,10 @@ The automated sequence inside `src/services/quiz/dailyTimedSessionEngine.js` fol
 ~19:04:15 IST ───▶  Phase 3: Championship Wrap-up (@everyone Ping 2 of 2)
                     • Top 3 Podium (Champion 🥇, Runner-Up 🥈, 3rd Place 🥉)
                     • Session Leaderboard (Top 10) with points and accuracy
-                    • Standalone "Whispers from the Mod" hint card (Zero Pings)
+                    • Displays: '7-Day Sprint Concluded! 🏆'
+                    • On Day 7: Stops immediately after Ping 2 (zero follow-up hint cards)
                     • Locks all points, XP, and streaks into Supabase (status: 'completed')
+                    • All post-sprint community announcements are strictly admin-managed
 ```
 
 ---
@@ -145,9 +149,9 @@ When moving this folder to another disk (e.g., `D:\HCC-AutoEngage`):
    ```
 5. **Quick Verification Script**:
    ```bash
-   node -e "import('./src/services/quiz/sessionQuestionManager.js').then(m => console.log('Ready for Day', m.getDayQuestionSet('2026-11-11').meta.dayNumber))"
+   node -e "import('./src/services/quiz/sessionQuestionManager.js').then(m => console.log('Ready for Day', m.getDayQuestionSet('2026-11-15').meta.dayNumber))"
    ```
-   *(Expected output: `Ready for Day 3`)*
+   *(Expected output: `Ready for Day 7`)*
 
 ---
 

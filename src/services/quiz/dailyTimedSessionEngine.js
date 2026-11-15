@@ -474,7 +474,9 @@ export async function runDailyTimedSession({
       })
       .setTimestamp();
 
-    const finalMention = `🏆 **@everyone — That's a wrap! The HCC Daily Tech Challenge (${meta.topic}) is complete! Check out today's Champions & Leaderboard below!** 🎊`;
+    const finalMention = meta.dayNumber >= 7
+      ? `🏆 **@everyone — That's a wrap on the 7-Day Daily Tech Challenge Sprint! The Day 7 Grand Finale (${meta.topic}) is complete! Check out today's Champions & Leaderboard below!** 🎊`
+      : `🏆 **@everyone — That's a wrap! The HCC Daily Tech Challenge (${meta.topic}) is complete! Check out today's Champions & Leaderboard below!** 🎊`;
 
     await targetChannel.send({
       content: finalMention,
@@ -482,13 +484,16 @@ export async function runDailyTimedSession({
       allowedMentions: { parse: ['everyone'] }, // Final announcement ping #2 of 2
     });
 
-    // Send the standalone "Whispers from the Mod" card as a separate follow-up message
-    await sleep(1500);
-    const standaloneHintCard = buildStandaloneHintEmbed();
-    await targetChannel.send({
-      embeds: [standaloneHintCard],
-      allowedMentions: { parse: [] }, // Never ping on hints
-    });
+    // Send the standalone "Whispers from the Mod" card as a follow-up only for intermediate days (< 7).
+    // On Day 7 (Grand Finale) or when sprint concludes, stop immediately after the second ping.
+    if (meta.dayNumber < 7) {
+      await sleep(1500);
+      const standaloneHintCard = buildStandaloneHintEmbed();
+      await targetChannel.send({
+        embeds: [standaloneHintCard],
+        allowedMentions: { parse: [] }, // Never ping on hints
+      });
+    }
 
     // Mark master session completed in Supabase
     state.status = 'completed';

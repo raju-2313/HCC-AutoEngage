@@ -219,13 +219,20 @@ export async function runDailyQuizCloseJob() {
 
 /**
  * Job 3: Weekly Leaderboard Drop & Snapshot (Official Community Roundup)
+ * NOTE: Automated cron execution is disabled per admin request.
+ * All final sprint announcements and weekly roundups are manually triggered by admins via `/admin announce weekly`.
  */
-export async function runWeeklyLeaderboardJob(client) {
-  logger.info('⏰ Running scheduled task: Weekly Community Roundup & Leaderboard');
+export async function runWeeklyLeaderboardJob(client, options = {}) {
+  logger.info('⏰ Weekly Community Roundup & Leaderboard job invoked', { isManualAdmin: options.isManualAdmin ?? false });
   try {
+    // Guard: Automated execution disabled. Only allow manual administrator execution.
+    if (!options.isManualAdmin) {
+      logger.info('Automated Weekly Leaderboard broadcast skipped: Manual admin mode active (disabled auto broadcast).');
+      return { success: true, reason: 'AUTOMATED_BROADCAST_DISABLED', skipped: true };
+    }
+
     const today = getKolkataDateString();
     // Guard: Only post weekly announcement on Sunday Nov 15 (conclusion of 7-day sprint) or beyond.
-    // Prevents posting premature/empty roundup on Sunday Nov 8 before sprint starts.
     if (today < '2026-11-15') {
       logger.info(`Weekly roundup skipped for ${today}: Sprint begins Nov 9 and concludes on Nov 15.`);
       return { success: true, reason: 'SPRINT_NOT_YET_CONCLUDED', skipped: true };
@@ -619,13 +626,9 @@ export function initScheduler(client) {
   );
   activeTasks.set('dailyClose', taskDailyClose);
 
-  // 3. Weekly Leaderboard (Sundays at 21:00 IST)
-  const taskWeeklyLeaderboard = cron.schedule(
-    '0 21 * * 0',
-    () => runWeeklyLeaderboardJob(client),
-    { timezone }
-  );
-  activeTasks.set('weeklyLeaderboard', taskWeeklyLeaderboard);
+  // 3. Weekly Leaderboard (Disabled automated run per admin instructions;
+  // all final sprint roundups and winner announcements will be executed manually via /admin announce weekly)
+  // const taskWeeklyLeaderboard = cron.schedule('0 21 * * 0', () => runWeeklyLeaderboardJob(client), { timezone });
 
   // 4. Monthly Winner Crowning (1st of month at 00:05 IST)
   const taskMonthlyWinners = cron.schedule(
