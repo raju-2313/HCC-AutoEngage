@@ -39,6 +39,8 @@ import { runMonthlyWinnerJob } from '../services/automation/scheduler.js';
 import { postWeeklyAnnouncement } from '../services/recognition/weeklyAnnouncementService.js';
 import { logActivity } from '../database/queries/logs.js';
 import { executePurge } from './purge.js';
+import { getTopMembersByPoints } from '../database/queries/leaderboard.js';
+import { supabaseAdmin } from '../database/client.js';
 
 const HR = '┄'.repeat(28);
 
@@ -126,6 +128,25 @@ export const data = new SlashCommandBuilder()
         sub
           .setName('winners')
           .setDescription('Calculate and post this month\'s champion podium.')
+      )
+      .addSubcommand((sub) =>
+        sub
+          .setName('leaderboard')
+          .setDescription('📢 Post the official 7-Day Sprint Final Leaderboard with @everyone ping.')
+          .addBooleanOption((opt) =>
+            opt
+              .setName('ping_everyone')
+              .setDescription('Ping @everyone with the announcement? (default: true)')
+              .setRequired(false)
+          )
+          .addIntegerOption((opt) =>
+            opt
+              .setName('top')
+              .setDescription('How many top participants to show (default: 10, max: 30)')
+              .setMinValue(3)
+              .setMaxValue(30)
+              .setRequired(false)
+          )
       )
   )
   .addSubcommandGroup((group) =>
@@ -397,6 +418,135 @@ export async function execute(interaction) {
           successEmbed(
             'Winners Announced',
             `Successfully computed standings and crowned **${result.winners?.length || 0}** champions!`
+          ),
+        ],
+      });
+    }
+
+    // ── 5b. /admin announce leaderboard ──────────────────────────────────────
+    if (group === 'announce' && sub === 'leaderboard') {
+      const pingEveryone = interaction.options.getBoolean('ping_everyone') ?? true;
+      const topN         = interaction.options.getInteger('top') ?? 10;
+      const targetChannel = interaction.channel;
+
+      // Fetch live leaderboard from DB (sorted by total_points DESC, total_xp DESC)
+      const allMembers = await getTopMembersByPoints(30);
+
+      // Also fetch attempt stats per member for the sprint period (Nov 9-15)
+      const { data: attempts } = await supabaseAdmin
+        .from('quiz_attempts')
+        .select('discord_id, is_correct')
+        .gte('submitted_at', '2026-11-09T00:00:00.000Z')
+        .lte('submitted_at', '2026-11-15T23:59:59.000Z');
+
+      const statsByDid = {};
+      (attempts || []).forEach(a => {
+        if (!statsByDid[a.discord_id]) statsByDid[a.discord_id] = { total: 0, correct: 0 };
+        statsByDid[a.discord_id].total++;
+        if (a.is_correct) statsByDid[a.discord_id].correct++;
+      });
+
+      const sprintIds = new Set(Object.keys(statsByDid));
+      // Filter to only sprint participants, re-sort
+      const sprintMembers = allMembers
+        .filter(m => sprintIds.has(m.discord_id))
+        .sort((a, b) => b.total_points - a.total_points || b.total_xp - a.total_xp);
+
+      const top = sprintMembers.slice(0, topN);
+
+      // ── Build the embed ──────────────────────────────────────────────────────
+      const RANK_ICONS = ['🥇', '🥈', '🥉'];
+      const RANK_LABELS = { 1: '1st Place', 2: '2nd Place', 3: '3rd Place' };
+
+      // Top 3 podium string
+      const podiumLines = top.slice(0, 3).map((m, i) => {
+        const s = statsByDid[m.discord_id] || { total: 0, correct: 0 };
+        const acc = s.total > 0 ? Math.round(s.correct / s.total * 100) : 0;
+        return `${RANK_ICONS[i]} **${RANK_LABELS[i + 1]}** — <@${m.discord_id}>\n` +
+               `┣ **${m.total_points} pts** · ${m.total_xp} XP · ${s.correct}/${s.total} correct (${acc}% acc)`;
+      }).join('\n\n');
+
+      // Full table rows #4 onwards
+      const tableRows = top.slice(3).map((m, i) => {
+        const rank = i + 4;
+        const s = statsByDid[m.discord_id] || { total: 0, correct: 0 };
+        const acc = s.total > 0 ? Math.round(s.correct / s.total * 100) : 0;
+        return `\`#${String(rank).padStart(2)}\` <@${m.discord_id}> — **${m.total_points} pts** · ${s.correct}/${s.total} ✅ · ${acc}%`;
+      }).join('\n');
+
+      const sprintEnd  = new Date('2026-11-15T13:30:00.000Z'); // 19:00 IST
+      const totalPts   = sprintMembers.reduce((s, m) => s + (m.total_points || 0), 0);
+      const totalQs    = Object.values(statsByDid).reduce((s, v) => s + v.total, 0);
+      const totalRight = Object.values(statsByDid).reduce((s, v) => s + v.correct, 0);
+
+      const embed = new EmbedBuilder()
+        .setColor(0xFFD700)   // Gold
+        .setTitle('🏆  HackerRank Campus Community — 7-Day Sprint Final Results!')
+        .setDescription(
+          `> **Sprint Period:** Nov 9 – Nov 15, 2026 · **${sprintMembers.length} Participants** · **${totalQs} Answers Submitted**\n` +
+          `> *Scores include bug-fix compensation for Discord interaction timeouts across all 7 days.*\n` +
+          `┄`.repeat(28)
+        )
+        .addFields(
+          {
+            name: '🎖️  Podium',
+            value: podiumLines,
+            inline: false,
+          },
+          ...(tableRows
+            ? [{
+                name: `📋  Full Rankings (#4 – #${topN})`,
+                value: tableRows,
+                inline: false,
+              }]
+            : []
+          ),
+          {
+            name: '📊  Sprint Statistics',
+            value: [
+              `• **Total Participants:** ${sprintMembers.length}`,
+              `• **Total Questions Answered:** ${totalQs}`,
+              `• **Total Correct:** ${totalRight} (${Math.round(totalRight / totalQs * 100)}% community accuracy)`,
+              `• **Total Points Distributed:** ${totalPts} pts`,
+              `• **Top Accuracy:** ${(() => {
+                const best = sprintMembers.reduce((best, m) => {
+                  const s = statsByDid[m.discord_id] || { total: 0, correct: 0 };
+                  if (s.total < 3) return best;
+                  const acc = s.correct / s.total;
+                  return acc > best.acc ? { acc, name: m.username } : best;
+                }, { acc: 0, name: '?' });
+                return `${best.name} (${Math.round(best.acc * 100)}%)`;
+              })()}`,
+            ].join('\n'),
+            inline: false,
+          }
+        )
+        .setFooter({ text: 'HCC AutoEngage · 7-Day Sprint · Final Official Results — Bug-Fix Compensated' })
+        .setTimestamp(sprintEnd);
+
+      // Send to the channel where admin ran the command
+      const pingContent = pingEveryone ? '@everyone\n' : '';
+
+      await targetChannel.send({
+        content: pingContent +
+          '━'.repeat(36) + '\n' +
+          '🚨  **THE 7-DAY SPRINT HAS CONCLUDED!** 🚨\n' +
+          '━'.repeat(36),
+        embeds: [embed],
+      });
+
+      await logActivity('admin_announce_leaderboard', interaction.user.id, {
+        channelId: targetChannel.id,
+        participantsShown: top.length,
+        pingEveryone,
+      });
+
+      return interaction.editReply({
+        embeds: [
+          successEmbed(
+            'Final Leaderboard Announced',
+            `Successfully posted the **7-Day Sprint Final Leaderboard** to <#${targetChannel.id}> with ${pingEveryone ? '@everyone ping' : 'no @everyone ping'}!\n\n` +
+            `Showing top **${top.length}** of **${sprintMembers.length}** participants.`
           ),
         ],
       });
