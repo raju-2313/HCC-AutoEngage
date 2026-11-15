@@ -427,7 +427,32 @@ export async function execute(interaction) {
     if (group === 'announce' && sub === 'leaderboard') {
       const pingEveryone = interaction.options.getBoolean('ping_everyone') ?? true;
       const topN         = interaction.options.getInteger('top') ?? 10;
-      const targetChannel = interaction.channel;
+      const targetChannelId = config.discord.channels.announcements || '1538470372918165587';
+
+      const targetChannel = await interaction.client.channels.fetch(targetChannelId).catch(() => null);
+      if (!targetChannel) {
+        return interaction.editReply({
+          embeds: [errorEmbed('Channel Not Found', `Could not find announcement channel \`${targetChannelId}\`.`)],
+        });
+      }
+
+      // Check bot permissions in target announcement channel
+      const botMember = await interaction.guild.members.fetchMe();
+      const perms = targetChannel.permissionsFor(botMember);
+      if (!perms || !perms.has(PermissionFlagsBits.SendMessages)) {
+        return interaction.editReply({
+          embeds: [
+            errorEmbed(
+              'Missing Bot Permissions',
+              `The bot cannot send messages in <#${targetChannel.id}> because **Send Messages** permission is disabled for the bot in that channel.\n\n` +
+              `**How to fix:**\n` +
+              `1. Right-click the **HCC AutoEngage** bot in the server member list → **Roles** → add the **HCC Moderator** role.\n` +
+              `*OR*\n` +
+              `2. Go to <#${targetChannel.id}> Channel Settings (⚙️) → **Permissions** → Add **HCC AutoEngage** → Set **Send Messages** & **Embed Links** to **✅ Allow**.`
+            ),
+          ],
+        });
+      }
 
       // Fetch live leaderboard from DB (sorted by total_points DESC, total_xp DESC)
       const allMembers = await getTopMembersByPoints(30);
@@ -500,10 +525,10 @@ export async function execute(interaction) {
         .setFooter({ text: 'HCC AutoEngage • Final Official Results' })
         .setTimestamp();
 
-      // Send to the channel where admin ran the command
+      // Post the PUBLIC announcement directly to the announcement channel
       const pingContent = pingEveryone ? '@everyone\n' : '';
 
-      await targetChannel.send({
+      const sentMsg = await targetChannel.send({
         content: pingContent +
           '━'.repeat(36) + '\n' +
           '🚨  **THE 7-DAY SPRINT HAS CONCLUDED!** 🚨\n' +
@@ -513,6 +538,7 @@ export async function execute(interaction) {
 
       await logActivity('admin_announce_leaderboard', interaction.user.id, {
         channelId: targetChannel.id,
+        messageId: sentMsg.id,
         participantsShown: top.length,
         pingEveryone,
       });
@@ -521,8 +547,10 @@ export async function execute(interaction) {
         embeds: [
           successEmbed(
             'Final Leaderboard Announced',
-            `Successfully posted the **7-Day Sprint Final Leaderboard** to <#${targetChannel.id}> with ${pingEveryone ? '@everyone ping' : 'no @everyone ping'}!\n\n` +
-            `Showing top **${top.length}** of **${sprintMembers.length}** participants.`
+            `Successfully published the public **7-Day Sprint Final Leaderboard** to <#${targetChannel.id}> with ${pingEveryone ? '@everyone ping' : 'no @everyone ping'}!\n\n` +
+            `• **Channel:** <#${targetChannel.id}>\n` +
+            `• **Message Link:** [Jump to Announcement](${sentMsg.url})\n` +
+            `• **Top Participants Shown:** ${top.length} of ${sprintMembers.length}`
           ),
         ],
       });
