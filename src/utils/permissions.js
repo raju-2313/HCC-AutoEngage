@@ -3,14 +3,14 @@
  * Helper utilities for permission and role checks.
  */
 
-import { config } from '../config/index.js';
+import { config } from "../config/index.js";
 
 const ALLOWED_ADMIN_ROLES = [
   config.app.adminRoleName,
-  'HCC Moderator',
-  'HCC Admin',
-  'Moderator',
-  'Admin',
+  "HCC Moderator",
+  "HCC Admin",
+  "Moderator",
+  "Admin",
 ].filter(Boolean);
 
 /**
@@ -28,35 +28,53 @@ export function isAdmin(interaction) {
   }
 
   // 2. Check Discord permissions bit-flags
-  if (interaction.memberPermissions?.has('Administrator')) return true;
-  if (interaction.memberPermissions?.has('ManageGuild')) return true;
+  if (interaction.memberPermissions?.has("Administrator")) return true;
+  if (interaction.memberPermissions?.has("ManageGuild")) return true;
 
   // 3. Find matching roles in the guild
   const guildRoles = interaction.guild?.roles?.cache;
   const targetRoleIds = guildRoles
     ? Array.from(guildRoles.values())
-        .filter((r) => ALLOWED_ADMIN_ROLES.some((name) => name.toLowerCase() === r.name.toLowerCase()))
+        .filter((r) =>
+          ALLOWED_ADMIN_ROLES.some(
+            (name) => name.toLowerCase() === r.name.toLowerCase(),
+          ),
+        )
         .map((r) => r.id)
     : [];
 
   // Check member role cache (GuildMemberRoleManager)
   if (interaction.member.roles?.cache) {
     const cache = interaction.member.roles.cache;
-    const cacheValues = typeof cache.values === 'function' ? Array.from(cache.values()) : [];
-    const hasRoleByName = typeof cache.some === 'function'
-      ? cache.some((role) => ALLOWED_ADMIN_ROLES.some((name) => name.toLowerCase() === role?.name?.toLowerCase()))
-      : cacheValues.some((role) => ALLOWED_ADMIN_ROLES.some((name) => name.toLowerCase() === role?.name?.toLowerCase()));
+    const cacheValues =
+      typeof cache.values === "function" ? Array.from(cache.values()) : [];
+    const hasRoleByName =
+      typeof cache.some === "function"
+        ? cache.some((role) =>
+            ALLOWED_ADMIN_ROLES.some(
+              (name) => name.toLowerCase() === role?.name?.toLowerCase(),
+            ),
+          )
+        : cacheValues.some((role) =>
+            ALLOWED_ADMIN_ROLES.some(
+              (name) => name.toLowerCase() === role?.name?.toLowerCase(),
+            ),
+          );
     if (hasRoleByName) return true;
 
     const hasRoleById = targetRoleIds.some((id) =>
-      typeof cache.has === 'function' ? cache.has(id) : cacheValues.some((r) => r.id === id)
+      typeof cache.has === "function"
+        ? cache.has(id)
+        : cacheValues.some((r) => r.id === id),
     );
     if (hasRoleById) return true;
   }
 
   // Check raw roles array if member roles is an array of IDs
   if (Array.isArray(interaction.member.roles)) {
-    const hasRawRoleId = interaction.member.roles.some((roleId) => targetRoleIds.includes(roleId));
+    const hasRawRoleId = interaction.member.roles.some((roleId) =>
+      targetRoleIds.includes(roleId),
+    );
     if (hasRawRoleId) return true;
   }
 
@@ -81,4 +99,3 @@ export function isStickerAdmin(interaction) {
   // 2. Fallback to standard admin permissions if ADMIN_USER_IDS is not explicitly configured
   return isAdmin(interaction);
 }
-

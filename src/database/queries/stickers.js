@@ -3,10 +3,10 @@
  * Database queries for Sticker Discovery, Moderation, and Uploads.
  */
 
-import { supabaseAdmin } from '../client.js';
-import { logger } from '../../utils/logger.js';
+import { supabaseAdmin } from "../client.js";
+import { logger } from "../../utils/logger.js";
 
-const TABLE = 'sticker_candidates';
+const TABLE = "sticker_candidates";
 
 /**
  * Saves newly discovered sticker candidates, ignoring duplicates on (name, pack_id).
@@ -22,14 +22,21 @@ export async function saveStickerCandidates(candidates) {
     const { data, error } = await supabaseAdmin
       .from(TABLE)
       .upsert(candidates, {
-        onConflict: 'name,pack_id',
+        onConflict: "name,pack_id",
         ignoreDuplicates: true,
       })
       .select();
 
     if (error) {
-      logger.error('Failed to save sticker candidates', { error: error.message });
-      return { inserted: 0, skipped: candidates.length, data: [], error: error.message };
+      logger.error("Failed to save sticker candidates", {
+        error: error.message,
+      });
+      return {
+        inserted: 0,
+        skipped: candidates.length,
+        data: [],
+        error: error.message,
+      };
     }
 
     const insertedCount = data ? data.length : 0;
@@ -37,8 +44,13 @@ export async function saveStickerCandidates(candidates) {
 
     return { inserted: insertedCount, skipped: skippedCount, data: data || [] };
   } catch (err) {
-    logger.error('Exception in saveStickerCandidates', { error: err.message });
-    return { inserted: 0, skipped: candidates.length, data: [], error: err.message };
+    logger.error("Exception in saveStickerCandidates", { error: err.message });
+    return {
+      inserted: 0,
+      skipped: candidates.length,
+      data: [],
+      error: err.message,
+    };
   }
 }
 
@@ -57,24 +69,26 @@ export async function getPendingCandidates(options = {}) {
   try {
     let query = supabaseAdmin
       .from(TABLE)
-      .select('*')
-      .eq('review_status', 'pending_review')
-      .order('created_at', { ascending: false })
+      .select("*")
+      .eq("review_status", "pending_review")
+      .order("created_at", { ascending: false })
       .range(offset, offset + limit - 1);
 
-    if (category) query = query.eq('category', category);
-    if (packId) query = query.eq('pack_id', packId);
+    if (category) query = query.eq("category", category);
+    if (packId) query = query.eq("pack_id", packId);
 
     const { data, error } = await query;
 
     if (error) {
-      logger.error('Failed to fetch pending sticker candidates', { error: error.message });
+      logger.error("Failed to fetch pending sticker candidates", {
+        error: error.message,
+      });
       return [];
     }
 
     return data || [];
   } catch (err) {
-    logger.error('Exception in getPendingCandidates', { error: err.message });
+    logger.error("Exception in getPendingCandidates", { error: err.message });
     return [];
   }
 }
@@ -88,18 +102,21 @@ export async function getCandidateById(id) {
   try {
     const { data, error } = await supabaseAdmin
       .from(TABLE)
-      .select('*')
-      .eq('id', id)
+      .select("*")
+      .eq("id", id)
       .maybeSingle();
 
     if (error) {
-      logger.error('Failed to fetch sticker candidate by ID', { id, error: error.message });
+      logger.error("Failed to fetch sticker candidate by ID", {
+        id,
+        error: error.message,
+      });
       return null;
     }
 
     return data;
   } catch (err) {
-    logger.error('Exception in getCandidateById', { id, error: err.message });
+    logger.error("Exception in getCandidateById", { id, error: err.message });
     return null;
   }
 }
@@ -113,18 +130,24 @@ export async function getCandidatesByPackId(packId) {
   try {
     const { data, error } = await supabaseAdmin
       .from(TABLE)
-      .select('*')
-      .eq('pack_id', packId)
-      .order('name', { ascending: true });
+      .select("*")
+      .eq("pack_id", packId)
+      .order("name", { ascending: true });
 
     if (error) {
-      logger.error('Failed to fetch candidates by pack ID', { packId, error: error.message });
+      logger.error("Failed to fetch candidates by pack ID", {
+        packId,
+        error: error.message,
+      });
       return [];
     }
 
     return data || [];
   } catch (err) {
-    logger.error('Exception in getCandidatesByPackId', { packId, error: err.message });
+    logger.error("Exception in getCandidatesByPackId", {
+      packId,
+      error: err.message,
+    });
     return [];
   }
 }
@@ -138,12 +161,16 @@ export async function getCandidatesByPackId(packId) {
  * @param {string} [updateData.rejectionReason]
  * @returns {Promise<Object|null>}
  */
-export async function updateCandidateReviewStatus(id, { reviewStatus, approvedBy, rejectionReason }) {
+export async function updateCandidateReviewStatus(
+  id,
+  { reviewStatus, approvedBy, rejectionReason },
+) {
   try {
     const payload = {
       review_status: reviewStatus,
       approved_by: approvedBy || null,
-      approved_at: reviewStatus === 'approved' ? new Date().toISOString() : null,
+      approved_at:
+        reviewStatus === "approved" ? new Date().toISOString() : null,
       rejection_reason: rejectionReason || null,
       updated_at: new Date().toISOString(),
     };
@@ -151,18 +178,24 @@ export async function updateCandidateReviewStatus(id, { reviewStatus, approvedBy
     const { data, error } = await supabaseAdmin
       .from(TABLE)
       .update(payload)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .maybeSingle();
 
     if (error) {
-      logger.error('Failed to update candidate review status', { id, error: error.message });
+      logger.error("Failed to update candidate review status", {
+        id,
+        error: error.message,
+      });
       return null;
     }
 
     return data;
   } catch (err) {
-    logger.error('Exception in updateCandidateReviewStatus', { id, error: err.message });
+    logger.error("Exception in updateCandidateReviewStatus", {
+      id,
+      error: err.message,
+    });
     return null;
   }
 }
@@ -176,12 +209,16 @@ export async function updateCandidateReviewStatus(id, { reviewStatus, approvedBy
  * @param {string} [updateData.rejectionReason]
  * @returns {Promise<Array<Object>>}
  */
-export async function updatePackReviewStatus(packId, { reviewStatus, approvedBy, rejectionReason }) {
+export async function updatePackReviewStatus(
+  packId,
+  { reviewStatus, approvedBy, rejectionReason },
+) {
   try {
     const payload = {
       review_status: reviewStatus,
       approved_by: approvedBy || null,
-      approved_at: reviewStatus === 'approved' ? new Date().toISOString() : null,
+      approved_at:
+        reviewStatus === "approved" ? new Date().toISOString() : null,
       rejection_reason: rejectionReason || null,
       updated_at: new Date().toISOString(),
     };
@@ -189,18 +226,24 @@ export async function updatePackReviewStatus(packId, { reviewStatus, approvedBy,
     const { data, error } = await supabaseAdmin
       .from(TABLE)
       .update(payload)
-      .eq('pack_id', packId)
-      .eq('review_status', 'pending_review')
+      .eq("pack_id", packId)
+      .eq("review_status", "pending_review")
       .select();
 
     if (error) {
-      logger.error('Failed to update pack review status', { packId, error: error.message });
+      logger.error("Failed to update pack review status", {
+        packId,
+        error: error.message,
+      });
       return [];
     }
 
     return data || [];
   } catch (err) {
-    logger.error('Exception in updatePackReviewStatus', { packId, error: err.message });
+    logger.error("Exception in updatePackReviewStatus", {
+      packId,
+      error: err.message,
+    });
     return [];
   }
 }
@@ -214,7 +257,10 @@ export async function updatePackReviewStatus(packId, { reviewStatus, approvedBy,
  * @param {string} [uploadInfo.uploadError]
  * @returns {Promise<Object|null>}
  */
-export async function updateCandidateUploadStatus(id, { uploadStatus, discordStickerId, uploadError }) {
+export async function updateCandidateUploadStatus(
+  id,
+  { uploadStatus, discordStickerId, uploadError },
+) {
   try {
     const payload = {
       upload_status: uploadStatus,
@@ -226,18 +272,24 @@ export async function updateCandidateUploadStatus(id, { uploadStatus, discordSti
     const { data, error } = await supabaseAdmin
       .from(TABLE)
       .update(payload)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .maybeSingle();
 
     if (error) {
-      logger.error('Failed to update sticker upload status', { id, error: error.message });
+      logger.error("Failed to update sticker upload status", {
+        id,
+        error: error.message,
+      });
       return null;
     }
 
     return data;
   } catch (err) {
-    logger.error('Exception in updateCandidateUploadStatus', { id, error: err.message });
+    logger.error("Exception in updateCandidateUploadStatus", {
+      id,
+      error: err.message,
+    });
     return null;
   }
 }
@@ -251,20 +303,24 @@ export async function getApprovedUnuploadedCandidates(limit = 20) {
   try {
     const { data, error } = await supabaseAdmin
       .from(TABLE)
-      .select('*')
-      .eq('review_status', 'approved')
-      .in('upload_status', ['not_uploaded', 'failed', 'skipped_slots'])
-      .order('created_at', { ascending: true })
+      .select("*")
+      .eq("review_status", "approved")
+      .in("upload_status", ["not_uploaded", "failed", "skipped_slots"])
+      .order("created_at", { ascending: true })
       .limit(limit);
 
     if (error) {
-      logger.error('Failed to fetch approved unuploaded candidates', { error: error.message });
+      logger.error("Failed to fetch approved unuploaded candidates", {
+        error: error.message,
+      });
       return [];
     }
 
     return data || [];
   } catch (err) {
-    logger.error('Exception in getApprovedUnuploadedCandidates', { error: err.message });
+    logger.error("Exception in getApprovedUnuploadedCandidates", {
+      error: err.message,
+    });
     return [];
   }
 }
@@ -276,7 +332,10 @@ export async function getApprovedUnuploadedCandidates(limit = 20) {
  * @param {string} verificationResult.contentStatus
  * @param {string} [verificationResult.rejectionReason]
  */
-export async function updateVerificationStatus(id, { contentStatus, rejectionReason }) {
+export async function updateVerificationStatus(
+  id,
+  { contentStatus, rejectionReason },
+) {
   try {
     const payload = {
       content_status: contentStatus,
@@ -284,25 +343,31 @@ export async function updateVerificationStatus(id, { contentStatus, rejectionRea
       updated_at: new Date().toISOString(),
     };
 
-    if (contentStatus.startsWith('flagged_')) {
-      payload.review_status = 'rejected';
+    if (contentStatus.startsWith("flagged_")) {
+      payload.review_status = "rejected";
     }
 
     const { data, error } = await supabaseAdmin
       .from(TABLE)
       .update(payload)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .maybeSingle();
 
     if (error) {
-      logger.error('Failed to update verification status', { id, error: error.message });
+      logger.error("Failed to update verification status", {
+        id,
+        error: error.message,
+      });
       return null;
     }
 
     return data;
   } catch (err) {
-    logger.error('Exception in updateVerificationStatus', { id, error: err.message });
+    logger.error("Exception in updateVerificationStatus", {
+      id,
+      error: err.message,
+    });
     return null;
   }
 }
@@ -319,10 +384,22 @@ export async function getStickerStats() {
       { count: uploadedCount },
       { count: rejectedCount },
     ] = await Promise.all([
-      supabaseAdmin.from(TABLE).select('*', { count: 'exact', head: true }).eq('review_status', 'pending_review'),
-      supabaseAdmin.from(TABLE).select('*', { count: 'exact', head: true }).eq('review_status', 'approved'),
-      supabaseAdmin.from(TABLE).select('*', { count: 'exact', head: true }).eq('upload_status', 'uploaded'),
-      supabaseAdmin.from(TABLE).select('*', { count: 'exact', head: true }).eq('review_status', 'rejected'),
+      supabaseAdmin
+        .from(TABLE)
+        .select("*", { count: "exact", head: true })
+        .eq("review_status", "pending_review"),
+      supabaseAdmin
+        .from(TABLE)
+        .select("*", { count: "exact", head: true })
+        .eq("review_status", "approved"),
+      supabaseAdmin
+        .from(TABLE)
+        .select("*", { count: "exact", head: true })
+        .eq("upload_status", "uploaded"),
+      supabaseAdmin
+        .from(TABLE)
+        .select("*", { count: "exact", head: true })
+        .eq("review_status", "rejected"),
     ]);
 
     return {
@@ -332,8 +409,7 @@ export async function getStickerStats() {
       rejected: rejectedCount || 0,
     };
   } catch (err) {
-    logger.error('Exception in getStickerStats', { error: err.message });
+    logger.error("Exception in getStickerStats", { error: err.message });
     return { pending: 0, approved: 0, uploaded: 0, rejected: 0 };
   }
 }
-

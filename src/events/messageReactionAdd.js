@@ -8,11 +8,11 @@
  *   - Enforces deduplication using messageId:emoji as the reference key.
  */
 
-import { logger } from '../utils/logger.js';
-import { recordEngagementEvent } from '../database/queries/engagement.js';
-import { recordDailyParticipation } from '../database/queries/members.js';
+import { logger } from "../utils/logger.js";
+import { recordEngagementEvent } from "../database/queries/engagement.js";
+import { recordDailyParticipation } from "../database/queries/members.js";
 
-export const name = 'messageReactionAdd';
+export const name = "messageReactionAdd";
 export const once = false;
 
 export async function execute(reaction, user) {
@@ -23,7 +23,7 @@ export async function execute(reaction, user) {
 
   try {
     // Record daily participation streak for active reaction engagement
-    recordDailyParticipation(user.id, 'reaction_add').catch(() => {});
+    recordDailyParticipation(user.id, "reaction_add").catch(() => {});
 
     // If partial reaction or message, fetch details
     if (reaction.partial) {
@@ -38,30 +38,31 @@ export async function execute(reaction, user) {
       return;
     }
 
-    const discordId   = user.id;
-    const username    = user.username;
-    const channelId   = reaction.message.channelId;
-    const emojiKey    = reaction.emoji.id || reaction.emoji.name;
+    const discordId = user.id;
+    const username = user.username;
+    const channelId = reaction.message.channelId;
+    const emojiKey = reaction.emoji.id || reaction.emoji.name;
     const referenceId = `${reaction.message.id}:${emojiKey}:${user.id}`;
 
     const result = await recordEngagementEvent({
       discordId,
       username,
-      eventType: 'reaction_add',
+      eventType: "reaction_add",
       channelId,
       referenceId,
       metadata: { emoji: reaction.emoji.name },
     });
 
     if (result.success && result.points_awarded > 0) {
-      logger.debug('Reaction engagement awarded', {
+      logger.debug("Reaction engagement awarded", {
         user: username,
         channelId,
         points: result.points_awarded,
       });
     }
   } catch (err) {
-    logger.debug('Non-blocking error in messageReactionAdd handler', { error: err.message });
+    logger.debug("Non-blocking error in messageReactionAdd handler", {
+      error: err.message,
+    });
   }
 }
-

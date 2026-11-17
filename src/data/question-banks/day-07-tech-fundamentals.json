@@ -133,7 +133,10 @@
     "codeSnippet": null,
     "options": [
       { "id": "A", "text": "They use spinning magnetic platters" },
-      { "id": "B", "text": "They have no moving mechanical parts and use flash memory" },
+      {
+        "id": "B",
+        "text": "They have no moving mechanical parts and use flash memory"
+      },
       { "id": "C", "text": "They only store text files" },
       { "id": "D", "text": "They require no electrical power" }
     ],
@@ -180,4 +183,3 @@
     "timeLimitSeconds": 15
   }
 ]
-

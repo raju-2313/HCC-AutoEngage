@@ -10,29 +10,40 @@
  *   5. Inactive Member Streak Reset (Daily 03:00 AM IST)
  */
 
-import cron from 'node-cron';
-import { EmbedBuilder } from 'discord.js';
-import { config } from '../../config/index.js';
-import { logger } from '../../utils/logger.js';
-import { publishDailyQuiz } from '../quiz/quizService.js';
-import { getActiveQuiz, closeQuiz, closeExpiredQuizzes, getQuizByScheduledDate } from '../../database/queries/quizzes.js';
-import { getKolkataDateString } from '../quiz/questionBank.js';
-import { getDayQuestionSet, isSprintDate } from '../quiz/sessionQuestionManager.js';
-import { runDailyTimedSession, reconcileDailySessionOnStartup } from '../quiz/dailyTimedSessionEngine.js';
-import { getDailySessionRecord } from '../../database/queries/quizSessions.js';
+import cron from "node-cron";
+import { EmbedBuilder } from "discord.js";
+import { config } from "../../config/index.js";
+import { logger } from "../../utils/logger.js";
+import { publishDailyQuiz } from "../quiz/quizService.js";
+import {
+  getActiveQuiz,
+  closeQuiz,
+  closeExpiredQuizzes,
+  getQuizByScheduledDate,
+} from "../../database/queries/quizzes.js";
+import { getKolkataDateString } from "../quiz/questionBank.js";
+import {
+  getDayQuestionSet,
+  isSprintDate,
+} from "../quiz/sessionQuestionManager.js";
+import {
+  runDailyTimedSession,
+  reconcileDailySessionOnStartup,
+} from "../quiz/dailyTimedSessionEngine.js";
+import { getDailySessionRecord } from "../../database/queries/quizSessions.js";
 import {
   buildWeeklyLeaderboardEmbed,
   computeMonthlyWinners,
   buildMonthlyWinnerAnnouncement,
   takeLeaderboardSnapshot,
-} from '../recognition/leaderboardService.js';
-import { postWeeklyAnnouncement } from '../recognition/weeklyAnnouncementService.js';
-import { resetInactiveStreaks } from '../../database/queries/members.js';
-import { logActivity } from '../../database/queries/logs.js';
-import { discoveryService } from '../stickers/discoveryService.js';
-import { getPendingCandidates } from '../../database/queries/stickers.js';
-import { emojiDiscoveryService } from '../emojis/discoveryService.js';
-import { getPendingEmojiCandidates } from '../../database/queries/emojis.js';
+} from "../recognition/leaderboardService.js";
+import { postWeeklyAnnouncement } from "../recognition/weeklyAnnouncementService.js";
+import { resetInactiveStreaks } from "../../database/queries/members.js";
+import { logActivity } from "../../database/queries/logs.js";
+import { discoveryService } from "../stickers/discoveryService.js";
+import { getPendingCandidates } from "../../database/queries/stickers.js";
+import { emojiDiscoveryService } from "../emojis/discoveryService.js";
+import { getPendingEmojiCandidates } from "../../database/queries/emojis.js";
 
 /**
  * MASTER SWITCH: Phase 1 Testing Completed (Nov 15, 2026).
@@ -69,28 +80,32 @@ async function resolveChannel(client, ...channelIds) {
  */
 export async function runDailyQuizDropJob(client, options = {}) {
   if (AUTOMATION_SUSPENDED && !options.force) {
-    logger.info('🛑 [AUTOMATION SUSPENDED] Daily Quiz Drop bypassed. Phase 1 sprint testing completed.');
-    return { success: true, reason: 'AUTOMATION_SUSPENDED' };
+    logger.info(
+      "🛑 [AUTOMATION SUSPENDED] Daily Quiz Drop bypassed. Phase 1 sprint testing completed.",
+    );
+    return { success: true, reason: "AUTOMATION_SUSPENDED" };
   }
 
   const currentDate = options.date || getKolkataDateString();
   // Channel resolution: use explicitly passed channelId → production quiz channel (never test channel in production)
   const channelId = options.channelId || config.discord.channels.quiz;
 
-  logger.info('⏰ Running scheduled task: Daily Quiz Drop', {
+  logger.info("⏰ Running scheduled task: Daily Quiz Drop", {
     targetDate: currentDate,
     channelId,
     retryAttempt: options.retryAttempt || 0,
   });
 
   if (isDailyQuizJobRunning && !options.force) {
-    logger.warn('Daily Quiz Drop already in progress. Skipping concurrent run.');
-    return { success: false, reason: 'JOB_ALREADY_RUNNING' };
+    logger.warn(
+      "Daily Quiz Drop already in progress. Skipping concurrent run.",
+    );
+    return { success: false, reason: "JOB_ALREADY_RUNNING" };
   }
 
   if (!channelId) {
-    logger.warn('Skipping Daily Quiz Drop: No target channel is configured');
-    return { success: false, reason: 'CHANNEL_NOT_CONFIGURED' };
+    logger.warn("Skipping Daily Quiz Drop: No target channel is configured");
+    return { success: false, reason: "CHANNEL_NOT_CONFIGURED" };
   }
 
   isDailyQuizJobRunning = true;
@@ -98,11 +113,15 @@ export async function runDailyQuizDropJob(client, options = {}) {
   try {
     // 1. Auto-close any lingering active quizzes from previous dates
     const closedCount = await closeExpiredQuizzes(currentDate).catch((err) => {
-      logger.warn('Notice: error during expired quiz cleanup before drop', { error: err.message });
+      logger.warn("Notice: error during expired quiz cleanup before drop", {
+        error: err.message,
+      });
       return [];
     });
     if (closedCount.length > 0) {
-      logger.info(`Auto-closed ${closedCount.length} expired quiz(zes) from prior dates.`);
+      logger.info(
+        `Auto-closed ${closedCount.length} expired quiz(zes) from prior dates.`,
+      );
     }
 
     // Check if a 10-question timed challenge session is scheduled for this date
@@ -122,13 +141,16 @@ export async function runDailyQuizDropJob(client, options = {}) {
     // CRITICAL GUARD: Outside the curated 7-day challenge window (Nov 9 - Nov 15, 2026),
     // NEVER fall back to uncurated single quizzes or broadcast @everyone pings!
     if (!options.forceLegacyQuiz) {
-      logger.info(`[QUIZ DROP SKIPPED] No curated 7-day challenge scheduled for ${currentDate}. Quiz drop cleanly bypassed.`, {
-        currentDate,
-        channelId,
-      });
+      logger.info(
+        `[QUIZ DROP SKIPPED] No curated 7-day challenge scheduled for ${currentDate}. Quiz drop cleanly bypassed.`,
+        {
+          currentDate,
+          channelId,
+        },
+      );
       return {
         success: true,
-        reason: 'NO_CHALLENGE_SCHEDULED_FOR_DATE',
+        reason: "NO_CHALLENGE_SCHEDULED_FOR_DATE",
         skipped: true,
         date: currentDate,
       };
@@ -136,12 +158,18 @@ export async function runDailyQuizDropJob(client, options = {}) {
 
     // 2. Check if today's quiz was already posted (duplicate protection & restart recovery - ONLY if forceLegacyQuiz is true)
     const existingQuiz = await getQuizByScheduledDate(currentDate);
-    if (existingQuiz && (existingQuiz.status === 'active' || existingQuiz.status === 'closed')) {
-      logger.info('Today\'s quiz has already been posted. No duplicate publication needed.', {
-        quizId: existingQuiz.id,
-        scheduledFor: existingQuiz.scheduled_for,
-        status: existingQuiz.status,
-      });
+    if (
+      existingQuiz &&
+      (existingQuiz.status === "active" || existingQuiz.status === "closed")
+    ) {
+      logger.info(
+        "Today's quiz has already been posted. No duplicate publication needed.",
+        {
+          quizId: existingQuiz.id,
+          scheduledFor: existingQuiz.scheduled_for,
+          status: existingQuiz.status,
+        },
+      );
       return { success: true, quizId: existingQuiz.id, alreadyExisted: true };
     }
 
@@ -161,11 +189,14 @@ export async function runDailyQuizDropJob(client, options = {}) {
         break; // Success
       } catch (postErr) {
         lastError = postErr;
-        logger.error(`Failed attempt ${attempt}/${maxRetries} to publish daily quiz`, {
-          error: postErr.message,
-          channelId,
-          date: currentDate,
-        });
+        logger.error(
+          `Failed attempt ${attempt}/${maxRetries} to publish daily quiz`,
+          {
+            error: postErr.message,
+            channelId,
+            date: currentDate,
+          },
+        );
         if (attempt < maxRetries) {
           const delayMs = attempt * 5000;
           logger.info(`Retrying Daily Quiz Drop in ${delayMs / 1000}s...`);
@@ -175,16 +206,18 @@ export async function runDailyQuizDropJob(client, options = {}) {
     }
 
     if (!result) {
-      throw lastError || new Error('Daily quiz publication failed after retries.');
+      throw (
+        lastError || new Error("Daily quiz publication failed after retries.")
+      );
     }
 
-    await logActivity('daily_quiz_scheduled_drop', 'scheduler', {
+    await logActivity("daily_quiz_scheduled_drop", "scheduler", {
       quizId: result.quiz.id,
       channelId,
       scheduledFor: currentDate,
     });
 
-    logger.info('Daily Quiz Drop completed successfully ✅', {
+    logger.info("Daily Quiz Drop completed successfully ✅", {
       quizId: result.quiz.id,
       date: currentDate,
       channelId,
@@ -192,7 +225,10 @@ export async function runDailyQuizDropJob(client, options = {}) {
 
     return { success: true, quizId: result.quiz.id };
   } catch (err) {
-    logger.error('Failed to run Daily Quiz Drop job', { error: err.message, stack: err.stack });
+    logger.error("Failed to run Daily Quiz Drop job", {
+      error: err.message,
+      stack: err.stack,
+    });
     return { success: false, error: err.message };
   } finally {
     isDailyQuizJobRunning = false;
@@ -203,26 +239,33 @@ export async function runDailyQuizDropJob(client, options = {}) {
  * Job 2: Daily Quiz Auto-Close
  */
 export async function runDailyQuizCloseJob() {
-  logger.info('⏰ Running scheduled task: Daily Quiz Auto-Close');
+  logger.info("⏰ Running scheduled task: Daily Quiz Auto-Close");
   if (isDailyCloseJobRunning) {
-    logger.warn('Daily Quiz Auto-Close job already running. Skipping.');
-    return { success: false, reason: 'JOB_ALREADY_RUNNING' };
+    logger.warn("Daily Quiz Auto-Close job already running. Skipping.");
+    return { success: false, reason: "JOB_ALREADY_RUNNING" };
   }
 
   isDailyCloseJobRunning = true;
   try {
     const active = await getActiveQuiz();
     if (!active) {
-      logger.info('No active quiz found to close.');
+      logger.info("No active quiz found to close.");
       return { success: true, closed: false };
     }
 
     await closeQuiz(active.id);
-    await logActivity('daily_quiz_auto_close', 'scheduler', { quizId: active.id });
-    logger.info('Active quiz auto-closed successfully ✅', { quizId: active.id });
+    await logActivity("daily_quiz_auto_close", "scheduler", {
+      quizId: active.id,
+    });
+    logger.info("Active quiz auto-closed successfully ✅", {
+      quizId: active.id,
+    });
     return { success: true, closed: true, quizId: active.id };
   } catch (err) {
-    logger.error('Failed to auto-close active quiz', { error: err.message, stack: err.stack });
+    logger.error("Failed to auto-close active quiz", {
+      error: err.message,
+      stack: err.stack,
+    });
     return { success: false, error: err.message };
   } finally {
     isDailyCloseJobRunning = false;
@@ -235,25 +278,41 @@ export async function runDailyQuizCloseJob() {
  * All final sprint announcements and weekly roundups are manually triggered by admins via `/admin announce weekly`.
  */
 export async function runWeeklyLeaderboardJob(client, options = {}) {
-  logger.info('⏰ Weekly Community Roundup & Leaderboard job invoked', { isManualAdmin: options.isManualAdmin ?? false });
+  logger.info("⏰ Weekly Community Roundup & Leaderboard job invoked", {
+    isManualAdmin: options.isManualAdmin ?? false,
+  });
   try {
     // Guard: Automated execution disabled. Only allow manual administrator execution.
     if (!options.isManualAdmin) {
-      logger.info('Automated Weekly Leaderboard broadcast skipped: Manual admin mode active (disabled auto broadcast).');
-      return { success: true, reason: 'AUTOMATED_BROADCAST_DISABLED', skipped: true };
+      logger.info(
+        "Automated Weekly Leaderboard broadcast skipped: Manual admin mode active (disabled auto broadcast).",
+      );
+      return {
+        success: true,
+        reason: "AUTOMATED_BROADCAST_DISABLED",
+        skipped: true,
+      };
     }
 
     const today = getKolkataDateString();
     // Guard: Only post weekly announcement on Sunday Nov 15 (conclusion of 7-day sprint) or beyond.
-    if (today < '2026-11-15') {
-      logger.info(`Weekly roundup skipped for ${today}: Sprint begins Nov 9 and concludes on Nov 15.`);
-      return { success: true, reason: 'SPRINT_NOT_YET_CONCLUDED', skipped: true };
+    if (today < "2026-11-15") {
+      logger.info(
+        `Weekly roundup skipped for ${today}: Sprint begins Nov 9 and concludes on Nov 15.`,
+      );
+      return {
+        success: true,
+        reason: "SPRINT_NOT_YET_CONCLUDED",
+        skipped: true,
+      };
     }
 
     const result = await postWeeklyAnnouncement({ client });
     return result;
   } catch (err) {
-    logger.error('Failed to execute Weekly Leaderboard announcement job', { error: err.message });
+    logger.error("Failed to execute Weekly Leaderboard announcement job", {
+      error: err.message,
+    });
     return { success: false, error: err.message };
   }
 }
@@ -262,34 +321,42 @@ export async function runWeeklyLeaderboardJob(client, options = {}) {
  * Job 4: Monthly Winner Crowning & Announcement
  */
 export async function runMonthlyWinnerJob(client) {
-  logger.info('⏰ Running scheduled task: Monthly Winner Crowning');
+  logger.info("⏰ Running scheduled task: Monthly Winner Crowning");
   try {
     // 1. Record winners to monthly_rewards table
     const winners = await computeMonthlyWinners();
 
     // 2. Take monthly snapshot
-    await takeLeaderboardSnapshot('monthly');
+    await takeLeaderboardSnapshot("monthly");
 
     // 3. Post announcement to channel
     const targetChannel = await resolveChannel(
       client,
       config.discord.channels.announcements,
-      config.discord.channels.quiz
+      config.discord.channels.quiz,
     );
 
     if (targetChannel && winners.length > 0) {
       const embed = buildMonthlyWinnerAnnouncement(winners);
       await targetChannel.send({
-        content: '🏆 **@everyone — The Monthly HCC Champions Have Been Crowned!** 🎊\nGive it up for this month\'s top performers and community contributors:',
+        content:
+          "🏆 **@everyone — The Monthly HCC Champions Have Been Crowned!** 🎊\nGive it up for this month's top performers and community contributors:",
         embeds: [embed],
       });
-      logger.info('Monthly winners announced', { count: winners.length, channelId: targetChannel.id });
+      logger.info("Monthly winners announced", {
+        count: winners.length,
+        channelId: targetChannel.id,
+      });
     }
 
-    await logActivity('monthly_winners_crowned', 'scheduler', { winnersCount: winners.length });
+    await logActivity("monthly_winners_crowned", "scheduler", {
+      winnersCount: winners.length,
+    });
     return { success: true, winners };
   } catch (err) {
-    logger.error('Failed to execute Monthly Winner job', { error: err.message });
+    logger.error("Failed to execute Monthly Winner job", {
+      error: err.message,
+    });
     return { success: false, error: err.message };
   }
 }
@@ -298,16 +365,22 @@ export async function runMonthlyWinnerJob(client) {
  * Job 5: Streak Maintenance (Resets streaks older than 48 hours)
  */
 export async function runStreakMaintenanceJob() {
-  logger.info('⏰ Running scheduled task: Streak Maintenance');
+  logger.info("⏰ Running scheduled task: Streak Maintenance");
   try {
     const resetMembers = await resetInactiveStreaks(48);
-    logger.info(`Streak maintenance complete: ${resetMembers.length} inactive streaks reset.`);
+    logger.info(
+      `Streak maintenance complete: ${resetMembers.length} inactive streaks reset.`,
+    );
     if (resetMembers.length > 0) {
-      await logActivity('inactive_streaks_reset', 'scheduler', { count: resetMembers.length });
+      await logActivity("inactive_streaks_reset", "scheduler", {
+        count: resetMembers.length,
+      });
     }
     return { success: true, resetCount: resetMembers.length };
   } catch (err) {
-    logger.error('Failed to run Streak Maintenance job', { error: err.message });
+    logger.error("Failed to run Streak Maintenance job", {
+      error: err.message,
+    });
     return { success: false, error: err.message };
   }
 }
@@ -329,9 +402,14 @@ export async function runKeepAliveHeartbeatJob(client) {
     }
 
     // 2. Ping external URL if provided (Railway/Render public domains)
-    const publicHost = process.env.PUBLIC_URL || process.env.RAILWAY_STATIC_URL || process.env.RAILWAY_PUBLIC_DOMAIN;
+    const publicHost =
+      process.env.PUBLIC_URL ||
+      process.env.RAILWAY_STATIC_URL ||
+      process.env.RAILWAY_PUBLIC_DOMAIN;
     if (publicHost) {
-      const fullUrl = publicHost.startsWith('http') ? `${publicHost}/ping` : `https://${publicHost}/ping`;
+      const fullUrl = publicHost.startsWith("http")
+        ? `${publicHost}/ping`
+        : `https://${publicHost}/ping`;
       try {
         await fetch(fullUrl, { signal: AbortSignal.timeout(4000) });
       } catch {
@@ -341,7 +419,7 @@ export async function runKeepAliveHeartbeatJob(client) {
 
     // 3. Keep Supabase connection pool warm
     try {
-      const { pingDatabase } = await import('../../database/client.js');
+      const { pingDatabase } = await import("../../database/client.js");
       await pingDatabase();
     } catch {
       // Ignore
@@ -350,16 +428,21 @@ export async function runKeepAliveHeartbeatJob(client) {
     // 4. Log heartbeat periodically (every 30 mins) to confirm 24/7 active status without log flooding
     const minute = new Date().getMinutes();
     if (minute % 30 === 0) {
-      logger.info('💓 24/7 Keep-Alive Heartbeat: Bot & database connection healthy', {
-        wsPingMs: client?.ws?.ping ?? -1,
-        uptimeSeconds: Math.floor(process.uptime()),
-        guilds: client?.guilds?.cache?.size ?? 0,
-      });
+      logger.info(
+        "💓 24/7 Keep-Alive Heartbeat: Bot & database connection healthy",
+        {
+          wsPingMs: client?.ws?.ping ?? -1,
+          uptimeSeconds: Math.floor(process.uptime()),
+          guilds: client?.guilds?.cache?.size ?? 0,
+        },
+      );
     }
 
     return { success: true };
   } catch (err) {
-    logger.warn('Notice: keep-alive heartbeat encounter', { error: err.message });
+    logger.warn("Notice: keep-alive heartbeat encounter", {
+      error: err.message,
+    });
     return { success: false, error: err.message };
   }
 }
@@ -370,34 +453,44 @@ export async function runKeepAliveHeartbeatJob(client) {
  * then automatically deletes the message after autoDeleteSeconds (default 10s).
  */
 export async function runChannelSelfTestJob(client, options = {}) {
-  const channelId = options.channelId || config.discord.channels.general || config.discord.channels.quiz;
+  const channelId =
+    options.channelId ||
+    config.discord.channels.general ||
+    config.discord.channels.quiz;
   const autoDeleteSeconds = options.autoDeleteSeconds ?? 10;
 
-  logger.info('⏰ Running scheduled task: Channel Self-Test', { channelId, autoDeleteSeconds });
+  logger.info("⏰ Running scheduled task: Channel Self-Test", {
+    channelId,
+    autoDeleteSeconds,
+  });
 
   if (!channelId) {
-    logger.warn('Skipping Channel Self-Test: No target channel configured');
-    return { success: false, reason: 'CHANNEL_NOT_CONFIGURED' };
+    logger.warn("Skipping Channel Self-Test: No target channel configured");
+    return { success: false, reason: "CHANNEL_NOT_CONFIGURED" };
   }
 
   try {
     const channel = await client.channels.fetch(channelId).catch(() => null);
     if (!channel) {
-      throw new Error(`Target channel ${channelId} not found or inaccessible by bot.`);
+      throw new Error(
+        `Target channel ${channelId} not found or inaccessible by bot.`,
+      );
     }
 
     const testEmbed = new EmbedBuilder()
-      .setColor(0x00C853)
-      .setTitle('🟢  HCC AutoEngage — System Diagnostic Check')
+      .setColor(0x00c853)
+      .setTitle("🟢  HCC AutoEngage — System Diagnostic Check")
       .setDescription(
-        '> Automated connection and channel pipeline test.\n\n' +
-        '• **Status:** Operational ✅\n' +
-        '• **Scheduler:** Active (Asia/Kolkata)\n' +
-        '• **Channel:** Verified\n' +
-        '• **Mentions:** Disabled (Silent)\n\n' +
-        `_This diagnostic notice will automatically delete in **${autoDeleteSeconds} seconds**._`
+        "> Automated connection and channel pipeline test.\n\n" +
+          "• **Status:** Operational ✅\n" +
+          "• **Scheduler:** Active (Asia/Kolkata)\n" +
+          "• **Channel:** Verified\n" +
+          "• **Mentions:** Disabled (Silent)\n\n" +
+          `_This diagnostic notice will automatically delete in **${autoDeleteSeconds} seconds**._`,
       )
-      .setFooter({ text: `HCC AutoEngage • Automated Health Check • Auto-deleting in ${autoDeleteSeconds}s` })
+      .setFooter({
+        text: `HCC AutoEngage • Automated Health Check • Auto-deleting in ${autoDeleteSeconds}s`,
+      })
       .setTimestamp();
 
     const msg = await channel.send({
@@ -405,16 +498,20 @@ export async function runChannelSelfTestJob(client, options = {}) {
       allowedMentions: { parse: [] }, // Strict zero mentions
     });
 
-    logger.info(`Channel self-test message sent (ID: ${msg.id}) to ${channelId} — auto-deleting in ${autoDeleteSeconds}s`);
+    logger.info(
+      `Channel self-test message sent (ID: ${msg.id}) to ${channelId} — auto-deleting in ${autoDeleteSeconds}s`,
+    );
 
     setTimeout(async () => {
       await msg.delete().catch(() => {});
-      logger.info(`Channel self-test message (${msg.id}) auto-deleted successfully ✅`);
+      logger.info(
+        `Channel self-test message (${msg.id}) auto-deleted successfully ✅`,
+      );
     }, autoDeleteSeconds * 1000);
 
     return { success: true, messageId: msg.id, channelId };
   } catch (err) {
-    logger.error('Channel Self-Test job failed', { error: err.message });
+    logger.error("Channel Self-Test job failed", { error: err.message });
     return { success: false, error: err.message };
   }
 }
@@ -425,11 +522,13 @@ export async function runChannelSelfTestJob(client, options = {}) {
  * NEVER uploads automatically; notifies admins to use /sticker review.
  */
 export async function runWeeklyStickerDiscoveryJob(client, options = {}) {
-  logger.info('⏰ Running scheduled task: Weekly Sticker Discovery');
+  logger.info("⏰ Running scheduled task: Weekly Sticker Discovery");
 
   if (isWeeklyStickerJobRunning && !options.force) {
-    logger.warn('Weekly Sticker Discovery job already running. Skipping concurrent run.');
-    return { success: false, reason: 'JOB_ALREADY_RUNNING' };
+    logger.warn(
+      "Weekly Sticker Discovery job already running. Skipping concurrent run.",
+    );
+    return { success: false, reason: "JOB_ALREADY_RUNNING" };
   }
 
   isWeeklyStickerJobRunning = true;
@@ -446,39 +545,48 @@ export async function runWeeklyStickerDiscoveryJob(client, options = {}) {
         client,
         config.discord.channels.logs,
         config.discord.channels.announcements,
-        config.discord.channels.test
+        config.discord.channels.test,
       );
 
       if (targetChannel) {
         const adminMentions = (config.app.adminUserIds || [])
           .map((id) => `<@${id}>`)
-          .join(' ');
+          .join(" ");
 
         const notificationEmbed = new EmbedBuilder()
-          .setColor(0x00E676)
-          .setTitle('🎨 Weekly Sticker Discovery: Candidates Ready for Review')
+          .setColor(0x00e676)
+          .setTitle("🎨 Weekly Sticker Discovery: Candidates Ready for Review")
           .setDescription(
             `The automated weekly sticker scan has completed!\n` +
-            `• **${scanResult.inserted}** new candidates discovered & verified.\n` +
-            `• **${pending.length}** total candidates currently awaiting review.\n\n` +
-            `🛡️ *The bot will NEVER upload stickers without human approval.*\n` +
-            `Authorized administrators can run \`/sticker review\` to inspect and approve/reject candidates.`
+              `• **${scanResult.inserted}** new candidates discovered & verified.\n` +
+              `• **${pending.length}** total candidates currently awaiting review.\n\n` +
+              `🛡️ *The bot will NEVER upload stickers without human approval.*\n` +
+              `Authorized administrators can run \`/sticker review\` to inspect and approve/reject candidates.`,
           )
-          .setFooter({ text: 'HCC AutoEngage • Sticker Moderation Queue' })
+          .setFooter({ text: "HCC AutoEngage • Sticker Moderation Queue" })
           .setTimestamp();
 
-        await targetChannel.send({
-          content: adminMentions ? `📢 Attention: ${adminMentions}` : undefined,
-          embeds: [notificationEmbed],
-        }).catch((err) => {
-          logger.warn('Failed to send sticker discovery notification message', { error: err.message });
-        });
+        await targetChannel
+          .send({
+            content: adminMentions
+              ? `📢 Attention: ${adminMentions}`
+              : undefined,
+            embeds: [notificationEmbed],
+          })
+          .catch((err) => {
+            logger.warn(
+              "Failed to send sticker discovery notification message",
+              { error: err.message },
+            );
+          });
       }
     }
 
     return { success: true, scanResult, pendingCount: pending.length };
   } catch (err) {
-    logger.error('Weekly Sticker Discovery job encountered an error', { error: err.message });
+    logger.error("Weekly Sticker Discovery job encountered an error", {
+      error: err.message,
+    });
     return { success: false, error: err.message };
   } finally {
     isWeeklyStickerJobRunning = false;
@@ -491,17 +599,21 @@ export async function runWeeklyStickerDiscoveryJob(client, options = {}) {
  * NEVER uploads automatically; notifies admins to use /emoji review.
  */
 export async function runWeeklyEmojiDiscoveryJob(client, options = {}) {
-  logger.info('⏰ Running scheduled task: Weekly Emoji Discovery');
+  logger.info("⏰ Running scheduled task: Weekly Emoji Discovery");
 
   if (isWeeklyEmojiJobRunning && !options.force) {
-    logger.warn('Weekly Emoji Discovery job already running. Skipping concurrent run.');
-    return { success: false, reason: 'JOB_ALREADY_RUNNING' };
+    logger.warn(
+      "Weekly Emoji Discovery job already running. Skipping concurrent run.",
+    );
+    return { success: false, reason: "JOB_ALREADY_RUNNING" };
   }
 
   isWeeklyEmojiJobRunning = true;
 
   try {
-    const scanResult = await emojiDiscoveryService.runDiscoveryScan({ limit: 50 });
+    const scanResult = await emojiDiscoveryService.runDiscoveryScan({
+      limit: 50,
+    });
     const pending = await getPendingEmojiCandidates({ limit: 50 });
 
     if (scanResult.inserted > 0 || pending.length > 0) {
@@ -509,39 +621,47 @@ export async function runWeeklyEmojiDiscoveryJob(client, options = {}) {
         client,
         config.discord.channels.logs,
         config.discord.channels.announcements,
-        config.discord.channels.test
+        config.discord.channels.test,
       );
 
       if (targetChannel) {
         const adminMentions = (config.app.adminUserIds || [])
           .map((id) => `<@${id}>`)
-          .join(' ');
+          .join(" ");
 
         const notificationEmbed = new EmbedBuilder()
-          .setColor(0x3B82F6)
-          .setTitle('😀 Weekly Emoji Discovery: 50 Popular Emojis Ready')
+          .setColor(0x3b82f6)
+          .setTitle("😀 Weekly Emoji Discovery: 50 Popular Emojis Ready")
           .setDescription(
             `The automated weekly emoji scan has completed!\n` +
-            `• **${scanResult.inserted}** new clean Gen Z and tech emojis discovered.\n` +
-            `• **${pending.length}** total emojis currently awaiting review.\n\n` +
-            `🛡️ *The bot will NEVER upload emojis without human approval.*\n` +
-            `Authorized administrators can run \`/emoji review\` to inspect and approve.`
+              `• **${scanResult.inserted}** new clean Gen Z and tech emojis discovered.\n` +
+              `• **${pending.length}** total emojis currently awaiting review.\n\n` +
+              `🛡️ *The bot will NEVER upload emojis without human approval.*\n` +
+              `Authorized administrators can run \`/emoji review\` to inspect and approve.`,
           )
-          .setFooter({ text: 'HCC AutoEngage • Emoji Moderation Queue' })
+          .setFooter({ text: "HCC AutoEngage • Emoji Moderation Queue" })
           .setTimestamp();
 
-        await targetChannel.send({
-          content: adminMentions ? `📢 Attention: ${adminMentions}` : undefined,
-          embeds: [notificationEmbed],
-        }).catch((err) => {
-          logger.warn('Failed to send emoji discovery notification message', { error: err.message });
-        });
+        await targetChannel
+          .send({
+            content: adminMentions
+              ? `📢 Attention: ${adminMentions}`
+              : undefined,
+            embeds: [notificationEmbed],
+          })
+          .catch((err) => {
+            logger.warn("Failed to send emoji discovery notification message", {
+              error: err.message,
+            });
+          });
       }
     }
 
     return { success: true, scanResult, pendingCount: pending.length };
   } catch (err) {
-    logger.error('Weekly Emoji Discovery job encountered an error', { error: err.message });
+    logger.error("Weekly Emoji Discovery job encountered an error", {
+      error: err.message,
+    });
     return { success: false, error: err.message };
   } finally {
     isWeeklyEmojiJobRunning = false;
@@ -557,32 +677,44 @@ export async function runWeeklyEmojiDiscoveryJob(client, options = {}) {
  */
 export async function reconcileMissedJobsOnStartup(client) {
   if (AUTOMATION_SUSPENDED) {
-    logger.info('🛑 [RECONCILIATION SUSPENDED] Automation is suspended (Phase 1 testing complete). Startup recovery skipped.');
+    logger.info(
+      "🛑 [RECONCILIATION SUSPENDED] Automation is suspended (Phase 1 testing complete). Startup recovery skipped.",
+    );
     return;
   }
 
   try {
     const today = getKolkataDateString();
-    const [targetHourStr = '19', targetMinStr = '00'] = (config.app.quizPostTime || '19:00').split(':');
+    const [targetHourStr = "19", targetMinStr = "00"] = (
+      config.app.quizPostTime || "19:00"
+    ).split(":");
     const targetHour = parseInt(targetHourStr, 10);
     const targetMin = parseInt(targetMinStr, 10);
 
     // Get current IST hour & minute
-    const nowISTParts = new Intl.DateTimeFormat('en-CA', {
-      timeZone: config.app.timezone || 'Asia/Kolkata',
-      hour: '2-digit',
-      minute: '2-digit',
+    const nowISTParts = new Intl.DateTimeFormat("en-CA", {
+      timeZone: config.app.timezone || "Asia/Kolkata",
+      hour: "2-digit",
+      minute: "2-digit",
       hour12: false,
     }).formatToParts(new Date());
 
-    const currentHour = parseInt(nowISTParts.find((p) => p.type === 'hour')?.value || '0', 10);
-    const currentMin  = parseInt(nowISTParts.find((p) => p.type === 'minute')?.value || '0', 10);
+    const currentHour = parseInt(
+      nowISTParts.find((p) => p.type === "hour")?.value || "0",
+      10,
+    );
+    const currentMin = parseInt(
+      nowISTParts.find((p) => p.type === "minute")?.value || "0",
+      10,
+    );
 
-    const isPastScheduledTime = (currentHour > targetHour) || (currentHour === targetHour && currentMin >= targetMin);
+    const isPastScheduledTime =
+      currentHour > targetHour ||
+      (currentHour === targetHour && currentMin >= targetMin);
 
-    logger.info('Checking for missed scheduled executions on startup...', {
+    logger.info("Checking for missed scheduled executions on startup...", {
       today,
-      currentIST: `${String(currentHour).padStart(2, '0')}:${String(currentMin).padStart(2, '0')}`,
+      currentIST: `${String(currentHour).padStart(2, "0")}:${String(currentMin).padStart(2, "0")}`,
       targetIST: `${targetHourStr}:${targetMinStr}`,
       isPastScheduledTime,
     });
@@ -598,18 +730,30 @@ export async function reconcileMissedJobsOnStartup(client) {
       const hasTimedBank = getDayQuestionSet(today);
       if (hasTimedBank) {
         const sessionRecord = await getDailySessionRecord(today);
-        if (!sessionRecord || sessionRecord.sessionState.status !== 'completed') {
-          logger.warn(`Missed daily timed session detected for today (${today}). Initiating session...`);
+        if (
+          !sessionRecord ||
+          sessionRecord.sessionState.status !== "completed"
+        ) {
+          logger.warn(
+            `Missed daily timed session detected for today (${today}). Initiating session...`,
+          );
           await runDailyQuizDropJob(client, { date: today });
         } else {
-          logger.info(`Today's timed session (${today}) already completed.`, { sessionId: sessionRecord.id });
+          logger.info(`Today's timed session (${today}) already completed.`, {
+            sessionId: sessionRecord.id,
+          });
         }
       } else {
-        logger.info(`No 7-day challenge scheduled for today (${today}). Skipping startup quiz recovery.`);
+        logger.info(
+          `No 7-day challenge scheduled for today (${today}). Skipping startup quiz recovery.`,
+        );
       }
     }
   } catch (err) {
-    logger.error('Error during startup scheduler reconciliation', { error: err.message, stack: err.stack });
+    logger.error("Error during startup scheduler reconciliation", {
+      error: err.message,
+      stack: err.stack,
+    });
   }
 }
 
@@ -621,28 +765,30 @@ export function initScheduler(client) {
   stopScheduler();
 
   if (AUTOMATION_SUSPENDED) {
-    logger.info('🛑 [AUTOMATION SUSPENDED] Phase 1 sprint testing complete (Nov 9–15, 2026). All automated cron jobs and background checkers are suspended.');
+    logger.info(
+      "🛑 [AUTOMATION SUSPENDED] Phase 1 sprint testing complete (Nov 9–15, 2026). All automated cron jobs and background checkers are suspended.",
+    );
     return;
   }
 
-  const timezone = config.app.timezone || 'Asia/Kolkata';
+  const timezone = config.app.timezone || "Asia/Kolkata";
   logger.info(`Initializing HCC automation scheduler (Timezone: ${timezone})…`);
 
   // 1. Daily Quiz Drop (Configured via QUIZ_POST_TIME — now 07:00 PM IST / 19:00)
   const taskDailyQuiz = cron.schedule(
     quizCron,
     () => runDailyQuizDropJob(client),
-    { timezone }
+    { timezone },
   );
-  activeTasks.set('dailyQuiz', taskDailyQuiz);
+  activeTasks.set("dailyQuiz", taskDailyQuiz);
 
   // 2. Daily Quiz Close (23:59 IST)
   const taskDailyClose = cron.schedule(
-    '59 23 * * *',
+    "59 23 * * *",
     () => runDailyQuizCloseJob(),
-    { timezone }
+    { timezone },
   );
-  activeTasks.set('dailyClose', taskDailyClose);
+  activeTasks.set("dailyClose", taskDailyClose);
 
   // 3. Weekly Leaderboard (Disabled automated run per admin instructions;
   // all final sprint roundups and winner announcements will be executed manually via /admin announce weekly)
@@ -650,27 +796,27 @@ export function initScheduler(client) {
 
   // 4. Monthly Winner Crowning (1st of month at 00:05 IST)
   const taskMonthlyWinners = cron.schedule(
-    '5 0 1 * *',
+    "5 0 1 * *",
     () => runMonthlyWinnerJob(client),
-    { timezone }
+    { timezone },
   );
-  activeTasks.set('monthlyWinners', taskMonthlyWinners);
+  activeTasks.set("monthlyWinners", taskMonthlyWinners);
 
   // 5. Streak Maintenance (Daily at 03:00 AM IST)
   const taskStreakMaintenance = cron.schedule(
-    '0 3 * * *',
+    "0 3 * * *",
     () => runStreakMaintenanceJob(),
-    { timezone }
+    { timezone },
   );
-  activeTasks.set('streakMaintenance', taskStreakMaintenance);
+  activeTasks.set("streakMaintenance", taskStreakMaintenance);
 
   // 6. 24/7 Keep-Alive & Active Connection Heartbeat (Every 5 minutes)
   const taskKeepAlive = cron.schedule(
-    '*/5 * * * *',
+    "*/5 * * * *",
     () => runKeepAliveHeartbeatJob(client),
-    { timezone }
+    { timezone },
   );
-  activeTasks.set('keepAlive', taskKeepAlive);
+  activeTasks.set("keepAlive", taskKeepAlive);
 
   // 7. Channel Self-Test & Diagnostic Check (e.g. Pre-quiz test or custom cron)
   const channelTestCron = process.env.CHANNEL_TEST_CRON;
@@ -678,34 +824,36 @@ export function initScheduler(client) {
     const taskChannelTest = cron.schedule(
       channelTestCron,
       () => runChannelSelfTestJob(client),
-      { timezone }
+      { timezone },
     );
-    activeTasks.set('channelSelfTest', taskChannelTest);
+    activeTasks.set("channelSelfTest", taskChannelTest);
   }
 
   // 8. Weekly Sticker Discovery (Administrator-configurable schedule)
-  const stickerCron = config.stickers?.discoveryCron || '0 11 * * 1';
+  const stickerCron = config.stickers?.discoveryCron || "0 11 * * 1";
   const taskStickerDiscovery = cron.schedule(
     stickerCron,
     () => runWeeklyStickerDiscoveryJob(client),
-    { timezone }
+    { timezone },
   );
-  activeTasks.set('weeklyStickerDiscovery', taskStickerDiscovery);
+  activeTasks.set("weeklyStickerDiscovery", taskStickerDiscovery);
 
   // 9. Weekly Emoji Discovery (Administrator-configurable schedule, 10 mins after stickers)
   const taskEmojiDiscovery = cron.schedule(
-    '10 11 * * 1',
+    "10 11 * * 1",
     () => runWeeklyEmojiDiscoveryJob(client),
-    { timezone }
+    { timezone },
   );
-  activeTasks.set('weeklyEmojiDiscovery', taskEmojiDiscovery);
+  activeTasks.set("weeklyEmojiDiscovery", taskEmojiDiscovery);
 
-  logger.info(`Scheduler running with ${activeTasks.size} registered automated jobs ✅`);
+  logger.info(
+    `Scheduler running with ${activeTasks.size} registered automated jobs ✅`,
+  );
 
   // Run startup recovery check asynchronously so it doesn't block Gateway ready event
   setTimeout(() => {
     reconcileMissedJobsOnStartup(client).catch((err) => {
-      logger.error('Startup recovery error', { error: err.message });
+      logger.error("Startup recovery error", { error: err.message });
     });
   }, 3000);
 }
@@ -720,4 +868,3 @@ export function stopScheduler() {
   }
   activeTasks.clear();
 }
-

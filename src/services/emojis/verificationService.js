@@ -3,12 +3,15 @@
  * Multi-layer content moderation, licensing verification, and Discord emoji constraint checks.
  */
 
-import { logger } from '../../utils/logger.js';
-import { checkTextModeration, checkLicenseValidity } from '../stickers/verificationService.js';
+import { logger } from "../../utils/logger.js";
+import {
+  checkTextModeration,
+  checkLicenseValidity,
+} from "../stickers/verificationService.js";
 
 // Discord Emoji Constraints
 const MAX_DISCORD_EMOJI_SIZE_BYTES = 256 * 1024; // 256 KB
-const ALLOWED_EMOJI_FORMATS = new Set(['png', 'gif', 'jpg', 'jpeg', 'webp']);
+const ALLOWED_EMOJI_FORMATS = new Set(["png", "gif", "jpg", "jpeg", "webp"]);
 const DISCORD_EMOJI_NAME_REGEX = /^[a-zA-Z0-9_]{2,32}$/;
 
 /**
@@ -19,12 +22,12 @@ const DISCORD_EMOJI_NAME_REGEX = /^[a-zA-Z0-9_]{2,32}$/;
  * @returns {string}
  */
 export function sanitizeDiscordEmojiName(rawName) {
-  if (!rawName) return 'emoji';
+  if (!rawName) return "emoji";
   const sanitized = rawName
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9_]+/g, '_')
-    .replace(/^_+|_+$/g, '')
+    .replace(/[^a-z0-9_]+/g, "_")
+    .replace(/^_+|_+$/g, "")
     .slice(0, 32);
 
   return sanitized.length < 2 ? `${sanitized}_e` : sanitized;
@@ -37,7 +40,7 @@ export function sanitizeDiscordEmojiName(rawName) {
  * @returns {{ valid: boolean, reason?: string }}
  */
 export function checkDiscordEmojiCompatibility(candidate) {
-  const name = (candidate.name || '').trim();
+  const name = (candidate.name || "").trim();
 
   if (!DISCORD_EMOJI_NAME_REGEX.test(name)) {
     return {
@@ -46,7 +49,7 @@ export function checkDiscordEmojiCompatibility(candidate) {
     };
   }
 
-  const desc = candidate.description || '';
+  const desc = candidate.description || "";
   if (desc.length > 100) {
     return {
       valid: false,
@@ -54,7 +57,7 @@ export function checkDiscordEmojiCompatibility(candidate) {
     };
   }
 
-  const format = (candidate.asset_format || 'png').toLowerCase().trim();
+  const format = (candidate.asset_format || "png").toLowerCase().trim();
   if (!ALLOWED_EMOJI_FORMATS.has(format)) {
     return {
       valid: false,
@@ -62,17 +65,20 @@ export function checkDiscordEmojiCompatibility(candidate) {
     };
   }
 
-  if (candidate.file_size_bytes && candidate.file_size_bytes > MAX_DISCORD_EMOJI_SIZE_BYTES) {
+  if (
+    candidate.file_size_bytes &&
+    candidate.file_size_bytes > MAX_DISCORD_EMOJI_SIZE_BYTES
+  ) {
     return {
       valid: false,
       reason: `Asset file size (${Math.round(candidate.file_size_bytes / 1024)} KB) exceeds Discord 256 KB limit.`,
     };
   }
 
-  if (!candidate.asset_url || !candidate.asset_url.startsWith('http')) {
+  if (!candidate.asset_url || !candidate.asset_url.startsWith("http")) {
     return {
       valid: false,
-      reason: 'Invalid or missing emoji asset URL.',
+      reason: "Invalid or missing emoji asset URL.",
     };
   }
 
@@ -91,31 +97,34 @@ export function checkDiscordEmojiCompatibility(candidate) {
  */
 export function verifyEmojiCandidate(candidate) {
   // 1. Check text moderation
-  const combinedText = `${candidate.name || ''} ${candidate.description || ''} ${candidate.trend_reason || ''}`;
+  const combinedText = `${candidate.name || ""} ${candidate.description || ""} ${candidate.trend_reason || ""}`;
   const textMod = checkTextModeration(combinedText);
   if (!textMod.clean) {
-    logger.warn('Emoji candidate rejected: vulgarity detected', {
+    logger.warn("Emoji candidate rejected: vulgarity detected", {
       candidate: candidate.name,
       pattern: textMod.matchedPattern,
     });
     return {
       valid: false,
-      contentStatus: 'flagged_profanity',
-      reason: 'Contains profanity, vulgarity, or inappropriate text.',
+      contentStatus: "flagged_profanity",
+      reason: "Contains profanity, vulgarity, or inappropriate text.",
     };
   }
 
   // 2. Check licensing
-  const licenseCheck = checkLicenseValidity(candidate.license, candidate.license_details);
+  const licenseCheck = checkLicenseValidity(
+    candidate.license,
+    candidate.license_details,
+  );
   if (!licenseCheck.acceptable) {
-    logger.warn('Emoji candidate rejected: license check failed', {
+    logger.warn("Emoji candidate rejected: license check failed", {
       candidate: candidate.name,
       license: candidate.license,
       reason: licenseCheck.reason,
     });
     return {
       valid: false,
-      contentStatus: 'flagged_license',
+      contentStatus: "flagged_license",
       reason: licenseCheck.reason,
     };
   }
@@ -123,20 +132,22 @@ export function verifyEmojiCandidate(candidate) {
   // 3. Check Discord technical constraints
   const discordCheck = checkDiscordEmojiCompatibility(candidate);
   if (!discordCheck.valid) {
-    logger.warn('Emoji candidate rejected: Discord compatibility check failed', {
-      candidate: candidate.name,
-      reason: discordCheck.reason,
-    });
+    logger.warn(
+      "Emoji candidate rejected: Discord compatibility check failed",
+      {
+        candidate: candidate.name,
+        reason: discordCheck.reason,
+      },
+    );
     return {
       valid: false,
-      contentStatus: 'flagged_quality',
+      contentStatus: "flagged_quality",
       reason: discordCheck.reason,
     };
   }
 
   return {
     valid: true,
-    contentStatus: 'verified',
+    contentStatus: "verified",
   };
 }
-
