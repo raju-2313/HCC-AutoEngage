@@ -33,7 +33,7 @@
     "discord.js": "^14.28.1",
     "dotenv": "^18.0.9",
     "node-cron": "^4.6.0",
-    "ws": "^8.22.1"
+    "ws": "^8.23.0"
   },
   "devDependencies": {
     "pptxgenjs": "^4.0.1"

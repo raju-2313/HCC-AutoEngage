@@ -11,28 +11,28 @@
  *   6. Register graceful-shutdown hooks
  */
 
-import { config } from './config/index.js';
-import { logger } from './utils/logger.js';
-import { createClient } from './bot/client.js';
-import { loadEvents } from './bot/eventLoader.js';
-import { loadCommands } from './bot/commandLoader.js';
-import { testDatabaseConnection } from './database/client.js';
-import { startHealthServer } from './server/healthServer.js';
+import { config } from "./config/index.js";
+import { logger } from "./utils/logger.js";
+import { createClient } from "./bot/client.js";
+import { loadEvents } from "./bot/eventLoader.js";
+import { loadCommands } from "./bot/commandLoader.js";
+import { testDatabaseConnection } from "./database/client.js";
+import { startHealthServer } from "./server/healthServer.js";
 
 async function main() {
-  logger.info('═══════════════════════════════════════════');
-  logger.info('  HCC AutoEngage – Starting up…');
+  logger.info("═══════════════════════════════════════════");
+  logger.info("  HCC AutoEngage – Starting up…");
   logger.info(`  Environment : ${config.app.env}`);
   logger.info(`  Timezone    : ${config.app.timezone}`);
-  logger.info('═══════════════════════════════════════════');
+  logger.info("═══════════════════════════════════════════");
 
   // Verify Supabase Database Connection
-  logger.info('Checking Supabase connection…');
+  logger.info("Checking Supabase connection…");
   const dbStatus = await testDatabaseConnection();
   if (dbStatus.ok) {
-    logger.info('Supabase database connection verified ✅');
+    logger.info("Supabase database connection verified ✅");
   } else {
-    logger.warn('Supabase database check:', {
+    logger.warn("Supabase database check:", {
       code: dbStatus.code,
       message: dbStatus.message,
     });
@@ -48,8 +48,8 @@ async function main() {
   await loadEvents(client);
 
   // Shard & Gateway connectivity monitoring
-  client.rest.on('rateLimited', (info) => {
-    logger.warn('Discord API rate limited', {
+  client.rest.on("rateLimited", (info) => {
+    logger.warn("Discord API rate limited", {
       timeToReset: info.timeToReset,
       limit: info.limit,
       method: info.method,
@@ -58,34 +58,45 @@ async function main() {
     });
   });
 
-  client.on('shardError', (error, shardId) => {
-    logger.error(`Discord Shard ${shardId} encountered an error`, { error: error.message });
+  client.on("shardError", (error, shardId) => {
+    logger.error(`Discord Shard ${shardId} encountered an error`, {
+      error: error.message,
+    });
   });
 
-  client.on('shardDisconnect', (event, shardId) => {
-    logger.warn(`Discord Shard ${shardId} disconnected`, { code: event.code, reason: event.reason });
+  client.on("shardDisconnect", (event, shardId) => {
+    logger.warn(`Discord Shard ${shardId} disconnected`, {
+      code: event.code,
+      reason: event.reason,
+    });
   });
 
-  client.on('shardReconnecting', (shardId) => {
+  client.on("shardReconnecting", (shardId) => {
     logger.info(`Discord Shard ${shardId} reconnecting…`);
   });
 
-  client.on('shardResume', (shardId, replayedEvents) => {
-    logger.info(`Discord Shard ${shardId} resumed connection`, { replayedEvents });
+  client.on("shardResume", (shardId, replayedEvents) => {
+    logger.info(`Discord Shard ${shardId} resumed connection`, {
+      replayedEvents,
+    });
   });
 
   // Start Production Health Check HTTP Server immediately (port 8080 or PORT env)
   const healthServer = startHealthServer(client);
 
   // Connect to Discord Gateway
-  const cleanToken = (config.discord.token || '').trim().replace(/^["']|["']$/g, '');
-  logger.info(`Connecting to Discord Gateway (token length: ${cleanToken.length})…`);
+  const cleanToken = (config.discord.token || "")
+    .trim()
+    .replace(/^["']|["']$/g, "");
+  logger.info(
+    `Connecting to Discord Gateway (token length: ${cleanToken.length})…`,
+  );
 
   try {
     await client.login(cleanToken);
-    logger.info('Discord Gateway login call returned — awaiting READY event…');
+    logger.info("Discord Gateway login call returned — awaiting READY event…");
   } catch (err) {
-    logger.error('Discord Gateway authentication error', {
+    logger.error("Discord Gateway authentication error", {
       error: err.message,
       stack: err.stack,
     });
@@ -97,29 +108,31 @@ async function main() {
     logger.info(`Received ${signal} – shutting down gracefully…`);
     healthServer.close();
     client.destroy();
-    logger.info('Discord client disconnected. Goodbye!');
+    logger.info("Discord client disconnected. Goodbye!");
     process.exit(0);
   };
 
-  process.on('SIGINT',  () => shutdown('SIGINT'));
-  process.on('SIGTERM', () => shutdown('SIGTERM'));
+  process.on("SIGINT", () => shutdown("SIGINT"));
+  process.on("SIGTERM", () => shutdown("SIGTERM"));
 
   // Prevent unhandled rejections from crashing the process silently
-  process.on('unhandledRejection', (reason) => {
-    logger.error('Unhandled promise rejection', { reason: String(reason) });
+  process.on("unhandledRejection", (reason) => {
+    logger.error("Unhandled promise rejection", { reason: String(reason) });
   });
 
-  process.on('uncaughtException', (err) => {
-    logger.error('Uncaught exception intercepted', { error: err.message, stack: err.stack });
+  process.on("uncaughtException", (err) => {
+    logger.error("Uncaught exception intercepted", {
+      error: err.message,
+      stack: err.stack,
+    });
     // Keep process alive for non-fatal errors; exit only if fatal memory corruption
-    if (err.message && err.message.includes('out of memory')) {
+    if (err.message && err.message.includes("out of memory")) {
       setTimeout(() => process.exit(1), 500);
     }
   });
 }
 
 main().catch((err) => {
-  console.error('Fatal startup error:', err);
+  console.error("Fatal startup error:", err);
   process.exit(1);
 });
-

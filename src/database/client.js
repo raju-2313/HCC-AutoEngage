@@ -8,10 +8,10 @@
  *  - testDatabaseConnection(): Diagnostic ping to confirm database reachability without leaking keys.
  */
 
-import { createClient } from '@supabase/supabase-js';
-import WebSocket from 'ws';
-import { config } from '../config/index.js';
-import { logger } from '../utils/logger.js';
+import { createClient } from "@supabase/supabase-js";
+import WebSocket from "ws";
+import { config } from "../config/index.js";
+import { logger } from "../utils/logger.js";
 
 let adminClient = null;
 let publicClient = null;
@@ -23,18 +23,22 @@ let publicClient = null;
 export function getAdminClient() {
   if (!adminClient) {
     if (!config.supabase.url || !config.supabase.serviceRoleKey) {
-      throw new Error('Supabase URL or Service Role Key is missing in config.');
+      throw new Error("Supabase URL or Service Role Key is missing in config.");
     }
 
-    adminClient = createClient(config.supabase.url, config.supabase.serviceRoleKey, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
+    adminClient = createClient(
+      config.supabase.url,
+      config.supabase.serviceRoleKey,
+      {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+        },
+        realtime: {
+          transport: WebSocket,
+        },
       },
-      realtime: {
-        transport: WebSocket,
-      },
-    });
+    );
   }
   return adminClient;
 }
@@ -72,23 +76,21 @@ export async function testDatabaseConnection() {
   try {
     const client = getAdminClient();
     // Perform a real GET query with limit 1 to accurately detect table existence
-    const { error } = await client
-      .from('members')
-      .select('id')
-      .limit(1);
+    const { error } = await client.from("members").select("id").limit(1);
 
     if (error) {
       // PGRST205 = table not in schema cache; 42P01 = undefined_table in Postgres
-      if (error.code === 'PGRST205' || error.code === '42P01') {
+      if (error.code === "PGRST205" || error.code === "42P01") {
         return {
           ok: false,
-          code: 'TABLES_NOT_FOUND',
-          message: 'Connected to Supabase, but required tables were not found in the schema cache. Please execute migrations/001_initial_schema.sql in your Supabase SQL Editor.',
+          code: "TABLES_NOT_FOUND",
+          message:
+            "Connected to Supabase, but required tables were not found in the schema cache. Please execute migrations/001_initial_schema.sql in your Supabase SQL Editor.",
         };
       }
       return {
         ok: false,
-        code: error.code || 'DB_ERROR',
+        code: error.code || "DB_ERROR",
         message: error.message,
       };
     }
@@ -96,10 +98,13 @@ export async function testDatabaseConnection() {
     // Masked host logging for safety
     const parsedUrl = new URL(config.supabase.url);
     logger.info(`Supabase connection healthy`, { host: parsedUrl.host });
-    return { ok: true, message: 'Database connection established successfully.' };
+    return {
+      ok: true,
+      message: "Database connection established successfully.",
+    };
   } catch (err) {
-    logger.error('Failed to connect to Supabase', { error: err.message });
-    return { ok: false, code: 'CONNECTION_FAILED', message: err.message };
+    logger.error("Failed to connect to Supabase", { error: err.message });
+    return { ok: false, code: "CONNECTION_FAILED", message: err.message };
   }
 }
 
@@ -110,10 +115,9 @@ export async function testDatabaseConnection() {
 export async function pingDatabase() {
   try {
     const client = getAdminClient();
-    const { error } = await client.from('members').select('id').limit(1);
+    const { error } = await client.from("members").select("id").limit(1);
     return !error;
   } catch {
     return false;
   }
 }
-

@@ -8,72 +8,91 @@ import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
-} from 'discord.js';
-import { fetchEngagementLeaderboard, getMemberEngagementSummary } from '../../database/queries/engagement.js';
-import { getRandomLeaderboardTip } from '../../utils/leaderboardTips.js';
+} from "discord.js";
+import {
+  fetchEngagementLeaderboard,
+  getMemberEngagementSummary,
+} from "../../database/queries/engagement.js";
+import { getRandomLeaderboardTip } from "../../utils/leaderboardTips.js";
 
-const HR = '───────────────────────';
+const HR = "───────────────────────";
 
 const RANK_BADGES = {
-  1: { medal: '🥇', label: 'Champion', title: 'Season Leader 👑' },
-  2: { medal: '🥈', label: '2nd Place', title: 'Runner-Up ⚡' },
-  3: { medal: '🥉', label: '3rd Place', title: 'Podium Contender 🌟' },
+  1: { medal: "🥇", label: "Champion", title: "Season Leader 👑" },
+  2: { medal: "🥈", label: "2nd Place", title: "Runner-Up ⚡" },
+  3: { medal: "🥉", label: "3rd Place", title: "Podium Contender 🌟" },
 };
 
 function modernBar(score, total = 10) {
-  const filled = Math.max(0, Math.min(total, Math.round((score / 100) * total)));
-  return '▰'.repeat(filled) + '▱'.repeat(total - filled);
+  const filled = Math.max(
+    0,
+    Math.min(total, Math.round((score / 100) * total)),
+  );
+  return "▰".repeat(filled) + "▱".repeat(total - filled);
 }
 
 // ─── Interactive Timeframe ActionRow ──────────────────────────────────────────
 
-export function buildLeaderboardActionRow(activePeriod = 'weekly') {
+export function buildLeaderboardActionRow(activePeriod = "weekly") {
   return new ActionRowBuilder().addComponents(
     new ButtonBuilder()
-      .setCustomId('lb_view:weekly')
-      .setLabel('Weekly')
-      .setEmoji('⚡')
-      .setStyle(activePeriod === 'weekly' ? ButtonStyle.Success : ButtonStyle.Secondary),
+      .setCustomId("lb_view:weekly")
+      .setLabel("Weekly")
+      .setEmoji("⚡")
+      .setStyle(
+        activePeriod === "weekly" ? ButtonStyle.Success : ButtonStyle.Secondary,
+      ),
     new ButtonBuilder()
-      .setCustomId('lb_view:monthly')
-      .setLabel('Monthly')
-      .setEmoji('📅')
-      .setStyle(activePeriod === 'monthly' ? ButtonStyle.Primary : ButtonStyle.Secondary),
+      .setCustomId("lb_view:monthly")
+      .setLabel("Monthly")
+      .setEmoji("📅")
+      .setStyle(
+        activePeriod === "monthly"
+          ? ButtonStyle.Primary
+          : ButtonStyle.Secondary,
+      ),
     new ButtonBuilder()
-      .setCustomId('lb_view:all_time')
-      .setLabel('All-Time')
-      .setEmoji('🏆')
-      .setStyle(activePeriod === 'all_time' ? ButtonStyle.Secondary : ButtonStyle.Secondary)
+      .setCustomId("lb_view:all_time")
+      .setLabel("All-Time")
+      .setEmoji("🏆")
+      .setStyle(
+        activePeriod === "all_time"
+          ? ButtonStyle.Secondary
+          : ButtonStyle.Secondary,
+      ),
   );
 }
 
 // ─── Unified Overall Community Engagement Leaderboard ─────────────────────────
 
-export async function buildOverallLeaderboardEmbed(periodType = 'weekly') {
+export async function buildOverallLeaderboardEmbed(periodType = "weekly") {
   const rows = await fetchEngagementLeaderboard(periodType, 10);
 
-  let periodTitle = '⚡  Weekly Standings (Last 7 Days)';
-  let themeColor  = 0x00C853; // HackerRank green
-  let bannerNote  = 'Resets every Sunday at 9:00 PM IST';
+  let periodTitle = "⚡  Weekly Standings (Last 7 Days)";
+  let themeColor = 0x00c853; // HackerRank green
+  let bannerNote = "Resets every Sunday at 9:00 PM IST";
 
-  if (periodType === 'monthly') {
-    periodTitle = '📅  Monthly Championship (Current Month)';
-    themeColor  = 0xF1C40F; // Gold
-    bannerNote  = 'Top 3 earn verified titles at month-end';
-  } else if (periodType === 'all_time') {
-    periodTitle = '🏆  All-Time Hall of Fame';
-    themeColor  = 0x9B59B6; // Amethyst
-    bannerNote  = 'Cumulative lifetime community contributions';
+  if (periodType === "monthly") {
+    periodTitle = "📅  Monthly Championship (Current Month)";
+    themeColor = 0xf1c40f; // Gold
+    bannerNote = "Top 3 earn verified titles at month-end";
+  } else if (periodType === "all_time") {
+    periodTitle = "🏆  All-Time Hall of Fame";
+    themeColor = 0x9b59b6; // Amethyst
+    bannerNote = "Cumulative lifetime community contributions";
   }
 
   const embed = new EmbedBuilder()
     .setColor(themeColor)
     .setAuthor({
-      name: 'HackerRank Campus Crew • Community Leaderboard',
-      iconURL: 'https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/1f3c6.png',
+      name: "HackerRank Campus Crew • Community Leaderboard",
+      iconURL:
+        "https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/1f3c6.png",
     })
     .setTitle(periodTitle)
-    .setThumbnail('https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/1f3c6.png')
+    .setThumbnail(
+      "https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/1f3c6.png",
+    )
     .setFooter({
       text: `HCC AutoEngage • ${bannerNote}  │  Switch views with the buttons below`,
     })
@@ -82,10 +101,10 @@ export async function buildOverallLeaderboardEmbed(periodType = 'weekly') {
   if (rows.length === 0) {
     embed.setDescription(
       `> Real-time rankings balancing **Learning**, **Discussions**, **Voice**, **Reactions**, and **Contributions**.\n${HR}\n\n` +
-      `### 📭  No Activity Recorded Yet\n` +
-      `Be the first to step onto the podium!\n\n` +
-      `• Participate in technical discussions in server channels\n` +
-      `• Join voice study sessions and help peers\n\n${HR}`
+        `### 📭  No Activity Recorded Yet\n` +
+        `Be the first to step onto the podium!\n\n` +
+        `• Participate in technical discussions in server channels\n` +
+        `• Join voice study sessions and help peers\n\n${HR}`,
     );
     return embed;
   }
@@ -101,7 +120,7 @@ export async function buildOverallLeaderboardEmbed(periodType = 'weekly') {
       `🎙️ Voice **${Math.round(r.voice_score)}%**`,
       `❤️ Support **${Math.round(r.reaction_score)}%**`,
       `🤝 Collab **${Math.round(r.contribution_score)}%**`,
-    ].join('  •  ');
+    ].join("  •  ");
 
     if (badge) {
       // Top 3 Hero Cards
@@ -114,18 +133,18 @@ export async function buildOverallLeaderboardEmbed(periodType = 'weekly') {
 
     // Standard Cards for #4 - #10
     return (
-      `\`#${String(r.rank).padStart(2, '0')}\`  ${mention}  —  **${r.overall_score} pts**  \`${scoreBar}\`\n` +
+      `\`#${String(r.rank).padStart(2, "0")}\`  ${mention}  —  **${r.overall_score} pts**  \`${scoreBar}\`\n` +
       `-# ${breakdown}`
     );
   });
 
   embed.setDescription(
     `> Overall rankings balancing **Learning** (40%), **Discussions** (25%), **Voice** (15%), **Reactions** (10%), and **Contributions** (10%).\n${HR}\n\n` +
-    cards.join('\n\n') +
-    `\n\n${HR}\n` +
-    `💡  **Whispers from the Mod:**\n` +
-    `> ${getRandomLeaderboardTip()}\n\n` +
-    `-# ⚖️ **Fair Scoring:** Scores are normalized against community benchmarks so learning and teamwork matter most.`
+      cards.join("\n\n") +
+      `\n\n${HR}\n` +
+      `💡  **Whispers from the Mod:**\n` +
+      `> ${getRandomLeaderboardTip()}\n\n` +
+      `-# ⚖️ **Fair Scoring:** Scores are normalized against community benchmarks so learning and teamwork matter most.`,
   );
 
   return embed;
@@ -170,11 +189,11 @@ export async function buildMemberEngagementCard(discordUser) {
     `### 🤝  Contributions & Peer Thanks (10% Weight)`,
     `• Recognition: **${s.contributionPoints}** pts from peer thanks & awards\n`,
     `${HR}\n`,
-    `🔥 **Daily Streak:** **${member.streak_current || 0} day${(member.streak_current || 0) !== 1 ? 's' : ''}**  ·  📅 **Active Days:** **${s.activeDays} / 30**`,
-  ].join('\n');
+    `🔥 **Daily Streak:** **${member.streak_current || 0} day${(member.streak_current || 0) !== 1 ? "s" : ""}**  ·  📅 **Active Days:** **${s.activeDays} / 30**`,
+  ].join("\n");
 
   const embed = new EmbedBuilder()
-    .setColor(0x00C853)
+    .setColor(0x00c853)
     .setAuthor({
       name: `${discordUser.username} — Community Engagement Scorecard`,
       iconURL: discordUser.displayAvatarURL({ size: 128 }),
@@ -183,7 +202,7 @@ export async function buildMemberEngagementCard(discordUser) {
     .setThumbnail(discordUser.displayAvatarURL({ size: 256 }))
     .setDescription(description)
     .setFooter({
-      text: 'HCC AutoEngage • Balanced scores reward learning, discussion & collaboration!',
+      text: "HCC AutoEngage • Balanced scores reward learning, discussion & collaboration!",
     })
     .setTimestamp();
 
