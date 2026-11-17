@@ -9,18 +9,21 @@ import {
   ButtonBuilder,
   ButtonStyle,
   MessageFlags,
-} from 'discord.js';
-import { COLORS } from '../../utils/embeds.js';
-import { logger } from '../../utils/logger.js';
-import { isStickerAdmin } from '../../utils/permissions.js';
+} from "discord.js";
+import { COLORS } from "../../utils/embeds.js";
+import { logger } from "../../utils/logger.js";
+import { isStickerAdmin } from "../../utils/permissions.js";
 import {
   getPendingEmojiCandidates,
   getEmojiCandidateById,
   getEmojiCandidatesByPackId,
   updateEmojiCandidateReviewStatus,
   updateEmojiPackReviewStatus,
-} from '../../database/queries/emojis.js';
-import { uploadApprovedEmojis, getGuildEmojiSlotInfo } from './uploadService.js';
+} from "../../database/queries/emojis.js";
+import {
+  uploadApprovedEmojis,
+  getGuildEmojiSlotInfo,
+} from "./uploadService.js";
 
 /**
  * Builds the embed and button action rows for reviewing an emoji candidate.
@@ -37,24 +40,40 @@ export function buildEmojiReviewPayload(candidate, options = {}) {
 
   const slotSummary = slotInfo
     ? `${slotInfo.remainingStatic} / ${slotInfo.max} static slots free (${slotInfo.usedStatic} used)`
-    : '50 free slots on standard servers';
+    : "50 free slots on standard servers";
 
   const embed = new EmbedBuilder()
     .setColor(COLORS.HCC_BLUE)
     .setTitle(`😀 Emoji Review: :${candidate.name}:`)
     .setDescription(
       `**Candidate ${currentIndex + 1} of ${totalCount}**\n` +
-      `Review this non-vulgar emoji candidate. The bot will **never** upload without explicit administrator approval.`
+        `Review this non-vulgar emoji candidate. The bot will **never** upload without explicit administrator approval.`,
     )
     .setThumbnail(candidate.preview_url)
     .addFields(
-      { name: '📦 Pack Name', value: `${candidate.pack_name} (\`${candidate.pack_id}\`)`, inline: true },
-      { name: '🏷️ Category', value: `\`${candidate.category}\``, inline: true },
-      { name: '💾 Static Emoji Slots', value: slotSummary, inline: true },
-      { name: '👤 Creator', value: candidate.creator || 'HCC Community', inline: true },
-      { name: '📜 License', value: `\`${candidate.license}\``, inline: true },
-      { name: '🔗 Source', value: `[View Source Asset](${candidate.source_url})`, inline: true },
-      { name: '🔥 Trend / Context', value: candidate.trend_reason || 'Popular Gen Z reaction', inline: false }
+      {
+        name: "📦 Pack Name",
+        value: `${candidate.pack_name} (\`${candidate.pack_id}\`)`,
+        inline: true,
+      },
+      { name: "🏷️ Category", value: `\`${candidate.category}\``, inline: true },
+      { name: "💾 Static Emoji Slots", value: slotSummary, inline: true },
+      {
+        name: "👤 Creator",
+        value: candidate.creator || "HCC Community",
+        inline: true,
+      },
+      { name: "📜 License", value: `\`${candidate.license}\``, inline: true },
+      {
+        name: "🔗 Source",
+        value: `[View Source Asset](${candidate.source_url})`,
+        inline: true,
+      },
+      {
+        name: "🔥 Trend / Context",
+        value: candidate.trend_reason || "Popular Gen Z reaction",
+        inline: false,
+      },
     )
     .setFooter({ text: `ID: ${candidate.id} • Clean & Community Verified` })
     .setTimestamp();
@@ -63,14 +82,14 @@ export function buildEmojiReviewPayload(candidate, options = {}) {
   const candidateRow = new ActionRowBuilder().addComponents(
     new ButtonBuilder()
       .setCustomId(`emoji:approve:${candidate.id}`)
-      .setLabel('Approve & Upload')
+      .setLabel("Approve & Upload")
       .setStyle(ButtonStyle.Success)
-      .setEmoji('✅'),
+      .setEmoji("✅"),
     new ButtonBuilder()
       .setCustomId(`emoji:reject:${candidate.id}`)
-      .setLabel('Reject')
+      .setLabel("Reject")
       .setStyle(ButtonStyle.Danger)
-      .setEmoji('❌')
+      .setEmoji("❌"),
   );
 
   if (totalCount > 1) {
@@ -78,18 +97,18 @@ export function buildEmojiReviewPayload(candidate, options = {}) {
       candidateRow.addComponents(
         new ButtonBuilder()
           .setCustomId(`emoji:nav:${currentIndex - 1}`)
-          .setLabel('Previous')
+          .setLabel("Previous")
           .setStyle(ButtonStyle.Secondary)
-          .setEmoji('◀️')
+          .setEmoji("◀️"),
       );
     }
     if (currentIndex < totalCount - 1) {
       candidateRow.addComponents(
         new ButtonBuilder()
           .setCustomId(`emoji:nav:${currentIndex + 1}`)
-          .setLabel('Next')
+          .setLabel("Next")
           .setStyle(ButtonStyle.Secondary)
-          .setEmoji('▶️')
+          .setEmoji("▶️"),
       );
     }
   }
@@ -100,12 +119,12 @@ export function buildEmojiReviewPayload(candidate, options = {}) {
       .setCustomId(`emoji:approve_pack:${candidate.pack_id}`)
       .setLabel(`Approve Entire Pack (${candidate.pack_name})`)
       .setStyle(ButtonStyle.Primary)
-      .setEmoji('📦'),
+      .setEmoji("📦"),
     new ButtonBuilder()
       .setCustomId(`emoji:reject_pack:${candidate.pack_id}`)
       .setLabel(`Reject Entire Pack`)
       .setStyle(ButtonStyle.Secondary)
-      .setEmoji('🗑️')
+      .setEmoji("🗑️"),
   );
 
   return {
@@ -123,26 +142,27 @@ export function buildEmojiReviewPayload(candidate, options = {}) {
 export async function handleEmojiButtonInteraction(interaction) {
   // 1. Strict Security Check
   if (!isStickerAdmin(interaction)) {
-    logger.warn('Unauthorized user attempted emoji moderation button', {
+    logger.warn("Unauthorized user attempted emoji moderation button", {
       user: interaction.user.tag,
       userId: interaction.user.id,
       customId: interaction.customId,
     });
     return interaction.reply({
-      content: '⛔ **Access Denied**: You do not have permission to approve or reject emojis. This action is restricted to HCC administrators.',
+      content:
+        "⛔ **Access Denied**: You do not have permission to approve or reject emojis. This action is restricted to HCC administrators.",
       flags: MessageFlags.Ephemeral,
     });
   }
 
   await interaction.deferUpdate();
 
-  const parts = interaction.customId.split(':');
+  const parts = interaction.customId.split(":");
   const action = parts[1];
   const targetId = parts[2];
 
   try {
     // ─── Approve Single Emoji ────────────────────────────────────────────────
-    if (action === 'approve') {
+    if (action === "approve") {
       const candidate = await getEmojiCandidateById(targetId);
       if (!candidate) {
         return interaction.editReply({
@@ -153,28 +173,43 @@ export async function handleEmojiButtonInteraction(interaction) {
       }
 
       await updateEmojiCandidateReviewStatus(candidate.id, {
-        reviewStatus: 'approved',
+        reviewStatus: "approved",
         approvedBy: interaction.user.id,
       });
 
       // Upload to Discord
-      const uploadResult = await uploadApprovedEmojis(interaction.guild, [candidate]);
+      const uploadResult = await uploadApprovedEmojis(interaction.guild, [
+        candidate,
+      ]);
 
       if (uploadResult.uploaded.length > 0) {
         const item = uploadResult.uploaded[0];
         const successEmbed = new EmbedBuilder()
           .setColor(COLORS.HCC_GREEN)
-          .setTitle('✅ Emoji Approved & Uploaded!')
-          .setDescription(`Custom emoji **:${candidate.name}:** has been added to the HCC Discord server!`)
+          .setTitle("✅ Emoji Approved & Uploaded!")
+          .setDescription(
+            `Custom emoji **:${candidate.name}:** has been added to the HCC Discord server!`,
+          )
           .setThumbnail(candidate.preview_url)
           .addFields(
-            { name: 'Emoji ID', value: `\`${item.emoji.id}\``, inline: true },
-            { name: 'Approved By', value: `<@${interaction.user.id}>`, inline: true },
-            { name: 'Remaining Slots', value: `${uploadResult.remainingSlots} free`, inline: true }
+            { name: "Emoji ID", value: `\`${item.emoji.id}\``, inline: true },
+            {
+              name: "Approved By",
+              value: `<@${interaction.user.id}>`,
+              inline: true,
+            },
+            {
+              name: "Remaining Slots",
+              value: `${uploadResult.remainingSlots} free`,
+              inline: true,
+            },
           )
           .setTimestamp();
 
-        return interaction.editReply({ embeds: [successEmbed], components: [] });
+        return interaction.editReply({
+          embeds: [successEmbed],
+          components: [],
+        });
       }
 
       if (uploadResult.skippedSlots.length > 0) {
@@ -185,7 +220,7 @@ export async function handleEmojiButtonInteraction(interaction) {
         });
       }
 
-      const failReason = uploadResult.failed[0]?.reason || 'Unknown error';
+      const failReason = uploadResult.failed[0]?.reason || "Unknown error";
       return interaction.editReply({
         content: `❌ **Upload Failed**: ${failReason}`,
         embeds: [],
@@ -194,7 +229,7 @@ export async function handleEmojiButtonInteraction(interaction) {
     }
 
     // ─── Reject Single Emoji ────────────────────────────────────────────────
-    if (action === 'reject') {
+    if (action === "reject") {
       const candidate = await getEmojiCandidateById(targetId);
       if (!candidate) {
         return interaction.editReply({
@@ -205,15 +240,17 @@ export async function handleEmojiButtonInteraction(interaction) {
       }
 
       await updateEmojiCandidateReviewStatus(candidate.id, {
-        reviewStatus: 'rejected',
+        reviewStatus: "rejected",
         approvedBy: interaction.user.id,
-        rejectionReason: 'Rejected during manual administrator review',
+        rejectionReason: "Rejected during manual administrator review",
       });
 
       const rejectEmbed = new EmbedBuilder()
         .setColor(COLORS.HCC_RED)
-        .setTitle('❌ Emoji Rejected')
-        .setDescription(`Candidate **:${candidate.name}:** was rejected by <@${interaction.user.id}>. It will not be uploaded.`)
+        .setTitle("❌ Emoji Rejected")
+        .setDescription(
+          `Candidate **:${candidate.name}:** was rejected by <@${interaction.user.id}>. It will not be uploaded.`,
+        )
         .setThumbnail(candidate.preview_url)
         .setTimestamp();
 
@@ -221,9 +258,11 @@ export async function handleEmojiButtonInteraction(interaction) {
     }
 
     // ─── Approve Entire Pack ────────────────────────────────────────────────
-    if (action === 'approve_pack') {
+    if (action === "approve_pack") {
       const candidates = await getEmojiCandidatesByPackId(targetId);
-      const pendingInPack = candidates.filter((c) => c.review_status === 'pending_review');
+      const pendingInPack = candidates.filter(
+        (c) => c.review_status === "pending_review",
+      );
 
       if (pendingInPack.length === 0) {
         return interaction.editReply({
@@ -234,39 +273,49 @@ export async function handleEmojiButtonInteraction(interaction) {
       }
 
       await updateEmojiPackReviewStatus(targetId, {
-        reviewStatus: 'approved',
+        reviewStatus: "approved",
         approvedBy: interaction.user.id,
       });
 
       // Upload all approved candidates in this pack
-      const uploadResult = await uploadApprovedEmojis(interaction.guild, pendingInPack);
+      const uploadResult = await uploadApprovedEmojis(
+        interaction.guild,
+        pendingInPack,
+      );
 
       const resultEmbed = new EmbedBuilder()
-        .setColor(uploadResult.failed.length > 0 ? COLORS.HCC_AMBER : COLORS.HCC_GREEN)
+        .setColor(
+          uploadResult.failed.length > 0 ? COLORS.HCC_AMBER : COLORS.HCC_GREEN,
+        )
         .setTitle(`📦 Emoji Pack Processed: ${targetId}`)
         .setDescription(
           `**Pack Approval Summary** by <@${interaction.user.id}>:\n` +
-          `• **Uploaded:** ${uploadResult.uploaded.length} emoji(s)\n` +
-          `• **Failed:** ${uploadResult.failed.length}\n` +
-          `• **Skipped (Slot Limit):** ${uploadResult.skippedSlots.length}\n` +
-          `• **Remaining Server Slots:** ${uploadResult.remainingSlots}`
+            `• **Uploaded:** ${uploadResult.uploaded.length} emoji(s)\n` +
+            `• **Failed:** ${uploadResult.failed.length}\n` +
+            `• **Skipped (Slot Limit):** ${uploadResult.skippedSlots.length}\n` +
+            `• **Remaining Server Slots:** ${uploadResult.remainingSlots}`,
         )
         .setTimestamp();
 
       if (uploadResult.skippedSlots.length > 0) {
-        const skippedNames = uploadResult.skippedSlots.map((s) => `:${s.candidate.name}:`).join(', ');
-        resultEmbed.addFields({ name: '⚠️ Skipped Due to Capacity (50 max)', value: skippedNames.slice(0, 1024) });
+        const skippedNames = uploadResult.skippedSlots
+          .map((s) => `:${s.candidate.name}:`)
+          .join(", ");
+        resultEmbed.addFields({
+          name: "⚠️ Skipped Due to Capacity (50 max)",
+          value: skippedNames.slice(0, 1024),
+        });
       }
 
       return interaction.editReply({ embeds: [resultEmbed], components: [] });
     }
 
     // ─── Reject Entire Pack ─────────────────────────────────────────────────
-    if (action === 'reject_pack') {
+    if (action === "reject_pack") {
       await updateEmojiPackReviewStatus(targetId, {
-        reviewStatus: 'rejected',
+        reviewStatus: "rejected",
         approvedBy: interaction.user.id,
-        rejectionReason: 'Pack rejected by administrator',
+        rejectionReason: "Pack rejected by administrator",
       });
 
       return interaction.editReply({
@@ -277,13 +326,14 @@ export async function handleEmojiButtonInteraction(interaction) {
     }
 
     // ─── Navigation ─────────────────────────────────────────────────────────
-    if (action === 'nav') {
+    if (action === "nav") {
       const nextIndex = parseInt(targetId, 10) || 0;
       const pending = await getPendingEmojiCandidates({ limit: 50 });
 
       if (pending.length === 0) {
         return interaction.editReply({
-          content: '🎉 **All caught up!** No pending emoji candidates to review.',
+          content:
+            "🎉 **All caught up!** No pending emoji candidates to review.",
           embeds: [],
           components: [],
         });
@@ -302,7 +352,7 @@ export async function handleEmojiButtonInteraction(interaction) {
       return interaction.editReply(payload);
     }
   } catch (err) {
-    logger.error('Error handling emoji button interaction', {
+    logger.error("Error handling emoji button interaction", {
       error: err.message,
       stack: err.stack,
     });
@@ -313,4 +363,3 @@ export async function handleEmojiButtonInteraction(interaction) {
     });
   }
 }
-

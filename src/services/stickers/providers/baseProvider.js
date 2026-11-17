@@ -10,7 +10,9 @@ export class BaseStickerProvider {
    */
   constructor(id, name) {
     if (this.constructor === BaseStickerProvider) {
-      throw new Error('BaseStickerProvider is an abstract class and cannot be instantiated directly.');
+      throw new Error(
+        "BaseStickerProvider is an abstract class and cannot be instantiated directly.",
+      );
     }
     this.id = id;
     this.name = name;
@@ -29,4 +31,3 @@ export class BaseStickerProvider {
     throw new Error('Method "discover()" must be implemented by subclass.');
   }
 }
-

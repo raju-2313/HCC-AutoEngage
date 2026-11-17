@@ -3,8 +3,8 @@
  * Database operations for quiz_attempts table.
  */
 
-import { supabaseAdmin } from '../client.js';
-import { logger } from '../../utils/logger.js';
+import { supabaseAdmin } from "../client.js";
+import { logger } from "../../utils/logger.js";
 
 /**
  * Submits a quiz attempt using atomic PostgreSQL transaction procedure.
@@ -12,25 +12,38 @@ import { logger } from '../../utils/logger.js';
  * and updates member points/streaks atomically in a single ACID transaction.
  */
 export async function submitQuizAttempt({ quizId, discordId, selectedOption }) {
-  const { data, error } = await supabaseAdmin.rpc('submit_quiz_attempt', {
+  const { data, error } = await supabaseAdmin.rpc("submit_quiz_attempt", {
     p_quiz_id: quizId,
     p_discord_id: discordId,
     p_selected_option: selectedOption,
   });
 
   if (error) {
-    if (error.code === '23505' || error.message?.includes('duplicate key')) {
-      logger.warn('Duplicate quiz attempt prevented via RPC', { quizId, discordId });
-      throw new Error('DUPLICATE_ATTEMPT');
+    if (error.code === "23505" || error.message?.includes("duplicate key")) {
+      logger.warn("Duplicate quiz attempt prevented via RPC", {
+        quizId,
+        discordId,
+      });
+      throw new Error("DUPLICATE_ATTEMPT");
     }
     // Quiz was closed between button click and server processing (last-second race condition)
-    if (error.message?.includes('not active for submissions') || error.message?.includes('is not active')) {
-      logger.warn('Late attempt rejected — quiz closed before submission arrived', { quizId, discordId });
-      const lateErr = new Error('QUIZ_EXPIRED');
-      lateErr.code = 'QUIZ_EXPIRED';
+    if (
+      error.message?.includes("not active for submissions") ||
+      error.message?.includes("is not active")
+    ) {
+      logger.warn(
+        "Late attempt rejected — quiz closed before submission arrived",
+        { quizId, discordId },
+      );
+      const lateErr = new Error("QUIZ_EXPIRED");
+      lateErr.code = "QUIZ_EXPIRED";
       throw lateErr;
     }
-    logger.error('Error in submitQuizAttempt RPC', { quizId, discordId, error: error.message });
+    logger.error("Error in submitQuizAttempt RPC", {
+      quizId,
+      discordId,
+      error: error.message,
+    });
     throw error;
   }
 
@@ -43,14 +56,18 @@ export async function submitQuizAttempt({ quizId, discordId, selectedOption }) {
  */
 export async function hasMemberAttempted(quizId, memberId) {
   const { data, error } = await supabaseAdmin
-    .from('quiz_attempts')
-    .select('id')
-    .eq('quiz_id', quizId)
-    .eq('member_id', memberId)
+    .from("quiz_attempts")
+    .select("id")
+    .eq("quiz_id", quizId)
+    .eq("member_id", memberId)
     .maybeSingle();
 
   if (error) {
-    logger.error('Error checking quiz attempt', { quizId, memberId, error: error.message });
+    logger.error("Error checking quiz attempt", {
+      quizId,
+      memberId,
+      error: error.message,
+    });
     throw error;
   }
   return Boolean(data);
@@ -69,7 +86,7 @@ export async function recordQuizAttempt({
   xpAwarded,
 }) {
   const { data, error } = await supabaseAdmin
-    .from('quiz_attempts')
+    .from("quiz_attempts")
     .insert({
       quiz_id: quizId,
       member_id: memberId,
@@ -84,12 +101,20 @@ export async function recordQuizAttempt({
     .single();
 
   if (error) {
-    if (error.code === '23505') {
+    if (error.code === "23505") {
       // Postgres unique_violation
-      logger.warn('Duplicate quiz attempt prevented', { quizId, memberId, discordId });
-      throw new Error('DUPLICATE_ATTEMPT');
+      logger.warn("Duplicate quiz attempt prevented", {
+        quizId,
+        memberId,
+        discordId,
+      });
+      throw new Error("DUPLICATE_ATTEMPT");
     }
-    logger.error('Error recording quiz attempt', { quizId, memberId, error: error.message });
+    logger.error("Error recording quiz attempt", {
+      quizId,
+      memberId,
+      error: error.message,
+    });
     throw error;
   }
   return data;
@@ -100,19 +125,23 @@ export async function recordQuizAttempt({
  */
 export async function getMemberQuizAttempts(discordId, limit = 10) {
   const { data, error } = await supabaseAdmin
-    .from('quiz_attempts')
-    .select(`
+    .from("quiz_attempts")
+    .select(
+      `
       *,
       quizzes (title, category, difficulty)
-    `)
-    .eq('discord_id', discordId)
-    .order('submitted_at', { ascending: false })
+    `,
+    )
+    .eq("discord_id", discordId)
+    .order("submitted_at", { ascending: false })
     .limit(limit);
 
   if (error) {
-    logger.error('Error fetching member quiz attempts', { discordId, error: error.message });
+    logger.error("Error fetching member quiz attempts", {
+      discordId,
+      error: error.message,
+    });
     throw error;
   }
   return data || [];
 }
-

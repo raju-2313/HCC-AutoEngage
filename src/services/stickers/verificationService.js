@@ -3,22 +3,22 @@
  * Multi-layer content moderation, licensing verification, and Discord constraint checks.
  */
 
-import { logger } from '../../utils/logger.js';
+import { logger } from "../../utils/logger.js";
 
 // Approved open / redistribution licenses
 const ACCEPTABLE_LICENSES = new Set([
-  'CC0',
-  'CC0-1.0',
-  'CC-BY',
-  'CC-BY-3.0',
-  'CC-BY-4.0',
-  'CC-BY-SA',
-  'CC-BY-SA-4.0',
-  'MIT',
-  'APACHE-2.0',
-  'PUBLIC_DOMAIN',
-  'HCC-COMMUNITY-FAIRUSE',
-  'OPEN_SOURCE',
+  "CC0",
+  "CC0-1.0",
+  "CC-BY",
+  "CC-BY-3.0",
+  "CC-BY-4.0",
+  "CC-BY-SA",
+  "CC-BY-SA-4.0",
+  "MIT",
+  "APACHE-2.0",
+  "PUBLIC_DOMAIN",
+  "HCC-COMMUNITY-FAIRUSE",
+  "OPEN_SOURCE",
 ]);
 
 // Explicit words & patterns that violate community standards
@@ -31,7 +31,7 @@ const PROFANITY_PATTERNS = [
 
 // Discord limits
 const MAX_DISCORD_STICKER_SIZE_BYTES = 512 * 1024; // 512 KB
-const ALLOWED_ASSET_FORMATS = new Set(['png', 'apng', 'gif', 'json']);
+const ALLOWED_ASSET_FORMATS = new Set(["png", "apng", "gif", "json"]);
 
 /**
  * Validates text fields for profanity, vulgarity, hate speech, and harassment.
@@ -42,7 +42,7 @@ export function checkTextModeration(text) {
   if (!text) return { clean: true };
 
   // Replace underscores and hyphens with spaces so word boundary matching \b works for snake_case emoji names
-  const normalizedText = text.replace(/[_\-]+/g, ' ');
+  const normalizedText = text.replace(/[_\-]+/g, " ");
 
   for (const pattern of PROFANITY_PATTERNS) {
     if (pattern.test(normalizedText)) {
@@ -59,12 +59,15 @@ export function checkTextModeration(text) {
  * @param {string} [licenseDetails]
  * @returns {{ acceptable: boolean, reason?: string }}
  */
-export function checkLicenseValidity(license, licenseDetails = '') {
+export function checkLicenseValidity(license, licenseDetails = "") {
   if (!license) {
-    return { acceptable: false, reason: 'Missing license or permission attribution.' };
+    return {
+      acceptable: false,
+      reason: "Missing license or permission attribution.",
+    };
   }
 
-  const normalized = license.toUpperCase().trim().replace(/\s+/g, '-');
+  const normalized = license.toUpperCase().trim().replace(/\s+/g, "-");
 
   // Check against accepted whitelist
   if (ACCEPTABLE_LICENSES.has(normalized)) {
@@ -74,11 +77,11 @@ export function checkLicenseValidity(license, licenseDetails = '') {
   // Reject known proprietary or restrictive markers
   const textToCheck = `${normalized} ${licenseDetails}`.toLowerCase();
   if (
-    textToCheck.includes('all rights reserved') ||
-    textToCheck.includes('copyright') ||
-    textToCheck.includes('no redistribution') ||
-    textToCheck.includes('non-commercial') ||
-    textToCheck.includes('proprietary')
+    textToCheck.includes("all rights reserved") ||
+    textToCheck.includes("copyright") ||
+    textToCheck.includes("no redistribution") ||
+    textToCheck.includes("non-commercial") ||
+    textToCheck.includes("proprietary")
   ) {
     return {
       acceptable: false,
@@ -105,7 +108,7 @@ export function checkLicenseValidity(license, licenseDetails = '') {
  * @returns {{ valid: boolean, reason?: string }}
  */
 export function checkDiscordCompatibility(candidate) {
-  const name = (candidate.name || '').trim();
+  const name = (candidate.name || "").trim();
   if (name.length < 2 || name.length > 30) {
     return {
       valid: false,
@@ -113,7 +116,7 @@ export function checkDiscordCompatibility(candidate) {
     };
   }
 
-  const desc = candidate.description || '';
+  const desc = candidate.description || "";
   if (desc.length > 100) {
     return {
       valid: false,
@@ -124,11 +127,11 @@ export function checkDiscordCompatibility(candidate) {
   if (!candidate.tags || candidate.tags.trim().length === 0) {
     return {
       valid: false,
-      reason: 'Discord stickers require at least one autocomplete emoji tag.',
+      reason: "Discord stickers require at least one autocomplete emoji tag.",
     };
   }
 
-  const format = (candidate.asset_format || 'png').toLowerCase().trim();
+  const format = (candidate.asset_format || "png").toLowerCase().trim();
   if (!ALLOWED_ASSET_FORMATS.has(format)) {
     return {
       valid: false,
@@ -136,17 +139,20 @@ export function checkDiscordCompatibility(candidate) {
     };
   }
 
-  if (candidate.file_size_bytes && candidate.file_size_bytes > MAX_DISCORD_STICKER_SIZE_BYTES) {
+  if (
+    candidate.file_size_bytes &&
+    candidate.file_size_bytes > MAX_DISCORD_STICKER_SIZE_BYTES
+  ) {
     return {
       valid: false,
       reason: `Asset file size (${Math.round(candidate.file_size_bytes / 1024)} KB) exceeds Discord 512 KB limit.`,
     };
   }
 
-  if (!candidate.asset_url || !candidate.asset_url.startsWith('http')) {
+  if (!candidate.asset_url || !candidate.asset_url.startsWith("http")) {
     return {
       valid: false,
-      reason: 'Invalid or missing asset URL.',
+      reason: "Invalid or missing asset URL.",
     };
   }
 
@@ -165,31 +171,34 @@ export function checkDiscordCompatibility(candidate) {
  */
 export function verifyCandidate(candidate) {
   // 1. Check text moderation on name, description, tags, and trend reason
-  const combinedText = `${candidate.name || ''} ${candidate.description || ''} ${candidate.trend_reason || ''}`;
+  const combinedText = `${candidate.name || ""} ${candidate.description || ""} ${candidate.trend_reason || ""}`;
   const textMod = checkTextModeration(combinedText);
   if (!textMod.clean) {
-    logger.warn('Sticker rejected: profanity or vulgar content detected', {
+    logger.warn("Sticker rejected: profanity or vulgar content detected", {
       candidate: candidate.name,
       pattern: textMod.matchedPattern,
     });
     return {
       valid: false,
-      contentStatus: 'flagged_profanity',
-      reason: 'Contains profanity, vulgarity, or inappropriate text.',
+      contentStatus: "flagged_profanity",
+      reason: "Contains profanity, vulgarity, or inappropriate text.",
     };
   }
 
   // 2. Check licensing & redistribution rights
-  const licenseCheck = checkLicenseValidity(candidate.license, candidate.license_details);
+  const licenseCheck = checkLicenseValidity(
+    candidate.license,
+    candidate.license_details,
+  );
   if (!licenseCheck.acceptable) {
-    logger.warn('Sticker rejected: license check failed', {
+    logger.warn("Sticker rejected: license check failed", {
       candidate: candidate.name,
       license: candidate.license,
       reason: licenseCheck.reason,
     });
     return {
       valid: false,
-      contentStatus: 'flagged_license',
+      contentStatus: "flagged_license",
       reason: licenseCheck.reason,
     };
   }
@@ -197,20 +206,19 @@ export function verifyCandidate(candidate) {
   // 3. Check Discord format & technical constraints
   const discordCheck = checkDiscordCompatibility(candidate);
   if (!discordCheck.valid) {
-    logger.warn('Sticker rejected: Discord compatibility check failed', {
+    logger.warn("Sticker rejected: Discord compatibility check failed", {
       candidate: candidate.name,
       reason: discordCheck.reason,
     });
     return {
       valid: false,
-      contentStatus: 'flagged_quality',
+      contentStatus: "flagged_quality",
       reason: discordCheck.reason,
     };
   }
 
   return {
     valid: true,
-    contentStatus: 'verified',
+    contentStatus: "verified",
   };
 }
-
