@@ -8,32 +8,37 @@
  *  3. Closes/clears active test quizzes.
  */
 
-import { supabaseAdmin } from '../database/client.js';
-import { logger } from '../utils/logger.js';
+import { supabaseAdmin } from "../database/client.js";
+import { logger } from "../utils/logger.js";
 
 async function resetAllToZero() {
-  logger.info('🔄 Starting complete database reset for fresh community launch…');
+  logger.info(
+    "🔄 Starting complete database reset for fresh community launch…",
+  );
 
   const tablesToClear = [
-    'engagement_events',
-    'voice_sessions',
-    'contribution_recognitions',
-    'engagement_daily_stats',
-    'engagement_scores',
-    'quiz_attempts',
-    'points_history',
-    'leaderboard_snapshots',
-    'monthly_rewards',
-    'activity_logs',
-    'quiz_questions',
-    'quizzes',
+    "engagement_events",
+    "voice_sessions",
+    "contribution_recognitions",
+    "engagement_daily_stats",
+    "engagement_scores",
+    "quiz_attempts",
+    "points_history",
+    "leaderboard_snapshots",
+    "monthly_rewards",
+    "activity_logs",
+    "quiz_questions",
+    "quizzes",
     // Note: daily session records are stored in the quizzes table (category='daily_timed_session')
     // and are already cleared above — no separate table needed.
   ];
 
   for (const table of tablesToClear) {
     try {
-      const { error } = await supabaseAdmin.from(table).delete().neq('id', '00000000-0000-0000-0000-000000000000');
+      const { error } = await supabaseAdmin
+        .from(table)
+        .delete()
+        .neq("id", "00000000-0000-0000-0000-000000000000");
       if (error) {
         logger.warn(`Could not clear table ${table}: ${error.message}`);
       } else {
@@ -47,7 +52,7 @@ async function resetAllToZero() {
   // Reset all members stats to zero
   try {
     const { data: updatedMembers, error: memberErr } = await supabaseAdmin
-      .from('members')
+      .from("members")
       .update({
         total_points: 0,
         total_xp: 0,
@@ -57,24 +62,28 @@ async function resetAllToZero() {
         quizzes_completed: 0,
         quizzes_won: 0,
       })
-      .neq('id', '00000000-0000-0000-0000-000000000000')
-      .select('id, discord_id, username');
+      .neq("id", "00000000-0000-0000-0000-000000000000")
+      .select("id, discord_id, username");
 
     if (memberErr) {
-      logger.error('Failed to reset member stats:', memberErr);
+      logger.error("Failed to reset member stats:", memberErr);
     } else {
-      logger.info(`Successfully reset ${updatedMembers?.length || 0} members back to Level 1, 0 Points, 0 Streak ✅`);
+      logger.info(
+        `Successfully reset ${updatedMembers?.length || 0} members back to Level 1, 0 Points, 0 Streak ✅`,
+      );
     }
   } catch (err) {
-    logger.error('Error updating members:', err);
+    logger.error("Error updating members:", err);
   }
 
-  logger.info('🎉 Database reset complete! Everything is set to 0 for tomorrow\'s fresh start.');
+  logger.info(
+    "🎉 Database reset complete! Everything is set to 0 for tomorrow's fresh start.",
+  );
 }
 
 resetAllToZero()
   .then(() => process.exit(0))
   .catch((err) => {
-    logger.error('Reset failed:', err);
+    logger.error("Reset failed:", err);
     process.exit(1);
   });

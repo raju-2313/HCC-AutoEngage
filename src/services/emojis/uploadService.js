@@ -3,15 +3,15 @@
  * Handles Discord custom emoji capacity calculation, deduplication, and safe uploads.
  */
 
-import { logger } from '../../utils/logger.js';
+import { logger } from "../../utils/logger.js";
 import {
   updateEmojiCandidateUploadStatus,
   getApprovedUnuploadedEmojis,
-} from '../../database/queries/emojis.js';
+} from "../../database/queries/emojis.js";
 
 // Discord Server Boost Tier Emoji Limits
 const EMOJI_TIER_LIMITS = {
-  0: 50,  // Tier 0 (Free Server) gives 50 static + 50 animated emojis!
+  0: 50, // Tier 0 (Free Server) gives 50 static + 50 animated emojis!
   1: 100, // Tier 1
   2: 150, // Tier 2
   3: 250, // Tier 3
@@ -24,7 +24,7 @@ const EMOJI_TIER_LIMITS = {
  */
 export function getGuildMaxEmojiSlots(guild) {
   if (!guild) return 50;
-  const tier = typeof guild.premiumTier === 'number' ? guild.premiumTier : 0;
+  const tier = typeof guild.premiumTier === "number" ? guild.premiumTier : 0;
   return EMOJI_TIER_LIMITS[tier] || 50;
 }
 
@@ -45,7 +45,10 @@ export async function getGuildEmojiSlotInfo(guild) {
 
   try {
     const emojis = await guild.emojis.fetch();
-    const emojiList = typeof emojis.map === 'function' ? emojis : Array.from(emojis.values ? emojis.values() : emojis);
+    const emojiList =
+      typeof emojis.map === "function"
+        ? emojis
+        : Array.from(emojis.values ? emojis.values() : emojis);
 
     let usedStatic = 0;
     let usedAnimated = 0;
@@ -73,7 +76,9 @@ export async function getGuildEmojiSlotInfo(guild) {
       emojis,
     };
   } catch (err) {
-    logger.error('Failed to fetch guild emojis for slot calculation', { error: err.message });
+    logger.error("Failed to fetch guild emojis for slot calculation", {
+      error: err.message,
+    });
     return {
       max,
       usedStatic: 0,
@@ -117,16 +122,22 @@ async function fetchImageBuffer(url, timeoutMs = 8000) {
  * @returns {Promise<{ success: boolean, emoji?: Object, reason?: string }>}
  */
 export async function uploadSingleEmoji(guild, candidate, existingNames) {
-  const cleanName = (candidate.name || '').trim().toLowerCase();
+  const cleanName = (candidate.name || "").trim().toLowerCase();
 
   // 1. Check for duplicates
   if (existingNames && existingNames.has(cleanName)) {
-    logger.warn('Skipping upload: emoji with identical name already exists in guild', { name: cleanName });
+    logger.warn(
+      "Skipping upload: emoji with identical name already exists in guild",
+      { name: cleanName },
+    );
     await updateEmojiCandidateUploadStatus(candidate.id, {
-      uploadStatus: 'skipped_slots',
-      uploadError: 'Emoji with identical name already exists in server.',
+      uploadStatus: "skipped_slots",
+      uploadError: "Emoji with identical name already exists in server.",
     });
-    return { success: false, reason: `Emoji ":${cleanName}:" already exists on the server.` };
+    return {
+      success: false,
+      reason: `Emoji ":${cleanName}:" already exists on the server.`,
+    };
   }
 
   // 2. Fetch buffer
@@ -135,9 +146,12 @@ export async function uploadSingleEmoji(guild, candidate, existingNames) {
     fileBuffer = await fetchImageBuffer(candidate.asset_url);
   } catch (err) {
     const errorMsg = `Failed to download emoji asset: ${err.message}`;
-    logger.error(errorMsg, { candidateId: candidate.id, url: candidate.asset_url });
+    logger.error(errorMsg, {
+      candidateId: candidate.id,
+      url: candidate.asset_url,
+    });
     await updateEmojiCandidateUploadStatus(candidate.id, {
-      uploadStatus: 'failed',
+      uploadStatus: "failed",
       uploadError: errorMsg,
     });
     return { success: false, reason: errorMsg };
@@ -148,14 +162,16 @@ export async function uploadSingleEmoji(guild, candidate, existingNames) {
     const errorMsg = `Asset size (${Math.round(fileBuffer.length / 1024)} KB) exceeds Discord emoji 256 KB limit.`;
     logger.error(errorMsg, { candidateId: candidate.id });
     await updateEmojiCandidateUploadStatus(candidate.id, {
-      uploadStatus: 'failed',
+      uploadStatus: "failed",
       uploadError: errorMsg,
     });
     return { success: false, reason: errorMsg };
   }
 
   // 4. Upload to Discord using guild.emojis.create
-  await updateEmojiCandidateUploadStatus(candidate.id, { uploadStatus: 'uploading' });
+  await updateEmojiCandidateUploadStatus(candidate.id, {
+    uploadStatus: "uploading",
+  });
 
   try {
     const created = await guild.emojis.create({
@@ -163,14 +179,14 @@ export async function uploadSingleEmoji(guild, candidate, existingNames) {
       name: cleanName,
     });
 
-    logger.info('Emoji uploaded to Discord successfully', {
+    logger.info("Emoji uploaded to Discord successfully", {
       name: cleanName,
       emojiId: created.id,
       guildId: guild.id,
     });
 
     await updateEmojiCandidateUploadStatus(candidate.id, {
-      uploadStatus: 'uploaded',
+      uploadStatus: "uploaded",
       discordEmojiId: created.id,
     });
 
@@ -184,7 +200,7 @@ export async function uploadSingleEmoji(guild, candidate, existingNames) {
     logger.error(errorMsg, { candidateId: candidate.id, error: err.message });
 
     await updateEmojiCandidateUploadStatus(candidate.id, {
-      uploadStatus: 'failed',
+      uploadStatus: "failed",
       uploadError: errorMsg,
     });
 
@@ -216,7 +232,7 @@ export async function uploadApprovedEmojis(guild, candidates = null) {
   const failed = [];
   const skippedSlots = [];
 
-  logger.info('Processing approved emoji uploads', {
+  logger.info("Processing approved emoji uploads", {
     candidatesCount: toUpload.length,
     availableSlots,
     guildName: guild.name,
@@ -224,14 +240,22 @@ export async function uploadApprovedEmojis(guild, candidates = null) {
 
   for (const candidate of toUpload) {
     if (availableSlots <= 0) {
-      logger.warn('Guild emoji slots exhausted. Skipping remaining approved candidates.', {
-        candidateName: candidate.name,
-      });
+      logger.warn(
+        "Guild emoji slots exhausted. Skipping remaining approved candidates.",
+        {
+          candidateName: candidate.name,
+        },
+      );
       await updateEmojiCandidateUploadStatus(candidate.id, {
-        uploadStatus: 'skipped_slots',
-        uploadError: 'Insufficient static emoji slots available on Discord server.',
+        uploadStatus: "skipped_slots",
+        uploadError:
+          "Insufficient static emoji slots available on Discord server.",
       });
-      skippedSlots.push({ candidate, reason: 'No available static emoji slots remaining on server (50 slot limit reached)' });
+      skippedSlots.push({
+        candidate,
+        reason:
+          "No available static emoji slots remaining on server (50 slot limit reached)",
+      });
       continue;
     }
 
@@ -255,4 +279,3 @@ export async function uploadApprovedEmojis(guild, candidates = null) {
     remainingSlots: availableSlots,
   };
 }
-

@@ -3,7 +3,7 @@
  * Creates and configures the Discord.js Client with minimal required intents.
  */
 
-import { Client, GatewayIntentBits, Partials } from 'discord.js';
+import { Client, GatewayIntentBits, Partials } from "discord.js";
 
 /**
  * Intents used (principle of least privilege):
@@ -35,4 +35,3 @@ export function createClient() {
     failIfNotExists: false,
   });
 }
-

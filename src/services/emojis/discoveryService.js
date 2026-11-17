@@ -3,10 +3,10 @@
  * Multi-provider emoji discovery and verification pipeline.
  */
 
-import { logger } from '../../utils/logger.js';
-import { Popular50EmojiProvider } from './providers/popular50EmojiProvider.js';
-import { verifyEmojiCandidate } from './verificationService.js';
-import { saveEmojiCandidates } from '../../database/queries/emojis.js';
+import { logger } from "../../utils/logger.js";
+import { Popular50EmojiProvider } from "./providers/popular50EmojiProvider.js";
+import { verifyEmojiCandidate } from "./verificationService.js";
+import { saveEmojiCandidates } from "../../database/queries/emojis.js";
 
 class EmojiDiscoveryService {
   constructor() {
@@ -20,7 +20,9 @@ class EmojiDiscoveryService {
    */
   registerProvider(provider) {
     this.providers.set(provider.id, provider);
-    logger.info(`Registered emoji discovery provider: ${provider.name} (${provider.id})`);
+    logger.info(
+      `Registered emoji discovery provider: ${provider.name} (${provider.id})`,
+    );
   }
 
   /**
@@ -45,7 +47,11 @@ class EmojiDiscoveryService {
     const limit = options.limit || 50;
     const providerId = options.providerId;
 
-    logger.info('Starting emoji discovery scan…', { limit, providerId, category: options.category });
+    logger.info("Starting emoji discovery scan…", {
+      limit,
+      providerId,
+      category: options.category,
+    });
 
     const rawCandidates = [];
 
@@ -60,13 +66,17 @@ class EmojiDiscoveryService {
         });
         rawCandidates.push(...found);
       } catch (err) {
-        logger.error(`Error discovering emojis from provider: ${id}`, { error: err.message });
+        logger.error(`Error discovering emojis from provider: ${id}`, {
+          error: err.message,
+        });
       }
 
       if (rawCandidates.length >= limit) break;
     }
 
-    logger.info(`Discovered ${rawCandidates.length} raw emoji candidates. Running verification pipeline…`);
+    logger.info(
+      `Discovered ${rawCandidates.length} raw emoji candidates. Running verification pipeline…`,
+    );
 
     // 2. Run verification pipeline
     const processedCandidates = [];
@@ -78,24 +88,24 @@ class EmojiDiscoveryService {
 
       const record = {
         name: candidate.name,
-        description: candidate.description || '',
-        pack_id: candidate.pack_id || 'popular_50_emojis',
-        pack_name: candidate.pack_name || 'HCC Top 50 Gen Z & Tech Emojis',
-        category: candidate.category || 'coding_memes',
+        description: candidate.description || "",
+        pack_id: candidate.pack_id || "popular_50_emojis",
+        pack_name: candidate.pack_name || "HCC Top 50 Gen Z & Tech Emojis",
+        category: candidate.category || "coding_memes",
         preview_url: candidate.preview_url,
         asset_url: candidate.asset_url,
         source_url: candidate.source_url,
-        creator: candidate.creator || 'HCC Open Community',
+        creator: candidate.creator || "HCC Open Community",
         license: candidate.license,
-        license_details: candidate.license_details || '',
-        trend_reason: candidate.trend_reason || 'Trending Gen Z reaction',
+        license_details: candidate.license_details || "",
+        trend_reason: candidate.trend_reason || "Trending Gen Z reaction",
         is_animated: candidate.is_animated || false,
         content_status: check.contentStatus,
-        review_status: check.valid ? 'pending_review' : 'rejected',
+        review_status: check.valid ? "pending_review" : "rejected",
         rejection_reason: check.valid ? null : check.reason,
-        upload_status: 'not_uploaded',
+        upload_status: "not_uploaded",
         file_size_bytes: candidate.file_size_bytes || 0,
-        asset_format: candidate.asset_format || 'png',
+        asset_format: candidate.asset_format || "png",
       };
 
       if (check.valid) {
@@ -110,7 +120,7 @@ class EmojiDiscoveryService {
     // 3. Persist to Supabase
     const dbResult = await saveEmojiCandidates(processedCandidates);
 
-    logger.info('Emoji discovery scan completed', {
+    logger.info("Emoji discovery scan completed", {
       scanned: processedCandidates.length,
       verified: verifiedCount,
       flagged: flaggedCount,
@@ -130,4 +140,3 @@ class EmojiDiscoveryService {
 }
 
 export const emojiDiscoveryService = new EmojiDiscoveryService();
-

@@ -4,7 +4,7 @@
  * without revealing the exact internal scoring algorithms.
  */
 
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder } from "discord.js";
 
 export const VAGUE_LEADERBOARD_TIPS = [
   "🤫 *Word on the server: Quizzes test your speed, but active discussions in general build silent momentum...*",
@@ -35,23 +35,23 @@ export function getRandomLeaderboardTip() {
  */
 export function buildStandaloneHintEmbed(customTip = null) {
   const tip = customTip || getRandomLeaderboardTip();
-  const HR = '───────────────────────';
+  const HR = "───────────────────────";
 
   return new EmbedBuilder()
-    .setColor(0x8E44AD) // Mystic Royal Violet
+    .setColor(0x8e44ad) // Mystic Royal Violet
     .setAuthor({
-      name: 'Whispers from the Mod  🤫',
-      iconURL: 'https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/1f575-fe0f.png',
+      name: "Whispers from the Mod  🤫",
+      iconURL:
+        "https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/1f575-fe0f.png",
     })
-    .setTitle('💡  Leaderboard Intel Drop')
+    .setTitle("💡  Leaderboard Intel Drop")
     .setDescription(
       `> A transmission from the moderation shadows to help you climb the ranks.\n${HR}\n\n` +
-      `### 📜  Community Dispatch\n\n` +
-      `> ${tip}\n\n` +
-      `${HR}\n` +
-      `-# 👁️ *The scoring algorithm watches more than just raw speed. Stay active across all channels to unlock the podium.*`
+        `### 📜  Community Dispatch\n\n` +
+        `> ${tip}\n\n` +
+        `${HR}\n` +
+        `-# 👁️ *The scoring algorithm watches more than just raw speed. Stay active across all channels to unlock the podium.*`,
     )
-    .setFooter({ text: 'HCC AutoEngage • Secret Community Intel' })
+    .setFooter({ text: "HCC AutoEngage • Secret Community Intel" })
     .setTimestamp();
 }
-
