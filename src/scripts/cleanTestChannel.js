@@ -5,14 +5,14 @@
  * Target: 1567916304118063124 (autoengage-testing)
  */
 
-import 'dotenv/config';
-import { Client, GatewayIntentBits } from 'discord.js';
+import "dotenv/config";
+import { Client, GatewayIntentBits } from "discord.js";
 
 const TOKEN = process.env.DISCORD_TOKEN;
-const TEST_CHANNEL_ID = '1567916304118063124';
+const TEST_CHANNEL_ID = "1567916304118063124";
 
 if (!TOKEN) {
-  console.error('❌ DISCORD_TOKEN is missing');
+  console.error("❌ DISCORD_TOKEN is missing");
   process.exit(1);
 }
 
@@ -20,14 +20,16 @@ const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
 
-client.once('clientReady', async () => {
+client.once("clientReady", async () => {
   console.log(`🤖 Logged in as ${client.user.tag}`);
   console.log(`📡 Cleaning bot messages in test channel: ${TEST_CHANNEL_ID}…`);
 
   try {
     const channel = await client.channels.fetch(TEST_CHANNEL_ID);
     if (!channel || !channel.isTextBased()) {
-      throw new Error(`Channel ${TEST_CHANNEL_ID} not found or not text-based.`);
+      throw new Error(
+        `Channel ${TEST_CHANNEL_ID} not found or not text-based.`,
+      );
     }
 
     let totalDeleted = 0;
@@ -42,14 +44,18 @@ client.once('clientReady', async () => {
       }
 
       // Filter messages sent by our bot
-      const botMessages = fetched.filter((msg) => msg.author.id === client.user.id);
+      const botMessages = fetched.filter(
+        (msg) => msg.author.id === client.user.id,
+      );
 
       if (botMessages.size === 0) {
         keepScanning = false;
         break;
       }
 
-      console.log(`  🔍 Found ${botMessages.size} bot message(s) in batch of ${fetched.size}…`);
+      console.log(
+        `  🔍 Found ${botMessages.size} bot message(s) in batch of ${fetched.size}…`,
+      );
 
       // Try bulk delete first (for messages under 14 days old)
       try {
@@ -68,7 +74,10 @@ client.once('clientReady', async () => {
         }
       } catch (bulkErr) {
         // Fallback to individual deletion if bulk delete fails
-        console.warn('  ⚠️ Bulk delete fallback to sequential delete:', bulkErr.message);
+        console.warn(
+          "  ⚠️ Bulk delete fallback to sequential delete:",
+          bulkErr.message,
+        );
         for (const msg of botMessages.values()) {
           await msg.delete().catch(() => {});
           totalDeleted++;
@@ -80,9 +89,11 @@ client.once('clientReady', async () => {
       await new Promise((r) => setTimeout(r, 1000));
     }
 
-    console.log(`\n✨ Channel cleanup complete! Deleted ${totalDeleted} bot message(s) from #${channel.name || 'test-channel'}.`);
+    console.log(
+      `\n✨ Channel cleanup complete! Deleted ${totalDeleted} bot message(s) from #${channel.name || "test-channel"}.`,
+    );
   } catch (err) {
-    console.error('❌ Error during channel cleanup:', err.message);
+    console.error("❌ Error during channel cleanup:", err.message);
   } finally {
     client.destroy();
     process.exit(0);
@@ -90,4 +101,3 @@ client.once('clientReady', async () => {
 });
 
 client.login(TOKEN);
-

@@ -10,7 +10,9 @@ export class BaseEmojiProvider {
    */
   constructor(id, name) {
     if (this.constructor === BaseEmojiProvider) {
-      throw new Error('BaseEmojiProvider is an abstract class and cannot be instantiated directly.');
+      throw new Error(
+        "BaseEmojiProvider is an abstract class and cannot be instantiated directly.",
+      );
     }
     this.id = id;
     this.name = name;
@@ -28,4 +30,3 @@ export class BaseEmojiProvider {
     throw new Error('Method "discover()" must be implemented by subclass.');
   }
 }
-

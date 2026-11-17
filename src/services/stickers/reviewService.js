@@ -9,18 +9,21 @@ import {
   ButtonBuilder,
   ButtonStyle,
   MessageFlags,
-} from 'discord.js';
-import { COLORS } from '../../utils/embeds.js';
-import { logger } from '../../utils/logger.js';
-import { isStickerAdmin } from '../../utils/permissions.js';
+} from "discord.js";
+import { COLORS } from "../../utils/embeds.js";
+import { logger } from "../../utils/logger.js";
+import { isStickerAdmin } from "../../utils/permissions.js";
 import {
   getPendingCandidates,
   getCandidateById,
   getCandidatesByPackId,
   updateCandidateReviewStatus,
   updatePackReviewStatus,
-} from '../../database/queries/stickers.js';
-import { uploadApprovedCandidates, getGuildStickerSlotInfo } from './uploadService.js';
+} from "../../database/queries/stickers.js";
+import {
+  uploadApprovedCandidates,
+  getGuildStickerSlotInfo,
+} from "./uploadService.js";
 
 /**
  * Builds the embed and button action rows for reviewing a sticker candidate.
@@ -37,24 +40,44 @@ export function buildCandidateReviewPayload(candidate, options = {}) {
 
   const slotSummary = slotInfo
     ? `${slotInfo.remaining} / ${slotInfo.max} slots free (${slotInfo.used} used)`
-    : 'Slot check on approve';
+    : "Slot check on approve";
 
   const embed = new EmbedBuilder()
     .setColor(COLORS.HCC_AMBER)
     .setTitle(`🎨 Sticker Review: ${candidate.name}`)
     .setDescription(
       `**Candidate ${currentIndex + 1} of ${totalCount}**\n` +
-      `Review this candidate for server addition. The bot will **never** upload without explicit approval.`
+        `Review this candidate for server addition. The bot will **never** upload without explicit approval.`,
     )
     .setImage(candidate.preview_url)
     .addFields(
-      { name: '📦 Pack Name', value: `${candidate.pack_name} (\`${candidate.pack_id}\`)`, inline: true },
-      { name: '🏷️ Category & Tag', value: `\`${candidate.category}\` | ${candidate.tags}`, inline: true },
-      { name: '💾 Server Slots', value: slotSummary, inline: true },
-      { name: '👤 Creator', value: candidate.creator || 'Community Artist', inline: true },
-      { name: '📜 License', value: `\`${candidate.license}\``, inline: true },
-      { name: '🔗 Source', value: `[View Source Asset](${candidate.source_url})`, inline: true },
-      { name: '🔥 Trend / Humour Context', value: candidate.trend_reason || 'Trending college tech reaction', inline: false }
+      {
+        name: "📦 Pack Name",
+        value: `${candidate.pack_name} (\`${candidate.pack_id}\`)`,
+        inline: true,
+      },
+      {
+        name: "🏷️ Category & Tag",
+        value: `\`${candidate.category}\` | ${candidate.tags}`,
+        inline: true,
+      },
+      { name: "💾 Server Slots", value: slotSummary, inline: true },
+      {
+        name: "👤 Creator",
+        value: candidate.creator || "Community Artist",
+        inline: true,
+      },
+      { name: "📜 License", value: `\`${candidate.license}\``, inline: true },
+      {
+        name: "🔗 Source",
+        value: `[View Source Asset](${candidate.source_url})`,
+        inline: true,
+      },
+      {
+        name: "🔥 Trend / Humour Context",
+        value: candidate.trend_reason || "Trending college tech reaction",
+        inline: false,
+      },
     )
     .setFooter({ text: `ID: ${candidate.id} • Verified Clean & Safe` })
     .setTimestamp();
@@ -63,14 +86,14 @@ export function buildCandidateReviewPayload(candidate, options = {}) {
   const candidateRow = new ActionRowBuilder().addComponents(
     new ButtonBuilder()
       .setCustomId(`sticker:approve:${candidate.id}`)
-      .setLabel('Approve & Upload')
+      .setLabel("Approve & Upload")
       .setStyle(ButtonStyle.Success)
-      .setEmoji('✅'),
+      .setEmoji("✅"),
     new ButtonBuilder()
       .setCustomId(`sticker:reject:${candidate.id}`)
-      .setLabel('Reject')
+      .setLabel("Reject")
       .setStyle(ButtonStyle.Danger)
-      .setEmoji('❌')
+      .setEmoji("❌"),
   );
 
   if (totalCount > 1) {
@@ -78,18 +101,18 @@ export function buildCandidateReviewPayload(candidate, options = {}) {
       candidateRow.addComponents(
         new ButtonBuilder()
           .setCustomId(`sticker:nav:${currentIndex - 1}`)
-          .setLabel('Previous')
+          .setLabel("Previous")
           .setStyle(ButtonStyle.Secondary)
-          .setEmoji('◀️')
+          .setEmoji("◀️"),
       );
     }
     if (currentIndex < totalCount - 1) {
       candidateRow.addComponents(
         new ButtonBuilder()
           .setCustomId(`sticker:nav:${currentIndex + 1}`)
-          .setLabel('Next')
+          .setLabel("Next")
           .setStyle(ButtonStyle.Secondary)
-          .setEmoji('▶️')
+          .setEmoji("▶️"),
       );
     }
   }
@@ -100,12 +123,12 @@ export function buildCandidateReviewPayload(candidate, options = {}) {
       .setCustomId(`sticker:approve_pack:${candidate.pack_id}`)
       .setLabel(`Approve Entire Pack (${candidate.pack_name})`)
       .setStyle(ButtonStyle.Primary)
-      .setEmoji('📦'),
+      .setEmoji("📦"),
     new ButtonBuilder()
       .setCustomId(`sticker:reject_pack:${candidate.pack_id}`)
       .setLabel(`Reject Entire Pack`)
       .setStyle(ButtonStyle.Secondary)
-      .setEmoji('🗑️')
+      .setEmoji("🗑️"),
   );
 
   return {
@@ -123,26 +146,27 @@ export function buildCandidateReviewPayload(candidate, options = {}) {
 export async function handleStickerButtonInteraction(interaction) {
   // 1. Strict Security Check
   if (!isStickerAdmin(interaction)) {
-    logger.warn('Unauthorized user attempted sticker moderation button', {
+    logger.warn("Unauthorized user attempted sticker moderation button", {
       user: interaction.user.tag,
       userId: interaction.user.id,
       customId: interaction.customId,
     });
     return interaction.reply({
-      content: '⛔ **Access Denied**: You do not have permission to approve or reject stickers. This action is restricted to HCC administrators.',
+      content:
+        "⛔ **Access Denied**: You do not have permission to approve or reject stickers. This action is restricted to HCC administrators.",
       flags: MessageFlags.Ephemeral,
     });
   }
 
   await interaction.deferUpdate();
 
-  const parts = interaction.customId.split(':');
+  const parts = interaction.customId.split(":");
   const action = parts[1];
   const targetId = parts[2];
 
   try {
     // ─── Approve Single Sticker ──────────────────────────────────────────────
-    if (action === 'approve') {
+    if (action === "approve") {
       const candidate = await getCandidateById(targetId);
       if (!candidate) {
         return interaction.editReply({
@@ -153,29 +177,48 @@ export async function handleStickerButtonInteraction(interaction) {
       }
 
       await updateCandidateReviewStatus(candidate.id, {
-        reviewStatus: 'approved',
+        reviewStatus: "approved",
         approvedBy: interaction.user.id,
       });
 
       // Upload to Discord
-      const uploadResult = await uploadApprovedCandidates(interaction.guild, [candidate]);
+      const uploadResult = await uploadApprovedCandidates(interaction.guild, [
+        candidate,
+      ]);
 
       if (uploadResult.uploaded.length > 0) {
         const item = uploadResult.uploaded[0];
         const successEmbed = new EmbedBuilder()
           .setColor(COLORS.HCC_GREEN)
-          .setTitle('✅ Sticker Approved & Uploaded!')
-          .setDescription(`**${candidate.name}** has been added to the HCC Discord server!`)
+          .setTitle("✅ Sticker Approved & Uploaded!")
+          .setDescription(
+            `**${candidate.name}** has been added to the HCC Discord server!`,
+          )
           .setThumbnail(candidate.preview_url)
           .addFields(
-            { name: 'Sticker ID', value: `\`${item.sticker.id}\``, inline: true },
-            { name: 'Tags', value: candidate.tags, inline: true },
-            { name: 'Approved By', value: `<@${interaction.user.id}>`, inline: true },
-            { name: 'Remaining Slots', value: `${uploadResult.remainingSlots} free`, inline: true }
+            {
+              name: "Sticker ID",
+              value: `\`${item.sticker.id}\``,
+              inline: true,
+            },
+            { name: "Tags", value: candidate.tags, inline: true },
+            {
+              name: "Approved By",
+              value: `<@${interaction.user.id}>`,
+              inline: true,
+            },
+            {
+              name: "Remaining Slots",
+              value: `${uploadResult.remainingSlots} free`,
+              inline: true,
+            },
           )
           .setTimestamp();
 
-        return interaction.editReply({ embeds: [successEmbed], components: [] });
+        return interaction.editReply({
+          embeds: [successEmbed],
+          components: [],
+        });
       }
 
       if (uploadResult.skippedSlots.length > 0) {
@@ -186,7 +229,7 @@ export async function handleStickerButtonInteraction(interaction) {
         });
       }
 
-      const failReason = uploadResult.failed[0]?.reason || 'Unknown error';
+      const failReason = uploadResult.failed[0]?.reason || "Unknown error";
       return interaction.editReply({
         content: `❌ **Upload Failed**: ${failReason}`,
         embeds: [],
@@ -195,7 +238,7 @@ export async function handleStickerButtonInteraction(interaction) {
     }
 
     // ─── Reject Single Sticker ──────────────────────────────────────────────
-    if (action === 'reject') {
+    if (action === "reject") {
       const candidate = await getCandidateById(targetId);
       if (!candidate) {
         return interaction.editReply({
@@ -206,15 +249,17 @@ export async function handleStickerButtonInteraction(interaction) {
       }
 
       await updateCandidateReviewStatus(candidate.id, {
-        reviewStatus: 'rejected',
+        reviewStatus: "rejected",
         approvedBy: interaction.user.id,
-        rejectionReason: 'Rejected during manual administrator review',
+        rejectionReason: "Rejected during manual administrator review",
       });
 
       const rejectEmbed = new EmbedBuilder()
         .setColor(COLORS.HCC_RED)
-        .setTitle('❌ Sticker Rejected')
-        .setDescription(`Candidate **${candidate.name}** was rejected by <@${interaction.user.id}>. It will not be uploaded.`)
+        .setTitle("❌ Sticker Rejected")
+        .setDescription(
+          `Candidate **${candidate.name}** was rejected by <@${interaction.user.id}>. It will not be uploaded.`,
+        )
         .setThumbnail(candidate.preview_url)
         .setTimestamp();
 
@@ -222,9 +267,11 @@ export async function handleStickerButtonInteraction(interaction) {
     }
 
     // ─── Approve Entire Pack ────────────────────────────────────────────────
-    if (action === 'approve_pack') {
+    if (action === "approve_pack") {
       const candidates = await getCandidatesByPackId(targetId);
-      const pendingInPack = candidates.filter((c) => c.review_status === 'pending_review');
+      const pendingInPack = candidates.filter(
+        (c) => c.review_status === "pending_review",
+      );
 
       if (pendingInPack.length === 0) {
         return interaction.editReply({
@@ -235,39 +282,49 @@ export async function handleStickerButtonInteraction(interaction) {
       }
 
       await updatePackReviewStatus(targetId, {
-        reviewStatus: 'approved',
+        reviewStatus: "approved",
         approvedBy: interaction.user.id,
       });
 
       // Upload all approved candidates in this pack
-      const uploadResult = await uploadApprovedCandidates(interaction.guild, pendingInPack);
+      const uploadResult = await uploadApprovedCandidates(
+        interaction.guild,
+        pendingInPack,
+      );
 
       const resultEmbed = new EmbedBuilder()
-        .setColor(uploadResult.failed.length > 0 ? COLORS.HCC_AMBER : COLORS.HCC_GREEN)
+        .setColor(
+          uploadResult.failed.length > 0 ? COLORS.HCC_AMBER : COLORS.HCC_GREEN,
+        )
         .setTitle(`📦 Pack Processed: ${targetId}`)
         .setDescription(
           `**Pack Approval Summary** by <@${interaction.user.id}>:\n` +
-          `• **Uploaded:** ${uploadResult.uploaded.length} sticker(s)\n` +
-          `• **Failed:** ${uploadResult.failed.length}\n` +
-          `• **Skipped (Slot Limit):** ${uploadResult.skippedSlots.length}\n` +
-          `• **Remaining Server Slots:** ${uploadResult.remainingSlots}`
+            `• **Uploaded:** ${uploadResult.uploaded.length} sticker(s)\n` +
+            `• **Failed:** ${uploadResult.failed.length}\n` +
+            `• **Skipped (Slot Limit):** ${uploadResult.skippedSlots.length}\n` +
+            `• **Remaining Server Slots:** ${uploadResult.remainingSlots}`,
         )
         .setTimestamp();
 
       if (uploadResult.skippedSlots.length > 0) {
-        const skippedNames = uploadResult.skippedSlots.map((s) => s.candidate.name).join(', ');
-        resultEmbed.addFields({ name: '⚠️ Skipped Due to Capacity', value: skippedNames });
+        const skippedNames = uploadResult.skippedSlots
+          .map((s) => s.candidate.name)
+          .join(", ");
+        resultEmbed.addFields({
+          name: "⚠️ Skipped Due to Capacity",
+          value: skippedNames,
+        });
       }
 
       return interaction.editReply({ embeds: [resultEmbed], components: [] });
     }
 
     // ─── Reject Entire Pack ─────────────────────────────────────────────────
-    if (action === 'reject_pack') {
+    if (action === "reject_pack") {
       await updatePackReviewStatus(targetId, {
-        reviewStatus: 'rejected',
+        reviewStatus: "rejected",
         approvedBy: interaction.user.id,
-        rejectionReason: 'Pack rejected by administrator',
+        rejectionReason: "Pack rejected by administrator",
       });
 
       return interaction.editReply({
@@ -278,13 +335,14 @@ export async function handleStickerButtonInteraction(interaction) {
     }
 
     // ─── Navigation ─────────────────────────────────────────────────────────
-    if (action === 'nav') {
+    if (action === "nav") {
       const nextIndex = parseInt(targetId, 10) || 0;
       const pending = await getPendingCandidates({ limit: 50 });
 
       if (pending.length === 0) {
         return interaction.editReply({
-          content: '🎉 **All caught up!** No pending sticker candidates to review.',
+          content:
+            "🎉 **All caught up!** No pending sticker candidates to review.",
           embeds: [],
           components: [],
         });
@@ -303,7 +361,7 @@ export async function handleStickerButtonInteraction(interaction) {
       return interaction.editReply(payload);
     }
   } catch (err) {
-    logger.error('Error handling sticker button interaction', {
+    logger.error("Error handling sticker button interaction", {
       error: err.message,
       stack: err.stack,
     });
@@ -314,4 +372,3 @@ export async function handleStickerButtonInteraction(interaction) {
     });
   }
 }
-

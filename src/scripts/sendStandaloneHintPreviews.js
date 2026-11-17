@@ -4,15 +4,18 @@
  * Target: 1567916304118063124
  */
 
-import 'dotenv/config';
-import { Client, GatewayIntentBits } from 'discord.js';
-import { VAGUE_LEADERBOARD_TIPS, buildStandaloneHintEmbed } from '../utils/leaderboardTips.js';
+import "dotenv/config";
+import { Client, GatewayIntentBits } from "discord.js";
+import {
+  VAGUE_LEADERBOARD_TIPS,
+  buildStandaloneHintEmbed,
+} from "../utils/leaderboardTips.js";
 
 const TOKEN = process.env.DISCORD_TOKEN;
-const TEST_CHANNEL_ID = '1567916304118063124';
+const TEST_CHANNEL_ID = "1567916304118063124";
 
 if (!TOKEN) {
-  console.error('❌ DISCORD_TOKEN missing');
+  console.error("❌ DISCORD_TOKEN missing");
   process.exit(1);
 }
 
@@ -20,9 +23,11 @@ const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
 
-client.once('clientReady', async () => {
+client.once("clientReady", async () => {
   console.log(`🤖 Logged in as ${client.user.tag}`);
-  console.log(`📡 Sending 3 standalone hint preview cards to: ${TEST_CHANNEL_ID}`);
+  console.log(
+    `📡 Sending 3 standalone hint preview cards to: ${TEST_CHANNEL_ID}`,
+  );
 
   try {
     const channel = await client.channels.fetch(TEST_CHANNEL_ID);
@@ -45,9 +50,9 @@ client.once('clientReady', async () => {
       await new Promise((r) => setTimeout(r, 1200)); // Brief pause between sends
     }
 
-    console.log('\n🎉 All 3 preview hint cards sent successfully!');
+    console.log("\n🎉 All 3 preview hint cards sent successfully!");
   } catch (err) {
-    console.error('❌ Error sending hint previews:', err.message);
+    console.error("❌ Error sending hint previews:", err.message);
   } finally {
     client.destroy();
     process.exit(0);
@@ -55,4 +60,3 @@ client.once('clientReady', async () => {
 });
 
 client.login(TOKEN);
-
