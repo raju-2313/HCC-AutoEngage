@@ -169,7 +169,10 @@
     "codeSnippet": null,
     "options": [
       { "id": "A", "text": "It links an external CSS stylesheet" },
-      { "id": "B", "text": "It tells the web browser to render the page in standard modern HTML5 mode rather than quirks mode" },
+      {
+        "id": "B",
+        "text": "It tells the web browser to render the page in standard modern HTML5 mode rather than quirks mode"
+      },
       { "id": "C", "text": "It encrypts the HTML page with HTTPS" },
       { "id": "D", "text": "It is an HTML tag that creates the document title" }
     ],
@@ -180,4 +183,3 @@
     "timeLimitSeconds": 15
   }
 ]
-

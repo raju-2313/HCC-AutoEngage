@@ -3,16 +3,16 @@
  * Handles Discord sticker capacity calculation, deduplication, and safe uploads.
  */
 
-import { logger } from '../../utils/logger.js';
+import { logger } from "../../utils/logger.js";
 import {
   updateCandidateUploadStatus,
   getApprovedUnuploadedCandidates,
   getCandidateById,
-} from '../../database/queries/stickers.js';
+} from "../../database/queries/stickers.js";
 
 // Discord Server Boost Tier Sticker Limits
 const STICKER_TIER_LIMITS = {
-  0: 5,  // Tier 0 / None
+  0: 5, // Tier 0 / None
   1: 15, // Tier 1
   2: 30, // Tier 2
   3: 60, // Tier 3
@@ -25,7 +25,7 @@ const STICKER_TIER_LIMITS = {
  */
 export function getGuildMaxStickerSlots(guild) {
   if (!guild) return 5;
-  const tier = typeof guild.premiumTier === 'number' ? guild.premiumTier : 0;
+  const tier = typeof guild.premiumTier === "number" ? guild.premiumTier : 0;
   return STICKER_TIER_LIMITS[tier] || 5;
 }
 
@@ -39,15 +39,29 @@ export async function getGuildStickerSlotInfo(guild) {
 
   try {
     const stickers = await guild.stickers.fetch();
-    const used = typeof stickers.size === 'number' ? stickers.size : (stickers.length || 0);
+    const used =
+      typeof stickers.size === "number" ? stickers.size : stickers.length || 0;
     const remaining = Math.max(0, max - used);
-    const stickerList = typeof stickers.map === 'function' ? stickers : Array.from(stickers.values ? stickers.values() : stickers);
-    const existingNames = new Set(stickerList.map((s) => s.name.toLowerCase().trim()));
+    const stickerList =
+      typeof stickers.map === "function"
+        ? stickers
+        : Array.from(stickers.values ? stickers.values() : stickers);
+    const existingNames = new Set(
+      stickerList.map((s) => s.name.toLowerCase().trim()),
+    );
 
     return { max, used, remaining, existingNames, stickers };
   } catch (err) {
-    logger.error('Failed to fetch guild stickers for slot calculation', { error: err.message });
-    return { max, used: 0, remaining: max, existingNames: new Set(), stickers: new Map() };
+    logger.error("Failed to fetch guild stickers for slot calculation", {
+      error: err.message,
+    });
+    return {
+      max,
+      used: 0,
+      remaining: max,
+      existingNames: new Set(),
+      stickers: new Map(),
+    };
   }
 }
 
@@ -82,17 +96,23 @@ async function fetchImageBuffer(url, timeoutMs = 8000) {
  * @returns {Promise<{ success: boolean, sticker?: Object, reason?: string }>}
  */
 export async function uploadSingleCandidate(guild, candidate, existingNames) {
-  const cleanName = (candidate.name || '').trim();
+  const cleanName = (candidate.name || "").trim();
   const normalizedName = cleanName.toLowerCase();
 
   // 1. Check for duplicates against existing guild stickers
   if (existingNames && existingNames.has(normalizedName)) {
-    logger.warn('Skipping upload: sticker with identical name already exists in guild', { name: cleanName });
+    logger.warn(
+      "Skipping upload: sticker with identical name already exists in guild",
+      { name: cleanName },
+    );
     await updateCandidateUploadStatus(candidate.id, {
-      uploadStatus: 'skipped_slots',
-      uploadError: 'Sticker with identical name already exists in server.',
+      uploadStatus: "skipped_slots",
+      uploadError: "Sticker with identical name already exists in server.",
     });
-    return { success: false, reason: `Sticker "${cleanName}" already exists on the server.` };
+    return {
+      success: false,
+      reason: `Sticker "${cleanName}" already exists on the server.`,
+    };
   }
 
   // 2. Fetch image buffer
@@ -101,9 +121,12 @@ export async function uploadSingleCandidate(guild, candidate, existingNames) {
     fileBuffer = await fetchImageBuffer(candidate.asset_url);
   } catch (err) {
     const errorMsg = `Failed to download sticker asset: ${err.message}`;
-    logger.error(errorMsg, { candidateId: candidate.id, url: candidate.asset_url });
+    logger.error(errorMsg, {
+      candidateId: candidate.id,
+      url: candidate.asset_url,
+    });
     await updateCandidateUploadStatus(candidate.id, {
-      uploadStatus: 'failed',
+      uploadStatus: "failed",
       uploadError: errorMsg,
     });
     return { success: false, reason: errorMsg };
@@ -114,18 +137,24 @@ export async function uploadSingleCandidate(guild, candidate, existingNames) {
     const errorMsg = `Asset size (${Math.round(fileBuffer.length / 1024)} KB) exceeds Discord 512 KB limit.`;
     logger.error(errorMsg, { candidateId: candidate.id });
     await updateCandidateUploadStatus(candidate.id, {
-      uploadStatus: 'failed',
+      uploadStatus: "failed",
       uploadError: errorMsg,
     });
     return { success: false, reason: errorMsg };
   }
 
   // 4. Upload to Discord using Discord.js GuildStickerManager
-  await updateCandidateUploadStatus(candidate.id, { uploadStatus: 'uploading' });
+  await updateCandidateUploadStatus(candidate.id, {
+    uploadStatus: "uploading",
+  });
 
   try {
-    const tagEmoji = candidate.tags || '🏷️';
-    const description = (candidate.description || candidate.trend_reason || '').slice(0, 100);
+    const tagEmoji = candidate.tags || "🏷️";
+    const description = (
+      candidate.description ||
+      candidate.trend_reason ||
+      ""
+    ).slice(0, 100);
 
     const created = await guild.stickers.create({
       file: fileBuffer,
@@ -134,14 +163,14 @@ export async function uploadSingleCandidate(guild, candidate, existingNames) {
       description,
     });
 
-    logger.info('Sticker uploaded to Discord successfully', {
+    logger.info("Sticker uploaded to Discord successfully", {
       name: cleanName,
       stickerId: created.id,
       guildId: guild.id,
     });
 
     await updateCandidateUploadStatus(candidate.id, {
-      uploadStatus: 'uploaded',
+      uploadStatus: "uploaded",
       discordStickerId: created.id,
     });
 
@@ -155,7 +184,7 @@ export async function uploadSingleCandidate(guild, candidate, existingNames) {
     logger.error(errorMsg, { candidateId: candidate.id, error: err.message });
 
     await updateCandidateUploadStatus(candidate.id, {
-      uploadStatus: 'failed',
+      uploadStatus: "failed",
       uploadError: errorMsg,
     });
 
@@ -187,7 +216,7 @@ export async function uploadApprovedCandidates(guild, candidates = null) {
   const failed = [];
   const skippedSlots = [];
 
-  logger.info('Processing approved sticker uploads', {
+  logger.info("Processing approved sticker uploads", {
     candidatesCount: toUpload.length,
     availableSlots,
     guildName: guild.name,
@@ -195,14 +224,20 @@ export async function uploadApprovedCandidates(guild, candidates = null) {
 
   for (const candidate of toUpload) {
     if (availableSlots <= 0) {
-      logger.warn('Guild sticker slots exhausted. Skipping remaining approved candidates.', {
-        candidateName: candidate.name,
-      });
+      logger.warn(
+        "Guild sticker slots exhausted. Skipping remaining approved candidates.",
+        {
+          candidateName: candidate.name,
+        },
+      );
       await updateCandidateUploadStatus(candidate.id, {
-        uploadStatus: 'skipped_slots',
-        uploadError: 'Insufficient sticker slots available on Discord server.',
+        uploadStatus: "skipped_slots",
+        uploadError: "Insufficient sticker slots available on Discord server.",
       });
-      skippedSlots.push({ candidate, reason: 'No available sticker slots remaining on server' });
+      skippedSlots.push({
+        candidate,
+        reason: "No available sticker slots remaining on server",
+      });
       continue;
     }
 

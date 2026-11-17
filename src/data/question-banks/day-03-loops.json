@@ -43,7 +43,10 @@
     "codeSnippet": null,
     "options": [
       { "id": "A", "text": "Stops the loop entirely" },
-      { "id": "B", "text": "Skips the rest of the current iteration and jumps to the next iteration" },
+      {
+        "id": "B",
+        "text": "Skips the rest of the current iteration and jumps to the next iteration"
+      },
       { "id": "C", "text": "Restarts the loop from the beginning" },
       { "id": "D", "text": "Exits the entire program" }
     ],
@@ -180,4 +183,3 @@
     "timeLimitSeconds": 15
   }
 ]
-
