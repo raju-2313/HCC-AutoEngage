@@ -3,10 +3,10 @@
  * Database queries for Emoji Discovery, Moderation, and Uploads.
  */
 
-import { supabaseAdmin } from '../client.js';
-import { logger } from '../../utils/logger.js';
+import { supabaseAdmin } from "../client.js";
+import { logger } from "../../utils/logger.js";
 
-const TABLE = 'emoji_candidates';
+const TABLE = "emoji_candidates";
 
 /**
  * Saves newly discovered emoji candidates, ignoring duplicates on (name, pack_id).
@@ -22,14 +22,19 @@ export async function saveEmojiCandidates(candidates) {
     const { data, error } = await supabaseAdmin
       .from(TABLE)
       .upsert(candidates, {
-        onConflict: 'name,pack_id',
+        onConflict: "name,pack_id",
         ignoreDuplicates: true,
       })
       .select();
 
     if (error) {
-      logger.error('Failed to save emoji candidates', { error: error.message });
-      return { inserted: 0, skipped: candidates.length, data: [], error: error.message };
+      logger.error("Failed to save emoji candidates", { error: error.message });
+      return {
+        inserted: 0,
+        skipped: candidates.length,
+        data: [],
+        error: error.message,
+      };
     }
 
     const insertedCount = data ? data.length : 0;
@@ -37,8 +42,13 @@ export async function saveEmojiCandidates(candidates) {
 
     return { inserted: insertedCount, skipped: skippedCount, data: data || [] };
   } catch (err) {
-    logger.error('Exception in saveEmojiCandidates', { error: err.message });
-    return { inserted: 0, skipped: candidates.length, data: [], error: err.message };
+    logger.error("Exception in saveEmojiCandidates", { error: err.message });
+    return {
+      inserted: 0,
+      skipped: candidates.length,
+      data: [],
+      error: err.message,
+    };
   }
 }
 
@@ -57,24 +67,28 @@ export async function getPendingEmojiCandidates(options = {}) {
   try {
     let query = supabaseAdmin
       .from(TABLE)
-      .select('*')
-      .eq('review_status', 'pending_review')
-      .order('created_at', { ascending: false })
+      .select("*")
+      .eq("review_status", "pending_review")
+      .order("created_at", { ascending: false })
       .range(offset, offset + limit - 1);
 
-    if (category) query = query.eq('category', category);
-    if (packId) query = query.eq('pack_id', packId);
+    if (category) query = query.eq("category", category);
+    if (packId) query = query.eq("pack_id", packId);
 
     const { data, error } = await query;
 
     if (error) {
-      logger.error('Failed to fetch pending emoji candidates', { error: error.message });
+      logger.error("Failed to fetch pending emoji candidates", {
+        error: error.message,
+      });
       return [];
     }
 
     return data || [];
   } catch (err) {
-    logger.error('Exception in getPendingEmojiCandidates', { error: err.message });
+    logger.error("Exception in getPendingEmojiCandidates", {
+      error: err.message,
+    });
     return [];
   }
 }
@@ -88,18 +102,24 @@ export async function getEmojiCandidateById(id) {
   try {
     const { data, error } = await supabaseAdmin
       .from(TABLE)
-      .select('*')
-      .eq('id', id)
+      .select("*")
+      .eq("id", id)
       .maybeSingle();
 
     if (error) {
-      logger.error('Failed to fetch emoji candidate by ID', { id, error: error.message });
+      logger.error("Failed to fetch emoji candidate by ID", {
+        id,
+        error: error.message,
+      });
       return null;
     }
 
     return data;
   } catch (err) {
-    logger.error('Exception in getEmojiCandidateById', { id, error: err.message });
+    logger.error("Exception in getEmojiCandidateById", {
+      id,
+      error: err.message,
+    });
     return null;
   }
 }
@@ -113,18 +133,24 @@ export async function getEmojiCandidatesByPackId(packId) {
   try {
     const { data, error } = await supabaseAdmin
       .from(TABLE)
-      .select('*')
-      .eq('pack_id', packId)
-      .order('name', { ascending: true });
+      .select("*")
+      .eq("pack_id", packId)
+      .order("name", { ascending: true });
 
     if (error) {
-      logger.error('Failed to fetch candidates by pack ID', { packId, error: error.message });
+      logger.error("Failed to fetch candidates by pack ID", {
+        packId,
+        error: error.message,
+      });
       return [];
     }
 
     return data || [];
   } catch (err) {
-    logger.error('Exception in getEmojiCandidatesByPackId', { packId, error: err.message });
+    logger.error("Exception in getEmojiCandidatesByPackId", {
+      packId,
+      error: err.message,
+    });
     return [];
   }
 }
@@ -138,12 +164,16 @@ export async function getEmojiCandidatesByPackId(packId) {
  * @param {string} [updateData.rejectionReason]
  * @returns {Promise<Object|null>}
  */
-export async function updateEmojiCandidateReviewStatus(id, { reviewStatus, approvedBy, rejectionReason }) {
+export async function updateEmojiCandidateReviewStatus(
+  id,
+  { reviewStatus, approvedBy, rejectionReason },
+) {
   try {
     const payload = {
       review_status: reviewStatus,
       approved_by: approvedBy || null,
-      approved_at: reviewStatus === 'approved' ? new Date().toISOString() : null,
+      approved_at:
+        reviewStatus === "approved" ? new Date().toISOString() : null,
       rejection_reason: rejectionReason || null,
       updated_at: new Date().toISOString(),
     };
@@ -151,18 +181,24 @@ export async function updateEmojiCandidateReviewStatus(id, { reviewStatus, appro
     const { data, error } = await supabaseAdmin
       .from(TABLE)
       .update(payload)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .maybeSingle();
 
     if (error) {
-      logger.error('Failed to update emoji candidate review status', { id, error: error.message });
+      logger.error("Failed to update emoji candidate review status", {
+        id,
+        error: error.message,
+      });
       return null;
     }
 
     return data;
   } catch (err) {
-    logger.error('Exception in updateEmojiCandidateReviewStatus', { id, error: err.message });
+    logger.error("Exception in updateEmojiCandidateReviewStatus", {
+      id,
+      error: err.message,
+    });
     return null;
   }
 }
@@ -176,12 +212,16 @@ export async function updateEmojiCandidateReviewStatus(id, { reviewStatus, appro
  * @param {string} [updateData.rejectionReason]
  * @returns {Promise<Array<Object>>}
  */
-export async function updateEmojiPackReviewStatus(packId, { reviewStatus, approvedBy, rejectionReason }) {
+export async function updateEmojiPackReviewStatus(
+  packId,
+  { reviewStatus, approvedBy, rejectionReason },
+) {
   try {
     const payload = {
       review_status: reviewStatus,
       approved_by: approvedBy || null,
-      approved_at: reviewStatus === 'approved' ? new Date().toISOString() : null,
+      approved_at:
+        reviewStatus === "approved" ? new Date().toISOString() : null,
       rejection_reason: rejectionReason || null,
       updated_at: new Date().toISOString(),
     };
@@ -189,18 +229,24 @@ export async function updateEmojiPackReviewStatus(packId, { reviewStatus, approv
     const { data, error } = await supabaseAdmin
       .from(TABLE)
       .update(payload)
-      .eq('pack_id', packId)
-      .eq('review_status', 'pending_review')
+      .eq("pack_id", packId)
+      .eq("review_status", "pending_review")
       .select();
 
     if (error) {
-      logger.error('Failed to update emoji pack review status', { packId, error: error.message });
+      logger.error("Failed to update emoji pack review status", {
+        packId,
+        error: error.message,
+      });
       return [];
     }
 
     return data || [];
   } catch (err) {
-    logger.error('Exception in updateEmojiPackReviewStatus', { packId, error: err.message });
+    logger.error("Exception in updateEmojiPackReviewStatus", {
+      packId,
+      error: err.message,
+    });
     return [];
   }
 }
@@ -214,7 +260,10 @@ export async function updateEmojiPackReviewStatus(packId, { reviewStatus, approv
  * @param {string} [uploadInfo.uploadError]
  * @returns {Promise<Object|null>}
  */
-export async function updateEmojiCandidateUploadStatus(id, { uploadStatus, discordEmojiId, uploadError }) {
+export async function updateEmojiCandidateUploadStatus(
+  id,
+  { uploadStatus, discordEmojiId, uploadError },
+) {
   try {
     const payload = {
       upload_status: uploadStatus,
@@ -226,18 +275,24 @@ export async function updateEmojiCandidateUploadStatus(id, { uploadStatus, disco
     const { data, error } = await supabaseAdmin
       .from(TABLE)
       .update(payload)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .maybeSingle();
 
     if (error) {
-      logger.error('Failed to update emoji upload status', { id, error: error.message });
+      logger.error("Failed to update emoji upload status", {
+        id,
+        error: error.message,
+      });
       return null;
     }
 
     return data;
   } catch (err) {
-    logger.error('Exception in updateEmojiCandidateUploadStatus', { id, error: err.message });
+    logger.error("Exception in updateEmojiCandidateUploadStatus", {
+      id,
+      error: err.message,
+    });
     return null;
   }
 }
@@ -251,20 +306,24 @@ export async function getApprovedUnuploadedEmojis(limit = 50) {
   try {
     const { data, error } = await supabaseAdmin
       .from(TABLE)
-      .select('*')
-      .eq('review_status', 'approved')
-      .in('upload_status', ['not_uploaded', 'failed', 'skipped_slots'])
-      .order('created_at', { ascending: true })
+      .select("*")
+      .eq("review_status", "approved")
+      .in("upload_status", ["not_uploaded", "failed", "skipped_slots"])
+      .order("created_at", { ascending: true })
       .limit(limit);
 
     if (error) {
-      logger.error('Failed to fetch approved unuploaded emojis', { error: error.message });
+      logger.error("Failed to fetch approved unuploaded emojis", {
+        error: error.message,
+      });
       return [];
     }
 
     return data || [];
   } catch (err) {
-    logger.error('Exception in getApprovedUnuploadedEmojis', { error: err.message });
+    logger.error("Exception in getApprovedUnuploadedEmojis", {
+      error: err.message,
+    });
     return [];
   }
 }
@@ -276,7 +335,10 @@ export async function getApprovedUnuploadedEmojis(limit = 50) {
  * @param {string} verificationResult.contentStatus
  * @param {string} [verificationResult.rejectionReason]
  */
-export async function updateEmojiVerificationStatus(id, { contentStatus, rejectionReason }) {
+export async function updateEmojiVerificationStatus(
+  id,
+  { contentStatus, rejectionReason },
+) {
   try {
     const payload = {
       content_status: contentStatus,
@@ -284,25 +346,31 @@ export async function updateEmojiVerificationStatus(id, { contentStatus, rejecti
       updated_at: new Date().toISOString(),
     };
 
-    if (contentStatus.startsWith('flagged_')) {
-      payload.review_status = 'rejected';
+    if (contentStatus.startsWith("flagged_")) {
+      payload.review_status = "rejected";
     }
 
     const { data, error } = await supabaseAdmin
       .from(TABLE)
       .update(payload)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .maybeSingle();
 
     if (error) {
-      logger.error('Failed to update emoji verification status', { id, error: error.message });
+      logger.error("Failed to update emoji verification status", {
+        id,
+        error: error.message,
+      });
       return null;
     }
 
     return data;
   } catch (err) {
-    logger.error('Exception in updateEmojiVerificationStatus', { id, error: err.message });
+    logger.error("Exception in updateEmojiVerificationStatus", {
+      id,
+      error: err.message,
+    });
     return null;
   }
 }
@@ -319,10 +387,22 @@ export async function getEmojiStats() {
       { count: uploadedCount },
       { count: rejectedCount },
     ] = await Promise.all([
-      supabaseAdmin.from(TABLE).select('*', { count: 'exact', head: true }).eq('review_status', 'pending_review'),
-      supabaseAdmin.from(TABLE).select('*', { count: 'exact', head: true }).eq('review_status', 'approved'),
-      supabaseAdmin.from(TABLE).select('*', { count: 'exact', head: true }).eq('upload_status', 'uploaded'),
-      supabaseAdmin.from(TABLE).select('*', { count: 'exact', head: true }).eq('review_status', 'rejected'),
+      supabaseAdmin
+        .from(TABLE)
+        .select("*", { count: "exact", head: true })
+        .eq("review_status", "pending_review"),
+      supabaseAdmin
+        .from(TABLE)
+        .select("*", { count: "exact", head: true })
+        .eq("review_status", "approved"),
+      supabaseAdmin
+        .from(TABLE)
+        .select("*", { count: "exact", head: true })
+        .eq("upload_status", "uploaded"),
+      supabaseAdmin
+        .from(TABLE)
+        .select("*", { count: "exact", head: true })
+        .eq("review_status", "rejected"),
     ]);
 
     return {
@@ -332,8 +412,7 @@ export async function getEmojiStats() {
       rejected: rejectedCount || 0,
     };
   } catch (err) {
-    logger.error('Exception in getEmojiStats', { error: err.message });
+    logger.error("Exception in getEmojiStats", { error: err.message });
     return { pending: 0, approved: 0, uploaded: 0, rejected: 0 };
   }
 }
-

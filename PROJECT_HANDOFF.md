@@ -10,27 +10,28 @@
 
 ## 1. Project Overview & Current Operating Status
 
-**HCC-AutoEngage** is the automated Discord community engagement and gamification engine for the **HackerRank Campus Crew (HCC)**. 
+**HCC-AutoEngage** is the automated Discord community engagement and gamification engine for the **HackerRank Campus Crew (HCC)**.
 
 ### Phase 1 7-Day Sprint Testing Concluded (Nov 9 – Nov 15, 2026)
-* **Sprint Window:** November 9 – November 15, 2026.
-* **Sprint Participants:** 30 unique members, 639 total answers submitted, 428 correct answers (67% community accuracy).
-* **Current Operating State:** **DORMANT / SUSPENDED**.
-  * `AUTOMATION_SUSPENDED = true` is set in `src/services/automation/scheduler.js`.
-  * **Zero automated background crons** are registered or running.
-  * **Zero daily drops** will occur tomorrow or on future dates.
-  * **Zero startup recovery tasks** will execute on container restarts.
-  * The bot remains online in standby mode (`Phase 1 Complete 🏆 | /help`) responding only to manual admin commands (`/admin ...`).
+
+- **Sprint Window:** November 9 – November 15, 2026.
+- **Sprint Participants:** 30 unique members, 639 total answers submitted, 428 correct answers (67% community accuracy).
+- **Current Operating State:** **DORMANT / SUSPENDED**.
+  - `AUTOMATION_SUSPENDED = true` is set in `src/services/automation/scheduler.js`.
+  - **Zero automated background crons** are registered or running.
+  - **Zero daily drops** will occur tomorrow or on future dates.
+  - **Zero startup recovery tasks** will execute on container restarts.
+  - The bot remains online in standby mode (`Phase 1 Complete 🏆 | /help`) responding only to manual admin commands (`/admin ...`).
 
 ---
 
 ## 2. Infrastructure & Verified Channels
 
-* **Runtime:** Container hosted on **Railway** (deploys automatically from `origin/main`).
-* **Database:** **Supabase (PostgreSQL)** housing all member accounts, historical attempts, and consolidated balances.
-* **Main Quiz / Discussion Channel (`#💬・general`):** `1538470672722952303`
-* **Official Announcement Channel (`#📢・announcements`):** `1538470372918165587`
-* **Sandbox / Testing Channel (`#autoengage-testing`):** `1567916304118063124`
+- **Runtime:** Container hosted on **Railway** (deploys automatically from `origin/main`).
+- **Database:** **Supabase (PostgreSQL)** housing all member accounts, historical attempts, and consolidated balances.
+- **Main Quiz / Discussion Channel (`#💬・general`):** `1538470672722952303`
+- **Official Announcement Channel (`#📢・announcements`):** `1538470372918165587`
+- **Sandbox / Testing Channel (`#autoengage-testing`):** `1567916304118063124`
 
 ---
 
@@ -38,20 +39,21 @@
 
 All 7 days were executed and completed:
 
-| Date | Day | Topic | Total Questions | Status |
-| :--- | :---: | :--- | :---: | :--- |
-| **Nov 9** | Day 1 | Python Basics | 10 | Completed |
-| **Nov 10** | Day 2 | C Programming Basics | 10 | Completed |
-| **Nov 11** | Day 3 | Loops & Iterations | 10 | Completed |
-| **Nov 12** | Day 4 | Conditionals & Logic | 10 | Completed |
-| **Nov 13** | Day 5 | Git & GitHub | 10 | Completed |
-| **Nov 14** | Day 6 | HTML & Web Foundations | 10 | Completed |
-| **Nov 15** | Day 7 | Tech & Computer Basics | 10 | Completed (Finale) |
+| Date       |  Day  | Topic                  | Total Questions | Status             |
+| :--------- | :---: | :--------------------- | :-------------: | :----------------- |
+| **Nov 9**  | Day 1 | Python Basics          |       10        | Completed          |
+| **Nov 10** | Day 2 | C Programming Basics   |       10        | Completed          |
+| **Nov 11** | Day 3 | Loops & Iterations     |       10        | Completed          |
+| **Nov 12** | Day 4 | Conditionals & Logic   |       10        | Completed          |
+| **Nov 13** | Day 5 | Git & GitHub           |       10        | Completed          |
+| **Nov 14** | Day 6 | HTML & Web Foundations |       10        | Completed          |
+| **Nov 15** | Day 7 | Tech & Computer Basics |       10        | Completed (Finale) |
 
 ### Official Final Podium (Post Bug-Fix Compensation)
-* 🥇 **1st Place:** `karan20071` (`846379972134174730`) — **530 pts** · 1,135 XP (41/56 correct, 73% acc)
-* 🥈 **2nd Place:** `krishnaacharya08` (`1567817875023073343`) — **520 pts** · 1,115 XP (44/59 correct, 75% acc)
-* 🥉 **3rd Place:** `samiksha_2007` (`1554487457192345621`) — **450 pts** · 935 XP (35/42 correct, 83% acc)
+
+- 🥇 **1st Place:** `karan20071` (`846379972134174730`) — **530 pts** · 1,135 XP (41/56 correct, 73% acc)
+- 🥈 **2nd Place:** `krishnaacharya08` (`1567817875023073343`) — **520 pts** · 1,115 XP (44/59 correct, 75% acc)
+- 🥉 **3rd Place:** `samiksha_2007` (`1554487457192345621`) — **450 pts** · 935 XP (35/42 correct, 83% acc)
 
 ---
 
@@ -60,24 +62,28 @@ All 7 days were executed and completed:
 During Phase 1 sprint testing, four primary system and operational errors were uncovered and systematically fixed:
 
 ### Issue 1: Discord 3-Second ACK Timeout on High Concurrency (`(!) This interaction failed`)
-* **Root Cause:** When 20+ students tapped answer buttons simultaneously within a 15-second window, backend verification and Supabase RPC transactions occasionally took longer than Discord Gateway's hard 3000ms acknowledgment window before responding. This caused Discord on mobile/desktop to show `(!) This interaction failed` to students, even though they had chosen the right answer.
-* **Resolution:** 
+
+- **Root Cause:** When 20+ students tapped answer buttons simultaneously within a 15-second window, backend verification and Supabase RPC transactions occasionally took longer than Discord Gateway's hard 3000ms acknowledgment window before responding. This caused Discord on mobile/desktop to show `(!) This interaction failed` to students, even though they had chosen the right answer.
+- **Resolution:**
   1. Ran an exhaustive audit across all 78 questions and 639 submissions in Supabase (`scripts/analyze_gaps_v2.mjs`).
   2. Applied an **Interior Gap Detection algorithm** (identifying participants who answered questions before and after a missing question, proving they were active and experiencing interaction dropouts).
   3. Identified **27 affected participants** and applied atomic compensation (+10 pts / +20 XP per missed interior question, total 1,570 pts / 3,140 XP) to live member balances.
   4. Fairly resolved the leaderboard: `karan20071` (verified with screenshot evidence of interaction failures on Day 7 Q4) rightfully secured 1st place with 530 pts.
 
 ### Issue 2: Last-Second Click Race Condition
-* **Root Cause:** Clicks submitted with <2 seconds remaining arrived at the server as the question was closing, generating `Quiz is not active for submissions`.
-* **Resolution:** Caught `QUIZ_EXPIRED` gracefully in `attempts.js` and `quizService.js`, returning a helpful ephemeral guidance card advising participants to tap with ~3s remaining.
+
+- **Root Cause:** Clicks submitted with <2 seconds remaining arrived at the server as the question was closing, generating `Quiz is not active for submissions`.
+- **Resolution:** Caught `QUIZ_EXPIRED` gracefully in `attempts.js` and `quizService.js`, returning a helpful ephemeral guidance card advising participants to tap with ~3s remaining.
 
 ### Issue 3: Announcement Channel Missing Permissions (`DiscordAPIError[50013]: Missing Permissions`)
-* **Root Cause:** `#📢・announcements` (`1538470372918165587`) had `@everyone` denied `Send Messages`. The bot lacked an explicit role or permission override allowing message posting in announcements, throwing `Missing Permissions`. Because slash commands defer as ephemeral receipts for admins, the error appeared as a private ephemeral failure box.
-* **Resolution:** Added `HCC Moderator` role to `HCC AutoEngage`, hardcoded target channel ID `1538470372918165587`, and verified permissions (`canSend: true`, `canEmbed: true`, `canMention: true`).
+
+- **Root Cause:** `#📢・announcements` (`1538470372918165587`) had `@everyone` denied `Send Messages`. The bot lacked an explicit role or permission override allowing message posting in announcements, throwing `Missing Permissions`. Because slash commands defer as ephemeral receipts for admins, the error appeared as a private ephemeral failure box.
+- **Resolution:** Added `HCC Moderator` role to `HCC AutoEngage`, hardcoded target channel ID `1538470372918165587`, and verified permissions (`canSend: true`, `canEmbed: true`, `canMention: true`).
 
 ### Issue 4: Railway Malformed Environment Variable
-* **Root Cause:** Railway environment configuration contained a clipped ID (`567916304118063124` missing the leading `1`), overriding code fallbacks and causing `Channel Not Found`.
-* **Resolution:** Hardcoded verified channel constants in `src/commands/admin.js` to ensure the bot directly targets `#📢・announcements` without relying on erroneous environment variables, and added an optional `channel:` slash command picker.
+
+- **Root Cause:** Railway environment configuration contained a clipped ID (`567916304118063124` missing the leading `1`), overriding code fallbacks and causing `Channel Not Found`.
+- **Resolution:** Hardcoded verified channel constants in `src/commands/admin.js` to ensure the bot directly targets `#📢・announcements` without relying on erroneous environment variables, and added an optional `channel:` slash command picker.
 
 ---
 
@@ -144,8 +150,8 @@ When moving this folder to another disk (e.g., `D:\HCC-AutoEngage`):
    ```bash
    node -e "import('./src/services/quiz/sessionQuestionManager.js').then(m => console.log('Ready for Day', m.getDayQuestionSet('2026-11-15').meta.dayNumber))"
    ```
-   *(Expected output: `Ready for Day 7`)*
+   _(Expected output: `Ready for Day 7`)_
 
 ---
 
-*Handoff complete. The automated engine on Railway is self-sufficient and will execute all remaining days automatically at 19:00 IST.*
+_Handoff complete. The automated engine on Railway is self-sufficient and will execute all remaining days automatically at 19:00 IST._

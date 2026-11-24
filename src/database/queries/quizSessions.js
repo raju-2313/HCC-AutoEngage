@@ -4,11 +4,11 @@
  * Stores master session state in `quizzes` and `activity_logs` without requiring DDL migrations.
  */
 
-import { supabaseAdmin } from '../client.js';
-import { logger } from '../../utils/logger.js';
-import { createQuiz, getQuizById, closeQuiz } from './quizzes.js';
+import { supabaseAdmin } from "../client.js";
+import { logger } from "../../utils/logger.js";
+import { createQuiz, getQuizById, closeQuiz } from "./quizzes.js";
 
-const SESSION_CATEGORY = 'daily_timed_session';
+const SESSION_CATEGORY = "daily_timed_session";
 
 /**
  * Retrieves the master daily session record for a given date.
@@ -16,16 +16,19 @@ const SESSION_CATEGORY = 'daily_timed_session';
  */
 export async function getDailySessionRecord(dateStr) {
   const { data, error } = await supabaseAdmin
-    .from('quizzes')
-    .select('*, quiz_questions(*)')
-    .eq('category', SESSION_CATEGORY)
-    .eq('scheduled_for', dateStr)
-    .order('created_at', { ascending: false })
+    .from("quizzes")
+    .select("*, quiz_questions(*)")
+    .eq("category", SESSION_CATEGORY)
+    .eq("scheduled_for", dateStr)
+    .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
 
   if (error) {
-    logger.error('Error fetching daily session record', { dateStr, error: error.message });
+    logger.error("Error fetching daily session record", {
+      dateStr,
+      error: error.message,
+    });
     throw error;
   }
 
@@ -65,7 +68,7 @@ export async function initDailySessionRecord({
     dayNumber,
     channelId,
     totalQuestions,
-    status: 'initialized',
+    status: "initialized",
     announcementSent: false,
     announcementMessageId: null,
     currentQuestionIndex: -1,
@@ -79,10 +82,10 @@ export async function initDailySessionRecord({
     title: `HCC Daily Challenge: ${topic} (Day ${dayNumber}/7)`,
     description: JSON.stringify(initialState),
     category: SESSION_CATEGORY,
-    difficulty: 'beginner',
-    status: 'active',
+    difficulty: "beginner",
+    status: "active",
     scheduledFor: dateStr,
-    createdBy: 'daily_timed_session_master',
+    createdBy: "daily_timed_session_master",
   });
 
   return {
@@ -96,27 +99,31 @@ export async function initDailySessionRecord({
  */
 export async function updateDailySessionState(masterQuizId, updatedState) {
   const { data, error } = await supabaseAdmin
-    .from('quizzes')
+    .from("quizzes")
     .update({
       description: JSON.stringify(updatedState),
-      status: updatedState.status === 'completed' ? 'closed' : 'active',
-      closed_at: updatedState.status === 'completed' ? new Date().toISOString() : null,
+      status: updatedState.status === "completed" ? "closed" : "active",
+      closed_at:
+        updatedState.status === "completed" ? new Date().toISOString() : null,
       updated_at: new Date().toISOString(),
     })
-    .eq('id', masterQuizId)
+    .eq("id", masterQuizId)
     .select()
     .single();
 
   if (error) {
-    logger.error('Error updating daily session state', { masterQuizId, error: error.message });
+    logger.error("Error updating daily session state", {
+      masterQuizId,
+      error: error.message,
+    });
     throw error;
   }
 
   // Also record state transition in activity_logs
   try {
-    await supabaseAdmin.from('activity_logs').insert({
-      action_type: 'daily_session_state_update',
-      actor_discord_id: 'scheduler',
+    await supabaseAdmin.from("activity_logs").insert({
+      action_type: "daily_session_state_update",
+      actor_discord_id: "scheduler",
       details: {
         masterQuizId,
         status: updatedState.status,
@@ -125,7 +132,9 @@ export async function updateDailySessionState(masterQuizId, updatedState) {
       },
     });
   } catch (err) {
-    logger.warn('Failed to record activity log for session state update', { error: err.message });
+    logger.warn("Failed to record activity log for session state update", {
+      error: err.message,
+    });
   }
 
   return {
@@ -141,15 +150,16 @@ export async function getSessionAttempts(quizIds) {
   if (!quizIds || quizIds.length === 0) return [];
 
   const { data, error } = await supabaseAdmin
-    .from('quiz_attempts')
-    .select('quiz_id, discord_id, selected_option, is_correct, points_awarded, members(username, avatar_url)')
-    .in('quiz_id', quizIds);
+    .from("quiz_attempts")
+    .select(
+      "quiz_id, discord_id, selected_option, is_correct, points_awarded, members(username, avatar_url)",
+    )
+    .in("quiz_id", quizIds);
 
   if (error) {
-    logger.error('Error fetching session attempts', { error: error.message });
+    logger.error("Error fetching session attempts", { error: error.message });
     return [];
   }
 
   return data || [];
 }
-

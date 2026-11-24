@@ -12,12 +12,16 @@ import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
-} from 'discord.js';
-import { logger } from '../../utils/logger.js';
-import { COLORS } from '../../utils/embeds.js';
-import { createQuiz, publishQuiz, closeQuiz } from '../../database/queries/quizzes.js';
-import { getRandomSampleQuestions } from './questionBank.js';
-import { supabaseAdmin } from '../../database/client.js';
+} from "discord.js";
+import { logger } from "../../utils/logger.js";
+import { COLORS } from "../../utils/embeds.js";
+import {
+  createQuiz,
+  publishQuiz,
+  closeQuiz,
+} from "../../database/queries/quizzes.js";
+import { getRandomSampleQuestions } from "./questionBank.js";
+import { supabaseAdmin } from "../../database/client.js";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -25,55 +29,68 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-const HR = '┄'.repeat(28);
+const HR = "┄".repeat(28);
 
 const CATEGORY_ICONS = {
-  javascript: '🟨', python: '🐍', dsa: '🌳',
-  databases: '🗄️', git: '🔀', web: '🌐', http: '🌐', systems: '⚙️', default: '💡',
+  javascript: "🟨",
+  python: "🐍",
+  dsa: "🌳",
+  databases: "🗄️",
+  git: "🔀",
+  web: "🌐",
+  http: "🌐",
+  systems: "⚙️",
+  default: "💡",
 };
-function catIcon(cat = '') {
+function catIcon(cat = "") {
   return CATEGORY_ICONS[cat.toLowerCase()] ?? CATEGORY_ICONS.default;
 }
 
 const DIFFICULTY_CONFIG = {
-  beginner: { label: '🌱 Beginner', color: COLORS.success },
-  advanced: { label: '🔥 Advanced', color: COLORS.warning },
+  beginner: { label: "🌱 Beginner", color: COLORS.success },
+  advanced: { label: "🔥 Advanced", color: COLORS.warning },
 };
 
 const OPTION_STYLES = {
-  A: { emoji: '🅰️', style: ButtonStyle.Primary },
-  B: { emoji: '🅱️', style: ButtonStyle.Primary },
-  C: { emoji: '🇨',  style: ButtonStyle.Primary },
-  D: { emoji: '🇩',  style: ButtonStyle.Primary },
+  A: { emoji: "🅰️", style: ButtonStyle.Primary },
+  B: { emoji: "🅱️", style: ButtonStyle.Primary },
+  C: { emoji: "🇨", style: ButtonStyle.Primary },
+  D: { emoji: "🇩", style: ButtonStyle.Primary },
 };
 
 /** Returns a visual progress bar like ▓▓▓░░░░░░░ for the question index. */
 function questionProgress(current, total) {
   const filled = Math.round((current / total) * 10);
-  return '▓'.repeat(filled) + '░'.repeat(10 - filled);
+  return "▓".repeat(filled) + "░".repeat(10 - filled);
 }
 
 /** Countdown dots message that creates a "ticking" feel via edits. */
 async function animatedCountdown(channel, fromSeconds) {
-  const dots = ['⠙', '⠸', '⠴', '⠦', '⠇', '⠋'];
+  const dots = ["⠙", "⠸", "⠴", "⠦", "⠇", "⠋"];
   const msg = await channel.send({
     embeds: [
       new EmbedBuilder()
-        .setColor(0xFFA500)
-        .setDescription(`### ${dots[0]}  First question starts in **${fromSeconds}s**...\n*Get your thinking caps on!* 🧠`)
+        .setColor(0xffa500)
+        .setDescription(
+          `### ${dots[0]}  First question starts in **${fromSeconds}s**...\n*Get your thinking caps on!* 🧠`,
+        ),
     ],
   });
 
   for (let i = fromSeconds - 1; i > 0; i--) {
     await sleep(1000);
     const dot = dots[i % dots.length];
-    await msg.edit({
-      embeds: [
-        new EmbedBuilder()
-          .setColor(0xFFA500)
-          .setDescription(`### ${dot}  First question starts in **${i}s**...\n*Get your thinking caps on!* 🧠`)
-      ],
-    }).catch(() => {});
+    await msg
+      .edit({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(0xffa500)
+            .setDescription(
+              `### ${dot}  First question starts in **${i}s**...\n*Get your thinking caps on!* 🧠`,
+            ),
+        ],
+      })
+      .catch(() => {});
   }
 
   await sleep(1000);
@@ -98,11 +115,13 @@ export async function runLiveQuizSession({
 }) {
   const channel = await client.channels.fetch(channelId).catch(() => null);
   if (!channel) {
-    throw new Error(`Channel ${channelId} not found or inaccessible by the bot.`);
+    throw new Error(
+      `Channel ${channelId} not found or inaccessible by the bot.`,
+    );
   }
 
   const sampleQuestions = getRandomSampleQuestions(questionCount);
-  logger.info('Starting live quiz session', {
+  logger.info("Starting live quiz session", {
     channelId,
     questionCount: sampleQuestions.length,
     secondsPerQuestion,
@@ -113,26 +132,31 @@ export async function runLiveQuizSession({
 
   // ── 1. Dramatic Announcement ──────────────────────────────────────────────
   const categories = [...new Set(sampleQuestions.map((q) => q.category))];
-  const categoryList = categories.map((c) => `${catIcon(c)} ${c.toUpperCase()}`).join('  ·  ');
+  const categoryList = categories
+    .map((c) => `${catIcon(c)} ${c.toUpperCase()}`)
+    .join("  ·  ");
 
   const introEmbed = new EmbedBuilder()
-    .setColor(0x5865F2)  // Discord blurple — signals "event starting"
-    .setTitle('⚡  HCC Live Tech Challenge  ⚡')
+    .setColor(0x5865f2) // Discord blurple — signals "event starting"
+    .setTitle("⚡  HCC Live Tech Challenge  ⚡")
     .setDescription(
       `## 🚀  ${sampleQuestions.length}-Question Blitz Starting Now!\n\n` +
-      `${HR}\n\n` +
-      `📚  **Topics covered:** ${categoryList}\n\n` +
-      `⏱️  **${secondsPerQuestion} seconds** per question — no second chances!\n` +
-      `🏆  **Points & XP** awarded live for every correct answer\n` +
-      `🥇  **Podium** revealed after the final question\n\n` +
-      `${HR}\n\n` +
-      `> _React fast, think sharp — good luck!_ 🎯`
+        `${HR}\n\n` +
+        `📚  **Topics covered:** ${categoryList}\n\n` +
+        `⏱️  **${secondsPerQuestion} seconds** per question — no second chances!\n` +
+        `🏆  **Points & XP** awarded live for every correct answer\n` +
+        `🥇  **Podium** revealed after the final question\n\n` +
+        `${HR}\n\n` +
+        `> _React fast, think sharp — good luck!_ 🎯`,
     )
-    .setFooter({ text: 'HCC AutoEngage • HackerRank Campus Crew  │  Answers are private to each member' })
+    .setFooter({
+      text: "HCC AutoEngage • HackerRank Campus Crew  │  Answers are private to each member",
+    })
     .setTimestamp();
 
   await channel.send({
-    content: '⚡ **@everyone — A Live Tech Quiz Challenge is starting right now!** 🎯 Hop in and test your speed!',
+    content:
+      "⚡ **@everyone — A Live Tech Quiz Challenge is starting right now!** 🎯 Hop in and test your speed!",
     embeds: [introEmbed],
   });
 
@@ -141,12 +165,13 @@ export async function runLiveQuizSession({
 
   // ── 2. Loop Through Questions ───────────────────────────────────────────────
   for (let i = 0; i < sampleQuestions.length; i++) {
-    const qData   = sampleQuestions[i];
+    const qData = sampleQuestions[i];
     const qNumber = i + 1;
-    const totalQ  = sampleQuestions.length;
-    const diff    = DIFFICULTY_CONFIG[qData.difficulty] ?? DIFFICULTY_CONFIG.beginner;
-    const icon    = catIcon(qData.category);
-    const bar     = questionProgress(qNumber - 1, totalQ);
+    const totalQ = sampleQuestions.length;
+    const diff =
+      DIFFICULTY_CONFIG[qData.difficulty] ?? DIFFICULTY_CONFIG.beginner;
+    const icon = catIcon(qData.category);
+    const bar = questionProgress(qNumber - 1, totalQ);
 
     // A. Create & publish quiz record in Supabase
     const createdQuiz = await createQuiz({
@@ -156,7 +181,7 @@ export async function runLiveQuizSession({
       difficulty: qData.difficulty,
       pointsReward: qData.pointsReward,
       xpReward: qData.xpReward,
-      createdBy: 'live_session',
+      createdBy: "live_session",
       questions: [
         {
           questionText: qData.questionText,
@@ -169,8 +194,8 @@ export async function runLiveQuizSession({
     });
 
     // Discord relative-time countdown tag
-    const endTime  = Date.now() + secondsPerQuestion * 1000;
-    const unixEnd  = Math.floor(endTime / 1000);
+    const endTime = Date.now() + secondsPerQuestion * 1000;
+    const unixEnd = Math.floor(endTime / 1000);
 
     // Options block
     const optionsText = qData.options
@@ -178,7 +203,7 @@ export async function runLiveQuizSession({
         const cfg = OPTION_STYLES[opt.id] ?? { emoji: opt.id };
         return `${cfg.emoji}  **${opt.id}.**  ${opt.text}`;
       })
-      .join('\n\n');
+      .join("\n\n");
 
     // Description
     let desc = `### ${qData.questionText}\n`;
@@ -193,9 +218,13 @@ export async function runLiveQuizSession({
       .setTitle(`${icon}  Question ${qNumber} of ${totalQ}  ·  ${qData.title}`)
       .setDescription(desc)
       .addFields(
-        { name: '⏳ Time Remaining', value: `<t:${unixEnd}:R>`,                                           inline: true },
-        { name: '🎯 Difficulty',     value: diff.label,                                                    inline: true },
-        { name: '🎁 Stakes',         value: `**+${qData.pointsReward}** pts  ·  **+${qData.xpReward}** XP`, inline: true }
+        { name: "⏳ Time Remaining", value: `<t:${unixEnd}:R>`, inline: true },
+        { name: "🎯 Difficulty", value: diff.label, inline: true },
+        {
+          name: "🎁 Stakes",
+          value: `**+${qData.pointsReward}** pts  ·  **+${qData.xpReward}** XP`,
+          inline: true,
+        },
       )
       .setFooter({
         text: `${bar}  Q${qNumber}/${totalQ}  │  Click your answer below — private to you!`,
@@ -204,7 +233,10 @@ export async function runLiveQuizSession({
 
     // Active answer buttons with emoji
     const activeButtons = qData.options.map((opt) => {
-      const cfg = OPTION_STYLES[opt.id] ?? { emoji: '', style: ButtonStyle.Primary };
+      const cfg = OPTION_STYLES[opt.id] ?? {
+        emoji: "",
+        style: ButtonStyle.Primary,
+      };
       return new ButtonBuilder()
         .setCustomId(`quiz_ans:${createdQuiz.id}:${opt.id}`)
         .setLabel(`Option ${opt.id}`)
@@ -216,7 +248,10 @@ export async function runLiveQuizSession({
     const message = await channel.send({ embeds: [qEmbed], components: [row] });
 
     // Mark quiz active in Supabase
-    await publishQuiz(createdQuiz.id, { messageId: message.id, channelId: channel.id });
+    await publishQuiz(createdQuiz.id, {
+      messageId: message.id,
+      channelId: channel.id,
+    });
 
     // B. Wait for the timer
     await sleep(secondsPerQuestion * 1000);
@@ -226,23 +261,30 @@ export async function runLiveQuizSession({
 
     // D. Fetch attempts
     const { data: attempts } = await supabaseAdmin
-      .from('quiz_attempts')
-      .select('discord_id, selected_option, is_correct, points_awarded, members(username)')
-      .eq('quiz_id', createdQuiz.id);
+      .from("quiz_attempts")
+      .select(
+        "discord_id, selected_option, is_correct, points_awarded, members(username)",
+      )
+      .eq("quiz_id", createdQuiz.id);
 
-    const totalSubs   = attempts?.length ?? 0;
+    const totalSubs = attempts?.length ?? 0;
     const correctSubs = attempts?.filter((a) => a.is_correct) ?? [];
 
     // Update session scoreboard
     if (attempts) {
       for (const att of attempts) {
-        const uid  = att.discord_id;
+        const uid = att.discord_id;
         const uname = att.members?.username ?? uid;
-        const cur  = sessionScores.get(uid) ?? { userId: uid, username: uname, score: 0, correctCount: 0 };
+        const cur = sessionScores.get(uid) ?? {
+          userId: uid,
+          username: uname,
+          score: 0,
+          correctCount: 0,
+        };
         cur.username = uname;
         cur.userId = uid;
         if (att.is_correct) {
-          cur.score        += att.points_awarded;
+          cur.score += att.points_awarded;
           cur.correctCount += 1;
         }
         sessionScores.set(uid, cur);
@@ -252,7 +294,10 @@ export async function runLiveQuizSession({
     // E. Edit question message: disable buttons, highlight correct answer
     const disabledButtons = qData.options.map((opt) => {
       const isCorrectOpt = opt.id === qData.correctOption;
-      const cfg = OPTION_STYLES[opt.id] ?? { emoji: '', style: ButtonStyle.Secondary };
+      const cfg = OPTION_STYLES[opt.id] ?? {
+        emoji: "",
+        style: ButtonStyle.Secondary,
+      };
       return new ButtonBuilder()
         .setCustomId(`quiz_closed:${createdQuiz.id}:${opt.id}`)
         .setLabel(`Option ${opt.id}`)
@@ -263,26 +308,30 @@ export async function runLiveQuizSession({
     const disabledRow = new ActionRowBuilder().addComponents(disabledButtons);
 
     // Accuracy line
-    const accuracyPct = totalSubs > 0
-      ? `${Math.round((correctSubs.length / totalSubs) * 100)}%`
-      : 'N/A';
+    const accuracyPct =
+      totalSubs > 0
+        ? `${Math.round((correctSubs.length / totalSubs) * 100)}%`
+        : "N/A";
 
     const resultEmbed = new EmbedBuilder()
       .setColor(COLORS.success)
       .setTitle(`⏰  Time's Up! — Question ${qNumber} of ${totalQ}`)
       .setDescription(
         `> **✅ Correct Answer:  Option ${qData.correctOption}**\n\n` +
-        `### 💡 Explanation\n${qData.explanation}\n\n` +
-        `${HR}\n\n` +
-        `📊  **${correctSubs.length}** of **${totalSubs}** participant${totalSubs !== 1 ? 's' : ''} answered correctly  ·  Accuracy: **${accuracyPct}**`
+          `### 💡 Explanation\n${qData.explanation}\n\n` +
+          `${HR}\n\n` +
+          `📊  **${correctSubs.length}** of **${totalSubs}** participant${totalSubs !== 1 ? "s" : ""} answered correctly  ·  Accuracy: **${accuracyPct}**`,
       )
       .setFooter({
-        text: qNumber < totalQ
-          ? `⏭️  Next question in 5 seconds...  (Q${qNumber + 1}/${totalQ})`
-          : '🏆  Calculating final scores...',
+        text:
+          qNumber < totalQ
+            ? `⏭️  Next question in 5 seconds...  (Q${qNumber + 1}/${totalQ})`
+            : "🏆  Calculating final scores...",
       });
 
-    await message.edit({ embeds: [qEmbed, resultEmbed], components: [disabledRow] }).catch(() => {});
+    await message
+      .edit({ embeds: [qEmbed, resultEmbed], components: [disabledRow] })
+      .catch(() => {});
 
     // Intermission
     if (qNumber < totalQ) {
@@ -303,12 +352,12 @@ export async function runLiveQuizSession({
       embeds: [
         new EmbedBuilder()
           .setColor(COLORS.neutral)
-          .setTitle('🏁  Quiz Session Complete')
+          .setTitle("🏁  Quiz Session Complete")
           .setDescription(
-            '> No answers were submitted during this session.\n\n' +
-            '_Use `/quiz live` again to start a new session. The more, the merrier!_'
+            "> No answers were submitted during this session.\n\n" +
+              "_Use `/quiz live` again to start a new session. The more, the merrier!_",
           )
-          .setFooter({ text: 'HCC AutoEngage • HackerRank Campus Crew' })
+          .setFooter({ text: "HCC AutoEngage • HackerRank Campus Crew" })
           .setTimestamp(),
       ],
     });
@@ -319,12 +368,12 @@ export async function runLiveQuizSession({
   await channel.send({
     embeds: [
       new EmbedBuilder()
-        .setColor(0xFFD700)
+        .setColor(0xffd700)
         .setDescription(
           `### 🥁  Drumroll please...\n\n` +
-          `All **${sampleQuestions.length}** questions complete!\n` +
-          `**${sorted.length}** participant${sorted.length !== 1 ? 's' : ''} gave it their all.\n\n` +
-          `_Calculating final standings..._ ⚡`
+            `All **${sampleQuestions.length}** questions complete!\n` +
+            `**${sorted.length}** participant${sorted.length !== 1 ? "s" : ""} gave it their all.\n\n` +
+            `_Calculating final standings..._ ⚡`,
         ),
     ],
   });
@@ -333,18 +382,20 @@ export async function runLiveQuizSession({
 
   // Top-3 dramatic reveal (send 3→2→1 with delays so each medal "drops" in)
   const podiumLines = sorted.slice(0, Math.min(3, sorted.length));
-  const PODIUM_MEDALS = ['🥇', '🥈', '🥉'];
-  const PODIUM_COLORS = [0xFFD700, 0xC0C0C0, 0xCD7F32];
+  const PODIUM_MEDALS = ["🥇", "🥈", "🥉"];
+  const PODIUM_COLORS = [0xffd700, 0xc0c0c0, 0xcd7f32];
   const PODIUM_TITLES = [
-    '🏆  CHAMPION  🏆',
-    '🥈  Runner-Up  🥈',
-    '🥉  Third Place  🥉',
+    "🏆  CHAMPION  🏆",
+    "🥈  Runner-Up  🥈",
+    "🥉  Third Place  🥉",
   ];
 
   for (let p = 0; p < podiumLines.length; p++) {
     await sleep(p === 0 ? 500 : 1800);
     const entry = podiumLines[p];
-    const userMention = entry.userId ? `<@${entry.userId}>` : `**${entry.username}**`;
+    const userMention = entry.userId
+      ? `<@${entry.userId}>`
+      : `**${entry.username}**`;
     await channel.send({
       content: `${PODIUM_MEDALS[p]}  Congratulations ${userMention}!`,
       embeds: [
@@ -353,7 +404,7 @@ export async function runLiveQuizSession({
           .setTitle(`${PODIUM_MEDALS[p]}  ${PODIUM_TITLES[p]}`)
           .setDescription(
             `## ${userMention}\n` +
-            `**${entry.score} Points**  ·  ${entry.correctCount}/${sampleQuestions.length} correct`
+              `**${entry.score} Points**  ·  ${entry.correctCount}/${sampleQuestions.length} correct`,
           ),
       ],
     });
@@ -366,31 +417,40 @@ export async function runLiveQuizSession({
     .slice(0, 10)
     .map((entry, idx) => {
       const medal = PODIUM_MEDALS[idx] ?? `**#${idx + 1}**`;
-      const userMention = entry.userId ? `<@${entry.userId}>` : `**${entry.username}**`;
-      const bar   = '█'.repeat(Math.round((entry.score / (sorted[0]?.score || 1)) * 8)).padEnd(8, '░');
+      const userMention = entry.userId
+        ? `<@${entry.userId}>`
+        : `**${entry.username}**`;
+      const bar = "█"
+        .repeat(Math.round((entry.score / (sorted[0]?.score || 1)) * 8))
+        .padEnd(8, "░");
       return `${medal}  ${userMention}\n╰  \`${bar}\`  ${entry.score} pts  ·  ${entry.correctCount}/${sampleQuestions.length} ✅`;
     })
-    .join('\n\n');
+    .join("\n\n");
 
   const finalEmbed = new EmbedBuilder()
-    .setColor(0xFFD700)
-    .setTitle('🏆  Final Session Standings')
+    .setColor(0xffd700)
+    .setTitle("🏆  Final Session Standings")
     .setDescription(
       `${leaderboardLines}\n\n${HR}\n\n` +
-      `🎉  Great job to all **${sorted.length}** participant${sorted.length !== 1 ? 's' : ''}!\n` +
-      `Points & streaks have been saved to your permanent profile.\n` +
-      `Use \`/profile\` to see your updated stats and badges.`
+        `🎉  Great job to all **${sorted.length}** participant${sorted.length !== 1 ? "s" : ""}!\n` +
+        `Points & streaks have been saved to your permanent profile.\n` +
+        `Use \`/profile\` to see your updated stats and badges.`,
     )
-    .setFooter({ text: 'HCC AutoEngage • HackerRank Campus Crew  │  Live Quiz Session Complete' })
+    .setFooter({
+      text: "HCC AutoEngage • HackerRank Campus Crew  │  Live Quiz Session Complete",
+    })
     .setTimestamp();
 
   await channel.send({ embeds: [finalEmbed] });
 
-  logger.info('Live quiz session completed successfully', {
+  logger.info("Live quiz session completed successfully", {
     channelId,
     totalQuestions: sampleQuestions.length,
     participants: sessionScores.size,
   });
 
-  return { totalQuestions: sampleQuestions.length, participants: sessionScores.size };
+  return {
+    totalQuestions: sampleQuestions.length,
+    participants: sessionScores.size,
+  };
 }

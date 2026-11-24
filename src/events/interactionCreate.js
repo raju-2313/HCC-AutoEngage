@@ -3,33 +3,42 @@
  * Routes every incoming interaction to the correct command handler.
  */
 
-import { MessageFlags } from 'discord.js';
-import { logger } from '../utils/logger.js';
-import { errorEmbed } from '../utils/embeds.js';
-import { handleQuizAnswerInteraction } from '../services/quiz/quizService.js';
-import { recordDailyParticipation } from '../database/queries/members.js';
+import { MessageFlags } from "discord.js";
+import { logger } from "../utils/logger.js";
+import { errorEmbed } from "../utils/embeds.js";
+import { handleQuizAnswerInteraction } from "../services/quiz/quizService.js";
+import { recordDailyParticipation } from "../database/queries/members.js";
 import {
   buildOverallLeaderboardEmbed,
   buildLeaderboardActionRow,
-} from '../services/recognition/engagementScoringService.js';
-import { handleStickerButtonInteraction } from '../services/stickers/reviewService.js';
-import { handleEmojiButtonInteraction } from '../services/emojis/reviewService.js';
+} from "../services/recognition/engagementScoringService.js";
+import { handleStickerButtonInteraction } from "../services/stickers/reviewService.js";
+import { handleEmojiButtonInteraction } from "../services/emojis/reviewService.js";
 
-export const name  = 'interactionCreate';
-export const once  = false;
+export const name = "interactionCreate";
+export const once = false;
 
 export async function execute(interaction, client) {
   // ── Slash Commands ──────────────────────────────────────────────────────────
   if (interaction.isChatInputCommand()) {
     // Record daily login & participation streak asynchronously
-    recordDailyParticipation(interaction.user.id, 'command_login').catch(() => {});
+    recordDailyParticipation(interaction.user.id, "command_login").catch(
+      () => {},
+    );
 
     const command = client.commands.get(interaction.commandName);
 
     if (!command) {
-      logger.warn(`Unknown slash command received`, { name: interaction.commandName });
+      logger.warn(`Unknown slash command received`, {
+        name: interaction.commandName,
+      });
       return interaction.reply({
-        embeds: [errorEmbed('Unknown Command', `\`/${interaction.commandName}\` is not registered.`)],
+        embeds: [
+          errorEmbed(
+            "Unknown Command",
+            `\`/${interaction.commandName}\` is not registered.`,
+          ),
+        ],
         flags: MessageFlags.Ephemeral,
       });
     }
@@ -37,20 +46,25 @@ export async function execute(interaction, client) {
     try {
       logger.info(`Executing command`, {
         command: interaction.commandName,
-        user:    interaction.user.tag,
-        guild:   interaction.guild?.name ?? 'DM',
+        user: interaction.user.tag,
+        guild: interaction.guild?.name ?? "DM",
       });
 
       await command.execute(interaction);
     } catch (err) {
       logger.error(`Command execution failed`, {
         command: interaction.commandName,
-        error:   err.message,
-        stack:   err.stack,
+        error: err.message,
+        stack: err.stack,
       });
 
       const errorReply = {
-        embeds: [errorEmbed('Something went wrong', 'An unexpected error occurred. Please try again later.')],
+        embeds: [
+          errorEmbed(
+            "Something went wrong",
+            "An unexpected error occurred. Please try again later.",
+          ),
+        ],
         flags: MessageFlags.Ephemeral,
       };
 
@@ -67,36 +81,38 @@ export async function execute(interaction, client) {
   if (interaction.isButton()) {
     logger.debug(`Button interaction received`, {
       customId: interaction.customId,
-      user:     interaction.user.tag,
+      user: interaction.user.tag,
     });
 
-    if (interaction.customId.startsWith('quiz_ans:')) {
+    if (interaction.customId.startsWith("quiz_ans:")) {
       return handleQuizAnswerInteraction(interaction);
     }
 
-    if (interaction.customId.startsWith('sticker:')) {
+    if (interaction.customId.startsWith("sticker:")) {
       return handleStickerButtonInteraction(interaction);
     }
 
-    if (interaction.customId.startsWith('emoji:')) {
+    if (interaction.customId.startsWith("emoji:")) {
       return handleEmojiButtonInteraction(interaction);
     }
 
-    if (interaction.customId.startsWith('lb_view:')) {
-      const period = interaction.customId.replace('lb_view:', '');
+    if (interaction.customId.startsWith("lb_view:")) {
+      const period = interaction.customId.replace("lb_view:", "");
       try {
         const embed = await buildOverallLeaderboardEmbed(period);
-        const row   = buildLeaderboardActionRow(period);
+        const row = buildLeaderboardActionRow(period);
         await interaction.update({
           embeds: [embed],
           components: [row],
         });
       } catch (err) {
-        logger.error('Error switching leaderboard period view', { period, error: err.message });
+        logger.error("Error switching leaderboard period view", {
+          period,
+          error: err.message,
+        });
       }
       return;
     }
     return;
   }
 }
-
