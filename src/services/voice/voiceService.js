@@ -3,14 +3,14 @@
  * Persistent voice session tracking, anti-farming protection, and crash recovery.
  */
 
-import { logger } from '../../utils/logger.js';
+import { logger } from "../../utils/logger.js";
 import {
   recordVoiceSessionStart,
   recordVoiceSessionEnd,
   getActiveVoiceSession,
   reconcileOrphanedVoiceSessions,
-} from '../../database/queries/engagement.js';
-import { recordDailyParticipation } from '../../database/queries/members.js';
+} from "../../database/queries/engagement.js";
+import { recordDailyParticipation } from "../../database/queries/members.js";
 
 /**
  * Handles voice channel state transitions.
@@ -20,12 +20,12 @@ export async function handleVoiceStateChange(oldState, newState) {
   if (!member || member.user.bot) return;
 
   const discordId = member.id;
-  const username  = member.user.username;
+  const username = member.user.username;
 
   const isAfkChannel = (channel) => {
     if (!channel) return false;
     if (channel.id === channel.guild.afkChannelId) return true;
-    return channel.name?.toLowerCase().includes('afk');
+    return channel.name?.toLowerCase().includes("afk");
   };
 
   const oldChannel = oldState.channel;
@@ -36,7 +36,7 @@ export async function handleVoiceStateChange(oldState, newState) {
     const active = await getActiveVoiceSession(discordId);
     if (active) {
       const res = await recordVoiceSessionEnd(active.id);
-      logger.info('Voice session ended', {
+      logger.info("Voice session ended", {
         user: username,
         durationSeconds: res.duration_seconds,
         points: res.points_awarded,
@@ -45,17 +45,19 @@ export async function handleVoiceStateChange(oldState, newState) {
       // Synchronize points ledger for completed voice session
       if (res?.points_awarded > 0) {
         try {
-          const { supabaseAdmin } = await import('../../database/client.js');
-          await supabaseAdmin.rpc('record_points_transaction', {
+          const { supabaseAdmin } = await import("../../database/client.js");
+          await supabaseAdmin.rpc("record_points_transaction", {
             p_discord_id: discordId,
             p_points_delta: Math.round(res.points_awarded),
             p_xp_delta: Math.round(res.points_awarded * 2),
-            p_reason: 'voice_study_session',
+            p_reason: "voice_study_session",
             p_reference_id: active.id,
-            p_awarded_by: 'system',
+            p_awarded_by: "system",
           });
         } catch (err) {
-          logger.warn('Points ledger sync for voice session skipped', { error: err.message });
+          logger.warn("Points ledger sync for voice session skipped", {
+            error: err.message,
+          });
         }
       }
     }
@@ -70,17 +72,19 @@ export async function handleVoiceStateChange(oldState, newState) {
         const res = await recordVoiceSessionEnd(active.id);
         if (res?.points_awarded > 0) {
           try {
-            const { supabaseAdmin } = await import('../../database/client.js');
-            await supabaseAdmin.rpc('record_points_transaction', {
+            const { supabaseAdmin } = await import("../../database/client.js");
+            await supabaseAdmin.rpc("record_points_transaction", {
               p_discord_id: discordId,
               p_points_delta: Math.round(res.points_awarded),
               p_xp_delta: Math.round(res.points_awarded * 2),
-              p_reason: 'voice_study_session',
+              p_reason: "voice_study_session",
               p_reference_id: active.id,
-              p_awarded_by: 'system',
+              p_awarded_by: "system",
             });
           } catch (err) {
-            logger.warn('Points ledger sync for channel switch skipped', { error: err.message });
+            logger.warn("Points ledger sync for channel switch skipped", {
+              error: err.message,
+            });
           }
         }
       }
@@ -97,13 +101,16 @@ export async function handleVoiceStateChange(oldState, newState) {
 
   // ── Scenario C: Joined voice from disconnected state ───────────────────────
   if (!oldChannel && newChannel && !isAfkChannel(newChannel)) {
-    recordDailyParticipation(discordId, 'voice_study').catch(() => {});
+    recordDailyParticipation(discordId, "voice_study").catch(() => {});
     await recordVoiceSessionStart({
       discordId,
       username,
       channelId: newChannel.id,
     });
-    logger.info('Voice session started', { user: username, channel: newChannel.name });
+    logger.info("Voice session started", {
+      user: username,
+      channel: newChannel.name,
+    });
   }
 }
 
@@ -113,7 +120,7 @@ export async function handleVoiceStateChange(oldState, newState) {
  */
 export async function initializeVoiceRecovery(client) {
   try {
-    logger.info('Reconciling active voice states across guilds…');
+    logger.info("Reconciling active voice states across guilds…");
     await reconcileOrphanedVoiceSessions();
 
     let resumedCount = 0;
@@ -121,7 +128,10 @@ export async function initializeVoiceRecovery(client) {
       for (const [memberId, voiceState] of guild.voiceStates.cache.entries()) {
         const member = voiceState.member;
         if (!member || member.user.bot) continue;
-        if (voiceState.channel && voiceState.channel.id !== guild.afkChannelId) {
+        if (
+          voiceState.channel &&
+          voiceState.channel.id !== guild.afkChannelId
+        ) {
           await recordVoiceSessionStart({
             discordId: memberId,
             username: member.user.username,
@@ -132,9 +142,12 @@ export async function initializeVoiceRecovery(client) {
       }
     }
 
-    logger.info(`Voice recovery complete: ${resumedCount} live active connections registered.`);
+    logger.info(
+      `Voice recovery complete: ${resumedCount} live active connections registered.`,
+    );
   } catch (err) {
-    logger.warn('Non-fatal error during voice session recovery', { error: err.message });
+    logger.warn("Non-fatal error during voice session recovery", {
+      error: err.message,
+    });
   }
 }
-

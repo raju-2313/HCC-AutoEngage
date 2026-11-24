@@ -79,7 +79,10 @@
     "codeSnippet": "s = \"cat\"\ns[0] = \"b\" # What happens?",
     "options": [
       { "id": "A", "text": "Mutable (s becomes \"bat\")" },
-      { "id": "B", "text": "Immutable (TypeError: 'str' object does not support item assignment)" },
+      {
+        "id": "B",
+        "text": "Immutable (TypeError: 'str' object does not support item assignment)"
+      },
       { "id": "C", "text": "Dynamically mutable" },
       { "id": "D", "text": "Mutable only inside lists" }
     ],
@@ -180,4 +183,3 @@
     "timeLimitSeconds": 15
   }
 ]
-
