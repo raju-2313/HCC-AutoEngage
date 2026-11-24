@@ -11,25 +11,24 @@
 module.exports = {
   apps: [
     {
-      name: 'hcc-autoengage',
-      script: 'src/index.js',
+      name: "hcc-autoengage",
+      script: "src/index.js",
       instances: 1,
-      exec_mode: 'fork',
+      exec_mode: "fork",
       autorestart: true,
       watch: false,
-      max_memory_restart: '400M',
+      max_memory_restart: "400M",
       restart_delay: 5000,
       max_restarts: 50,
-      min_uptime: '10s',
-      error_file: './logs/pm2-error.log',
-      out_file: './logs/pm2-out.log',
+      min_uptime: "10s",
+      error_file: "./logs/pm2-error.log",
+      out_file: "./logs/pm2-out.log",
       merge_logs: true,
       time: true,
       env: {
-        NODE_ENV: 'production',
-        TZ: 'Asia/Kolkata',
+        NODE_ENV: "production",
+        TZ: "Asia/Kolkata",
       },
     },
   ],
 };
-

@@ -3,26 +3,28 @@
  * Database operations for quizzes and quiz_questions tables.
  */
 
-import { supabaseAdmin } from '../client.js';
-import { logger } from '../../utils/logger.js';
+import { supabaseAdmin } from "../client.js";
+import { logger } from "../../utils/logger.js";
 
 /**
  * Gets the current active quiz including its questions.
  */
 export async function getActiveQuiz() {
   const { data, error } = await supabaseAdmin
-    .from('quizzes')
-    .select(`
+    .from("quizzes")
+    .select(
+      `
       *,
       quiz_questions (*)
-    `)
-    .eq('status', 'active')
-    .order('published_at', { ascending: false })
+    `,
+    )
+    .eq("status", "active")
+    .order("published_at", { ascending: false })
     .limit(1)
     .maybeSingle();
 
   if (error) {
-    logger.error('Error fetching active quiz', { error: error.message });
+    logger.error("Error fetching active quiz", { error: error.message });
     throw error;
   }
   return data;
@@ -33,16 +35,18 @@ export async function getActiveQuiz() {
  */
 export async function getQuizById(quizId) {
   const { data, error } = await supabaseAdmin
-    .from('quizzes')
-    .select(`
+    .from("quizzes")
+    .select(
+      `
       *,
       quiz_questions (*)
-    `)
-    .eq('id', quizId)
+    `,
+    )
+    .eq("id", quizId)
     .maybeSingle();
 
   if (error) {
-    logger.error('Error fetching quiz by id', { quizId, error: error.message });
+    logger.error("Error fetching quiz by id", { quizId, error: error.message });
     throw error;
   }
   return data;
@@ -54,23 +58,23 @@ export async function getQuizById(quizId) {
 export async function createQuiz({
   title,
   description = null,
-  category = 'daily_tech_quiz',
-  difficulty = 'beginner',
+  category = "daily_tech_quiz",
+  difficulty = "beginner",
   pointsReward = 10,
   xpReward = 20,
   scheduledFor = null,
-  createdBy = 'system',
+  createdBy = "system",
   questions = [],
 }) {
   // 1. Insert Quiz header
   const { data: quiz, error: quizError } = await supabaseAdmin
-    .from('quizzes')
+    .from("quizzes")
     .insert({
       title,
       description,
       category,
       difficulty,
-      status: 'draft',
+      status: "draft",
       points_reward: pointsReward,
       xp_reward: xpReward,
       scheduled_for: scheduledFor,
@@ -80,7 +84,7 @@ export async function createQuiz({
     .single();
 
   if (quizError) {
-    logger.error('Error creating quiz', { error: quizError.message });
+    logger.error("Error creating quiz", { error: quizError.message });
     throw quizError;
   }
 
@@ -97,11 +101,14 @@ export async function createQuiz({
     }));
 
     const { error: questionsError } = await supabaseAdmin
-      .from('quiz_questions')
+      .from("quiz_questions")
       .insert(questionsToInsert);
 
     if (questionsError) {
-      logger.error('Error creating quiz questions', { quizId: quiz.id, error: questionsError.message });
+      logger.error("Error creating quiz questions", {
+        quizId: quiz.id,
+        error: questionsError.message,
+      });
       throw questionsError;
     }
   }
@@ -114,19 +121,19 @@ export async function createQuiz({
  */
 export async function publishQuiz(quizId, { messageId, channelId }) {
   const { data, error } = await supabaseAdmin
-    .from('quizzes')
+    .from("quizzes")
     .update({
-      status: 'active',
+      status: "active",
       published_at: new Date().toISOString(),
       discord_message_id: messageId,
       discord_channel_id: channelId,
     })
-    .eq('id', quizId)
+    .eq("id", quizId)
     .select()
     .single();
 
   if (error) {
-    logger.error('Error publishing quiz', { quizId, error: error.message });
+    logger.error("Error publishing quiz", { quizId, error: error.message });
     throw error;
   }
   return data;
@@ -137,18 +144,23 @@ export async function publishQuiz(quizId, { messageId, channelId }) {
  */
 export async function getQuizByScheduledDate(scheduledDate) {
   const { data, error } = await supabaseAdmin
-    .from('quizzes')
-    .select(`
+    .from("quizzes")
+    .select(
+      `
       *,
       quiz_questions (*)
-    `)
-    .eq('scheduled_for', scheduledDate)
-    .order('created_at', { ascending: false })
+    `,
+    )
+    .eq("scheduled_for", scheduledDate)
+    .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
 
   if (error) {
-    logger.error('Error fetching quiz by scheduled date', { scheduledDate, error: error.message });
+    logger.error("Error fetching quiz by scheduled date", {
+      scheduledDate,
+      error: error.message,
+    });
     throw error;
   }
   return data;
@@ -159,17 +171,20 @@ export async function getQuizByScheduledDate(scheduledDate) {
  */
 export async function closeExpiredQuizzes(currentDate) {
   const { data, error } = await supabaseAdmin
-    .from('quizzes')
+    .from("quizzes")
     .update({
-      status: 'closed',
+      status: "closed",
       closed_at: new Date().toISOString(),
     })
-    .eq('status', 'active')
-    .lt('scheduled_for', currentDate)
+    .eq("status", "active")
+    .lt("scheduled_for", currentDate)
     .select();
 
   if (error) {
-    logger.error('Error closing expired quizzes', { currentDate, error: error.message });
+    logger.error("Error closing expired quizzes", {
+      currentDate,
+      error: error.message,
+    });
     throw error;
   }
   return data || [];
@@ -180,19 +195,18 @@ export async function closeExpiredQuizzes(currentDate) {
  */
 export async function closeQuiz(quizId) {
   const { data, error } = await supabaseAdmin
-    .from('quizzes')
+    .from("quizzes")
     .update({
-      status: 'closed',
+      status: "closed",
       closed_at: new Date().toISOString(),
     })
-    .eq('id', quizId)
+    .eq("id", quizId)
     .select()
     .single();
 
   if (error) {
-    logger.error('Error closing quiz', { quizId, error: error.message });
+    logger.error("Error closing quiz", { quizId, error: error.message });
     throw error;
   }
   return data;
 }
-

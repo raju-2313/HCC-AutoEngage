@@ -17,8 +17,8 @@
 ### Q1. [EASY] What will be the output of the following Python code?
 
 ```javascript
-x = 5
-print(x * 2)
+x = 5;
+print(x * 2);
 ```
 
 - **[Option A]** 10 **(Correct Answer ✅)**
@@ -51,8 +51,8 @@ print("Hello, HCC!")
 ### Q3. [EASY] What is the data type of the variable `score`?
 
 ```javascript
-score = 98.5
-print(type(score))
+score = 98.5;
+print(type(score));
 ```
 
 - **[Option A]** int
@@ -113,10 +113,10 @@ print(17 // 5)
 ### Q7. [MEDIUM] What will be printed by the following code?
 
 ```javascript
-a = [1, 2]
-b = a
-b.append(3)
-print(len(a))
+a = [1, 2];
+b = a;
+b.append(3);
+print(len(a));
 ```
 
 - **[Option A]** 2
@@ -132,8 +132,8 @@ print(len(a))
 ### Q8. [MEDIUM] What is the result of the following string and integer multiplication?
 
 ```javascript
-val = "3" * 3
-print(val)
+val = "3" * 3;
+print(val);
 ```
 
 - **[Option A]** 9
@@ -993,7 +993,9 @@ git commit ___ "Add feature"
 ### Q9. [MEDIUM] How do you open a hyperlink in a new browser tab in HTML?
 
 ```javascript
-<a href="https://google.com" ______="_blank">Search</a>
+<a href="https://google.com" ______="_blank">
+  Search
+</a>
 ```
 
 - **[Option A]** target **(Correct Answer ✅)**
@@ -1159,4 +1161,3 @@ hackerrank.com  →  104.16.132.229
 - **🎁 Rewards:** +10 Points / +20 XP
 
 ---
-
