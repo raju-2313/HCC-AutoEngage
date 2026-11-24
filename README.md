@@ -8,17 +8,18 @@ HCC AutoEngage is a cloud-hosted Discord automation platform designed to drive a
 
 ## 📌 Project Status: Phase 1 Sprint Concluded (Nov 9 – 15, 2026)
 
-The initial **7-Day Daily Tech Challenge Sprint** has successfully concluded. All 6 development phases are implemented. 
+The initial **7-Day Daily Tech Challenge Sprint** has successfully concluded. All 6 development phases are implemented.
 Automated background cron drops are currently **SUSPENDED** (`AUTOMATION_SUSPENDED = true`) in standby mode while Phase 2 planning commences.
 
 ### 🏆 7-Day Sprint Highlights
-* **Duration:** 7 Consecutive Days (Nov 9 – Nov 15, 2026).
-* **Participation:** 30 Unique Campus Members.
-* **Activity:** 639 Total Submissions · 428 Correct Answers (67% Community Accuracy).
-* **Official Podium:**
-  * 🥇 **Champion:** `karan20071` — **530 pts** · 1,135 XP (73% accuracy)
-  * 🥈 **Runner-Up:** `krishnaacharya08` — **520 pts** · 1,115 XP (75% accuracy)
-  * 🥉 **3rd Place:** `samiksha_2007` — **450 pts** · 935 XP (83% accuracy)
+
+- **Duration:** 7 Consecutive Days (Nov 9 – Nov 15, 2026).
+- **Participation:** 30 Unique Campus Members.
+- **Activity:** 639 Total Submissions · 428 Correct Answers (67% Community Accuracy).
+- **Official Podium:**
+  - 🥇 **Champion:** `karan20071` — **530 pts** · 1,135 XP (73% accuracy)
+  - 🥈 **Runner-Up:** `krishnaacharya08` — **520 pts** · 1,115 XP (75% accuracy)
+  - 🥉 **3rd Place:** `samiksha_2007` — **450 pts** · 935 XP (83% accuracy)
 
 ---
 
@@ -38,43 +39,43 @@ Automated background cron drops are currently **SUSPENDED** (`AUTOMATION_SUSPEND
 
 ## 🛠️ Architecture & Tech Stack
 
-| Component | Technology | Purpose |
-| :--- | :--- | :--- |
-| **Runtime** | Node.js v20+ (ES Modules) | Asynchronous event loop & process management |
-| **Discord SDK** | `discord.js` v14 | Gateway interactions, button components, and embeds |
-| **Database** | Supabase (PostgreSQL 15) | Relational persistence, atomic RPC procedures, and RLS |
-| **Scheduler** | `node-cron` | Timezone-aware (Asia/Kolkata) cron triggers |
-| **Production Hosting** | Railway | 24/7 containerized cloud deployment with auto-CI |
-| **Health Monitoring** | Native HTTP Server | Lightweight `/ping` & `/health` endpoints on port 8080 |
+| Component              | Technology                | Purpose                                                |
+| :--------------------- | :------------------------ | :----------------------------------------------------- |
+| **Runtime**            | Node.js v20+ (ES Modules) | Asynchronous event loop & process management           |
+| **Discord SDK**        | `discord.js` v14          | Gateway interactions, button components, and embeds    |
+| **Database**           | Supabase (PostgreSQL 15)  | Relational persistence, atomic RPC procedures, and RLS |
+| **Scheduler**          | `node-cron`               | Timezone-aware (Asia/Kolkata) cron triggers            |
+| **Production Hosting** | Railway                   | 24/7 containerized cloud deployment with auto-CI       |
+| **Health Monitoring**  | Native HTTP Server        | Lightweight `/ping` & `/health` endpoints on port 8080 |
 
 ---
 
 ## ✅ Feature Implementation Matrix
 
-| Phase | Milestone | Features & Capabilities | Status |
-| :---: | :--- | :--- | :---: |
-| **1** | **Foundation** | Client bootstrap, gateway connection, `/ping`, `/help`, structured logging | ✅ Complete |
-| **2** | **Data Layer** | Supabase client singleton, migration schemas, member profiles, logs | ✅ Complete |
-| **3** | **Quiz Engine** | 10-question timed sessions, 15s answer clocks, Discord buttons, ephemeral feedback | ✅ Complete |
-| **4** | **Gamification** | Points (+10), XP (+20), streak tracking, level calculations, `/profile`, `/leaderboard` | ✅ Complete |
-| **5** | **Automation** | Cron scheduler (19:00 IST drops), expired quiz auto-close, recovery reconciler | ✅ Complete |
-| **6** | **Admin Suite** | `/admin points`, `/admin quiz`, `/admin announce`, `/admin stats`, `/purge` | ✅ Complete |
-| **★** | **Engagement Engine** | Voice study session duration tracking, custom channel multipliers | ✅ Complete |
-| **★** | **Media Curation** | Moderated Sticker & Emoji discovery pipelines with human review queues | ✅ Complete |
+| Phase | Milestone             | Features & Capabilities                                                                 |   Status    |
+| :---: | :-------------------- | :-------------------------------------------------------------------------------------- | :---------: |
+| **1** | **Foundation**        | Client bootstrap, gateway connection, `/ping`, `/help`, structured logging              | ✅ Complete |
+| **2** | **Data Layer**        | Supabase client singleton, migration schemas, member profiles, logs                     | ✅ Complete |
+| **3** | **Quiz Engine**       | 10-question timed sessions, 15s answer clocks, Discord buttons, ephemeral feedback      | ✅ Complete |
+| **4** | **Gamification**      | Points (+10), XP (+20), streak tracking, level calculations, `/profile`, `/leaderboard` | ✅ Complete |
+| **5** | **Automation**        | Cron scheduler (19:00 IST drops), expired quiz auto-close, recovery reconciler          | ✅ Complete |
+| **6** | **Admin Suite**       | `/admin points`, `/admin quiz`, `/admin announce`, `/admin stats`, `/purge`             | ✅ Complete |
+| **★** | **Engagement Engine** | Voice study session duration tracking, custom channel multipliers                       | ✅ Complete |
+| **★** | **Media Curation**    | Moderated Sticker & Emoji discovery pipelines with human review queues                  | ✅ Complete |
 
 ---
 
 ## 📅 7-Day Challenge Sprint Calendar
 
-| Date | Day | Topic | Category | Format | Status |
-| :--- | :---: | :--- | :---: | :--- | :---: |
-| **Nov 9** | Day 1 | Python Basics | `python` | 10 Rapid Questions | ✅ Complete |
-| **Nov 10** | Day 2 | C Programming Basics | `c` | 10 Rapid Questions | ✅ Complete |
-| **Nov 11** | Day 3 | Loops & Iterations | `python` | 10 Rapid Questions | ✅ Complete |
-| **Nov 12** | Day 4 | Conditionals & Logic | `python` / logic | 10 Rapid Questions | ✅ Complete |
-| **Nov 13** | Day 5 | Git & GitHub | `bash` | 10 Rapid Questions | ✅ Complete |
-| **Nov 14** | Day 6 | HTML & Web Foundations | `html` | 10 Rapid Questions | ✅ Complete |
-| **Nov 15** | Day 7 | Tech & Computer Basics | `plain / cs` | 10 Rapid Questions (Finale) | ✅ Complete |
+| Date       |  Day  | Topic                  |     Category     | Format                      |   Status    |
+| :--------- | :---: | :--------------------- | :--------------: | :-------------------------- | :---------: |
+| **Nov 9**  | Day 1 | Python Basics          |     `python`     | 10 Rapid Questions          | ✅ Complete |
+| **Nov 10** | Day 2 | C Programming Basics   |       `c`        | 10 Rapid Questions          | ✅ Complete |
+| **Nov 11** | Day 3 | Loops & Iterations     |     `python`     | 10 Rapid Questions          | ✅ Complete |
+| **Nov 12** | Day 4 | Conditionals & Logic   | `python` / logic | 10 Rapid Questions          | ✅ Complete |
+| **Nov 13** | Day 5 | Git & GitHub           |      `bash`      | 10 Rapid Questions          | ✅ Complete |
+| **Nov 14** | Day 6 | HTML & Web Foundations |      `html`      | 10 Rapid Questions          | ✅ Complete |
+| **Nov 15** | Day 7 | Tech & Computer Basics |   `plain / cs`   | 10 Rapid Questions (Finale) | ✅ Complete |
 
 ---
 
@@ -127,26 +128,28 @@ HCC-AutoEngage/
 ## 🤖 Slash Command Reference
 
 ### Member Commands
-| Command | Options | Description |
-| :--- | :--- | :--- |
-| `/profile` | `[user]` | View points, total XP, current level, streak, and quiz stats |
-| `/leaderboard` | `[timeframe]` | View current server standings (All-time, Weekly, Monthly) |
-| `/quiz stats` | — | Check personal quiz completion numbers and win rates |
-| `/engagement me` | — | View text chat, reaction, and voice study session scores |
-| `/ping` | — | Verify bot connectivity and measure Discord API latency |
-| `/help` | — | Explore command documentation and instructions |
+
+| Command          | Options       | Description                                                  |
+| :--------------- | :------------ | :----------------------------------------------------------- |
+| `/profile`       | `[user]`      | View points, total XP, current level, streak, and quiz stats |
+| `/leaderboard`   | `[timeframe]` | View current server standings (All-time, Weekly, Monthly)    |
+| `/quiz stats`    | —             | Check personal quiz completion numbers and win rates         |
+| `/engagement me` | —             | View text chat, reaction, and voice study session scores     |
+| `/ping`          | —             | Verify bot connectivity and measure Discord API latency      |
+| `/help`          | —             | Explore command documentation and instructions               |
 
 ### Administrator Commands (`HCC Admin` / Administrator Role Required)
-| Command | Options | Description |
-| :--- | :--- | :--- |
+
+| Command                       | Options                           | Description                                                         |
+| :---------------------------- | :-------------------------------- | :------------------------------------------------------------------ |
 | `/admin announce leaderboard` | `[channel] [ping_everyone] [top]` | Broadcast official Final Leaderboard with podium and @everyone ping |
-| `/admin announce weekly` | — | Broadcast the weekly community digest and honors |
-| `/admin points` | `<user> <amount> [xp] [reason]` | Manually award or deduct points/XP with audit trail |
-| `/admin quiz publish` | `[question_id]` | Manually drop a daily quiz into the quiz channel |
-| `/admin quiz close` | — | Force-close the active quiz challenge immediately |
-| `/admin streak reset` | `<user>` | Reset a member's daily participation streak |
-| `/admin stats` | — | Inspect server-wide participation and health metrics |
-| `/purge` | `[amount]` | Bulk-delete bot-authored messages in the current channel |
+| `/admin announce weekly`      | —                                 | Broadcast the weekly community digest and honors                    |
+| `/admin points`               | `<user> <amount> [xp] [reason]`   | Manually award or deduct points/XP with audit trail                 |
+| `/admin quiz publish`         | `[question_id]`                   | Manually drop a daily quiz into the quiz channel                    |
+| `/admin quiz close`           | —                                 | Force-close the active quiz challenge immediately                   |
+| `/admin streak reset`         | `<user>`                          | Reset a member's daily participation streak                         |
+| `/admin stats`                | —                                 | Inspect server-wide participation and health metrics                |
+| `/purge`                      | `[amount]`                        | Bulk-delete bot-authored messages in the current channel            |
 
 ---
 
@@ -183,23 +186,24 @@ ADMIN_ROLE_NAME="HCC Admin"
 During live sprint execution, four system challenges were resolved to protect competitive fairness:
 
 1. **Discord 3s Gateway ACK Timeout (`(!) This interaction failed`):**
-   * *Challenge:* When 20+ students clicked answer buttons simultaneously, network latency to Supabase occasionally exceeded Discord's 3000ms acknowledgment window.
-   * *Resolution:* Executed an **Interior Gap Detection audit** across 639 submissions. Identified 27 participants whose responses were dropped between active questions and awarded full compensation (+10 pts / +20 XP per dropped question, total 1,570 pts).
+   - _Challenge:_ When 20+ students clicked answer buttons simultaneously, network latency to Supabase occasionally exceeded Discord's 3000ms acknowledgment window.
+   - _Resolution:_ Executed an **Interior Gap Detection audit** across 639 submissions. Identified 27 participants whose responses were dropped between active questions and awarded full compensation (+10 pts / +20 XP per dropped question, total 1,570 pts).
 2. **Late-Click Race Conditions:**
-   * *Challenge:* Clicks submitted with <2s remaining arrived while the question was closing, throwing unhandled exceptions.
-   * *Resolution:* Handled `QUIZ_EXPIRED` cleanly, delivering an ephemeral advisory to tap earlier.
+   - _Challenge:_ Clicks submitted with <2s remaining arrived while the question was closing, throwing unhandled exceptions.
+   - _Resolution:_ Handled `QUIZ_EXPIRED` cleanly, delivering an ephemeral advisory to tap earlier.
 3. **Announcement Permissions:**
-   * *Challenge:* `#📢・announcements` denied message permissions to `@everyone`, blocking automated winner posts.
-   * *Resolution:* Added `HCC Moderator` role to the bot and hardcoded safe channel resolution fallbacks.
+   - _Challenge:_ `#📢・announcements` denied message permissions to `@everyone`, blocking automated winner posts.
+   - _Resolution:_ Added `HCC Moderator` role to the bot and hardcoded safe channel resolution fallbacks.
 4. **Railway Environment Variable Typos:**
-   * *Challenge:* A malformed channel ID in Railway's dashboard caused `Channel Not Found`.
-   * *Resolution:* Enforced verified constant channel routing in code.
+   - _Challenge:_ A malformed channel ID in Railway's dashboard caused `Channel Not Found`.
+   - _Resolution:_ Enforced verified constant channel routing in code.
 
 ---
 
 ## 💻 Quick Start & Local Development
 
 ### 1. Clone & Install
+
 ```bash
 git clone https://github.com/raju-2313/HCC-AutoEngage.git
 cd HCC-AutoEngage
@@ -207,11 +211,13 @@ npm install
 ```
 
 ### 2. Register Slash Commands
+
 ```bash
 node src/scripts/deployCommands.js
 ```
 
 ### 3. Launch the Bot
+
 ```bash
 # Production mode:
 npm start
@@ -225,4 +231,4 @@ npm run dev
 ## ⚖️ License & Disclaimer
 
 Maintained by the **HackerRank Campus Crew (HCC)** core team.  
-*HCC AutoEngage is an open-source community initiative. It is not officially affiliated with or endorsed by HackerRank.*
+_HCC AutoEngage is an open-source community initiative. It is not officially affiliated with or endorsed by HackerRank._

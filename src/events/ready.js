@@ -7,19 +7,19 @@
  *  removed in v15. Always use 'clientReady' for v14+ compatibility.)
  */
 
-import { ActivityType } from 'discord.js';
-import { logger } from '../utils/logger.js';
-import { initScheduler } from '../services/automation/scheduler.js';
-import { initializeVoiceRecovery } from '../services/voice/voiceService.js';
+import { ActivityType } from "discord.js";
+import { logger } from "../utils/logger.js";
+import { initScheduler } from "../services/automation/scheduler.js";
+import { initializeVoiceRecovery } from "../services/voice/voiceService.js";
 
-export const name = 'clientReady';
+export const name = "clientReady";
 export const once = true;
 
 export function execute(client) {
   logger.info(`Bot is online`, {
-    tag:    client.user.tag,
+    tag: client.user.tag,
     guilds: client.guilds.cache.size,
-    users:  client.guilds.cache.reduce((acc, g) => acc + g.memberCount, 0),
+    users: client.guilds.cache.reduce((acc, g) => acc + g.memberCount, 0),
   });
 
   // Initialize Automation Scheduler (Phase 5)
@@ -30,16 +30,16 @@ export function execute(client) {
 
   // Set a rotating presence reflecting Phase 1 completion
   const activities = [
-    { name: 'Phase 1 Complete 🏆', type: ActivityType.Watching },
-    { name: 'HCC Community 🚀',   type: ActivityType.Watching },
-    { name: '/help for commands', type: ActivityType.Listening },
+    { name: "Phase 1 Complete 🏆", type: ActivityType.Watching },
+    { name: "HCC Community 🚀", type: ActivityType.Watching },
+    { name: "/help for commands", type: ActivityType.Listening },
   ];
 
   let index = 0;
   const rotate = () => {
     const activity = activities[index % activities.length];
     client.user.setPresence({
-      status: 'online',
+      status: "online",
       activities: [activity],
     });
     index++;
@@ -48,4 +48,3 @@ export function execute(client) {
   rotate();
   setInterval(rotate, 30_000); // rotate every 30 s
 }
-

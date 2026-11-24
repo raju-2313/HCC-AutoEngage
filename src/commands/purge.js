@@ -5,23 +5,32 @@
  * Restricted to administrators and HCC Moderators.
  */
 
-import { SlashCommandBuilder, PermissionFlagsBits, MessageFlags, EmbedBuilder } from 'discord.js';
-import { isAdmin } from '../utils/permissions.js';
-import { errorEmbed, COLORS } from '../utils/embeds.js';
-import { logger } from '../utils/logger.js';
-import { logActivity } from '../database/queries/logs.js';
+import {
+  SlashCommandBuilder,
+  PermissionFlagsBits,
+  MessageFlags,
+  EmbedBuilder,
+} from "discord.js";
+import { isAdmin } from "../utils/permissions.js";
+import { errorEmbed, COLORS } from "../utils/embeds.js";
+import { logger } from "../utils/logger.js";
+import { logActivity } from "../database/queries/logs.js";
 
 export const data = new SlashCommandBuilder()
-  .setName('purge')
-  .setDescription('Purge messages sent exclusively by this bot in this channel (Admin only).')
+  .setName("purge")
+  .setDescription(
+    "Purge messages sent exclusively by this bot in this channel (Admin only).",
+  )
   .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
   .addIntegerOption((opt) =>
     opt
-      .setName('amount')
-      .setDescription('Number of bot messages to delete (1-100). Default is 50.')
+      .setName("amount")
+      .setDescription(
+        "Number of bot messages to delete (1-100). Default is 50.",
+      )
       .setMinValue(1)
       .setMaxValue(100)
-      .setRequired(false)
+      .setRequired(false),
   );
 
 /**
@@ -31,7 +40,12 @@ export async function executePurge(interaction, targetAmount) {
   const channel = interaction.channel;
   if (!channel || !channel.isTextBased()) {
     return interaction.editReply({
-      embeds: [errorEmbed('Invalid Channel', 'This command can only be used in text channels.')],
+      embeds: [
+        errorEmbed(
+          "Invalid Channel",
+          "This command can only be used in text channels.",
+        ),
+      ],
     });
   }
 
@@ -51,10 +65,14 @@ export async function executePurge(interaction, targetAmount) {
         fetchOptions.before = lastMessageId;
       }
 
-      const fetchedMessages = await channel.messages.fetch(fetchOptions).catch((err) => {
-        logger.warn('Failed to fetch message batch for purge', { error: err.message });
-        return null;
-      });
+      const fetchedMessages = await channel.messages
+        .fetch(fetchOptions)
+        .catch((err) => {
+          logger.warn("Failed to fetch message batch for purge", {
+            error: err.message,
+          });
+          return null;
+        });
 
       if (!fetchedMessages || fetchedMessages.size === 0) {
         break; // No more messages in channel history
@@ -74,8 +92,12 @@ export async function executePurge(interaction, targetAmount) {
 
       // Separate messages younger than 14 days (bulkDelete eligible) from older ones
       const fourteenDaysAgo = Date.now() - 14 * 24 * 60 * 60 * 1000;
-      const bulkEligible = toDelete.filter((m) => m.createdTimestamp > fourteenDaysAgo);
-      const manualEligible = toDelete.filter((m) => m.createdTimestamp <= fourteenDaysAgo);
+      const bulkEligible = toDelete.filter(
+        (m) => m.createdTimestamp > fourteenDaysAgo,
+      );
+      const manualEligible = toDelete.filter(
+        (m) => m.createdTimestamp <= fourteenDaysAgo,
+      );
 
       // Try bulk delete for recent messages if more than 1
       if (bulkEligible.length > 1) {
@@ -83,7 +105,9 @@ export async function executePurge(interaction, targetAmount) {
           const bulkResult = await channel.bulkDelete(bulkEligible, true);
           deletedCount += bulkResult.size;
         } catch (bulkErr) {
-          logger.warn('Bulk delete failed, falling back to sequential delete', { error: bulkErr.message });
+          logger.warn("Bulk delete failed, falling back to sequential delete", {
+            error: bulkErr.message,
+          });
           for (const msg of bulkEligible) {
             await msg.delete().catch(() => null);
             deletedCount++;
@@ -106,7 +130,7 @@ export async function executePurge(interaction, targetAmount) {
     }
 
     // Log admin activity to Supabase
-    await logActivity('admin_purge_bot_messages', interaction.user.id, {
+    await logActivity("admin_purge_bot_messages", interaction.user.id, {
       channelId: channel.id,
       channelName: channel.name,
       requestedAmount: targetAmount,
@@ -116,23 +140,33 @@ export async function executePurge(interaction, targetAmount) {
 
     const embed = new EmbedBuilder()
       .setColor(COLORS.success)
-      .setTitle('🧹  Bot Messages Purged')
+      .setTitle("🧹  Bot Messages Purged")
       .setDescription(
         `> Successfully deleted **${deletedCount}** message(s) sent by <@${botId}> in <#${channel.id}>.\n\n` +
-        `**Details:**\n` +
-        `• **Requested Amount:** \`${targetAmount}\`\n` +
-        `• **Deleted Messages:** \`${deletedCount}\`\n` +
-        `• **Scope:** Exclusively messages by <@${botId}>\n` +
-        `• **Human Messages:** Untouched & intact ✅`
+          `**Details:**\n` +
+          `• **Requested Amount:** \`${targetAmount}\`\n` +
+          `• **Deleted Messages:** \`${deletedCount}\`\n` +
+          `• **Scope:** Exclusively messages by <@${botId}>\n` +
+          `• **Human Messages:** Untouched & intact ✅`,
       )
-      .setFooter({ text: `HCC AutoEngage • Admin action by @${interaction.user.username}` })
+      .setFooter({
+        text: `HCC AutoEngage • Admin action by @${interaction.user.username}`,
+      })
       .setTimestamp();
 
     return interaction.editReply({ embeds: [embed] });
   } catch (err) {
-    logger.error('Error during purge execution', { error: err.message, stack: err.stack });
+    logger.error("Error during purge execution", {
+      error: err.message,
+      stack: err.stack,
+    });
     return interaction.editReply({
-      embeds: [errorEmbed('Purge Failed', `An error occurred while purging bot messages: ${err.message}`)],
+      embeds: [
+        errorEmbed(
+          "Purge Failed",
+          `An error occurred while purging bot messages: ${err.message}`,
+        ),
+      ],
     });
   }
 }
@@ -141,7 +175,12 @@ export async function execute(interaction) {
   // 1. Strict Admin / Moderator Authorization Check
   if (!isAdmin(interaction)) {
     return interaction.reply({
-      embeds: [errorEmbed('Permission Denied', 'Only administrators and HCC Moderators can use `/purge`.')],
+      embeds: [
+        errorEmbed(
+          "Permission Denied",
+          "Only administrators and HCC Moderators can use `/purge`.",
+        ),
+      ],
       flags: MessageFlags.Ephemeral,
     });
   }
@@ -149,7 +188,6 @@ export async function execute(interaction) {
   // 2. Defer ephemerally so the command execution is silent to normal users
   await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-  const amount = interaction.options.getInteger('amount') || 50;
+  const amount = interaction.options.getInteger("amount") || 50;
   return executePurge(interaction, amount);
 }
-

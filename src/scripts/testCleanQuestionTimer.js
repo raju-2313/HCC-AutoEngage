@@ -5,7 +5,7 @@
  * Strictly ZERO PINGS.
  */
 
-import 'dotenv/config';
+import "dotenv/config";
 import {
   Client,
   GatewayIntentBits,
@@ -13,14 +13,14 @@ import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
-} from 'discord.js';
-import { COLORS } from '../utils/embeds.js';
+} from "discord.js";
+import { COLORS } from "../utils/embeds.js";
 
 const TOKEN = process.env.DISCORD_TOKEN;
-const TEST_CHANNEL_ID = '1567916304118063124';
+const TEST_CHANNEL_ID = "1567916304118063124";
 
 if (!TOKEN) {
-  console.error('❌ DISCORD_TOKEN is missing');
+  console.error("❌ DISCORD_TOKEN is missing");
   process.exit(1);
 }
 
@@ -32,35 +32,39 @@ const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
 
-client.once('clientReady', async () => {
+client.once("clientReady", async () => {
   console.log(`🤖 Logged in as ${client.user.tag}`);
-  console.log(`📡 Sending synchronized 15-second test question to: ${TEST_CHANNEL_ID}`);
+  console.log(
+    `📡 Sending synchronized 15-second test question to: ${TEST_CHANNEL_ID}`,
+  );
 
   try {
     const channel = await client.channels.fetch(TEST_CHANNEL_ID);
-    if (!channel) throw new Error('Test channel not found.');
+    if (!channel) throw new Error("Test channel not found.");
 
     const qTimeSec = 15;
-    const HR = '┄'.repeat(28);
+    const HR = "┄".repeat(28);
 
     const question = {
-      id: 'test-timer-clean',
-      topic: 'C Programming Basics',
-      questionText: 'What is the correct syntax to declare an integer variable in C?',
-      codeSnippet: '/* Which option declares variable x as integer? */',
+      id: "test-timer-clean",
+      topic: "C Programming Basics",
+      questionText:
+        "What is the correct syntax to declare an integer variable in C?",
+      codeSnippet: "/* Which option declares variable x as integer? */",
       options: [
-        { id: 'A', text: 'int x;' },
-        { id: 'B', text: 'integer x;' },
-        { id: 'C', text: 'num x;' },
-        { id: 'D', text: 'var x: int;' },
+        { id: "A", text: "int x;" },
+        { id: "B", text: "integer x;" },
+        { id: "C", text: "num x;" },
+        { id: "D", text: "var x: int;" },
       ],
-      correctOption: 'A',
-      explanation: 'In C, integer variables are declared using the `int` keyword followed by the variable name: `int x;`.',
+      correctOption: "A",
+      explanation:
+        "In C, integer variables are declared using the `int` keyword followed by the variable name: `int x;`.",
     };
 
     const optionsText = question.options
       .map((opt) => `**${opt.id}.**  ${opt.text}`)
-      .join('\n\n');
+      .join("\n\n");
 
     const desc = `### ${question.questionText}\n\n\`\`\`c\n${question.codeSnippet}\n\`\`\`\n\n${HR}\n\n${optionsText}\n\n${HR}`;
 
@@ -68,13 +72,13 @@ client.once('clientReady', async () => {
       new ButtonBuilder()
         .setCustomId(`clean_test_ans:${opt.id}`)
         .setLabel(`Option ${opt.id}`)
-        .setStyle(ButtonStyle.Primary)
+        .setStyle(ButtonStyle.Primary),
     );
     const row = new ActionRowBuilder().addComponents(activeButtons);
 
     // Calculate exact target expiry time
     const startNow = Date.now();
-    const expiryTimestampMs = startNow + (qTimeSec * 1000);
+    const expiryTimestampMs = startNow + qTimeSec * 1000;
     const expiryUnixSec = Math.floor(expiryTimestampMs / 1000);
 
     const qEmbed = new EmbedBuilder()
@@ -83,12 +87,12 @@ client.once('clientReady', async () => {
       .setDescription(desc)
       .addFields(
         {
-          name: '⏱️ Time Limit',
+          name: "⏱️ Time Limit",
           value: `**${qTimeSec} Seconds**\nCloses <t:${expiryUnixSec}:R>`,
           inline: true,
         },
-        { name: '🎯 Tier', value: '🌱 Easy', inline: true },
-        { name: '🎁 Stakes', value: '**+10** pts', inline: true }
+        { name: "🎯 Tier", value: "🌱 Easy", inline: true },
+        { name: "🎁 Stakes", value: "**+10** pts", inline: true },
       )
       .setFooter({
         text: `Q1/1  │  Click your answer below (private)  │  ${qTimeSec}s limit`,
@@ -102,14 +106,18 @@ client.once('clientReady', async () => {
       allowedMentions: { parse: [] }, // ZERO PINGS
     });
 
-    console.log(`✅ Posted (Message ID: ${qMessage.id}). Waiting exactly 15 seconds...`);
+    console.log(
+      `✅ Posted (Message ID: ${qMessage.id}). Waiting exactly 15 seconds...`,
+    );
 
     // Synchronize sleep to the exact target expiry timestamp
     const remainingMs = Math.max(0, expiryTimestampMs - Date.now());
     console.log(`⏳ Precise sleep remaining: ${remainingMs}ms`);
     await sleep(remainingMs);
 
-    console.log(`⏰ Time expired at ${new Date().toISOString()}! Locking question and revealing answer...`);
+    console.log(
+      `⏰ Time expired at ${new Date().toISOString()}! Locking question and revealing answer...`,
+    );
 
     const disabledButtons = question.options.map((opt) => {
       const isCorrect = opt.id === question.correctOption;
@@ -122,19 +130,19 @@ client.once('clientReady', async () => {
     const disabledRow = new ActionRowBuilder().addComponents(disabledButtons);
 
     const closedQEmbed = new EmbedBuilder()
-      .setColor(0x95A5A6) // Neutral gray when closed
+      .setColor(0x95a5a6) // Neutral gray when closed
       .setTitle(`💻  Question 1 of 1 · C Programming Basics`)
       .setDescription(desc)
       .addFields(
         {
-          name: '⏱️ Time Limit',
+          name: "⏱️ Time Limit",
           value: `🔒 **Time's Up!**\nClosed <t:${expiryUnixSec}:R>`,
           inline: true,
         },
-        { name: '🎯 Tier', value: '🌱 Easy', inline: true },
-        { name: '🎁 Stakes', value: '**+10** pts', inline: true }
+        { name: "🎯 Tier", value: "🌱 Easy", inline: true },
+        { name: "🎁 Stakes", value: "**+10** pts", inline: true },
       )
-      .setFooter({ text: 'Q1/1  │  Submissions closed' })
+      .setFooter({ text: "Q1/1  │  Submissions closed" })
       .setTimestamp();
 
     const resultEmbed = new EmbedBuilder()
@@ -142,26 +150,25 @@ client.once('clientReady', async () => {
       .setTitle(`⏰  Time's Up! — Question 1 of 1`)
       .setDescription(
         `> **✅ Correct Answer: Option A (int x;)**\n\n` +
-        `### 💡 Explanation\n${question.explanation}\n\n` +
-        `${HR}\n\n` +
-        `📊  **Test Result:** Question closed at exactly 15.0 seconds. No lag, no hallucination, no rate limits.`
+          `### 💡 Explanation\n${question.explanation}\n\n` +
+          `${HR}\n\n` +
+          `📊  **Test Result:** Question closed at exactly 15.0 seconds. No lag, no hallucination, no rate limits.`,
       )
-      .setFooter({ text: 'HCC AutoEngage • Clean Synchronized Timer' });
+      .setFooter({ text: "HCC AutoEngage • Clean Synchronized Timer" });
 
     await qMessage.edit({
       embeds: [closedQEmbed, resultEmbed],
       components: [disabledRow],
     });
 
-    console.log('🎉 Clean test completed successfully!');
+    console.log("🎉 Clean test completed successfully!");
     await client.destroy();
     process.exit(0);
   } catch (err) {
-    console.error('❌ Error in clean timer test:', err);
+    console.error("❌ Error in clean timer test:", err);
     await client.destroy();
     process.exit(1);
   }
 });
 
 client.login(TOKEN);
-
