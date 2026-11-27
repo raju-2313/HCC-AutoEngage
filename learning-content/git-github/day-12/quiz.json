@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "day": 12,
+    "topic": "Forking & Upstream Syncing",
+    "category": "git",
+    "totalQuestions": 10,
+    "questionTimeSec": 15,
+    "difficulty": "intermediate",
+    "part": "C"
+  },
+  "questions": [
+    {
+      "id": "git-d12-q01",
+      "question": "What is a 'Fork' on GitHub?",
+      "options": {
+        "A": "A physical kitchen utensil",
+        "B": "A server-side copy of another user's repository created under your own GitHub account",
+        "C": "A Git command that deletes branches",
+        "D": "A paid GitHub add-on"
+      },
+      "correctAnswer": "B",
+      "explanation": "Forking creates an independent copy of a repository in your GitHub account, allowing you to freely experiment and push changes without write access to the original.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d12-q02",
+      "question": "What is the primary difference between `git clone` and forking?",
+      "options": {
+        "A": "`git clone` copies a repo to your local computer; forking copies a repo on GitHub servers to your own GitHub account",
+        "B": "They are exact synonyms",
+        "C": "Forking only works on private repos",
+        "D": "Cloning costs money, forking is free"
+      },
+      "correctAnswer": "A",
+      "explanation": "Forking happens on GitHub's cloud platform. Cloning downloads a repository to your local file system.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d12-q03",
+      "question": "In the open-source fork workflow, what does the remote named `upstream` typically refer to?",
+      "options": {
+        "A": "Your local hard drive",
+        "B": "The original parent repository from which you created your fork",
+        "C": "A backup server",
+        "D": "Your personal GitHub profile"
+      },
+      "correctAnswer": "B",
+      "explanation": "By convention, `origin` points to your personal fork, while `upstream` points to the main project repository.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d12-q04",
+      "question": "Which command connects the original parent repository as a remote named `upstream`?",
+      "options": {
+        "A": "git remote add upstream <parent-repo-url>",
+        "B": "git link upstream <parent-repo-url>",
+        "C": "git fork connect <parent-repo-url>",
+        "D": "git parent add <parent-repo-url>"
+      },
+      "correctAnswer": "A",
+      "explanation": "`git remote add upstream <url>` configures the original repo URL so you can pull future updates.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d12-q05",
+      "question": "How do you fetch the latest commits from the original `upstream` project into your local machine?",
+      "options": {
+        "A": "git fetch upstream",
+        "B": "git update all",
+        "C": "git sync original",
+        "D": "git get parent"
+      },
+      "correctAnswer": "A",
+      "explanation": "`git fetch upstream` downloads the newest branches and commits from the main project into your local cache.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d12-q06",
+      "question": "Why can't you push commits directly to a popular open-source repository like `facebook/react`?",
+      "options": {
+        "A": "Because Git only allows one commit per day",
+        "B": "Because you do not have write/push permissions to that repository; you must fork it and submit a Pull Request instead",
+        "C": "Because React is not written in Git",
+        "D": "Because pushing to public repos requires a paid license"
+      },
+      "correctAnswer": "B",
+      "explanation": "Public repositories only grant write access to core maintainers. External contributors contribute via forks and pull requests.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d12-q07",
+      "question": "How can you keep your local `main` branch synchronized with changes made to `upstream/main`?",
+      "options": {
+        "A": "`git switch main && git pull upstream main`",
+        "B": "`git reset --hard`",
+        "C": "`git clean -fd`",
+        "D": "`git push origin main`"
+      },
+      "correctAnswer": "A",
+      "explanation": "Pulling from `upstream main` merges the latest official commits into your local main branch.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d12-q08",
+      "question": "Does GitHub provide a web button to sync your fork directly without using terminal commands?",
+      "options": {
+        "A": "No, it is strictly command-line only",
+        "B": "Yes, GitHub has a 'Sync fork' button on your fork's repository homepage",
+        "C": "Only for paid Enterprise accounts",
+        "D": "Only if you have fewer than 10 commits"
+      },
+      "correctAnswer": "B",
+      "explanation": "GitHub's web UI features a 'Sync fork' dropdown that allows you to update your fork's branch with one click.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d12-q09",
+      "question": "When you push commits to your fork's `origin`, does that automatically change the original author's repository?",
+      "options": {
+        "A": "Yes, all forks automatically alter the original project",
+        "B": "No, your fork is completely isolated until you submit a Pull Request and the maintainers approve and merge it",
+        "C": "Only if you push to the main branch",
+        "D": "Yes, unless password protected"
+      },
+      "correctAnswer": "B",
+      "explanation": "Your fork is your private playground. Nothing touches the upstream repository without an approved Pull Request.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d12-q10",
+      "question": "What is the recommended branch to create when working on a bug fix in your fork?",
+      "options": {
+        "A": "Always commit directly on `main` in your fork",
+        "B": "Create a dedicated feature or fix branch (e.g. `fix/typo-in-docs`) so your PR is clean and isolated",
+        "C": "A branch named `upstream`",
+        "D": "A branch named `temp`"
+      },
+      "correctAnswer": "B",
+      "explanation": "Creating dedicated branches on your fork makes opening clean, focused Pull Requests simple and avoids polluting your fork's `main` branch.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    }
+  ]
+}

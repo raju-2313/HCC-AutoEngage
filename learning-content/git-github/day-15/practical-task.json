@@ -1,0 +1,23 @@
+{
+  "day": 15,
+  "title": "Complete the End-to-End Capstone Workflow",
+  "description": "Execute the complete professional developer lifecycle on your `hcc-git-practice` repository and share your repository link in the HCC community!",
+  "steps": [
+    "1. Open an Issue: Title `Add Capstone Completion Badge to README` (#2)",
+    "2. Ensure local `main` is fresh: `git switch main && git pull origin main`",
+    "3. Create branch: `git switch -c feature/capstone-badge`",
+    "4. Edit `README.md` to add: `### 🎓 Completed 15-Day HCC Git & GitHub Programme` and an achievement list",
+    "5. Review diff: `git diff` — verify only the expected lines changed",
+    "6. Stage & Commit: `git add README.md && git commit -m \"feat: add capstone completion badge to README\"`",
+    "7. Push branch: `git push -u origin feature/capstone-badge`",
+    "8. Open PR: write `Closes #2` in description, review diff in Files Changed, and merge it",
+    "9. Sync local: `git switch main && git pull origin main && git branch -d feature/capstone-badge`",
+    "10. Verify: run `git log --graph --oneline` — admire your complete, professional, 15-day Git history!"
+  ],
+  "expected_output": "Your repository features clean commits, merged PRs, closed issues, and a completed badge on README.md.",
+  "submission_type": "link",
+  "tips": [
+    "Pin this practice repository to your GitHub profile as tangible proof of your Git skills!",
+    "Every project you build in college, hackathons, or personal learning from now on should follow this exact workflow."
+  ]
+}

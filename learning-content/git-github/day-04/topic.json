@@ -1,0 +1,12 @@
+{
+  "day": 4,
+  "title": "Inspecting History & Viewing Changes",
+  "slug": "inspecting-history-viewing-changes",
+  "category": "git",
+  "difficulty": "beginner",
+  "part": "A",
+  "introduction": "Once you have saved multiple commits, how do you travel through project history? Today you will master `git log` and `git diff` to inspect past commits, see exact line-by-line differences, and learn how to write professional commit messages.",
+  "why_it_matters": "Code is read far more often than it is written. In professional teams, being able to quickly inspect what was changed, by whom, and why saves hours during debugging and code reviews.",
+  "estimated_time_minutes": 25,
+  "practical_activity_preview": "Make multiple commits, view changes with `git diff`, and navigate history with `git log --oneline`."
+}

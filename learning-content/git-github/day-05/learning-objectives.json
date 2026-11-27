@@ -1,0 +1,7 @@
+[
+  "Unstage accidentally staged files using git restore --staged <file>",
+  "Discard unwanted local edits using git restore <file>",
+  "Update the previous commit message or files using git commit --amend",
+  "Differentiate git reset (rewrites local history) from git revert (creates safe inverse commit)",
+  "Understand why git revert is preferred on shared/public branches"
+]

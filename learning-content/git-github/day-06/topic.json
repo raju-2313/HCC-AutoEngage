@@ -1,0 +1,12 @@
+{
+  "day": 6,
+  "title": "Project Hygiene: .gitignore & README.md",
+  "slug": "project-hygiene-gitignore-readme",
+  "category": "git",
+  "difficulty": "beginner",
+  "part": "A",
+  "introduction": "Professional repositories are clean and well-documented. Today you master `.gitignore` to prevent clutter, build artifacts, and sensitive API secrets from ever entering Git history, and learn how to write an engaging `README.md` using GitHub-Flavored Markdown.",
+  "why_it_matters": "Committing passwords or `.env` files is a major security vulnerability that Git permanently records unless cleaned. Furthermore, a clear README is the first impression recruiters, mentors, and open-source contributors get of your project.",
+  "estimated_time_minutes": 25,
+  "practical_activity_preview": "Add a `.gitignore` ignoring logs and environment variables, and format a professional `README.md`."
+}

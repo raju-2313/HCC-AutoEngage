@@ -1,0 +1,20 @@
+{
+  "day": 2,
+  "title": "Install Git & Configure Your Identity",
+  "description": "Install Git on your machine and set it up with your name and email. Then verify everything is working.",
+  "steps": [
+    "Download and install Git from https://git-scm.com/downloads",
+    "Open your terminal (Command Prompt, Git Bash, or macOS Terminal)",
+    "Run: git --version  — confirm you see a version number like 'git version 2.x.x'",
+    "Run: git config --global user.name \"Your Name\"",
+    "Run: git config --global user.email \"youremail@example.com\"",
+    "Run: git config --list  — verify your name and email appear in the output"
+  ],
+  "expected_output": "Terminal shows your git version, and git config --list shows your user.name and user.email correctly set.",
+  "submission_type": "none",
+  "tips": [
+    "Use the same email address you will use on GitHub — this links commits to your GitHub account",
+    "On Windows, use Git Bash (installed with Git for Windows) for the best experience",
+    "If you already have Git installed, skip to step 3 and check your version"
+  ]
+}

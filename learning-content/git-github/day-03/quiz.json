@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "day": 3,
+    "topic": "Creating Your First Repository & The Three-Stage Workflow",
+    "category": "git",
+    "totalQuestions": 10,
+    "questionTimeSec": 15,
+    "difficulty": "beginner",
+    "part": "A"
+  },
+  "questions": [
+    {
+      "id": "git-d03-q01",
+      "question": "Which command initializes a new Git repository in the current directory?",
+      "options": {
+        "A": "git start",
+        "B": "git init",
+        "C": "git create",
+        "D": "git new"
+      },
+      "correctAnswer": "B",
+      "explanation": "`git init` creates an empty Git repository by generating a hidden `.git` folder in your project root.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d03-q02",
+      "question": "What hidden folder does Git use to store all its tracking metadata and commit history?",
+      "options": {
+        "A": ".github",
+        "B": ".gitconfig",
+        "C": ".git",
+        "D": ".vcs"
+      },
+      "correctAnswer": "C",
+      "explanation": "The `.git` directory contains the object database, commit history, branch references, and configuration for that repository.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d03-q03",
+      "question": "What is the correct sequence of the three main areas in Git?",
+      "options": {
+        "A": "Staging Area → Working Directory → Repository",
+        "B": "Working Directory → Staging Area → Repository",
+        "C": "Repository → Staging Area → Working Directory",
+        "D": "Working Directory → Repository → Cloud"
+      },
+      "correctAnswer": "B",
+      "explanation": "Files are edited in your Working Directory, prepared for commit in the Staging Area (index), and saved permanently into the Repository.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d03-q04",
+      "question": "Which command checks which files are modified, staged, or untracked?",
+      "options": {
+        "A": "git check",
+        "B": "git info",
+        "C": "git status",
+        "D": "git list"
+      },
+      "correctAnswer": "C",
+      "explanation": "`git status` provides a comprehensive overview of your working tree and staging area.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d03-q05",
+      "question": "What does the command `git add index.html` do?",
+      "options": {
+        "A": "Creates a new file named index.html",
+        "B": "Moves changes in index.html to the staging area",
+        "C": "Immediately commits index.html to repository history",
+        "D": "Pushes index.html to GitHub"
+      },
+      "correctAnswer": "B",
+      "explanation": "`git add` adds the current state of a file to the staging area so it can be included in the next commit.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d03-q06",
+      "question": "What does `git add .` do?",
+      "options": {
+        "A": "Deletes all untracked files",
+        "B": "Stages all new and modified files in the current directory and subdirectories",
+        "C": "Initializes a repository in the parent folder",
+        "D": "Commits all changes with a default message"
+      },
+      "correctAnswer": "B",
+      "explanation": "The dot `.` represents the current directory, staging all tracked modifications and untracked files under the current path.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d03-q07",
+      "question": "What is the purpose of the `-m` flag in `git commit -m \"Add navbar\"`?",
+      "options": {
+        "A": "Merge branches",
+        "B": "Specify the commit message directly in the command",
+        "C": "Modify the previous commit",
+        "D": "Mark the commit as mandatory"
+      },
+      "correctAnswer": "B",
+      "explanation": "The `-m` flag supplies the commit message inline without opening a text editor like Vim or nano.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d03-q08",
+      "question": "If a file is listed under 'Untracked files' in `git status`, what does it mean?",
+      "options": {
+        "A": "Git has detected a merge conflict",
+        "B": "The file exists in your directory but Git is not monitoring its changes yet",
+        "C": "The file has been deleted from GitHub",
+        "D": "The file is corrupted"
+      },
+      "correctAnswer": "B",
+      "explanation": "Untracked files are files in your working directory that have never been added to Git via `git add`.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d03-q09",
+      "question": "Why does Git use a Staging Area instead of committing all file changes directly?",
+      "options": {
+        "A": "To compress the files before saving",
+        "B": "To allow you to pick and choose exactly which changes belong together in a logical commit",
+        "C": "Because hard drives cannot write files directly",
+        "D": "To verify file syntax automatically"
+      },
+      "correctAnswer": "B",
+      "explanation": "The staging area allows you to craft atomic, meaningful commits rather than dumping unrelated file edits into one messy snapshot.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d03-q10",
+      "question": "What does `git commit -a -m \"message\"` (or `-am`) do for an untracked file?",
+      "options": {
+        "A": "It automatically stages and commits both tracked and untracked files",
+        "B": "It only commits previously tracked, modified files — it ignores brand-new untracked files",
+        "C": "It deletes untracked files",
+        "D": "It pushes changes to GitHub"
+      },
+      "correctAnswer": "B",
+      "explanation": "The `-a` flag only auto-stages files that Git is already tracking. Brand-new untracked files still require explicit `git add`.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    }
+  ]
+}

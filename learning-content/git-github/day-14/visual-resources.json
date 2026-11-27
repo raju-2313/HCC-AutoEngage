@@ -1,0 +1,11 @@
+[
+  {
+    "title": "Introduction to GitHub (Microsoft Learn)",
+    "creator": "Microsoft Learn",
+    "url": "https://learn.microsoft.com/en-us/training/modules/introduction-to-github/",
+    "type": "Interactive Module",
+    "duration_minutes": 15,
+    "what_you_learn": "GitHub Flow, issue tracking, labels, milestones, project boards, and team coordination.",
+    "difficulty": "beginner"
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Git in 100 Seconds",
+    "creator": "Fireship",
+    "url": "https://www.youtube.com/watch?v=hwP7WQkmECE",
+    "type": "YouTube Short / Explainer",
+    "duration_minutes": 2,
+    "what_you_learn": "A lightning-fast visual overview of what Git is, why it was created, and how it tracks changes using snapshots.",
+    "difficulty": "beginner"
+  },
+  {
+    "title": "Git Tutorial for Beginners — Part 1: What is Git?",
+    "creator": "codebasics",
+    "url": "https://www.youtube.com/watch?v=xAAmje1H9YM",
+    "type": "YouTube Tutorial",
+    "duration_minutes": 15,
+    "what_you_learn": "Detailed walkthrough of version control concepts, the problem Git solves, and how Git differs from GitHub with real-world analogies.",
+    "difficulty": "beginner"
+  }
+]

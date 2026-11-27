@@ -1,0 +1,29 @@
+[
+  {
+    "title": "About pull requests",
+    "publisher": "GitHub Docs",
+    "url": "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests",
+    "type": "Official Docs",
+    "est_read_time_minutes": 6,
+    "what_you_learn": "Conceptual overview of Pull Requests, base vs head branches, and collaboration features.",
+    "difficulty": "intermediate"
+  },
+  {
+    "title": "Creating a pull request",
+    "publisher": "GitHub Docs",
+    "url": "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request",
+    "type": "Official Docs",
+    "est_read_time_minutes": 6,
+    "what_you_learn": "Step-by-step instructions to open a PR from a branch or fork with title and description.",
+    "difficulty": "intermediate"
+  },
+  {
+    "title": "Reviewing proposed changes in a pull request",
+    "publisher": "GitHub Docs",
+    "url": "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/reviewing-proposed-changes-in-a-pull-request",
+    "type": "Official Docs",
+    "est_read_time_minutes": 6,
+    "what_you_learn": "How reviewers leave inline line-by-line comments, suggest edits, and approve or request changes.",
+    "difficulty": "intermediate"
+  }
+]

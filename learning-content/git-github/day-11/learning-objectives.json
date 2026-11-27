@@ -1,0 +1,7 @@
+[
+  "Understand the exact condition that triggers a Git merge conflict",
+  "Read and interpret Git conflict markers (HEAD vs incoming branch)",
+  "Resolve conflicts using a code editor (e.g. VS Code Accept Current / Incoming / Both)",
+  "Stage resolved files and complete the merge commit",
+  "Abort an unwanted or broken merge attempt safely using git merge --abort"
+]

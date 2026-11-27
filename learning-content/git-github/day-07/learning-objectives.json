@@ -1,0 +1,7 @@
+[
+  "Create a new remote repository on GitHub without conflicting starter files",
+  "Connect a local repository to GitHub using git remote add origin <url>",
+  "Inspect connected remotes and URLs using git remote -v",
+  "Understand the difference between HTTPS and SSH remote URLs",
+  "Rename or update remote URLs using git remote set-url"
+]

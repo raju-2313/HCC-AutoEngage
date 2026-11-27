@@ -1,0 +1,22 @@
+{
+  "day": 4,
+  "title": "Inspect History and Line Diffs",
+  "description": "Make two distinct edits, inspect the exact diff before staging, and review the project history using compact logging.",
+  "steps": [
+    "In `hcc-git-practice`, open `hello.txt` and add a new line: 'Git makes collaboration simple.'",
+    "Run `git diff` in your terminal — observe lines starting with `+` (added) in green",
+    "Stage and commit: git add hello.txt && git commit -m \"docs: update hello.txt with collaboration note\"",
+    "Add another line to `hello.txt`: 'Learning with HCC.'",
+    "Stage the change: git add hello.txt",
+    "Run `git diff --staged` (or `--cached`) — observe the staged diff against the last commit",
+    "Commit: git commit -m \"docs: add HCC community note\"",
+    "Inspect history: `git log --oneline` — observe your clean list of commit hashes and messages",
+    "View the last commit in full detail: `git show HEAD`"
+  ],
+  "expected_output": "Terminal shows `git log --oneline` listing all 3 commits with their 7-character hashes and messages.",
+  "submission_type": "none",
+  "tips": [
+    "Press `q` to exit the terminal pager if `git log` or `git diff` fills up your screen!",
+    "`git diff` shows unstaged changes; `git diff --staged` shows what is about to be committed."
+  ]
+}

@@ -1,0 +1,11 @@
+[
+  {
+    "title": "Git Tutorial for Beginners: Learn Git in 1 Hour (History & Diff)",
+    "creator": "Programming with Mosh",
+    "url": "https://www.youtube.com/watch?v=8JJ101D3knE",
+    "type": "YouTube Tutorial",
+    "duration_minutes": 12,
+    "what_you_learn": "How to read git log output, navigate through pagers, use git diff to compare uncommitted code, and inspect individual commits.",
+    "difficulty": "beginner"
+  }
+]

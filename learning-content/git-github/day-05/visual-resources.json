@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Git for Beginners: Fixing Bad Commits (Part 3)",
+    "creator": "SelfTeach.me",
+    "url": "https://www.youtube.com/watch?v=d--34g7u3cM",
+    "type": "YouTube Walkthrough",
+    "duration_minutes": 10,
+    "what_you_learn": "Visual guide to amending commit messages, unstaging files, and recovering from common beginner mistakes.",
+    "difficulty": "beginner"
+  },
+  {
+    "title": "Git Tutorial 5: Undoing/Reverting/Resetting code changes",
+    "creator": "codebasics",
+    "url": "https://www.youtube.com/watch?v=3dk3s4LK-Wg",
+    "type": "YouTube Tutorial",
+    "duration_minutes": 10,
+    "what_you_learn": "Detailed visual comparison of git reset vs git revert with terminal examples.",
+    "difficulty": "beginner"
+  }
+]

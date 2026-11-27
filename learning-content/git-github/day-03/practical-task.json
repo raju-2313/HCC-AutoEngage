@@ -1,0 +1,22 @@
+{
+  "day": 3,
+  "title": "Create and Commit to Your First Repo",
+  "description": "Initialize a practice repository on your computer, create a text file, stage it, and commit it.",
+  "steps": [
+    "Open your terminal and navigate to your practice folder (e.g., cd ~/Desktop or cd D:\\)",
+    "Create a new directory and enter it: mkdir hcc-git-practice && cd hcc-git-practice",
+    "Initialize Git: git init (notice the hidden .git folder created)",
+    "Create a file hello.txt with the text 'Hello HCC!' inside",
+    "Run git status — notice hello.txt is listed in red under 'Untracked files'",
+    "Stage the file: git add hello.txt (or git add .)",
+    "Run git status again — notice it is now green under 'Changes to be committed'",
+    "Commit the change: git commit -m \"Initial commit: Add hello.txt\"",
+    "Run git status one last time — confirm it says 'nothing to commit, working tree clean'"
+  ],
+  "expected_output": "Terminal confirms '1 file changed, 1 insertion(+)' and git status reports a clean working tree.",
+  "submission_type": "none",
+  "tips": [
+    "Never run git init inside your entire user home directory or Desktop root — always create a project subfolder first!",
+    "git add . stages all changes in the current directory, while git add filename stages only that specific file."
+  ]
+}

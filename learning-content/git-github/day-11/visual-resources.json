@@ -1,0 +1,11 @@
+[
+  {
+    "title": "Git for Beginners: How to Resolve Merge Conflicts (Part 5)",
+    "creator": "SelfTeach.me",
+    "url": "https://www.youtube.com/watch?v=Lz5fWjnemSA",
+    "type": "YouTube Walkthrough",
+    "duration_minutes": 10,
+    "what_you_learn": "Live walk-through of triggering a conflict, understanding the markers, accepting current vs incoming changes, and committing.",
+    "difficulty": "intermediate"
+  }
+]

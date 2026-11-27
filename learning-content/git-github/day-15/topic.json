@@ -1,0 +1,12 @@
+{
+  "day": 15,
+  "title": "Capstone: Complete Collaborative Workflow Simulation",
+  "slug": "capstone-collaborative-workflow-simulation",
+  "category": "git",
+  "difficulty": "practical",
+  "part": "C",
+  "introduction": "Congratulations on reaching Day 15! Today is your **Capstone**: bringing every single skill from the past two weeks together into one unified, end-to-end simulated production workflow. You will experience the exact sequence of actions that professional software engineers follow every single day.",
+  "why_it_matters": "Knowing individual commands in isolation is good, but stringing them together smoothly into a confident, complete workflow is what makes you an industry-ready engineer who can hit the ground running in any team or hackathon.",
+  "estimated_time_minutes": 35,
+  "practical_activity_preview": "Execute the complete 8-step lifecycle: Issue → Branch → Edit & Commit → Push → PR → Review → Merge → Local Sync."
+}

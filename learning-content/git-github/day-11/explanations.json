@@ -1,0 +1,62 @@
+[
+  {
+    "questionId": "git-d11-q01",
+    "correct_answer": "B",
+    "explanation": "Conflicts only occur on overlapping lines. Everything else merges automatically.",
+    "tip": "Conflicts are a safety mechanism, not an error!"
+  },
+  {
+    "questionId": "git-d11-q02",
+    "correct_answer": "B",
+    "explanation": "Top section = Current branch (where you are sitting).",
+    "tip": "Remember: HEAD is your current branch."
+  },
+  {
+    "questionId": "git-d11-q03",
+    "correct_answer": "A",
+    "explanation": "Bottom section = Incoming branch (what you are merging in).",
+    "tip": "VS Code displays convenient 'Accept Current' and 'Accept Incoming' buttons above each conflict block."
+  },
+  {
+    "questionId": "git-d11-q04",
+    "correct_answer": "B",
+    "explanation": "`git merge --abort` is your emergency exit door.",
+    "tip": "It completely undoes the merge attempt and leaves no trace."
+  },
+  {
+    "questionId": "git-d11-q05",
+    "correct_answer": "B",
+    "explanation": "Stage with `git add` to mark resolved, then `git commit` to seal the deal.",
+    "tip": "Git will automatically populate a default 'Merge branch...' commit message."
+  },
+  {
+    "questionId": "git-d11-q06",
+    "correct_answer": "A",
+    "explanation": "You can also choose 'Accept Both Changes' to keep both lines in sequence.",
+    "tip": "Often, combining both developers' lines is the desired solution."
+  },
+  {
+    "questionId": "git-d11-q07",
+    "correct_answer": "B",
+    "explanation": "Always search your code for `<<<<<<<` before committing to ensure no markers were missed.",
+    "tip": "Many linters and pre-commit hooks automatically catch this error."
+  },
+  {
+    "questionId": "git-d11-q08",
+    "correct_answer": "B",
+    "explanation": "Git's 3-way merge algorithm is exceptionally smart with non-overlapping edits.",
+    "tip": "Most merges in real teams happen completely automatically with zero conflicts."
+  },
+  {
+    "questionId": "git-d11-q09",
+    "correct_answer": "B",
+    "explanation": "Regularly pulling `main` into your feature branch catches conflicts while they are still tiny and fresh.",
+    "tip": "Don't let feature branches sit unmerged for weeks!"
+  },
+  {
+    "questionId": "git-d11-q10",
+    "correct_answer": "A",
+    "explanation": "`git status` lists all files currently needing manual resolution.",
+    "tip": "Files marked 'both modified' are the ones with conflict markers inside."
+  }
+]

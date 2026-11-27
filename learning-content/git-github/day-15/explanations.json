@@ -1,0 +1,62 @@
+[
+  {
+    "questionId": "git-d15-q01",
+    "correct_answer": "B",
+    "explanation": "Rule #1 of branching: Start from the latest clean code.",
+    "tip": "`git switch main && git pull` before every `git switch -c`."
+  },
+  {
+    "questionId": "git-d15-q02",
+    "correct_answer": "A",
+    "explanation": "Main is sacred. Feature branches are where experiments and development happen.",
+    "tip": "Set up GitHub branch protection rules to enforce this."
+  },
+  {
+    "questionId": "git-d15-q03",
+    "correct_answer": "A",
+    "explanation": "Memorize this cycle: Issue → Branch → Code → PR → Review → Merge → Pull.",
+    "tip": "This is what you will do in every software job."
+  },
+  {
+    "questionId": "git-d15-q04",
+    "correct_answer": "B",
+    "explanation": "Status tells you what is clean, modified, staged, and untracked.",
+    "tip": "When in doubt, run `git status`."
+  },
+  {
+    "questionId": "git-d15-q05",
+    "correct_answer": "B",
+    "explanation": "One commit per logical change. Don't mix frontend styling with backend database fixes in one commit.",
+    "tip": "Atomic commits make reading git logs a joy."
+  },
+  {
+    "questionId": "git-d15-q06",
+    "correct_answer": "A",
+    "explanation": "`git revert` is the professional way to undo bugs on shared branches.",
+    "tip": "Never force push to main in a team project."
+  },
+  {
+    "questionId": "git-d15-q07",
+    "correct_answer": "A",
+    "explanation": "Despite the name, `git blame` is about understanding context and asking the right person for guidance.",
+    "tip": "GitHub web also has a 'Blame' button on every file view."
+  },
+  {
+    "questionId": "git-d15-q08",
+    "correct_answer": "A",
+    "explanation": "Stashing is your safety net when an urgent interruption happens mid-task.",
+    "tip": "`git stash` to save, `git stash pop` to resume."
+  },
+  {
+    "questionId": "git-d15-q09",
+    "correct_answer": "B",
+    "explanation": "Recruiters and senior engineers judge your code hygiene as much as the code itself.",
+    "tip": "A clean GitHub profile opens doors to internships and jobs."
+  },
+  {
+    "questionId": "git-d15-q10",
+    "correct_answer": "B",
+    "explanation": "Version control is not a chore — it is your superpower. Welcome to the Git & GitHub developer community!",
+    "tip": "Keep building, keep committing, and keep collaborating with HCC!"
+  }
+]

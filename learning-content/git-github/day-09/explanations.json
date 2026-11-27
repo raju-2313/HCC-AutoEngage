@@ -1,0 +1,62 @@
+[
+  {
+    "questionId": "git-d09-q01",
+    "correct_answer": "B",
+    "explanation": "Because branches are just 41 bytes, creating a branch takes microseconds and uses no disk space.",
+    "tip": "Never hesitate to create branches — they are practically free!"
+  },
+  {
+    "questionId": "git-d09-q02",
+    "correct_answer": "B",
+    "explanation": "`-c` stands for create. `git switch -c feature/x` is the cleanest modern syntax.",
+    "tip": "Equivalent older command: `git checkout -b feature/x`."
+  },
+  {
+    "questionId": "git-d09-q03",
+    "correct_answer": "A",
+    "explanation": "`git branch` is your branch inspector.",
+    "tip": "Add `-v` to see the latest commit on each branch: `git branch -v`."
+  },
+  {
+    "questionId": "git-d09-q04",
+    "correct_answer": "B",
+    "explanation": "If HEAD points directly to a commit hash instead of a branch name, you are in 'detached HEAD' state.",
+    "tip": "Always make sure HEAD points to a branch before making new commits."
+  },
+  {
+    "questionId": "git-d09-q05",
+    "correct_answer": "B",
+    "explanation": "Group prefixes (`feature/`, `bugfix/`) help tools and teammates organize work.",
+    "tip": "Include the issue number if applicable: `feature/issue-42-auth`."
+  },
+  {
+    "questionId": "git-d09-q06",
+    "correct_answer": "A",
+    "explanation": "`git switch` was added in Git 2.23 to separate branch switching from file restoring.",
+    "tip": "Switch switches branches; restore restores files."
+  },
+  {
+    "questionId": "git-d09-q07",
+    "correct_answer": "B",
+    "explanation": "Your editor will automatically refresh to show files on the active branch.",
+    "tip": "Don't panic when files 'disappear' — switch back and they return!"
+  },
+  {
+    "questionId": "git-d09-q08",
+    "correct_answer": "B",
+    "explanation": "Use `git stash` to temporarily shelf unfinished work, switch branches, and `git stash pop` later.",
+    "tip": "Stashing is Git's clipboard for uncommitted code."
+  },
+  {
+    "questionId": "git-d09-q09",
+    "correct_answer": "A",
+    "explanation": "`-a` shows local and remote tracking branches (usually in red).",
+    "tip": "Run `git fetch` first to ensure your remote branch list is fresh."
+  },
+  {
+    "questionId": "git-d09-q10",
+    "correct_answer": "A",
+    "explanation": "Publishes the branch so teammates can see it or review a PR on GitHub.",
+    "tip": "Once pushed, GitHub will display a button to 'Compare & pull request'."
+  }
+]

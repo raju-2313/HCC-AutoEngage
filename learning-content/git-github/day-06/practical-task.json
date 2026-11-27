@@ -1,0 +1,19 @@
+{
+  "day": 6,
+  "title": "Add a .gitignore and README.md",
+  "description": "Set up project hygiene for `hcc-git-practice` by ignoring sensitive and temporary files, and writing a formatted project README.",
+  "steps": [
+    "In `hcc-git-practice`, create a file named `.gitignore`",
+    "Add lines: `*.log`, `.env`, `node_modules/`, and `.DS_Store`",
+    "Create a test file `app.log` and `.env` — run `git status` and verify Git completely ignores them",
+    "Create or update `README.md` with: a title `# HCC Git Practice`, a short description, `## Features` list, and a bash code block showing `git status`",
+    "Stage `.gitignore` and `README.md`: `git add .gitignore README.md`",
+    "Commit: `git commit -m \"chore: add .gitignore and project README\"`"
+  ],
+  "expected_output": "Git status shows only `.gitignore` and `README.md` tracked; `*.log` and `.env` are invisible to Git.",
+  "submission_type": "none",
+  "tips": [
+    "Filenames starting with a dot like `.gitignore` are hidden files on Unix/macOS and Windows.",
+    "To un-track a file that was previously committed by mistake: `git rm --cached <file>`."
+  ]
+}

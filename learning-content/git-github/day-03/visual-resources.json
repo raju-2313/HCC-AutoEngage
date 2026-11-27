@@ -1,0 +1,11 @@
+[
+  {
+    "title": "Learn Git In 15 Minutes",
+    "creator": "Colt Steele",
+    "url": "https://www.youtube.com/watch?v=USjZcfj8yxE",
+    "type": "YouTube Crash Course",
+    "duration_minutes": 16,
+    "what_you_learn": "Live terminal demo of git init, git status, git add, and git commit in a beginner-friendly walk-through.",
+    "difficulty": "beginner"
+  }
+]

@@ -1,0 +1,11 @@
+[
+  {
+    "title": "Git Tutorial 8: .gitignore file",
+    "creator": "codebasics",
+    "url": "https://www.youtube.com/watch?v=ErJyWO8TGoM",
+    "type": "YouTube Tutorial",
+    "duration_minutes": 6,
+    "what_you_learn": "How .gitignore works, glob patterns, ignoring folders like node_modules, and why to never track secrets.",
+    "difficulty": "beginner"
+  }
+]

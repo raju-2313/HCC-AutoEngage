@@ -1,0 +1,12 @@
+{
+  "day": 12,
+  "title": "Forking & Upstream Syncing",
+  "slug": "forking-upstream-syncing",
+  "category": "git",
+  "difficulty": "intermediate",
+  "part": "C",
+  "introduction": "Welcome to Part C: Real-World Collaboration! How do you contribute to a repository you don't own — like React, VS Code, or an open-source library? You cannot push directly to their repository. Instead, you **Fork** it! Today you learn the Fork & Pull Request workflow used across the global open-source community.",
+  "why_it_matters": "Forking allows anyone in the world to experiment and contribute improvements to any open-source project safely. Understanding how to link your fork to the original `upstream` repository ensures your fork never becomes outdated.",
+  "estimated_time_minutes": 25,
+  "practical_activity_preview": "Fork an open-source starter repo on GitHub, clone your fork locally, and configure an `upstream` remote."
+}

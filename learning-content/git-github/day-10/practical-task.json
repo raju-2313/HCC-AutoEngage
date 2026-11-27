@@ -1,0 +1,21 @@
+{
+  "day": 10,
+  "title": "Merge Feature Branch and Clean Up",
+  "description": "Merge `feature/profile-page` into `main`, verify all files exist on `main`, and delete the merged feature branch.",
+  "steps": [
+    "In `hcc-git-practice`, switch to the receiving branch: `git switch main`",
+    "Verify your status: `git status` — confirm you are on `main` and working tree is clean",
+    "Merge the feature branch: `git merge feature/profile-page`",
+    "Observe the output: notice 'Fast-forward' and that `profile.md` is now part of `main`!",
+    "Inspect history: `git log --oneline` — observe the feature commit is now in `main`'s history",
+    "Delete the feature branch locally: `git branch -d feature/profile-page`",
+    "Run `git branch` — confirm only `main` remains",
+    "Push updated `main` to GitHub: `git push origin main`"
+  ],
+  "expected_output": "Terminal confirms successful merge, branch deleted, and `profile.md` pushed to GitHub `main`.",
+  "submission_type": "none",
+  "tips": [
+    "Always remember: to merge Branch A into `main`, you must BE ON `main` when running `git merge BranchA`!",
+    "`-d` (lowercase) will only delete a branch if it has already been safely merged, preventing accidental work loss."
+  ]
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Introduction to Git",
+    "publisher": "Microsoft Learn",
+    "url": "https://learn.microsoft.com/en-us/training/modules/introduction-to-git/",
+    "type": "Interactive Module",
+    "est_read_time_minutes": 10,
+    "what_you_learn": "Comprehensive recap of core Git lifecycle, staging, branching, merging, and remote collaboration.",
+    "difficulty": "beginner"
+  },
+  {
+    "title": "GitHub Skills (Interactive Courses)",
+    "publisher": "GitHub",
+    "url": "https://skills.github.com/",
+    "type": "Interactive Platform",
+    "est_read_time_minutes": 15,
+    "what_you_learn": "Interactive self-paced courses for continuous learning: GitHub Actions, Markdown, Pages, and Open Source.",
+    "difficulty": "intermediate"
+  }
+]

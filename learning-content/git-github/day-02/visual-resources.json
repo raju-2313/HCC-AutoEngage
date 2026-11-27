@@ -1,0 +1,11 @@
+[
+  {
+    "title": "Git Tutorial for Beginners — Installing Git on Windows & Mac",
+    "creator": "SelfTeach.me",
+    "url": "https://www.youtube.com/watch?v=A6bo-NjKtTc",
+    "type": "YouTube Tutorial",
+    "duration_minutes": 12,
+    "what_you_learn": "Step-by-step installation walkthrough for Windows and macOS, plus the initial `git config` commands to set your name and email.",
+    "difficulty": "beginner"
+  }
+]

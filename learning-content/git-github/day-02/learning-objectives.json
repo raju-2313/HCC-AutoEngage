@@ -1,0 +1,7 @@
+[
+  "Successfully install Git on your operating system",
+  "Configure your global Git username and email address",
+  "Verify Git installation using the terminal",
+  "Understand the difference between global and local Git configuration",
+  "List your current Git configuration settings using git config --list"
+]

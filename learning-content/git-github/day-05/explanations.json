@@ -1,0 +1,62 @@
+[
+  {
+    "questionId": "git-d05-q01",
+    "correct_answer": "B",
+    "explanation": "`git restore --staged` replaces the older `git reset HEAD <file>`.",
+    "tip": "It is safe: your file edits remain in your editor."
+  },
+  {
+    "questionId": "git-d05-q02",
+    "correct_answer": "A",
+    "explanation": "`git restore <file>` discards working directory edits.",
+    "tip": "Warning: discarded unstaged changes cannot be recovered by Git!"
+  },
+  {
+    "questionId": "git-d05-q03",
+    "correct_answer": "B",
+    "explanation": "Amend replaces the most recent commit with a new hash.",
+    "tip": "Only amend local commits that haven't been pushed to a shared remote yet."
+  },
+  {
+    "questionId": "git-d05-q04",
+    "correct_answer": "B",
+    "explanation": "Reset moves the timeline backwards; Revert steps forward by recording an inverse commit.",
+    "tip": "Revert is the gold standard for teamwork."
+  },
+  {
+    "questionId": "git-d05-q05",
+    "correct_answer": "B",
+    "explanation": "`--hard` removes uncommitted edits without prompting.",
+    "tip": "If you need to save temporary work, use `git stash` instead of resetting."
+  },
+  {
+    "questionId": "git-d05-q06",
+    "correct_answer": "B",
+    "explanation": "Revert preserves history integrity for all collaborators.",
+    "tip": "You can push a revert commit with regular `git push` without any force flag."
+  },
+  {
+    "questionId": "git-d05-q07",
+    "correct_answer": "B",
+    "explanation": "`git reset --soft` is perfect for combining multiple commits or splitting one.",
+    "tip": "Your code is still in the staging area ready to re-commit."
+  },
+  {
+    "questionId": "git-d05-q08",
+    "correct_answer": "B",
+    "explanation": "`~` goes back linearly through commit parents.",
+    "tip": "`HEAD^` and `HEAD~1` refer to the same parent commit in linear history."
+  },
+  {
+    "questionId": "git-d05-q09",
+    "correct_answer": "A",
+    "explanation": "Restores all tracked files to the index state.",
+    "tip": "Always run `git status` or `git diff` first to see what you are discarding."
+  },
+  {
+    "questionId": "git-d05-q10",
+    "correct_answer": "B",
+    "explanation": "`git clean -f` removes untracked files.",
+    "tip": "Always test with `git clean -n` (dry-run) first to see what would be deleted!"
+  }
+]

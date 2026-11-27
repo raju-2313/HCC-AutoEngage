@@ -1,0 +1,26 @@
+{
+  "day": 11,
+  "title": "Trigger and Resolve a Real Merge Conflict",
+  "description": "Create two conflicting edits to the exact same line of `hello.txt` on two different branches, trigger a conflict, resolve it, and commit.",
+  "steps": [
+    "In `hcc-git-practice`, make sure you are on `main`: `git switch main`",
+    "Create branch 1: `git switch -c conflict-a`",
+    "Edit line 1 of `hello.txt` to say: 'Hello from Developer Alice!' — stage and commit: `git commit -am \"alice: update greeting\"`",
+    "Switch back to `main`: `git switch main`",
+    "Create branch 2: `git switch -c conflict-b`",
+    "Edit line 1 of `hello.txt` to say: 'Hello from Developer Bob!' — stage and commit: `git commit -am \"bob: update greeting\"`",
+    "Switch back to `main` and merge branch A: `git switch main && git merge conflict-a` (merges cleanly!)",
+    "Now attempt to merge branch B into `main`: `git merge conflict-b` — BOOM! Conflict detected!",
+    "Open `hello.txt` in VS Code or your editor — inspect `<<<<<<< HEAD`, `=======`, `>>>>>>> conflict-b`",
+    "Edit the file to choose the best greeting (or keep both), remove ALL conflict marker lines, and save",
+    "Stage the resolved file: `git add hello.txt`",
+    "Complete the merge commit: `git commit -m \"merge: resolve greeting conflict between Alice and Bob\"`",
+    "Delete the test branches: `git branch -d conflict-a conflict-b`"
+  ],
+  "expected_output": "`git status` confirms clean working tree and `git log --oneline` shows a successful merge commit.",
+  "submission_type": "none",
+  "tips": [
+    "If you ever get overwhelmed during a merge conflict, run `git merge --abort` to return everything to the exact state before the merge!",
+    "Never leave conflict marker lines (`<<<<<<<`, `=======`, `>>>>>>>`) in your code — they will cause syntax errors in your application."
+  ]
+}

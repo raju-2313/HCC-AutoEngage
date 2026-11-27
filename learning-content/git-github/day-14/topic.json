@@ -1,0 +1,12 @@
+{
+  "day": 14,
+  "title": "GitHub Issues, Discussions & Team Workflows",
+  "slug": "issues-discussions-team-workflows",
+  "category": "git",
+  "difficulty": "intermediate",
+  "part": "C",
+  "introduction": "Writing code is only half the job in software development. Great projects need planning, bug tracking, feature roadmaps, and community communication. Today you master **GitHub Issues** (actionable tasks and bug reports), **Discussions** (open-ended ideation), and the **Feature Branch Workflow** used in hackathons.",
+  "why_it_matters": "Without issue tracking, bugs are forgotten and teams end up duplicating work. Learning how to link issues to Pull Requests using auto-close keywords (`Closes #42`) creates an automated, professional project board.",
+  "estimated_time_minutes": 25,
+  "practical_activity_preview": "Open a structured bug/feature issue on GitHub, link it to a PR using `Closes #1`, and watch it close automatically."
+}

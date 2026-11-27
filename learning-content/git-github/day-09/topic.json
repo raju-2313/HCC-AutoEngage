@@ -1,0 +1,12 @@
+{
+  "day": 9,
+  "title": "Branching Fundamentals",
+  "slug": "branching-fundamentals",
+  "category": "git",
+  "difficulty": "intermediate",
+  "part": "B",
+  "introduction": "In professional development, nobody writes code directly on `main`. Today you learn **branching** — Git's superpower that lets you create isolated parallel timelines to build features or fix bugs without risking the stability of your working application.",
+  "why_it_matters": "Branches allow 10 or 1,000 developers to work on the exact same codebase at the same time without stepping on each other's toes. Because Git branches are lightweight 41-byte pointer files, creating or switching branches is nearly instantaneous.",
+  "estimated_time_minutes": 30,
+  "practical_activity_preview": "Create a feature branch, make commits in isolation, and switch between branches."
+}

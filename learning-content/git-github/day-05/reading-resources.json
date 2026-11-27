@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Git Basics — Undoing Things",
+    "publisher": "Pro Git (git-scm.com)",
+    "url": "https://git-scm.com/book/en/v2/Git-Basics-Undoing-Things",
+    "type": "Official Docs",
+    "est_read_time_minutes": 8,
+    "what_you_learn": "How to use git restore --staged, git commit --amend, and discard local edits.",
+    "difficulty": "beginner"
+  },
+  {
+    "title": "Undoing Changes",
+    "publisher": "Atlassian Git Tutorials",
+    "url": "https://www.atlassian.com/git/tutorials/undoing-changes",
+    "type": "Written Guide",
+    "est_read_time_minutes": 10,
+    "what_you_learn": "When to use git checkout/restore, git reset (soft/mixed/hard), and safe public git revert.",
+    "difficulty": "beginner"
+  }
+]

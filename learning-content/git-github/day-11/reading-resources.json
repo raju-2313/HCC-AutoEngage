@@ -1,0 +1,11 @@
+[
+  {
+    "title": "Merge Conflicts",
+    "publisher": "Atlassian Git Tutorials",
+    "url": "https://www.atlassian.com/git/tutorials/using-branches/merge-conflicts",
+    "type": "Written Guide",
+    "est_read_time_minutes": 10,
+    "what_you_learn": "Deep explanation of what causes conflicts, reading diff markers, aborting merges, and resolution steps.",
+    "difficulty": "intermediate"
+  }
+]

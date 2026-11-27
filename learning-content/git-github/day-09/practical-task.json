@@ -1,0 +1,21 @@
+{
+  "day": 9,
+  "title": "Create and Work on an Isolated Feature Branch",
+  "description": "Create a new branch `feature/profile-page`, add a new file on that branch, and observe how switching branches updates your workspace in real-time.",
+  "steps": [
+    "In `hcc-git-practice`, make sure you are on `main`: `git switch main` (or `git checkout main`)",
+    "Create and switch to a new feature branch: `git switch -c feature/profile-page`",
+    "Verify your active branch: `git branch` (notice the asterisk `*` next to `feature/profile-page`)",
+    "Create a new file `profile.md` with: `# User Profile\n\nName: HCC Learner`",
+    "Stage and commit: `git add profile.md && git commit -m \"feat: create user profile page\"`",
+    "Now switch back to `main`: `git switch main`",
+    "Look in your file explorer / folder — notice `profile.md` completely vanished! It's safe on your feature branch",
+    "Switch back to the feature branch: `git switch feature/profile-page` — `profile.md` reappears instantly!"
+  ],
+  "expected_output": "You can seamlessly switch between branches and observe Git restoring file states to match the active branch.",
+  "submission_type": "none",
+  "tips": [
+    "Modern Git (v2.23+) introduced `git switch` specifically for changing branches, replacing the overloaded `git checkout`.",
+    "Always commit or stash your working edits before switching branches so Git doesn't block the switch."
+  ]
+}

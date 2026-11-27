@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "day": 8,
+    "topic": "Syncing Code: push, clone, pull & fetch",
+    "category": "git",
+    "totalQuestions": 10,
+    "questionTimeSec": 15,
+    "difficulty": "intermediate",
+    "part": "B"
+  },
+  "questions": [
+    {
+      "id": "git-d08-q01",
+      "question": "Which command uploads your local commits to a remote repository?",
+      "options": {
+        "A": "git upload",
+        "B": "git push",
+        "C": "git send",
+        "D": "git sync"
+      },
+      "correctAnswer": "B",
+      "explanation": "`git push` publishes your local branch commits to the specified remote repository.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d08-q02",
+      "question": "What does the `-u` flag do in `git push -u origin main`?",
+      "options": {
+        "A": "Forces an urgent push",
+        "B": "Sets the upstream tracking reference so future `git push` and `git pull` know which remote branch to target",
+        "C": "Unstages all files after pushing",
+        "D": "Upgrades the Git installation"
+      },
+      "correctAnswer": "B",
+      "explanation": "`-u` (or `--set-upstream`) links your current local branch to the remote branch, enabling shorthand `git push` and `git pull` later.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d08-q03",
+      "question": "Which command downloads an entire existing GitHub repository and its complete commit history to your computer?",
+      "options": {
+        "A": "git download <url>",
+        "B": "git copy <url>",
+        "C": "git clone <url>",
+        "D": "git get <url>"
+      },
+      "correctAnswer": "C",
+      "explanation": "`git clone` copies the remote repository, sets up `origin` automatically, and checks out the default branch.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d08-q04",
+      "question": "What is the key difference between `git fetch` and `git pull`?",
+      "options": {
+        "A": "`git fetch` deletes files; `git pull` recovers them",
+        "B": "`git fetch` downloads remote commits without merging them into your working files, while `git pull` downloads AND merges them immediately",
+        "C": "`git fetch` only works on branches named main",
+        "D": "They do the exact same thing"
+      },
+      "correctAnswer": "B",
+      "explanation": "`git fetch` is safe and non-intrusive. `git pull` executes `git fetch` followed immediately by `git merge`.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d08-q05",
+      "question": "Which mathematical formula accurately describes `git pull`?",
+      "options": {
+        "A": "git pull = git add + git commit",
+        "B": "git pull = git fetch + git merge",
+        "C": "git pull = git clone + git push",
+        "D": "git pull = git checkout + git reset"
+      },
+      "correctAnswer": "B",
+      "explanation": "Running `git pull` is shorthand for fetching remote branch changes and then merging them into your active branch.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d08-q06",
+      "question": "Why might Git reject a `git push` with an error saying '[rejected - non-fast-forward]'?",
+      "options": {
+        "A": "Your internet connection is down",
+        "B": "The remote branch contains new commits that you do not have locally yet",
+        "C": "Your commit message was too short",
+        "D": "GitHub is running out of disk space"
+      },
+      "correctAnswer": "B",
+      "explanation": "Git prevents you from accidentally overwriting teammates' work. You must `git pull` the remote commits first before pushing.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d08-q07",
+      "question": "What should you do when a push is rejected due to remote changes?",
+      "options": {
+        "A": "Delete your `.git` folder",
+        "B": "Run `git pull` to fetch and integrate the new remote commits, then push again",
+        "C": "Shut down the computer",
+        "D": "Create a brand new GitHub account"
+      },
+      "correctAnswer": "B",
+      "explanation": "Pulling integrates the remote work into your branch, allowing you to push cleanly.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d08-q08",
+      "question": "When you clone a repository with `git clone https://... my-app`, what does the optional `my-app` argument specify?",
+      "options": {
+        "A": "The branch name to checkout",
+        "B": "The custom name of the local folder created for the project",
+        "C": "Your GitHub username",
+        "D": "The commit message"
+      },
+      "correctAnswer": "B",
+      "explanation": "By default, Git names the folder after the repository name. Supplying a custom second argument names the folder whatever you specify.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d08-q09",
+      "question": "Why should a developer run `git pull` at the start of every workday?",
+      "options": {
+        "A": "To renew their GitHub token",
+        "B": "To ensure their local branch includes all changes and bug fixes made by teammates before writing new code",
+        "C": "Git commands expire after 24 hours without pulling",
+        "D": "To delete old commits"
+      },
+      "correctAnswer": "B",
+      "explanation": "Starting from an up-to-date base branch prevents painful merge conflicts later in the day.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d08-q10",
+      "question": "What is `git push --force` (or `-f`) and why is it dangerous on shared branches?",
+      "options": {
+        "A": "It speeds up uploading large images",
+        "B": "It overwrites the remote branch history with your local history, potentially destroying teammates' committed work",
+        "C": "It creates a backup copy of the repository",
+        "D": "It is completely safe and recommended for everyday use"
+      },
+      "correctAnswer": "B",
+      "explanation": "Force pushing overwrites the remote repository regardless of other people's commits. Never force push to shared branches like `main`!",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    }
+  ]
+}

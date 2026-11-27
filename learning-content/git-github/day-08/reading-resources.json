@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Cloning a repository",
+    "publisher": "GitHub Docs",
+    "url": "https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository",
+    "type": "Official Docs",
+    "est_read_time_minutes": 5,
+    "what_you_learn": "How git clone works, copying full commit history, and configuring local tracking.",
+    "difficulty": "beginner"
+  },
+  {
+    "title": "Syncing (git remote, fetch, pull, push)",
+    "publisher": "Atlassian Git Tutorials",
+    "url": "https://www.atlassian.com/git/tutorials/syncing",
+    "type": "Written Guide",
+    "est_read_time_minutes": 10,
+    "what_you_learn": "The critical difference between git fetch (safe check) and git pull (fetch + merge).",
+    "difficulty": "intermediate"
+  }
+]

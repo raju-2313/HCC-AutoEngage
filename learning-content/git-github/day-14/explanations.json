@@ -1,0 +1,62 @@
+[
+  {
+    "questionId": "git-d14-q01",
+    "correct_answer": "B",
+    "explanation": "Issues keep work organized and transparent.",
+    "tip": "Add checklist items with `- [ ] Task item` in issues for sub-tasks!"
+  },
+  {
+    "questionId": "git-d14-q02",
+    "correct_answer": "B",
+    "explanation": "Discussions = Forum for Q&A and ideas. Issues = Backlog for code to write.",
+    "tip": "Discussions can be converted into Issues once an idea becomes an agreed task."
+  },
+  {
+    "questionId": "git-d14-q03",
+    "correct_answer": "B",
+    "explanation": "Linking PRs to issues creates full audit traceability.",
+    "tip": "Other synonyms include `Fixes #` and `Resolves #`."
+  },
+  {
+    "questionId": "git-d14-q04",
+    "correct_answer": "A",
+    "explanation": "Color-coded labels make scanning backlogs effortless.",
+    "tip": "You can create custom labels like `frontend`, `backend`, `urgent`."
+  },
+  {
+    "questionId": "git-d14-q05",
+    "correct_answer": "B",
+    "explanation": "Search GitHub for `label:\"good first issue\"` to find open-source projects welcoming newcomers!",
+    "tip": "The perfect way to earn your first open-source badge."
+  },
+  {
+    "questionId": "git-d14-q06",
+    "correct_answer": "B",
+    "explanation": "GitHub Flow is used by startups and tech giants alike.",
+    "tip": "Never skip the code review step in teams."
+  },
+  {
+    "questionId": "git-d14-q07",
+    "correct_answer": "B",
+    "explanation": "`@mention` notifies teammates in their GitHub inbox and email.",
+    "tip": "You can also mention entire teams: `@org/frontend-team`."
+  },
+  {
+    "questionId": "git-d14-q08",
+    "correct_answer": "A",
+    "explanation": "Kanban boards show who is working on what in real-time.",
+    "tip": "Move cards automatically when PRs are opened and merged."
+  },
+  {
+    "questionId": "git-d14-q09",
+    "correct_answer": "A",
+    "explanation": "Place templates in `.github/ISSUE_TEMPLATE/`.",
+    "tip": "High-quality bug reports lead to fast bug fixes."
+  },
+  {
+    "questionId": "git-d14-q10",
+    "correct_answer": "A",
+    "explanation": "Centralizing tasks where code lives prevents lost work and confusion.",
+    "tip": "Hackathons run 10x smoother when using GitHub Issues."
+  }
+]

@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "day": 14,
+    "topic": "GitHub Issues, Discussions & Team Workflows",
+    "category": "git",
+    "totalQuestions": 10,
+    "questionTimeSec": 15,
+    "difficulty": "intermediate",
+    "part": "C"
+  },
+  "questions": [
+    {
+      "id": "git-d14-q01",
+      "question": "What is a GitHub Issue best used for?",
+      "options": {
+        "A": "Casual chit-chat about weekend movies",
+        "B": "Tracking actionable tasks, bug reports, feature requests, and technical debt in a repository",
+        "C": "Storing large video files",
+        "D": "Hosting a personal blog"
+      },
+      "correctAnswer": "B",
+      "explanation": "Issues are actionable tickets representing concrete bugs or features to be implemented.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d14-q02",
+      "question": "When should a team use GitHub Discussions instead of GitHub Issues?",
+      "options": {
+        "A": "When they want to delete code",
+        "B": "For open-ended questions, community Q&A, brainstorming ideas, and general announcements that are not yet actionable tasks",
+        "C": "Only when the repository is private",
+        "D": "Only during weekends"
+      },
+      "correctAnswer": "B",
+      "explanation": "Discussions provide an open forum format for community Q&A and ideas without cluttering the actionable issue backlog.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d14-q03",
+      "question": "Which keyword in a Pull Request description will automatically close Issue #42 when the PR is merged into default branch?",
+      "options": {
+        "A": "Delete #42",
+        "B": "Closes #42",
+        "C": "Erase #42",
+        "D": "Remove #42"
+      },
+      "correctAnswer": "B",
+      "explanation": "`Closes #42`, `Fixes #42`, or `Resolves #42` instructs GitHub to mark Issue #42 as closed upon merging.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d14-q04",
+      "question": "What are GitHub Issue Labels (e.g. `bug`, `enhancement`, `good first issue`) used for?",
+      "options": {
+        "A": "To categorize, prioritize, and filter issues and pull requests across a project",
+        "B": "To change the repository font color",
+        "C": "To charge users for creating tickets",
+        "D": "To restrict who can read the repository"
+      },
+      "correctAnswer": "A",
+      "explanation": "Labels categorize tickets, making it easy to filter by topic, difficulty, or urgency.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d14-q05",
+      "question": "What does the label `good first issue` typically signal on GitHub?",
+      "options": {
+        "A": "An issue that only senior engineers are allowed to fix",
+        "B": "A beginner-friendly task with low complexity curated specifically for newcomers to make their first contribution",
+        "C": "The first issue ever created in the repo history",
+        "D": "An issue with a monetary bounty"
+      },
+      "correctAnswer": "B",
+      "explanation": "`good first issue` is an open-source standard helping students and new contributors find accessible introductory tasks.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d14-q06",
+      "question": "What is the recommended chronological order of the 'GitHub Flow' in team projects?",
+      "options": {
+        "A": "Deploy → Code → Issue → Delete",
+        "B": "Issue/Task → Feature Branch → Commits → Pull Request → Code Review → Merge to Main",
+        "C": "Merge to Main → Branch → Issue → Test",
+        "D": "Commit to Main directly → PR"
+      },
+      "correctAnswer": "B",
+      "explanation": "GitHub Flow is the industry-standard lightweight workflow: define task, branch, code, PR, review, and merge.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d14-q07",
+      "question": "How do you mention a teammate in an issue or PR comment to notify them?",
+      "options": {
+        "A": "#username",
+        "B": "@username",
+        "C": "!username",
+        "D": "%username"
+      },
+      "correctAnswer": "B",
+      "explanation": "Prefixing a username with `@` (e.g. `@alice`) pings that user and sends a notification.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d14-q08",
+      "question": "What is a GitHub Project Board (Kanban board)?",
+      "options": {
+        "A": "A visual spreadsheet of columns (e.g. Todo, In Progress, Done) to manage workflow cards across team members",
+        "B": "A drawing tool for mockups",
+        "C": "A paid compiler",
+        "D": "A database server"
+      },
+      "correctAnswer": "A",
+      "explanation": "GitHub Projects provide Kanban boards to track sprint progress and task status visually.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d14-q09",
+      "question": "What is an Issue Template?",
+      "options": {
+        "A": "A pre-formatted markdown template prompting reporters for specific details (like steps to reproduce, expected behavior, screenshots)",
+        "B": "A script that writes code automatically",
+        "C": "A graphic design banner",
+        "D": "A license agreement"
+      },
+      "correctAnswer": "A",
+      "explanation": "Issue templates guide users to submit complete, reproducible bug reports rather than vague complaints.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d14-q10",
+      "question": "Why should teams avoid using WhatsApp or DMs for technical task tracking during a hackathon?",
+      "options": {
+        "A": "WhatsApp messages cannot be searched or linked to commits, PRs, and code history",
+        "B": "GitHub charges extra if you use chat apps",
+        "C": "Git commands fail if WhatsApp is open",
+        "D": "Because coding is only allowed in silence"
+      },
+      "correctAnswer": "A",
+      "explanation": "Tracking tasks in GitHub Issues preserves context, assigns responsibility, links directly to PRs, and keeps everyone aligned.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    }
+  ]
+}

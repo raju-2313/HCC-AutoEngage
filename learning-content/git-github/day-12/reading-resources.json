@@ -1,0 +1,11 @@
+[
+  {
+    "title": "Fork a repo",
+    "publisher": "GitHub Docs",
+    "url": "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo",
+    "type": "Official Docs",
+    "est_read_time_minutes": 8,
+    "what_you_learn": "How forks differ from clones, managing fork sync via GitHub UI and CLI, and configuring upstream.",
+    "difficulty": "intermediate"
+  }
+]

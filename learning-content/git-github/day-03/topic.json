@@ -1,0 +1,12 @@
+{
+  "day": 3,
+  "title": "Creating Your First Repository & The Three-Stage Workflow",
+  "slug": "first-repo-three-stage-workflow",
+  "category": "git",
+  "difficulty": "beginner",
+  "part": "A",
+  "introduction": "Today you create your very first Git repository! You will discover Git's most fundamental concept: the three areas that every file moves through — the Working Directory (your workspace), the Staging Area (preparing changes), and the Repository (permanent snapshots).",
+  "why_it_matters": "Unlike a regular Save command which blindly overwrites a file, Git's two-step 'add then commit' flow gives you complete control over which changes are grouped into each permanent snapshot.",
+  "estimated_time_minutes": 30,
+  "practical_activity_preview": "Initialize a local repository, create a file, stage it, and make your first commit."
+}

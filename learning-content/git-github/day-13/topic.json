@@ -1,0 +1,12 @@
+{
+  "day": 13,
+  "title": "Pull Requests (PRs) & Code Reviews",
+  "slug": "pull-requests-code-reviews",
+  "category": "git",
+  "difficulty": "intermediate",
+  "part": "C",
+  "introduction": "Today you learn the heartbeat of modern software engineering: **Pull Requests (PRs)**. A Pull Request is not just code — it is an invitation for your team to review, discuss, test, and approve your changes before merging them into production.",
+  "why_it_matters": "Code review is where junior developers learn fastest and where teams catch bugs before users ever see them. Knowing how to write a clear PR description and constructively participate in code reviews is what separates amateur coders from hireable software engineers.",
+  "estimated_time_minutes": 30,
+  "practical_activity_preview": "Push a feature branch to GitHub, open a descriptive Pull Request, inspect diffs, and merge it."
+}

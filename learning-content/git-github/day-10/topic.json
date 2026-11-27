@@ -1,0 +1,12 @@
+{
+  "day": 10,
+  "title": "Merging Branches",
+  "slug": "merging-branches",
+  "category": "git",
+  "difficulty": "intermediate",
+  "part": "B",
+  "introduction": "You have built and tested your feature on its dedicated branch — now how do you bring those changes back into `main`? Today you learn **merging**: combining different branch histories, understanding Fast-Forward merges vs 3-Way merge commits, and deleting old branches cleanly.",
+  "why_it_matters": "Merging is the culmination of the feature-branch workflow. Doing it cleanly ensures that the team's main codebase receives all your tested enhancements while keeping git history clear and traceable.",
+  "estimated_time_minutes": 25,
+  "practical_activity_preview": "Merge your feature branch into `main`, understand Fast-Forward, and safely delete the old branch."
+}

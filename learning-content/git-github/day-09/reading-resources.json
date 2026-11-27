@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Git Branching — Branches in a Nutshell",
+    "publisher": "Pro Git (git-scm.com)",
+    "url": "https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell",
+    "type": "Official Docs",
+    "est_read_time_minutes": 10,
+    "what_you_learn": "How Git branches work under the hood as movable pointers to commits, and how HEAD tracks the active branch.",
+    "difficulty": "intermediate"
+  },
+  {
+    "title": "Using Branches",
+    "publisher": "Atlassian Git Tutorials",
+    "url": "https://www.atlassian.com/git/tutorials/using-branches",
+    "type": "Written Guide",
+    "est_read_time_minutes": 10,
+    "what_you_learn": "Branch naming conventions, git branch vs git switch, and feature branch workflows.",
+    "difficulty": "intermediate"
+  }
+]

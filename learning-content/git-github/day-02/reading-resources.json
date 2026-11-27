@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Installing Git — Pro Git Book",
+    "publisher": "git-scm.com",
+    "url": "https://git-scm.com/book/en/v2/Getting-Started-Installing-Git",
+    "type": "Documentation",
+    "est_read_time_minutes": 8,
+    "what_you_learn": "Official installation instructions for Windows (Git for Windows), macOS (via Homebrew or Xcode tools), and Linux (via package manager).",
+    "difficulty": "beginner"
+  },
+  {
+    "title": "First-Time Git Setup — Pro Git Book",
+    "publisher": "git-scm.com",
+    "url": "https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup",
+    "type": "Documentation",
+    "est_read_time_minutes": 8,
+    "what_you_learn": "How to configure user.name, user.email, default editor, and default branch name. Explains global vs local config scope.",
+    "difficulty": "beginner"
+  }
+]

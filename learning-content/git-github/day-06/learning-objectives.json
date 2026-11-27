@@ -1,0 +1,7 @@
+[
+  "Create and configure a .gitignore file using wildcard and directory rules",
+  "Understand why API keys and credentials (.env) must never be committed",
+  "Format a structured README.md using GitHub-Flavored Markdown",
+  "Handle files already accidentally tracked before adding to .gitignore (git rm --cached)",
+  "Recognize standard repository files (LICENSE, CONTRIBUTING.md)"
+]

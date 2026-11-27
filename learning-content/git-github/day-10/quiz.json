@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "day": 10,
+    "topic": "Merging Branches",
+    "category": "git",
+    "totalQuestions": 10,
+    "questionTimeSec": 15,
+    "difficulty": "intermediate",
+    "part": "B"
+  },
+  "questions": [
+    {
+      "id": "git-d10-q01",
+      "question": "To merge changes from `feature/login` into `main`, which branch must you be currently checked out on before running `git merge`?",
+      "options": {
+        "A": "feature/login",
+        "B": "main",
+        "C": "master",
+        "D": "Any branch"
+      },
+      "correctAnswer": "B",
+      "explanation": "You must always be on the RECEIVING branch (the branch you want to merge changes INTO) when executing `git merge`.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d10-q02",
+      "question": "What is a 'Fast-Forward' merge in Git?",
+      "options": {
+        "A": "A merge completed in under 1 second",
+        "B": "When the target branch has no new commits since branching, Git simply moves the target pointer forward to the feature branch commit without creating an extra merge commit",
+        "C": "A merge that skips code verification",
+        "D": "A merge executed directly on GitHub servers"
+      },
+      "correctAnswer": "B",
+      "explanation": "If no divergent commits occurred on `main`, Git simply slides the `main` pointer forward. No new merge commit is required.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d10-q03",
+      "question": "When does Git create a '3-Way Merge Commit' instead of a fast-forward?",
+      "options": {
+        "A": "When both the target branch AND the feature branch have had new commits since they diverged",
+        "B": "Only when merging 3 branches at the same time",
+        "C": "When 3 different developers review the code",
+        "D": "When the file size exceeds 3MB"
+      },
+      "correctAnswer": "A",
+      "explanation": "When histories diverge, Git analyzes the common ancestor commit plus both branch tips to generate a new merge commit combining both lines.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d10-q04",
+      "question": "Which flag forces Git to create a merge commit even if a Fast-Forward merge was possible?",
+      "options": {
+        "A": "--force-commit",
+        "B": "--no-ff",
+        "C": "--always-merge",
+        "D": "--commit-all"
+      },
+      "correctAnswer": "B",
+      "explanation": "`--no-ff` (no fast-forward) always creates an explicit merge commit, preserving the visual record of the branch existing.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d10-q05",
+      "question": "Which command safely deletes a local branch that has already been merged?",
+      "options": {
+        "A": "git branch -d <branch-name>",
+        "B": "git branch -D <branch-name>",
+        "C": "git delete <branch-name>",
+        "D": "git branch --kill"
+      },
+      "correctAnswer": "A",
+      "explanation": "Lowercase `-d` checks if the branch has been merged into upstream; if not, Git warns and refuses to delete.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d10-q06",
+      "question": "What does capital `-D` do in `git branch -D <branch-name>`?",
+      "options": {
+        "A": "Downloads the branch from GitHub",
+        "B": "Force-deletes the branch even if it contains unmerged commits",
+        "C": "Displays the branch details",
+        "D": "Duplicates the branch"
+      },
+      "correctAnswer": "B",
+      "explanation": "`-D` is a shortcut for `--delete --force`. It deletes the branch regardless of its merge status.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d10-q07",
+      "question": "Why should you delete feature branches after they are merged into `main`?",
+      "options": {
+        "A": "To keep the repository tidy and prevent developers from accidentally continuing work on stale branches",
+        "B": "Git has a maximum limit of 5 branches",
+        "C": "GitHub charges per branch",
+        "D": "Old branches slow down compile speed"
+      },
+      "correctAnswer": "A",
+      "explanation": "Deleting merged branches prevents branch proliferation and ensures everyone works from active, fresh code.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d10-q08",
+      "question": "How do you delete a remote branch on GitHub from your terminal?",
+      "options": {
+        "A": "git push origin --delete <branch-name>",
+        "B": "git remote erase <branch-name>",
+        "C": "git delete remote <branch-name>",
+        "D": "git remove github/<branch-name>"
+      },
+      "correctAnswer": "A",
+      "explanation": "`git push origin --delete <branch-name>` tells GitHub to remove that branch pointer from the remote repository.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d10-q09",
+      "question": "Does deleting a merged feature branch delete the commits that were on that branch?",
+      "options": {
+        "A": "Yes, all commits made on that branch disappear forever",
+        "B": "No, because the commits are now part of `main`'s history, deleting the branch pointer loses no work",
+        "C": "Only if using `-D`",
+        "D": "Yes, unless backed up on a USB drive"
+      },
+      "correctAnswer": "B",
+      "explanation": "A branch is just a pointer. Since `main` now points to or includes those commits, deleting the feature pointer loses nothing.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d10-q10",
+      "question": "Which command shows a visual ASCII graph of branch commits and merges in your terminal?",
+      "options": {
+        "A": "git log --graph --oneline --all",
+        "B": "git tree --visual",
+        "C": "git branches --chart",
+        "D": "git show-graph"
+      },
+      "correctAnswer": "A",
+      "explanation": "`git log --graph --oneline --all` draws a beautiful visual text branch tree showing how branches diverged and merged.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    }
+  ]
+}

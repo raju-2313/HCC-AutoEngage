@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Create a repo",
+    "publisher": "GitHub Docs",
+    "url": "https://docs.github.com/en/get-started/quickstart/create-a-repo",
+    "type": "Official Docs",
+    "est_read_time_minutes": 5,
+    "what_you_learn": "Step-by-step UI instructions to create a public or private repository on GitHub.",
+    "difficulty": "beginner"
+  },
+  {
+    "title": "About remote repositories",
+    "publisher": "GitHub Docs",
+    "url": "https://docs.github.com/en/get-started/getting-started-with-git/about-remote-repositories",
+    "type": "Official Docs",
+    "est_read_time_minutes": 6,
+    "what_you_learn": "Understanding remote URLs, HTTPS vs SSH authentication, and origin naming convention.",
+    "difficulty": "beginner"
+  }
+]

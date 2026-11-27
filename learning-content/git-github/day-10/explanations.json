@@ -1,0 +1,62 @@
+[
+  {
+    "questionId": "git-d10-q01",
+    "correct_answer": "B",
+    "explanation": "Rule of thumb: checkout the receiver, then call the sender: `git switch main && git merge feature`.",
+    "tip": "If you merge from the wrong branch, use `git merge --abort` immediately."
+  },
+  {
+    "questionId": "git-d10-q02",
+    "correct_answer": "B",
+    "explanation": "Fast-forward creates a straight linear history without unnecessary merge bubbles.",
+    "tip": "It's the cleanest merge type for short-lived personal feature branches."
+  },
+  {
+    "questionId": "git-d10-q03",
+    "correct_answer": "A",
+    "explanation": "3-way merge uses: base ancestor + branch A tip + branch B tip.",
+    "tip": "The resulting commit has two parents instead of one."
+  },
+  {
+    "questionId": "git-d10-q04",
+    "correct_answer": "B",
+    "explanation": "`--no-ff` makes it obvious in history that a feature was developed as an isolated branch.",
+    "tip": "Many large teams enforce `--no-ff` for pull requests."
+  },
+  {
+    "questionId": "git-d10-q05",
+    "correct_answer": "A",
+    "explanation": "`-d` is your safety belt: Git prevents you from deleting unmerged code.",
+    "tip": "If Git says 'The branch is not fully merged', check your commits before using `-D`."
+  },
+  {
+    "questionId": "git-d10-q06",
+    "correct_answer": "B",
+    "explanation": "`-D` force deletes. Use it only when you intentionally want to discard an abandoned experiment.",
+    "tip": "Think twice before running `git branch -D`."
+  },
+  {
+    "questionId": "git-d10-q07",
+    "correct_answer": "A",
+    "explanation": "Branches represent active tasks. When the task is done, the branch should be retired.",
+    "tip": "GitHub even offers an automatic 'Delete branch' button on merged PRs."
+  },
+  {
+    "questionId": "git-d10-q08",
+    "correct_answer": "A",
+    "explanation": "You can also use GitHub's web interface to delete remote branches with one click.",
+    "tip": "Shorthand syntax: `git push origin :<branch-name>`."
+  },
+  {
+    "questionId": "git-d10-q09",
+    "correct_answer": "B",
+    "explanation": "Commits are reachable from `main`, so they remain permanently in your repo history.",
+    "tip": "This is why Git branches are so fearless to delete."
+  },
+  {
+    "questionId": "git-d10-q10",
+    "correct_answer": "A",
+    "explanation": "`git log --graph --oneline --all` is many developers' favorite alias.",
+    "tip": "Set an alias: `git config --global alias.tree \"log --graph --oneline --all\"`!"
+  }
+]

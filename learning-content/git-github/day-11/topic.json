@@ -1,0 +1,12 @@
+{
+  "day": 11,
+  "title": "Handling & Resolving Merge Conflicts",
+  "slug": "handling-resolving-merge-conflicts",
+  "category": "git",
+  "difficulty": "intermediate",
+  "part": "B",
+  "introduction": "Every developer dreads merge conflicts until they understand what actually causes them. Today you demystify merge conflicts: why Git pauses when two people edit the same lines, how to read conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`), and how to resolve them calmly in VS Code or any text editor.",
+  "why_it_matters": "Merge conflicts are not bugs or disasters — they are Git safely asking *you* to make the final human decision rather than guessing and accidentally destroying somebody's work. Once you master this skill, you will never panic during a team hackathon again.",
+  "estimated_time_minutes": 30,
+  "practical_activity_preview": "Intentionally create a merge conflict between two branches, resolve it, and complete the merge."
+}

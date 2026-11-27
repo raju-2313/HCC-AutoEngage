@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "day": 9,
+    "topic": "Branching Fundamentals",
+    "category": "git",
+    "totalQuestions": 10,
+    "questionTimeSec": 15,
+    "difficulty": "intermediate",
+    "part": "B"
+  },
+  "questions": [
+    {
+      "id": "git-d09-q01",
+      "question": "Under the hood, what is a Git branch?",
+      "options": {
+        "A": "A completely duplicated copy of all project files in a hidden folder",
+        "B": "A lightweight, movable 41-byte pointer to a specific commit",
+        "C": "A cloud server on GitHub",
+        "D": "A compressed ZIP archive"
+      },
+      "correctAnswer": "B",
+      "explanation": "In Git, a branch is simply a file containing the 40-character commit hash it currently points to.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d09-q02",
+      "question": "Which modern Git command creates a new branch and switches to it in a single step?",
+      "options": {
+        "A": "git branch --jump <name>",
+        "B": "git switch -c <name>",
+        "C": "git move -b <name>",
+        "D": "git new <name>"
+      },
+      "correctAnswer": "B",
+      "explanation": "`git switch -c <name>` (or older `git checkout -b <name>`) creates the branch and immediately moves HEAD to it.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d09-q03",
+      "question": "Which command lists all local branches in your repository?",
+      "options": {
+        "A": "git branch",
+        "B": "git list branches",
+        "C": "git show --branches",
+        "D": "git branches -l"
+      },
+      "correctAnswer": "A",
+      "explanation": "`git branch` lists all local branches, highlighting the currently active branch with an asterisk `*`.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d09-q04",
+      "question": "What does `HEAD` point to in standard Git operation?",
+      "options": {
+        "A": "The first commit ever made",
+        "B": "The currently checked-out branch pointer or active commit",
+        "C": "The GitHub main server",
+        "D": "The newest file on disk"
+      },
+      "correctAnswer": "B",
+      "explanation": "`HEAD` is Git's pointer to the current active branch/commit. When you commit, the branch that HEAD points to moves forward.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d09-q05",
+      "question": "Which of the following is a recommended professional branch naming convention for a new login screen?",
+      "options": {
+        "A": "my-branch",
+        "B": "feature/user-login",
+        "C": "final_branch_v2",
+        "D": "test1234"
+      },
+      "correctAnswer": "B",
+      "explanation": "Prefixes like `feature/`, `bugfix/`, `hotfix/`, and `chore/` make branch purposes immediately obvious to team members.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d09-q06",
+      "question": "How do you switch back to an existing branch named `main` using modern Git?",
+      "options": {
+        "A": "git switch main",
+        "B": "git branch main",
+        "C": "git goto main",
+        "D": "git move main"
+      },
+      "correctAnswer": "A",
+      "explanation": "`git switch <branch-name>` switches to an existing branch.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d09-q07",
+      "question": "What happens to your working directory files when you switch to another branch?",
+      "options": {
+        "A": "Nothing — files never change when switching branches",
+        "B": "Git automatically updates, adds, or removes files in your folder to match that branch's latest commit",
+        "C": "All uncommitted files are permanently deleted",
+        "D": "Git closes your text editor"
+      },
+      "correctAnswer": "B",
+      "explanation": "Git swaps out files in your working directory to accurately reflect the snapshot of the branch you switched to.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d09-q08",
+      "question": "What happens if you try to switch branches while having uncommitted changes that conflict with the destination branch?",
+      "options": {
+        "A": "Git deletes your changes without warning",
+        "B": "Git aborts the switch and warns you to commit or stash your changes first",
+        "C": "Git crashes your operating system",
+        "D": "Git automatically pushes the changes to GitHub"
+      },
+      "correctAnswer": "B",
+      "explanation": "Git protects your uncommitted work. If a file modified in your working tree differs on the target branch, Git blocks the switch.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d09-q09",
+      "question": "Which command lists BOTH local branches and remote-tracking branches from GitHub?",
+      "options": {
+        "A": "git branch -a",
+        "B": "git branch --remote-only",
+        "C": "git remotes -b",
+        "D": "git branch -all-remotes"
+      },
+      "correctAnswer": "A",
+      "explanation": "`git branch -a` (all) displays local branches as well as remote-tracking branches (prefixed with `remotes/origin/`).",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d09-q10",
+      "question": "How do you push a newly created local branch named `feature/login` to GitHub?",
+      "options": {
+        "A": "git push -u origin feature/login",
+        "B": "git upload branch feature/login",
+        "C": "git push main",
+        "D": "git sync feature/login"
+      },
+      "correctAnswer": "A",
+      "explanation": "`git push -u origin <branch-name>` creates the branch on GitHub and sets up upstream tracking.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    }
+  ]
+}

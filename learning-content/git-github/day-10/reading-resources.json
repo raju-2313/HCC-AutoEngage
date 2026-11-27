@@ -1,0 +1,11 @@
+[
+  {
+    "title": "Using Branches & Merging",
+    "publisher": "Atlassian Git Tutorials",
+    "url": "https://www.atlassian.com/git/tutorials/using-branches",
+    "type": "Written Guide",
+    "est_read_time_minutes": 10,
+    "what_you_learn": "Fast-forward merges vs 3-way merge commits, git merge command syntax, and branch cleanup.",
+    "difficulty": "intermediate"
+  }
+]

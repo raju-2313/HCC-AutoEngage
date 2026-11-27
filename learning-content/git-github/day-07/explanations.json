@@ -1,0 +1,62 @@
+[
+  {
+    "questionId": "git-d07-q01",
+    "correct_answer": "B",
+    "explanation": "Remotes allow distributed collaboration by giving a shared sync destination.",
+    "tip": "You can collaborate with team members across the world via remotes."
+  },
+  {
+    "questionId": "git-d07-q02",
+    "correct_answer": "C",
+    "explanation": "`origin` is just a convention, but almost all tutorials and tools expect it.",
+    "tip": "You could technically name it anything, but sticking to `origin` prevents confusion."
+  },
+  {
+    "questionId": "git-d07-q03",
+    "correct_answer": "B",
+    "explanation": "This tells Git: whenever I say `origin`, refer to this URL.",
+    "tip": "Copy the HTTPS URL directly from your repository's green '<> Code' button."
+  },
+  {
+    "questionId": "git-d07-q04",
+    "correct_answer": "B",
+    "explanation": "`-v` stands for verbose. It shows both Fetch and Push targets.",
+    "tip": "In 99% of cases, fetch and push URLs are identical."
+  },
+  {
+    "questionId": "git-d07-q05",
+    "correct_answer": "B",
+    "explanation": "An empty GitHub repository allows a smooth first push without conflicts.",
+    "tip": "If you do get a conflict, `git pull origin main --rebase` will help."
+  },
+  {
+    "questionId": "git-d07-q06",
+    "correct_answer": "B",
+    "explanation": "HTTPS is easiest for beginners. SSH is preferred once you generate SSH keys.",
+    "tip": "GitHub requires Personal Access Tokens (PAT) instead of account passwords for HTTPS pushes."
+  },
+  {
+    "questionId": "git-d07-q07",
+    "correct_answer": "A",
+    "explanation": "Useful when switching a repo from HTTPS to SSH or moving to a new organization.",
+    "tip": "Check with `git remote -v` after updating."
+  },
+  {
+    "questionId": "git-d07-q08",
+    "correct_answer": "B",
+    "explanation": "Distributed VCS allows syncing with multiple team members or deployment servers.",
+    "tip": "Heroku and Dokku also use extra Git remotes to trigger deployments."
+  },
+  {
+    "questionId": "git-d07-q09",
+    "correct_answer": "A",
+    "explanation": "Only removes the pointer from your `.git/config` file.",
+    "tip": "The GitHub repository online remains completely untouched."
+  },
+  {
+    "questionId": "git-d07-q10",
+    "correct_answer": "B",
+    "explanation": "Think of `remote add` as adding a contact to your phonebook.",
+    "tip": "Pushing is tomorrow's topic — Day 08!"
+  }
+]

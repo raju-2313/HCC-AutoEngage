@@ -1,0 +1,174 @@
+{
+  "meta": {
+    "day": 2,
+    "topic": "Installing Git & First-Time Configuration",
+    "category": "git",
+    "totalQuestions": 10,
+    "questionTimeSec": 15,
+    "difficulty": "beginner",
+    "part": "A"
+  },
+  "questions": [
+    {
+      "id": "git-d02-q01",
+      "question": "Which command checks the installed version of Git?",
+      "options": {
+        "A": "git check",
+        "B": "git version",
+        "C": "git --version",
+        "D": "git status"
+      },
+      "correctAnswer": "C",
+      "explanation": "`git --version` prints the installed Git version. This is the standard way to verify Git is correctly installed on your system.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d02-q02",
+      "question": "Which command sets your Git username globally?",
+      "codeSnippet": "git config _______ user.name \"Your Name\"",
+      "options": {
+        "A": "--local",
+        "B": "--system",
+        "C": "--global",
+        "D": "--user"
+      },
+      "correctAnswer": "C",
+      "explanation": "`--global` applies the setting to all repositories on your machine. Without it, the setting only applies to the current repository (`--local`).",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d02-q03",
+      "question": "Where does `git config --global` store settings?",
+      "options": {
+        "A": "Inside each repository's .git folder",
+        "B": "In a file called .gitconfig in your home directory",
+        "C": "In the Windows Registry",
+        "D": "On GitHub servers"
+      },
+      "correctAnswer": "B",
+      "explanation": "Global config is stored in `~/.gitconfig` (or `C:\\Users\\YourName\\.gitconfig` on Windows). Local config is stored in `.git/config` inside each repository.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d02-q04",
+      "question": "Which command lists all your current Git configuration settings?",
+      "options": {
+        "A": "git settings",
+        "B": "git config --all",
+        "C": "git config --list",
+        "D": "git show config"
+      },
+      "correctAnswer": "C",
+      "explanation": "`git config --list` prints all configuration values from system, global, and local scopes. It is the fastest way to verify your name and email are set correctly.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d02-q05",
+      "question": "Why should your Git email match your GitHub account email?",
+      "options": {
+        "A": "It makes git commit run faster",
+        "B": "GitHub uses the email to link commits to your GitHub profile and show contributions",
+        "C": "Git will refuse to commit if they don't match",
+        "D": "It is required only for private repositories"
+      },
+      "correctAnswer": "B",
+      "explanation": "GitHub matches the email in your commits to your GitHub account. If they differ, your commits appear as an unknown user and your contribution graph won't show the work.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d02-q06",
+      "question": "On Windows, which terminal is recommended for running Git commands?",
+      "options": {
+        "A": "PowerShell only",
+        "B": "Git Bash (installed with Git for Windows)",
+        "C": "Command Prompt only",
+        "D": "Git requires a graphical application on Windows"
+      },
+      "correctAnswer": "B",
+      "explanation": "Git Bash provides a Unix-like terminal on Windows with full Git support. PowerShell and Command Prompt also work but Git Bash is most consistent with tutorials.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d02-q07",
+      "question": "Which config scope affects only the current repository?",
+      "options": {
+        "A": "--global",
+        "B": "--system",
+        "C": "--local",
+        "D": "--project"
+      },
+      "correctAnswer": "C",
+      "explanation": "`--local` scope writes config to `.git/config` inside the current repository only. This overrides global settings for that specific project.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d02-q08",
+      "question": "What does the following command do?\n\ngit config --global core.editor \"code --wait\"",
+      "options": {
+        "A": "Sets VS Code as the default text editor for Git",
+        "B": "Opens VS Code immediately",
+        "C": "Installs VS Code",
+        "D": "Links Git to your GitHub account"
+      },
+      "correctAnswer": "A",
+      "explanation": "This sets VS Code as Git's default editor for writing commit messages and resolving merge conflicts. `--wait` tells Git to wait until you close the VS Code window before continuing.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d02-q09",
+      "question": "If `git --version` returns 'git version 2.43.0', what does this confirm?",
+      "options": {
+        "A": "Git is running on GitHub version 2.43",
+        "B": "Git is correctly installed and accessible from the terminal",
+        "C": "You are using an outdated version of Git",
+        "D": "You need to update Git before using it"
+      },
+      "correctAnswer": "B",
+      "explanation": "Any output from `git --version` confirms Git is installed and your terminal can find it. Version 2.x is current and all features in this programme work on 2.x.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d02-q10",
+      "question": "Which command sets the default branch name to 'main' for new repositories?",
+      "options": {
+        "A": "git branch --default main",
+        "B": "git config --global init.defaultBranch main",
+        "C": "git init --branch main",
+        "D": "git set default main"
+      },
+      "correctAnswer": "B",
+      "explanation": "GitHub now uses 'main' as the default branch. Setting `init.defaultBranch main` globally means every new `git init` will start with a branch called 'main' instead of 'master'.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    }
+  ]
+}

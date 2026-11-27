@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "day": 7,
+    "topic": "Remote Repositories & Connecting Local to GitHub",
+    "category": "git",
+    "totalQuestions": 10,
+    "questionTimeSec": 15,
+    "difficulty": "beginner",
+    "part": "B"
+  },
+  "questions": [
+    {
+      "id": "git-d07-q01",
+      "question": "What is a 'remote' in Git?",
+      "options": {
+        "A": "A physical TV remote for your monitor",
+        "B": "A version of your repository hosted on the internet or network (e.g., on GitHub)",
+        "C": "A developer who works from home",
+        "D": "A backup hard drive"
+      },
+      "correctAnswer": "B",
+      "explanation": "A remote is a version of your repository hosted elsewhere, allowing you to fetch and push code to sync with others.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d07-q02",
+      "question": "What is the standard, conventional nickname given to the primary remote repository in Git?",
+      "options": {
+        "A": "upstream",
+        "B": "github",
+        "C": "origin",
+        "D": "primary"
+      },
+      "correctAnswer": "C",
+      "explanation": "`origin` is the default shorthand name Git assigns to the remote server you cloned from or push to.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d07-q03",
+      "question": "Which command links a local repository to a remote repository URL?",
+      "options": {
+        "A": "git link <url>",
+        "B": "git remote add origin <url>",
+        "C": "git connect <url>",
+        "D": "git sync add origin <url>"
+      },
+      "correctAnswer": "B",
+      "explanation": "`git remote add <name> <url>` associates a human-readable remote name (like `origin`) with a repository web address.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d07-q04",
+      "question": "Which command lists all configured remotes along with their fetch and push URLs?",
+      "options": {
+        "A": "git remote list",
+        "B": "git remote -v",
+        "C": "git url -a",
+        "D": "git remotes --all"
+      },
+      "correctAnswer": "B",
+      "explanation": "`git remote -v` (verbose) lists the shortnames and exact URLs for all configured remote connections.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d07-q05",
+      "question": "When creating a GitHub repo to connect an EXISTING local project, why should you leave 'Add README' unchecked?",
+      "options": {
+        "A": "Because GitHub charges extra for READMEs",
+        "B": "To avoid creating divergent initial commits on GitHub that would conflict with your local commits",
+        "C": "Because Git cannot support README files",
+        "D": "GitHub will delete your local files if checked"
+      },
+      "correctAnswer": "B",
+      "explanation": "Creating a README on GitHub generates a commit on the remote. If your local repo already has commits, pushing will be rejected until merged.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d07-q06",
+      "question": "Which two main protocols can you use to connect to a GitHub remote?",
+      "options": {
+        "A": "FTP and Telnet",
+        "B": "HTTPS and SSH",
+        "C": "HTTP and SMTP",
+        "D": "Bluetooth and NFC"
+      },
+      "correctAnswer": "B",
+      "explanation": "HTTPS (using Personal Access Tokens or browser login) and SSH (using public/private SSH key pairs) are the two supported protocols.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d07-q07",
+      "question": "How do you change the URL of an existing remote called `origin`?",
+      "options": {
+        "A": "git remote set-url origin <new-url>",
+        "B": "git remote change origin <new-url>",
+        "C": "git remote rename <new-url>",
+        "D": "git config origin <new-url>"
+      },
+      "correctAnswer": "A",
+      "explanation": "`git remote set-url origin <new-url>` updates the target URL for the existing remote alias.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d07-q08",
+      "question": "Can a Git repository have more than one remote configured?",
+      "options": {
+        "A": "No, Git only permits a single remote named origin",
+        "B": "Yes, you can configure multiple remotes (e.g., origin, upstream, staging)",
+        "C": "Only if using GitLab, not GitHub",
+        "D": "Only with paid GitHub enterprise"
+      },
+      "correctAnswer": "B",
+      "explanation": "Git supports arbitrary numbers of remotes. In open-source workflows, having `origin` (your fork) and `upstream` (original repo) is standard.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d07-q09",
+      "question": "Which command completely removes a remote named `origin` from your local repo configuration?",
+      "options": {
+        "A": "git remote remove origin",
+        "B": "git delete origin",
+        "C": "git remote erase origin",
+        "D": "git disconnect origin"
+      },
+      "correctAnswer": "A",
+      "explanation": "`git remote remove origin` (or `git remote rm origin`) disconnects the remote link without deleting your local files or commits.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d07-q10",
+      "question": "Does running `git remote add origin <url>` upload your files to GitHub immediately?",
+      "options": {
+        "A": "Yes, it automatically uploads all commits",
+        "B": "No, it only sets up the link bookmark; you must run `git push` to upload code",
+        "C": "Yes, but only the README file",
+        "D": "No, it deletes the remote"
+      },
+      "correctAnswer": "B",
+      "explanation": "Adding a remote is strictly configuration. No data is transferred to or from GitHub until you explicitly push or fetch.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    }
+  ]
+}

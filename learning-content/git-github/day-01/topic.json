@@ -1,0 +1,12 @@
+{
+  "day": 1,
+  "title": "What is Version Control & Git vs GitHub?",
+  "slug": "version-control-git-vs-github",
+  "category": "git",
+  "difficulty": "beginner",
+  "part": "A",
+  "introduction": "Before we write a single Git command, let's answer the most important question: *why does version control even exist?* Imagine writing a 500-line essay and accidentally deleting half of it — with no undo. Version control is the undo button for your entire project, forever. Git is the tool that tracks every change you make to your files. GitHub is the website where you store and share those tracked projects with the world.",
+  "why_it_matters": "Every professional developer uses Git daily. Without it, teams would email zip files back and forth and hope nobody overwrites anyone else's work. Git solves that completely. And GitHub is where millions of open-source projects live — the same place where React, VS Code, and Linux are built.",
+  "estimated_time_minutes": 45,
+  "practical_activity_preview": "Explore a live GitHub repository and identify its key parts."
+}

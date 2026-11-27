@@ -1,0 +1,62 @@
+[
+  {
+    "questionId": "git-d01-q01",
+    "correct_answer": "B",
+    "explanation": "Version control tracks every file change over time. Think of it as a time machine for your project — you can always go back to any saved point.",
+    "tip": "The 'version' in version control refers to each saved state (snapshot) of your project."
+  },
+  {
+    "questionId": "git-d01-q02",
+    "correct_answer": "B",
+    "explanation": "In a distributed system, every developer has the full repository. No internet? No problem — you can still commit, branch, and review history locally.",
+    "tip": "Compare: Subversion (SVN) is centralized — you need the server to do almost anything."
+  },
+  {
+    "questionId": "git-d01-q03",
+    "correct_answer": "C",
+    "explanation": "Git is software you install. GitHub is a website. You can use Git without GitHub, but GitHub requires Git to work.",
+    "tip": "Think of Git as WhatsApp and GitHub as the server that stores your messages in the cloud."
+  },
+  {
+    "questionId": "git-d01-q04",
+    "correct_answer": "C",
+    "explanation": "Linus Torvalds needed a replacement for BitKeeper in 2005. He wrote the first version of Git in just a few days.",
+    "tip": "Fun fact: Git was self-hosted — the first commit of Git was managed by Git itself."
+  },
+  {
+    "questionId": "git-d01-q05",
+    "correct_answer": "C",
+    "explanation": "Every clone is a full copy. Run `git log` on your laptop with no Wi-Fi and you will still see the entire project history.",
+    "tip": "This is why `git clone` takes some time for large projects — it downloads everything."
+  },
+  {
+    "questionId": "git-d01-q06",
+    "correct_answer": "B",
+    "explanation": "Merge conflicts happen when two people edit the same part of a file. Git detects this and asks you to resolve it manually — safely.",
+    "tip": "Before Git, teams used to lock files so only one person could edit at a time. Git made parallel work safe."
+  },
+  {
+    "questionId": "git-d01-q07",
+    "correct_answer": "B",
+    "explanation": "A repo is more than just files. The hidden `.git` folder inside your project contains the entire history — every commit, every branch.",
+    "tip": "If you delete the `.git` folder, your project loses all its version history instantly."
+  },
+  {
+    "questionId": "git-d01-q08",
+    "correct_answer": "B",
+    "explanation": "GitLab is fully open-source and can be self-hosted. Bitbucket is popular in enterprise environments. GitHub is the most popular for open source.",
+    "tip": "Git Bash is a terminal emulator for Windows — not a hosting platform."
+  },
+  {
+    "questionId": "git-d01-q09",
+    "correct_answer": "B",
+    "explanation": "Your local repository is self-contained. GitHub only stores a remote copy. The local copy is what matters for your day-to-day work.",
+    "tip": "This is a key advantage of distributed VCS over centralized systems like SVN."
+  },
+  {
+    "questionId": "git-d01-q10",
+    "correct_answer": "B",
+    "explanation": "A commit is a snapshot with a message, timestamp, and author. It does NOT automatically push to GitHub — that requires a separate `git push` command.",
+    "tip": "Think of a commit as saving a checkpoint in a game — it stays local until you decide to sync."
+  }
+]

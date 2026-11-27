@@ -1,0 +1,20 @@
+{
+  "day": 1,
+  "title": "Explore a Real GitHub Repository",
+  "description": "No installation needed today. Visit the GitHub repository for freeCodeCamp — one of the most starred open-source projects in the world — and explore it like a developer would.",
+  "steps": [
+    "Open https://github.com/freeCodeCamp/freeCodeCamp in your browser",
+    "Find and note the total number of commits shown on the repository page",
+    "Click the 'commits' link and read the last 3 commit messages",
+    "Look at the repository's README.md and identify what the project is about",
+    "Find the 'Issues' tab and note roughly how many open issues there are",
+    "Find the 'Branches' section and note how many branches exist"
+  ],
+  "expected_output": "A short note (even just mental notes) of what you found — number of commits, what the last 3 commits changed, and what the project does.",
+  "submission_type": "none",
+  "tips": [
+    "The commit count is shown near the top of the file list, often as '12,345 commits'",
+    "Each commit message tells you what changed — good commit messages are short and descriptive",
+    "The README is the front page of every repository — always read it first"
+  ]
+}

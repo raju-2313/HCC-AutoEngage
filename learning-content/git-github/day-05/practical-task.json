@@ -1,0 +1,21 @@
+{
+  "day": 5,
+  "title": "Practice Safe Undo Operations",
+  "description": "Trigger three common mistakes (wrong staged file, bad commit message, accidental commit) and fix all three using modern Git commands.",
+  "steps": [
+    "In `hcc-git-practice`, create a dummy file `mistake.txt` and stage it: git add mistake.txt",
+    "Unstage it without deleting the file: git restore --staged mistake.txt — check with git status",
+    "Make an unwanted edit to `hello.txt`, then discard it: git restore hello.txt",
+    "Make a commit with a typo in the message: git commit -m \"typo in messge\" --allow-empty",
+    "Fix the message immediately without creating a new commit: git commit --amend -m \"docs: fix typo in previous commit\"",
+    "Now create a commit that you want to undo: git commit -m \"temporary test feature\" --allow-empty",
+    "Safely undo it by generating a reverse commit: git revert HEAD --no-edit",
+    "Inspect git log --oneline — notice the new 'Revert \"temporary test feature\"' commit recorded in history"
+  ],
+  "expected_output": "History shows clean commits, the typo amended, and a new Revert commit preserving full audit trail.",
+  "submission_type": "none",
+  "tips": [
+    "Modern Git (v2.23+) introduced git restore specifically to make undoing intuitive without confusing git checkout flags.",
+    "git revert is the safest way to undo on public branches because it never deletes past history."
+  ]
+}

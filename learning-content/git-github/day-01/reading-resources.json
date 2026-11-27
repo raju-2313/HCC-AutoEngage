@@ -1,0 +1,20 @@
+[
+  {
+    "title": "What is Version Control?",
+    "publisher": "Atlassian",
+    "url": "https://www.atlassian.com/git/tutorials/what-is-version-control",
+    "type": "Article",
+    "est_read_time_minutes": 10,
+    "what_you_learn": "Explains centralized vs distributed version control, why Git is distributed, and the core benefits for individuals and teams.",
+    "difficulty": "beginner"
+  },
+  {
+    "title": "About Git — GitHub Docs",
+    "publisher": "GitHub",
+    "url": "https://docs.github.com/en/get-started/using-git/about-git",
+    "type": "Documentation",
+    "est_read_time_minutes": 8,
+    "what_you_learn": "Official explanation of Git's design philosophy, its distributed nature, and how GitHub extends Git's capabilities.",
+    "difficulty": "beginner"
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "questionId": "git-d08-q01",
+    "correct_answer": "B",
+    "explanation": "`git push` sends commit objects to the remote server.",
+    "tip": "Syntax: `git push <remote> <branch>`."
+  },
+  {
+    "questionId": "git-d08-q02",
+    "correct_answer": "B",
+    "explanation": "Sets upstream tracking. Once set, you can just type `git push` or `git pull`.",
+    "tip": "Check tracking branches anytime with `git branch -vv`."
+  },
+  {
+    "questionId": "git-d08-q03",
+    "correct_answer": "C",
+    "explanation": "Cloning downloads all commits, branches, and tags.",
+    "tip": "You do NOT need to run `git init` before `git clone` — clone does it for you!"
+  },
+  {
+    "questionId": "git-d08-q04",
+    "correct_answer": "B",
+    "explanation": "Fetch inspects; pull merges. Fetch never touches your working files.",
+    "tip": "If unsure, run `git fetch` first and inspect with `git log origin/main`."
+  },
+  {
+    "questionId": "git-d08-q05",
+    "correct_answer": "B",
+    "explanation": "`git pull` literally combines fetch and merge into one operation.",
+    "tip": "You can also configure `git pull --rebase` to keep a linear history."
+  },
+  {
+    "questionId": "git-d08-q06",
+    "correct_answer": "B",
+    "explanation": "Non-fast-forward means your local branch is behind the remote.",
+    "tip": "Pull first, merge or rebase, then push."
+  },
+  {
+    "questionId": "git-d08-q07",
+    "correct_answer": "B",
+    "explanation": "Standard workflow: Pull down changes, test locally, push back up.",
+    "tip": "This is the core cadence of modern team programming."
+  },
+  {
+    "questionId": "git-d08-q08",
+    "correct_answer": "B",
+    "explanation": "Example: `git clone https://... .` clones directly into the current directory.",
+    "tip": "Useful when you already created an empty project folder."
+  },
+  {
+    "questionId": "git-d08-q09",
+    "correct_answer": "B",
+    "explanation": "Pull early and often to keep conflicts small and manageable.",
+    "tip": "Make 'git pull' your morning coffee routine."
+  },
+  {
+    "questionId": "git-d08-q10",
+    "correct_answer": "B",
+    "explanation": "Force pushing rewrites remote history. Always use `--force-with-lease` if you must force push your own feature branch.",
+    "tip": "Most professional repositories enable branch protection to block force pushes on main."
+  }
+]

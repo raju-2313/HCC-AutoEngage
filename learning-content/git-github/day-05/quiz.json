@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "day": 5,
+    "topic": "Undoing Mistakes Safely (restore, reset, revert)",
+    "category": "git",
+    "totalQuestions": 10,
+    "questionTimeSec": 15,
+    "difficulty": "beginner",
+    "part": "A"
+  },
+  "questions": [
+    {
+      "id": "git-d05-q01",
+      "question": "Which modern Git command removes a file from the staging area without deleting your edits?",
+      "options": {
+        "A": "git unstage <file>",
+        "B": "git restore --staged <file>",
+        "C": "git remove --cached <file>",
+        "D": "git delete <file>"
+      },
+      "correctAnswer": "B",
+      "explanation": "`git restore --staged <file>` takes the file out of the staging area while leaving your edits in your working directory intact.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d05-q02",
+      "question": "Which command discards all unstaged edits in `app.js` and reverts it to the last commit?",
+      "options": {
+        "A": "git restore app.js",
+        "B": "git revert app.js",
+        "C": "git clean app.js",
+        "D": "git unedit app.js"
+      },
+      "correctAnswer": "A",
+      "explanation": "`git restore <file>` overwrites the working copy with the version from the last commit or staging area.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d05-q03",
+      "question": "Which command allows you to change the message of your most recent commit?",
+      "options": {
+        "A": "git commit --change",
+        "B": "git commit --amend -m \"new message\"",
+        "C": "git commit --fix",
+        "D": "git rename commit"
+      },
+      "correctAnswer": "B",
+      "explanation": "`git commit --amend` lets you combine staged changes or update the commit message of the most recent commit.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d05-q04",
+      "question": "What is the primary difference between `git reset` and `git revert`?",
+      "options": {
+        "A": "`git reset` works only on GitHub, while `git revert` works only locally",
+        "B": "`git reset` rewrites history by moving the branch pointer back, while `git revert` creates a new commit that inverts past changes",
+        "C": "`git revert` deletes files, while `git reset` renames them",
+        "D": "They are exact synonyms"
+      },
+      "correctAnswer": "B",
+      "explanation": "`git revert` is non-destructive because it adds a new commit undoing previous changes, making it safe for shared branches.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d05-q05",
+      "question": "Why is `git reset --hard` considered dangerous?",
+      "options": {
+        "A": "It shuts down Git",
+        "B": "It permanently deletes all uncommitted changes and overwrites your working directory",
+        "C": "It locks the repository on GitHub",
+        "D": "It deletes your GitHub profile"
+      },
+      "correctAnswer": "B",
+      "explanation": "`--hard` forces Git to match the target commit exactly, destroying uncommitted edits in both the working directory and staging area.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d05-q06",
+      "question": "If you have already pushed commits to a shared team repository on GitHub, how should you undo a bad commit?",
+      "options": {
+        "A": "git reset --hard HEAD~1",
+        "B": "git revert <commit-hash>",
+        "C": "git delete commit",
+        "D": "Delete the repository and re-clone"
+      },
+      "correctAnswer": "B",
+      "explanation": "Always use `git revert` on public branches so teammates don't experience broken history or divergent branch conflicts.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d05-q07",
+      "question": "What does `git reset --soft HEAD~1` do?",
+      "options": {
+        "A": "Deletes the last commit and all its changes forever",
+        "B": "Undoes the last commit but keeps all changes staged ready to commit again",
+        "C": "Reverts all changes to the original clone state",
+        "D": "Soft-locks the branch against pushes"
+      },
+      "correctAnswer": "B",
+      "explanation": "`--soft` moves HEAD back by one commit while leaving all changes staged in the index.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d05-q08",
+      "question": "What does `HEAD~1` mean in Git syntax?",
+      "options": {
+        "A": "The first commit ever made in the repo",
+        "B": "One commit before the current HEAD commit (the parent commit)",
+        "C": "A branch named '1'",
+        "D": "An error code"
+      },
+      "correctAnswer": "B",
+      "explanation": "The tilde `~` operator navigates ancestry: `HEAD~1` is the immediate parent commit, `HEAD~2` is two commits back.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d05-q09",
+      "question": "What happens if you run `git restore .` in your project folder?",
+      "options": {
+        "A": "All unstaged changes in tracked files across the current folder are discarded",
+        "B": "All committed files are deleted",
+        "C": "All untracked files are deleted",
+        "D": "All files are staged for commit"
+      },
+      "correctAnswer": "A",
+      "explanation": "`git restore .` discards unstaged modifications in tracked files, reverting them to their last committed state.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d05-q10",
+      "question": "What command removes untracked files that are cluttering your directory?",
+      "options": {
+        "A": "git purge",
+        "B": "git clean -f",
+        "C": "git sweep",
+        "D": "git rm --all"
+      },
+      "correctAnswer": "B",
+      "explanation": "`git clean -f` forces the deletion of untracked files in the working directory (use with caution!).",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    }
+  ]
+}

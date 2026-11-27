@@ -1,0 +1,7 @@
+[
+  "Initialize a new local repository using git init",
+  "Check the status of tracked and untracked files using git status",
+  "Stage modified or new files using git add",
+  "Create a permanent snapshot using git commit -m with a clear message",
+  "Explain the purpose of the staging area (index)"
+]

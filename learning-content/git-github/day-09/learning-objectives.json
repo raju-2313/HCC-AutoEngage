@@ -1,0 +1,7 @@
+[
+  "Explain what a Git branch is under the hood (a lightweight movable pointer to a commit)",
+  "Create and switch to a new branch using git switch -c <branch-name>",
+  "List all local and remote branches using git branch and git branch -a",
+  "Understand how HEAD moves when switching branches",
+  "Adopt professional branch naming standards (feature/, bugfix/, chore/)"
+]

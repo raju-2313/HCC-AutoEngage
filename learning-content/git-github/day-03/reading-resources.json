@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Saving Changes (git add & git commit)",
+    "publisher": "Atlassian Git Tutorials",
+    "url": "https://www.atlassian.com/git/tutorials/saving-changes",
+    "type": "Written Guide",
+    "est_read_time_minutes": 10,
+    "what_you_learn": "Deep dive into the working directory vs staging area vs commit history.",
+    "difficulty": "beginner"
+  },
+  {
+    "title": "Git Basics — Recording Changes to the Repository",
+    "publisher": "Pro Git (git-scm.com)",
+    "url": "https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository",
+    "type": "Official Docs",
+    "est_read_time_minutes": 10,
+    "what_you_learn": "File lifecycle in Git: untracked, unmodified, modified, and staged.",
+    "difficulty": "beginner"
+  }
+]

@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "day": 13,
+    "topic": "Pull Requests (PRs) & Code Reviews",
+    "category": "git",
+    "totalQuestions": 10,
+    "questionTimeSec": 15,
+    "difficulty": "intermediate",
+    "part": "C"
+  },
+  "questions": [
+    {
+      "id": "git-d13-q01",
+      "question": "What is a Pull Request (PR) on GitHub?",
+      "options": {
+        "A": "A request asking GitHub for more storage space",
+        "B": "A proposed set of code changes from a branch submitted for review and discussion before merging into a target branch",
+        "C": "A command that downloads code from the terminal",
+        "D": "A password reset request"
+      },
+      "correctAnswer": "B",
+      "explanation": "A PR allows team members to review code, run automated tests, discuss implementation details, and approve changes before merging.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d13-q02",
+      "question": "In a GitHub Pull Request, what is the 'base' branch?",
+      "options": {
+        "A": "The branch where you made your changes",
+        "B": "The target destination branch that will RECEIVE the merged changes (e.g. `main`)",
+        "C": "A deleted branch",
+        "D": "Your personal computer"
+      },
+      "correctAnswer": "B",
+      "explanation": "Base is where you want to merge your changes INTO. Head/Compare is the branch containing your new commits.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d13-q03",
+      "question": "Where on a GitHub PR can reviewers see the exact line-by-line diff of all modified files?",
+      "options": {
+        "A": "Commits tab",
+        "B": "Files changed tab",
+        "C": "Settings tab",
+        "D": "Insights tab"
+      },
+      "correctAnswer": "B",
+      "explanation": "The 'Files changed' tab displays side-by-side or unified diffs for every file modified in the pull request.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d13-q04",
+      "question": "If a reviewer asks for changes on your PR, how do you update the Pull Request?",
+      "options": {
+        "A": "Close the PR and open a brand new one",
+        "B": "Make the requested edits locally, commit them on the same feature branch, and run `git push` — the PR updates automatically!",
+        "C": "Email the updated file to the reviewer",
+        "D": "Delete your repository"
+      },
+      "correctAnswer": "B",
+      "explanation": "GitHub PRs track the branch. Any new commits pushed to that branch automatically appear in the open PR.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d13-q05",
+      "question": "What is a 'Draft Pull Request' on GitHub?",
+      "options": {
+        "A": "A PR that cannot be opened",
+        "B": "A PR marked as work-in-progress that cannot be merged until marked ready for review",
+        "C": "A PR written in pencil",
+        "D": "A PR that expires after 1 hour"
+      },
+      "correctAnswer": "B",
+      "explanation": "Draft PRs let developers get early feedback or run CI tests without accidentally allowing the code to be merged.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d13-q06",
+      "question": "What are the three standard merge options available when merging a PR on GitHub?",
+      "options": {
+        "A": "Fast, Medium, Slow",
+        "B": "Create a merge commit, Squash and merge, Rebase and merge",
+        "C": "Copy, Paste, Save",
+        "D": "Upload, Download, Sync"
+      },
+      "correctAnswer": "B",
+      "explanation": "GitHub offers: regular merge commit (keeps all commits), squash and merge (combines all commits into one clean commit), and rebase (linear history).",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d13-q07",
+      "question": "What does 'Squash and Merge' do to a PR with 15 small commits?",
+      "options": {
+        "A": "Deletes all 15 commits and cancels the merge",
+        "B": "Combines all 15 commits into a single unified commit on the base branch with a clean message",
+        "C": "Splits each commit into two",
+        "D": "Creates 15 separate branches"
+      },
+      "correctAnswer": "B",
+      "explanation": "Squash and merge condenses messy work-in-progress commits into one polished commit on `main`.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d13-q08",
+      "question": "Which of the following is considered constructive code review etiquette?",
+      "options": {
+        "A": "Commenting 'this code is terrible'",
+        "B": "Explaining the reasoning behind suggestions, being respectful, and praising good solutions",
+        "C": "Approving without reading the code",
+        "D": "Rejecting every PR by default"
+      },
+      "correctAnswer": "B",
+      "explanation": "Code review is a collaborative learning culture. Professional reviews focus on code quality and explain *why* an alternative is better.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d13-q09",
+      "question": "How can a reviewer suggest an exact code replacement directly in an inline GitHub comment?",
+      "options": {
+        "A": "Using the 'Add a suggestion' button (```suggestion block)",
+        "B": "By editing the author's local file",
+        "C": "By calling the author on the phone",
+        "D": "By deleting the branch"
+      },
+      "correctAnswer": "A",
+      "explanation": "GitHub allows reviewers to insert ```` ```suggestion ```` blocks, which the PR author can apply with a single click.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d13-q10",
+      "question": "After merging a Pull Request on GitHub, what is the best practice for the local repository?",
+      "options": {
+        "A": "Never touch Git again",
+        "B": "Switch to local `main`, run `git pull origin main` to download the merged changes, and delete the local feature branch",
+        "C": "Re-clone the entire repository from scratch",
+        "D": "Force-push local main"
+      },
+      "correctAnswer": "B",
+      "explanation": "Syncing your local `main` with `git pull` brings your computer up to date with the newly merged PR code.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    }
+  ]
+}

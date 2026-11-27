@@ -1,0 +1,62 @@
+[
+  {
+    "questionId": "git-d03-q01",
+    "correct_answer": "B",
+    "explanation": "`git init` creates the `.git` directory and starts tracking the folder.",
+    "tip": "Only run `git init` once per project root."
+  },
+  {
+    "questionId": "git-d03-q02",
+    "correct_answer": "C",
+    "explanation": "All commit objects, tree snapshots, and branch pointers live inside `.git`.",
+    "tip": "Deleting `.git` removes all version history but leaves your raw files intact."
+  },
+  {
+    "questionId": "git-d03-q03",
+    "correct_answer": "B",
+    "explanation": "Working dir (edit) → Staging area (stage) → Repository (commit).",
+    "tip": "Think of staging as packing a box, and commit as sealing and shipping it."
+  },
+  {
+    "questionId": "git-d03-q04",
+    "correct_answer": "C",
+    "explanation": "`git status` is your most frequently used command. When in doubt, run `git status`.",
+    "tip": "Use `git status -s` for a compact, short view."
+  },
+  {
+    "questionId": "git-d03-q05",
+    "correct_answer": "B",
+    "explanation": "`git add` copies changes into the index (staging area).",
+    "tip": "You can stage parts of a file interactively using `git add -p`."
+  },
+  {
+    "questionId": "git-d03-q06",
+    "correct_answer": "B",
+    "explanation": "`git add .` is convenient, but make sure you don't stage unwanted files like passwords or binaries.",
+    "tip": "Always check `git status` after `git add .` to see what got staged."
+  },
+  {
+    "questionId": "git-d03-q07",
+    "correct_answer": "B",
+    "explanation": "Without `-m`, Git opens your configured terminal editor (Vim/nano/VS Code).",
+    "tip": "Write commit messages in imperative mood: 'Add feature' rather than 'Added feature'."
+  },
+  {
+    "questionId": "git-d03-q08",
+    "correct_answer": "B",
+    "explanation": "Untracked files are invisible to Git's snapshot history until `git add` is used.",
+    "tip": "Files listed in `.gitignore` will not even show up as untracked."
+  },
+  {
+    "questionId": "git-d03-q09",
+    "correct_answer": "B",
+    "explanation": "Staging enables atomic commits: bug fix in one commit, styling in another.",
+    "tip": "Atomic commits make reading history and reverting bugs effortless."
+  },
+  {
+    "questionId": "git-d03-q10",
+    "correct_answer": "B",
+    "explanation": "`git commit -am` skips `git add` for modified tracked files only.",
+    "tip": "If a new file won't commit with `-am`, check if it's untracked!"
+  }
+]

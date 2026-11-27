@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "day": 1,
+    "topic": "Version Control & Git vs GitHub",
+    "category": "git",
+    "totalQuestions": 10,
+    "questionTimeSec": 15,
+    "difficulty": "beginner",
+    "part": "A"
+  },
+  "questions": [
+    {
+      "id": "git-d01-q01",
+      "question": "What is the primary purpose of a version control system?",
+      "options": {
+        "A": "To speed up code compilation",
+        "B": "To track changes to files over time and allow reverting to earlier versions",
+        "C": "To automatically fix bugs in your code",
+        "D": "To share files between computers via email"
+      },
+      "correctAnswer": "B",
+      "explanation": "Version control systems (VCS) record every change made to files, who made them, and when. This lets you review history, undo mistakes, and collaborate without overwriting each other's work.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d01-q02",
+      "question": "Git is best described as a:",
+      "options": {
+        "A": "Centralized version control system",
+        "B": "Distributed version control system",
+        "C": "Cloud hosting platform for code",
+        "D": "Programming language"
+      },
+      "correctAnswer": "B",
+      "explanation": "Git is a distributed VCS — every developer has a complete copy of the full repository history on their own machine. This means you can work offline and no single server failure loses all history.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d01-q03",
+      "question": "GitHub is:",
+      "options": {
+        "A": "The same thing as Git",
+        "B": "A command-line tool installed on your computer",
+        "C": "A cloud platform that hosts Git repositories and adds collaboration features",
+        "D": "A programming framework"
+      },
+      "correctAnswer": "C",
+      "explanation": "Git is the local tool that tracks changes. GitHub is a website (owned by Microsoft) that hosts your Git repositories online and adds features like pull requests, issues, and GitHub Actions.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d01-q04",
+      "question": "Who created Git?",
+      "options": {
+        "A": "Bill Gates",
+        "B": "Mark Zuckerberg",
+        "C": "Linus Torvalds",
+        "D": "GitHub Inc."
+      },
+      "correctAnswer": "C",
+      "explanation": "Linus Torvalds created Git in 2005 to manage the Linux kernel source code. He needed a fast, distributed system after the previous tool's free license was revoked.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d01-q05",
+      "question": "In a distributed version control system like Git, where is the repository stored?",
+      "options": {
+        "A": "Only on a central server",
+        "B": "Only in the cloud",
+        "C": "On every developer's local machine as a full copy",
+        "D": "In a shared network folder"
+      },
+      "correctAnswer": "C",
+      "explanation": "In a distributed VCS, every developer clones the full repository including its entire history to their own computer. This enables offline work and means there is no single point of failure.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d01-q06",
+      "question": "Which of the following is a problem that version control solves?",
+      "options": {
+        "A": "Making code run faster",
+        "B": "Two developers accidentally overwriting each other's changes",
+        "C": "Installing programming languages automatically",
+        "D": "Generating documentation from code comments"
+      },
+      "correctAnswer": "B",
+      "explanation": "Without version control, teams often face lost work when two people edit the same file simultaneously. Git tracks who changed what and helps merge those changes safely.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d01-q07",
+      "question": "What does a 'repository' (repo) contain?",
+      "options": {
+        "A": "Only the latest version of your project files",
+        "B": "Your project files plus the complete history of every change ever made",
+        "C": "Only commit messages",
+        "D": "Only files that were deleted"
+      },
+      "correctAnswer": "B",
+      "explanation": "A repository stores your project files AND Git's complete history — every commit, branch, and tag. This is what makes it possible to travel back in time to any previous state.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d01-q08",
+      "question": "Which of these is an alternative to GitHub for hosting Git repositories?",
+      "options": {
+        "A": "Notepad",
+        "B": "GitLab",
+        "C": "Git Bash",
+        "D": "VS Code"
+      },
+      "correctAnswer": "B",
+      "explanation": "GitLab is a major GitHub alternative. Others include Bitbucket and Gitea. All of them host Git repositories but Git itself works independently of any hosting platform.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d01-q09",
+      "question": "If GitHub shuts down tomorrow, what happens to your local Git repository?",
+      "options": {
+        "A": "All history is lost because it was stored on GitHub",
+        "B": "Nothing — your local copy still has the full history",
+        "C": "Git stops working on your computer",
+        "D": "Your commits are automatically moved to GitLab"
+      },
+      "correctAnswer": "B",
+      "explanation": "Because Git is distributed, your local clone contains the entire repository history. GitHub going offline only means you lose the remote copy — your local history stays intact.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d01-q10",
+      "question": "Which statement about Git commits is correct?",
+      "options": {
+        "A": "A commit saves only the files that are currently open in your editor",
+        "B": "A commit is a snapshot of your project at a specific point in time",
+        "C": "A commit automatically uploads your code to GitHub",
+        "D": "You can only make one commit per project"
+      },
+      "correctAnswer": "B",
+      "explanation": "A commit is Git's way of saving a snapshot of your staged changes with a message describing what changed. Each commit has a unique ID and is linked to the previous commit, forming the project history.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    }
+  ]
+}

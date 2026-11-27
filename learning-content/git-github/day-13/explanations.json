@@ -1,0 +1,62 @@
+[
+  {
+    "questionId": "git-d13-q01",
+    "correct_answer": "B",
+    "explanation": "Pull Requests are the fundamental collaboration unit on GitHub.",
+    "tip": "Even solo developers open PRs to self-review before merging to main."
+  },
+  {
+    "questionId": "git-d13-q02",
+    "correct_answer": "B",
+    "explanation": "Double check your base branch! Merging into the wrong branch can cause unexpected deployment issues.",
+    "tip": "GitHub defaults base to `main`."
+  },
+  {
+    "questionId": "git-d13-q03",
+    "correct_answer": "B",
+    "explanation": "You can click on any line number in the diff to leave a comment on that exact line.",
+    "tip": "Reviewers can also start a multi-line review."
+  },
+  {
+    "questionId": "git-d13-q04",
+    "correct_answer": "B",
+    "explanation": "Just `git add`, `git commit`, and `git push`. The PR timeline updates automatically.",
+    "tip": "No need to close or recreate the PR."
+  },
+  {
+    "questionId": "git-d13-q05",
+    "correct_answer": "B",
+    "explanation": "Draft PRs clearly signal: 'I am still writing code, but take a look if you want'.",
+    "tip": "Convert to 'Ready for review' when done."
+  },
+  {
+    "questionId": "git-d13-q06",
+    "correct_answer": "B",
+    "explanation": "Squash & Merge is popular because it keeps `main` history clean and easy to read.",
+    "tip": "Teams usually agree on one standard merge strategy in their repo settings."
+  },
+  {
+    "questionId": "git-d13-q07",
+    "correct_answer": "B",
+    "explanation": "Squashing turns 10 'fix typo' commits into one clean 'feat: add profile page' commit.",
+    "tip": "It preserves a spotless commit history on main."
+  },
+  {
+    "questionId": "git-d13-q08",
+    "correct_answer": "B",
+    "explanation": "Review the code, not the person. Use phrases like 'What do you think about...' or 'Could we optimize this by...'.",
+    "tip": "Empathy and clear communication make great teams."
+  },
+  {
+    "questionId": "git-d13-q09",
+    "correct_answer": "A",
+    "explanation": "The author can click 'Commit suggestion' to immediately accept your fix without opening their editor.",
+    "tip": "A huge time saver during reviews."
+  },
+  {
+    "questionId": "git-d13-q10",
+    "correct_answer": "B",
+    "explanation": "`git switch main && git pull` completes the circle.",
+    "tip": "Clean up the old feature branch locally with `git branch -d <name>`."
+  }
+]

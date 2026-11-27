@@ -1,0 +1,7 @@
+[
+  "Switch to the target receiving branch before running git merge",
+  "Merge a feature branch into main using git merge <branch-name>",
+  "Differentiate between Fast-Forward merges and 3-Way Merge commits",
+  "Force a merge commit using git merge --no-ff",
+  "Delete merged local branches safely using git branch -d <branch-name>"
+]

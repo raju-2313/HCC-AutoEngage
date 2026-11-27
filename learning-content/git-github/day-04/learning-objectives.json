@@ -1,0 +1,7 @@
+[
+  "View repository commit history with git log and git log --oneline",
+  "Inspect line-by-line differences using git diff",
+  "Compare staged changes against the last commit using git diff --staged",
+  "Understand Git commit hashes (SHA-1 checksums) and HEAD pointer",
+  "Apply the conventional commit message standard for clarity"
+]

@@ -1,0 +1,24 @@
+{
+  "day": 14,
+  "title": "Create an Issue and Auto-Close It via PR",
+  "description": "Create an Issue on your `hcc-git-practice` repository, build a fix on a feature branch, and auto-close the issue by linking it in your Pull Request.",
+  "steps": [
+    "Go to your `hcc-git-practice` repository on GitHub and click the 'Issues' tab",
+    "Click 'New issue' — Title: `Add project license to repository`",
+    "Description: `We need an open-source MIT license file in the root directory.`",
+    "Click 'Submit new issue' — note the issue number (e.g., `#1`)",
+    "In your local terminal: `git switch main && git pull`",
+    "Create branch: `git switch -c chore/add-license`",
+    "Create a file `LICENSE` containing: `MIT License - Copyright (c) 2026 HCC Learner`",
+    "Stage and commit: `git add LICENSE && git commit -m \"chore: add MIT license\"`",
+    "Push branch: `git push -u origin chore/add-license`",
+    "Open a PR on GitHub — in the description write: `Closes #1` (replace with your issue number!)",
+    "Merge the Pull Request — go back to the Issues tab and observe that Issue #1 was closed automatically!"
+  ],
+  "expected_output": "Issue shows closed with the purple badge: 'closed by pull request #...' automatically.",
+  "submission_type": "none",
+  "tips": [
+    "GitHub recognizes keywords: `Closes #1`, `Fixes #1`, `Resolves #1`.",
+    "Auto-closing issues saves teams from manually cleaning up tickets after shipping code."
+  ]
+}

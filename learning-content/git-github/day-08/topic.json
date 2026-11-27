@@ -1,0 +1,12 @@
+{
+  "day": 8,
+  "title": "Syncing Code: push, clone, pull & fetch",
+  "slug": "syncing-code-push-clone-pull-fetch",
+  "category": "git",
+  "difficulty": "intermediate",
+  "part": "B",
+  "introduction": "Today you master the four pillars of Git synchronization: `push` (upload local work), `clone` (download an entire repository), `fetch` (check for updates safely), and `pull` (download and merge remote changes into your code).",
+  "why_it_matters": "Syncing code is what makes Git a team tool. Knowing exactly what happens during a `pull` vs a `fetch` prevents unexpected merge conflicts and accidental overwritten code.",
+  "estimated_time_minutes": 30,
+  "practical_activity_preview": "Push your local commits to GitHub, make an edit online, and pull it back to your computer."
+}

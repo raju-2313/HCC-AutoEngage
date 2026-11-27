@@ -1,0 +1,7 @@
+[
+  "Create well-structured GitHub Issues with titles, descriptions, and labels",
+  "Differentiate between Issues (actionable work/bugs) and Discussions (open questions/ideas)",
+  "Link a Pull Request to an Issue using closing keywords (e.g., Closes #1, Fixes #5)",
+  "Explain the GitHub Flow: Issue → Branch → Commit → PR → Review → Merge",
+  "Organize team hackathon tasks using GitHub Project boards and milestones"
+]

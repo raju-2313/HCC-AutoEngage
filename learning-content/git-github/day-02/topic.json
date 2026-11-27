@@ -1,0 +1,12 @@
+{
+  "day": 2,
+  "title": "Installing Git & First-Time Configuration",
+  "slug": "installing-configuring-git",
+  "category": "git",
+  "difficulty": "beginner",
+  "part": "A",
+  "introduction": "Today you install Git on your machine and set it up so Git knows who you are. These two steps — install and configure — are done once and then you are ready for everything that follows. Git is free, open-source, and runs on Windows, macOS, and Linux.",
+  "why_it_matters": "Git cannot track *who* made a commit unless you tell it your name and email. Every commit you make will permanently carry your identity in the project history. Setting this up correctly from the start means your contributions are properly credited on GitHub.",
+  "estimated_time_minutes": 40,
+  "practical_activity_preview": "Install Git, configure your name and email, and verify the setup."
+}

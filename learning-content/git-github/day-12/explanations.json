@@ -1,0 +1,62 @@
+[
+  {
+    "questionId": "git-d12-q01",
+    "correct_answer": "B",
+    "explanation": "Forking is a GitHub platform feature, not a core Git command.",
+    "tip": "You have full admin rights over your fork."
+  },
+  {
+    "questionId": "git-d12-q02",
+    "correct_answer": "A",
+    "explanation": "Fork = GitHub to GitHub copy. Clone = GitHub to local machine copy.",
+    "tip": "Typical workflow: Fork on GitHub → Clone your fork locally."
+  },
+  {
+    "questionId": "git-d12-q03",
+    "correct_answer": "B",
+    "explanation": "`upstream` points to the source of truth.",
+    "tip": "Remember: Origin = My fork, Upstream = The original repo."
+  },
+  {
+    "questionId": "git-d12-q04",
+    "correct_answer": "A",
+    "explanation": "`git remote add upstream <url>` takes 5 seconds and makes future syncing effortless.",
+    "tip": "Verify with `git remote -v`."
+  },
+  {
+    "questionId": "git-d12-q05",
+    "correct_answer": "A",
+    "explanation": "Downloads commits from the original repo so you can inspect or merge them.",
+    "tip": "You can view upstream commits with `git log upstream/main`."
+  },
+  {
+    "questionId": "git-d12-q06",
+    "correct_answer": "B",
+    "explanation": "Forking protects open-source projects from unauthorized or broken code pushes.",
+    "tip": "Maintainers review all proposed code before it ever touches main."
+  },
+  {
+    "questionId": "git-d12-q07",
+    "correct_answer": "A",
+    "explanation": "Pulls new upstream commits and fast-forwards your local main.",
+    "tip": "Don't forget to push back to your fork: `git push origin main`!"
+  },
+  {
+    "questionId": "git-d12-q08",
+    "correct_answer": "B",
+    "explanation": "The 'Sync fork' button on GitHub is super convenient when you don't have terminal access.",
+    "tip": "Look for 'This branch is behind...' on your repo page."
+  },
+  {
+    "questionId": "git-d12-q09",
+    "correct_answer": "B",
+    "explanation": "Forks are completely decoupled. You can break anything in your fork without fear.",
+    "tip": "Feel 100% free to experiment in your own fork."
+  },
+  {
+    "questionId": "git-d12-q10",
+    "correct_answer": "B",
+    "explanation": "Keeping your fork's `main` clean makes syncing with upstream effortless.",
+    "tip": "Always branch off main for every separate pull request."
+  }
+]

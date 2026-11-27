@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "day": 15,
+    "topic": "Capstone: Complete Collaborative Workflow Simulation",
+    "category": "git",
+    "totalQuestions": 10,
+    "questionTimeSec": 15,
+    "difficulty": "practical",
+    "part": "C"
+  },
+  "questions": [
+    {
+      "id": "git-d15-q01",
+      "question": "What is the very first thing you should do locally before starting work on a new feature branch in a team repository?",
+      "options": {
+        "A": "Run `git push --force`",
+        "B": "Switch to `main` and run `git pull` to ensure your base is 100% up to date with teammates' work",
+        "C": "Delete your `.git` folder",
+        "D": "Format your hard drive"
+      },
+      "correctAnswer": "B",
+      "explanation": "Always branch off a fresh, updated `main` to avoid starting work from stale code.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d15-q02",
+      "question": "Why should developers NEVER push unfinished, broken code directly to `main`?",
+      "options": {
+        "A": "`main` represents the stable, working version of the application; breaking it blocks all teammates and halts production deployments",
+        "B": "Git automatically deletes repositories that contain bugs",
+        "C": "GitHub charges a fee for broken commits",
+        "D": "It is physically impossible to push to main"
+      },
+      "correctAnswer": "A",
+      "explanation": "Protecting `main` ensures the team always has a releasable, functional foundation.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d15-q03",
+      "question": "Which sequence accurately summarizes the full end-to-end collaborative developer workflow?",
+      "options": {
+        "A": "Issue → Feature Branch → Commit → Push → Pull Request → Code Review → Merge → Pull to Local",
+        "B": "Commit to Main → PR → Branch → Issue",
+        "C": "Push → Fork → Clone → Revert",
+        "D": "Clone → Delete → Commit → Reset"
+      },
+      "correctAnswer": "A",
+      "explanation": "This 8-step cycle is the gold standard industry workflow used worldwide.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d15-q04",
+      "question": "What does the command `git status` tell you?",
+      "options": {
+        "A": "Your internet bandwidth speed",
+        "B": "Your active branch, tracked/untracked files, staged changes, and whether your local branch is ahead/behind remote",
+        "C": "The current date and time",
+        "D": "Your GitHub password"
+      },
+      "correctAnswer": "B",
+      "explanation": "`git status` is your constant situational awareness tool in Git.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d15-q05",
+      "question": "What is an 'atomic commit'?",
+      "options": {
+        "A": "A commit that uses nuclear physics",
+        "B": "A small, self-contained commit that solves one single logical task or bug cleanly and completely",
+        "C": "A commit with over 10,000 files",
+        "D": "A commit made at midnight"
+      },
+      "correctAnswer": "B",
+      "explanation": "Atomic commits are easy to understand, easy to review, and easy to revert if a bug is introduced.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d15-q06",
+      "question": "If a commit introduced a critical bug in production, which command is the safest way to undo it on a public branch?",
+      "options": {
+        "A": "git revert <commit-hash>",
+        "B": "git reset --hard HEAD~1 && git push -f",
+        "C": "Delete the repository",
+        "D": "git clean -fd"
+      },
+      "correctAnswer": "A",
+      "explanation": "`git revert` records a new commit that safely reverses the bug without rewriting public branch history.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d15-q07",
+      "question": "How can you check who wrote each line of a file and when it was committed?",
+      "options": {
+        "A": "git blame <filename>",
+        "B": "git who <filename>",
+        "C": "git author <filename>",
+        "D": "git history --users"
+      },
+      "correctAnswer": "A",
+      "explanation": "`git blame` annotates each line of a file with the commit hash, author name, and date of the last edit.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d15-q08",
+      "question": "What is `git stash` used for?",
+      "options": {
+        "A": "To temporarily shelve uncommitted changes so you can switch branches or pull without committing incomplete work",
+        "B": "To permanently delete files",
+        "C": "To store passwords",
+        "D": "To compress the repository"
+      },
+      "correctAnswer": "A",
+      "explanation": "`git stash` temporarily stores modified files in a clean scratchpad, allowing you to restore them later with `git stash pop`.",
+      "difficulty": "intermediate",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d15-q09",
+      "question": "Which of the following belongs in a professional GitHub repository before sharing with employers or mentors?",
+      "options": {
+        "A": "Committed `.env` files with secret API keys",
+        "B": "A clear README.md, a proper .gitignore, descriptive commit messages, and a clean branch history",
+        "C": "Empty commit messages like 'update' and 'asdf'",
+        "D": "100 unmerged abandoned branches"
+      },
+      "correctAnswer": "B",
+      "explanation": "Repository hygiene demonstrates professional engineering habits and attention to detail.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d15-q10",
+      "question": "Having completed this 15-day Git & GitHub programme, what should be your standard practice for all future coding projects?",
+      "options": {
+        "A": "Go back to saving folders as `project_v2_final.zip`",
+        "B": "Initialize Git (`git init`), create a `.gitignore` and `README.md`, work on feature branches, and push to GitHub regularly",
+        "C": "Only use Git the night before project submission",
+        "D": "Email code to teammates"
+      },
+      "correctAnswer": "B",
+      "explanation": "Making Git a daily reflex protects your work, empowers teamwork, and sets you apart as a professional engineer.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    }
+  ]
+}

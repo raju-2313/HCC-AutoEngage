@@ -1,0 +1,24 @@
+{
+  "day": 13,
+  "title": "Open, Review, and Merge a Pull Request",
+  "description": "Push a new feature branch to your GitHub repository, open a well-documented Pull Request, review the diff, and merge it.",
+  "steps": [
+    "In `hcc-git-practice`, create a new branch: `git switch -c feature/contributor-guide`",
+    "Create a file `CONTRIBUTING.md` explaining how others can contribute to your practice repo",
+    "Stage and commit: `git add CONTRIBUTING.md && git commit -m \"docs: add contributor guidelines\"`",
+    "Push the branch to GitHub: `git push -u origin feature/contributor-guide`",
+    "Open your repository on GitHub in your browser — click the green 'Compare & pull request' button",
+    "Set Title: `docs: Add CONTRIBUTING.md guidelines`",
+    "Write Description: include `### Summary` (what this adds) and `### Verification` (how you tested)",
+    "Click 'Create pull request'",
+    "Click the 'Files changed' tab — review your own diff (notice green additions)",
+    "Return to the 'Conversation' tab and click 'Merge pull request' → 'Confirm merge'",
+    "Click 'Delete branch' to clean up the remote branch on GitHub!"
+  ],
+  "expected_output": "Your PR shows the purple 'Merged' badge on GitHub and `CONTRIBUTING.md` is now live on `main`.",
+  "submission_type": "none",
+  "tips": [
+    "Base branch is where changes go (usually `main`); Compare/Head branch is where your changes come from.",
+    "A great PR description makes life easy for the reviewer — always explain *why* you made the change."
+  ]
+}

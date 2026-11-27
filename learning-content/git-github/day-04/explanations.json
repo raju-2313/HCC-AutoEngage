@@ -1,0 +1,62 @@
+[
+  {
+    "questionId": "git-d04-q01",
+    "correct_answer": "B",
+    "explanation": "`git log` provides the complete history chain.",
+    "tip": "Add `-p` to see the actual code diff inside the log: `git log -p`."
+  },
+  {
+    "questionId": "git-d04-q02",
+    "correct_answer": "C",
+    "explanation": "`--oneline` is the fastest way to get an overview of recent work.",
+    "tip": "Combine flags: `git log --oneline -n 5` shows only the last 5 commits."
+  },
+  {
+    "questionId": "git-d04-q03",
+    "correct_answer": "B",
+    "explanation": "Press `q` to quit the pager. Spacebar scrolls down, `b` scrolls up.",
+    "tip": "You can also search inside git log by typing `/keyword` and pressing Enter."
+  },
+  {
+    "questionId": "git-d04-q04",
+    "correct_answer": "A",
+    "explanation": "`git diff` without flags inspects changes that haven't been staged yet.",
+    "tip": "Run `git diff` before `git add` to review your own work before staging."
+  },
+  {
+    "questionId": "git-d04-q05",
+    "correct_answer": "B",
+    "explanation": "`--staged` and `--cached` are exact synonyms in Git.",
+    "tip": "Use this right before committing to be 100% sure what will be in the snapshot."
+  },
+  {
+    "questionId": "git-d04-q06",
+    "correct_answer": "B",
+    "explanation": "Green `+` lines are additions; red `-` lines are deletions.",
+    "tip": "Modifying a line shows up as deleting the old line and adding the new line."
+  },
+  {
+    "questionId": "git-d04-q07",
+    "correct_answer": "B",
+    "explanation": "You only need the first 7 characters of a hash to identify a commit uniquely in most commands.",
+    "tip": "Example: `git show a1b2c3d`."
+  },
+  {
+    "questionId": "git-d04-q08",
+    "correct_answer": "C",
+    "explanation": "`HEAD` points to the branch or commit you are currently checked out on.",
+    "tip": "`HEAD~1` refers to the commit immediately before HEAD."
+  },
+  {
+    "questionId": "git-d04-q09",
+    "correct_answer": "A",
+    "explanation": "`git show` inspects any Git object (commit, tag, tree).",
+    "tip": "`git show <hash>` lets you inspect any past commit at any time."
+  },
+  {
+    "questionId": "git-d04-q10",
+    "correct_answer": "B",
+    "explanation": "Follow Conventional Commits (`feat:`, `fix:`, `docs:`, `refactor:`) for crystal-clear team logs.",
+    "tip": "Keep the first line under 50-72 characters."
+  }
+]

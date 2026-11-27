@@ -1,0 +1,7 @@
+[
+  "Upload local commits using git push and understand the -u (upstream) flag",
+  "Download any public repository with full history using git clone <url>",
+  "Distinguish between git fetch (downloads remote commits without touching working files) and git pull",
+  "Explain the formula: git pull = git fetch + git merge",
+  "Safely synchronize local and remote branches in daily development"
+]

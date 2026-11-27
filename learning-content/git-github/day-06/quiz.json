@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "day": 6,
+    "topic": "Project Hygiene: .gitignore & README.md",
+    "category": "git",
+    "totalQuestions": 10,
+    "questionTimeSec": 15,
+    "difficulty": "beginner",
+    "part": "A"
+  },
+  "questions": [
+    {
+      "id": "git-d06-q01",
+      "question": "What is the exact filename used to tell Git which files and directories to ignore?",
+      "options": {
+        "A": "gitignore.txt",
+        "B": ".gitignore",
+        "C": "git.ignore",
+        "D": ".git/ignore"
+      },
+      "correctAnswer": "B",
+      "explanation": "`.gitignore` in the repository root (or subdirectory) tells Git which files or patterns to ignore.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d06-q02",
+      "question": "Which of the following should ALWAYS be listed in your `.gitignore` file?",
+      "options": {
+        "A": "README.md",
+        "B": "package.json",
+        "C": ".env files containing API keys and database credentials",
+        "D": "index.html"
+      },
+      "correctAnswer": "C",
+      "explanation": "Secrets like `.env` must never be committed to Git. Once pushed to GitHub, bots scan public repos within seconds.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d06-q03",
+      "question": "What pattern in `.gitignore` ignores all files ending with `.log` anywhere in the project?",
+      "options": {
+        "A": "log.*",
+        "B": "*.log",
+        "C": "/log",
+        "D": "all.log"
+      },
+      "correctAnswer": "B",
+      "explanation": "`*.log` uses the asterisk wildcard to match any filename ending in the `.log` extension.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d06-q04",
+      "question": "How do you ignore an entire folder named `build` in `.gitignore`?",
+      "options": {
+        "A": "folder:build",
+        "B": "build/",
+        "C": "<build>",
+        "D": "delete build"
+      },
+      "correctAnswer": "B",
+      "explanation": "Ending a pattern with a slash (`build/`) indicates to Git that only directories matching that name should be ignored.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d06-q05",
+      "question": "If a file was already committed to Git BEFORE adding it to `.gitignore`, what happens?",
+      "options": {
+        "A": "Git automatically deletes the file from disk",
+        "B": "Git continues tracking changes to the file until you explicitly untrack it",
+        "C": "Git throws a syntax error",
+        "D": "The repository is locked"
+      },
+      "correctAnswer": "B",
+      "explanation": "`.gitignore` only ignores untracked files. Files already tracked must be untracked using `git rm --cached <file>`.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d06-q06",
+      "question": "Which command removes a file from Git tracking without deleting it from your local computer?",
+      "options": {
+        "A": "git rm -f <file>",
+        "B": "git rm --cached <file>",
+        "C": "git delete --keep <file>",
+        "D": "git unstage --erase"
+      },
+      "correctAnswer": "B",
+      "explanation": "`git rm --cached <file>` removes the file from the staging area/index but keeps the actual file safe on your hard drive.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d06-q07",
+      "question": "What does the symbol `!` before a pattern do in `.gitignore` (e.g., `!important.log`)?",
+      "options": {
+        "A": "Deletes the file",
+        "B": "Negates the pattern, ensuring that file is NOT ignored",
+        "C": "Marks it as urgent",
+        "D": "Comments out the line"
+      },
+      "correctAnswer": "B",
+      "explanation": "An exclamation mark `!` re-includes a file that was previously excluded by a broader pattern.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d06-q08",
+      "question": "What file format is standard for a repository `README`?",
+      "options": {
+        "A": "Rich Text (.rtf)",
+        "B": "Markdown (.md)",
+        "C": "Microsoft Word (.docx)",
+        "D": "Plain text (.txt)"
+      },
+      "correctAnswer": "B",
+      "explanation": "Markdown (`README.md`) is rendered directly as rich HTML by GitHub, GitLab, and other platforms.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d06-q09",
+      "question": "In Markdown, how do you format a top-level heading?",
+      "options": {
+        "A": "<heading>Title</heading>",
+        "B": "# Title",
+        "C": "== Title ==",
+        "D": "[Title]"
+      },
+      "correctAnswer": "B",
+      "explanation": "A single hash `#` creates an `<h1>` heading. `##` creates `<h2>`, `###` creates `<h3>`.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    },
+    {
+      "id": "git-d06-q10",
+      "question": "How do you create a fenced code block with syntax highlighting in GitHub-Flavored Markdown?",
+      "options": {
+        "A": "Wrap code in single quotes: 'code'",
+        "B": "Wrap code in triple backticks: ```bash ... ```",
+        "C": "Use HTML <codeblock> tags",
+        "D": "Indent with spaces only"
+      },
+      "correctAnswer": "B",
+      "explanation": "Triple backticks ```` ```language ```` enable multiline syntax highlighting for bash, js, python, etc.",
+      "difficulty": "beginner",
+      "points": 10,
+      "xp": 20,
+      "category": "git"
+    }
+  ]
+}

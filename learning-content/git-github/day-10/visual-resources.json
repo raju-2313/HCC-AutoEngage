@@ -1,0 +1,11 @@
+[
+  {
+    "title": "Git & GitHub Tutorial for Beginners #9 - Merging Branches (& conflicts)",
+    "creator": "The Net Ninja",
+    "url": "https://www.youtube.com/watch?v=3RjQznt-8kE",
+    "type": "YouTube Tutorial",
+    "duration_minutes": 10,
+    "what_you_learn": "How git merge works, switching to the receiving branch, merging, and cleaning up merged branches.",
+    "difficulty": "beginner"
+  }
+]

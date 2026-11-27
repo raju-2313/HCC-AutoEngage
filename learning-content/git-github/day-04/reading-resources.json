@@ -1,0 +1,11 @@
+[
+  {
+    "title": "Git Basics — Viewing the Commit History",
+    "publisher": "Pro Git (git-scm.com)",
+    "url": "https://git-scm.com/book/en/v2/Git-Basics-Viewing-the-Commit-History",
+    "type": "Official Docs",
+    "est_read_time_minutes": 10,
+    "what_you_learn": "Deep guide to git log formatting, flags like --oneline, --stat, -p, and filtering by date/author.",
+    "difficulty": "beginner"
+  }
+]

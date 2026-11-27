@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Git Tutorial 2: What is Github?",
+    "creator": "codebasics",
+    "url": "https://www.youtube.com/watch?v=Bg9IAquDsDg",
+    "type": "YouTube Tutorial",
+    "duration_minutes": 7,
+    "what_you_learn": "Connecting local Git concepts to GitHub remotes, understanding origin, and pushing initial code.",
+    "difficulty": "beginner"
+  },
+  {
+    "title": "Git and GitHub for Beginners - Crash Course (Remote Setup)",
+    "creator": "freeCodeCamp.org",
+    "url": "https://www.youtube.com/watch?v=RGOj5yH7evk",
+    "type": "YouTube Tutorial",
+    "duration_minutes": 15,
+    "what_you_learn": "Creating a repo on GitHub, copying the clone URL, adding remote origin, and authenticating.",
+    "difficulty": "beginner"
+  }
+]

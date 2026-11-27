@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Git for Beginners: Branching (Part 4)",
+    "creator": "SelfTeach.me",
+    "url": "https://www.youtube.com/watch?v=8Gno6JUOYHk",
+    "type": "YouTube Walkthrough",
+    "duration_minutes": 10,
+    "what_you_learn": "Why we branch, creating branches, switching branches, and watching files change in your editor.",
+    "difficulty": "beginner"
+  },
+  {
+    "title": "Learn Git Branching (Interactive Sandbox)",
+    "creator": "Peter Cottle",
+    "url": "https://learngitbranching.js.org/",
+    "type": "Interactive Visual Sandbox",
+    "duration_minutes": 15,
+    "what_you_learn": "Gamified visual interactive node-tree simulator showing commits and branch pointers live in action.",
+    "difficulty": "intermediate"
+  }
+]

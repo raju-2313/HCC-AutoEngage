@@ -1,0 +1,22 @@
+{
+  "day": 12,
+  "title": "Fork and Configure Upstream Remote",
+  "description": "Fork a public practice repository on GitHub, clone your fork to your computer, and set up the original repo as an `upstream` remote.",
+  "steps": [
+    "Go to a public practice repository on GitHub (or use: https://github.com/octocat/Spoon-Knife)",
+    "Click the 'Fork' button in the top right corner of the page",
+    "Create the fork under your personal GitHub account",
+    "On YOUR newly created fork page, copy the HTTPS clone URL",
+    "In your terminal, clone your fork: `git clone <YOUR_FORK_URL> spoon-knife-fork`",
+    "Navigate into the folder: `cd spoon-knife-fork`",
+    "Check configured remotes: `git remote -v` — notice `origin` points to YOUR fork",
+    "Now add the original project as `upstream`: `git remote add upstream https://github.com/octocat/Spoon-Knife.git`",
+    "Verify again: `git remote -v` — you should now see 4 lines: 2 for `origin` (your fork) and 2 for `upstream` (original repo)!"
+  ],
+  "expected_output": "`git remote -v` lists both `origin` (your personal fork) and `upstream` (original author's repo).",
+  "submission_type": "none",
+  "tips": [
+    "A fork is a server-side copy on GitHub; a clone is a local copy on your hard drive.",
+    "`upstream` is the standard convention name for the original repository you forked from."
+  ]
+}

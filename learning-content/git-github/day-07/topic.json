@@ -1,0 +1,12 @@
+{
+  "day": 7,
+  "title": "Remote Repositories & Connecting Local to GitHub",
+  "slug": "remote-repositories-connecting-github",
+  "category": "git",
+  "difficulty": "beginner",
+  "part": "B",
+  "introduction": "Welcome to Part B! Until now, your repository lived only on your local machine. Today you take your first step into cloud collaboration by creating a repository on GitHub and connecting your local project to it as a remote.",
+  "why_it_matters": "A local repository keeps your history safe from accidental edits, but not from hardware failures. Connecting to GitHub backs up your code in the cloud, makes it accessible anywhere, and opens the door to team collaboration.",
+  "estimated_time_minutes": 25,
+  "practical_activity_preview": "Create a GitHub repository online, add it as a remote `origin`, and verify the connection."
+}

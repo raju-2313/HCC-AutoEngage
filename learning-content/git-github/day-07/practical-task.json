@@ -1,0 +1,20 @@
+{
+  "day": 7,
+  "title": "Connect Local Practice Repo to GitHub",
+  "description": "Create an empty repository on GitHub and link your local `hcc-git-practice` repository to it.",
+  "steps": [
+    "Go to https://github.com/new in your browser (log in if needed)",
+    "Name the repository `hcc-git-practice`",
+    "Set visibility to Public (or Private if you prefer)",
+    "IMPORTANT: Leave 'Add a README file', '.gitignore', and 'Choose a license' UNCHECKED (since we already have them locally!)",
+    "Click 'Create repository' — copy the HTTPS URL shown on the quick setup page",
+    "In your local terminal inside `hcc-git-practice`, run: `git remote add origin <PASTE_YOUR_URL>`",
+    "Verify the remote connection: `git remote -v`"
+  ],
+  "expected_output": "`git remote -v` prints two lines showing `origin` with your repository URL for (fetch) and (push).",
+  "submission_type": "none",
+  "tips": [
+    "If you accidentally created the GitHub repo with a README, it will cause a non-fast-forward conflict on your first push. Leaving it empty avoids this completely!",
+    "`origin` is simply the standard default alias name for your primary remote repository."
+  ]
+}

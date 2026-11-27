@@ -1,0 +1,7 @@
+[
+  "Distinguish between Cloning a repository vs Forking a repository",
+  "Create a personal fork of a public repository on GitHub",
+  "Configure both origin (your personal fork) and upstream (original source repo) remotes",
+  "Sync your local and remote fork with new changes from the upstream project",
+  "Explain the open-source contribution lifecycle"
+]

@@ -1,0 +1,22 @@
+{
+  "day": 8,
+  "title": "Round-Trip Sync with GitHub",
+  "description": "Push your local commits to GitHub, simulate a teammate's change by editing on GitHub web, and pull that change back down to your computer.",
+  "steps": [
+    "In `hcc-git-practice`, push your local commits: `git push -u origin main`",
+    "Open your repository page on GitHub in your browser — confirm your files, commits, and README are live!",
+    "On GitHub, click on `README.md` and click the pencil icon to edit it",
+    "Add a new line: `* Contributed via GitHub web editor`",
+    "Scroll down and click 'Commit changes...'",
+    "Now return to your local terminal inside `hcc-git-practice`",
+    "Run `git fetch origin` — notice Git downloaded remote info without modifying your local file yet",
+    "Run `git pull origin main` — observe your local `README.md` update automatically with the new line!",
+    "Check `git log --oneline` to see the remote commit in your local history"
+  ],
+  "expected_output": "Terminal confirms 'Fast-forward' merge and local `README.md` now contains the edit made on GitHub.",
+  "submission_type": "none",
+  "tips": [
+    "The `-u` in `git push -u origin main` sets the upstream tracking reference so future pushes only require `git push`.",
+    "Always run `git pull` at the start of your workday before starting new code to ensure you have teammates' latest work."
+  ]
+}

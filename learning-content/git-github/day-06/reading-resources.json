@@ -1,0 +1,29 @@
+[
+  {
+    "title": "Ignoring files",
+    "publisher": "GitHub Docs",
+    "url": "https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files",
+    "type": "Official Docs",
+    "est_read_time_minutes": 6,
+    "what_you_learn": "How to configure repository .gitignore, pattern syntax, and global ignore rules.",
+    "difficulty": "beginner"
+  },
+  {
+    "title": "About READMEs",
+    "publisher": "GitHub Docs",
+    "url": "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-the-repository-readme-file",
+    "type": "Official Docs",
+    "est_read_time_minutes": 5,
+    "what_you_learn": "Why every repository needs a README, where it displays, and standard sections.",
+    "difficulty": "beginner"
+  },
+  {
+    "title": "Learn GitHub-Flavored Markdown Syntax and Formatting",
+    "publisher": "freeCodeCamp News",
+    "url": "https://www.freecodecamp.org/news/learn-github-flavored-markdown-syntax-and-formatting-with-examples/",
+    "type": "Written Tutorial",
+    "est_read_time_minutes": 8,
+    "what_you_learn": "Practical guide to headings (#), bold/italic, lists, task lists, code blocks (```), and links.",
+    "difficulty": "beginner"
+  }
+]

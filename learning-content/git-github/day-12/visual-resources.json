@@ -1,0 +1,11 @@
+[
+  {
+    "title": "Git and GitHub for Beginners - Crash Course (Forking & PR Workflow)",
+    "creator": "freeCodeCamp.org",
+    "url": "https://www.youtube.com/watch?v=RGOj5yH7evk",
+    "type": "YouTube Tutorial",
+    "duration_minutes": 12,
+    "what_you_learn": "How forking works on GitHub, cloning your fork, adding upstream remote, and syncing updates.",
+    "difficulty": "beginner"
+  }
+]

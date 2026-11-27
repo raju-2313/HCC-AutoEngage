@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Git for Beginners: Writing and Approving Pull Requests in GitHub (Part 6)",
+    "creator": "SelfTeach.me",
+    "url": "https://www.youtube.com/watch?v=1XrP6POUPD0",
+    "type": "YouTube Walkthrough",
+    "duration_minutes": 10,
+    "what_you_learn": "Creating a PR on GitHub, adding labels/assignees, reviewing the Files Changed diff, leaving inline comments, and merging.",
+    "difficulty": "intermediate"
+  },
+  {
+    "title": "Git Tutorial 10: What is Pull Request?",
+    "creator": "codebasics",
+    "url": "https://www.youtube.com/watch?v=e3bjQX9jIBk",
+    "type": "YouTube Tutorial",
+    "duration_minutes": 8,
+    "what_you_learn": "Visual explanation of the PR review lifecycle, peer review benefits, and why teams mandate PRs.",
+    "difficulty": "beginner"
+  }
+]

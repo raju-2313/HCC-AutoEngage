@@ -1,0 +1,62 @@
+[
+  {
+    "questionId": "git-d06-q01",
+    "correct_answer": "B",
+    "explanation": "`.gitignore` must be spelled exactly with a leading dot.",
+    "tip": "You can have multiple `.gitignore` files in subdirectories for nested rules."
+  },
+  {
+    "questionId": "git-d06-q02",
+    "correct_answer": "C",
+    "explanation": "Committing `.env` or API tokens is the #1 cause of security leaks for beginners.",
+    "tip": "Use `.env.example` to show required variable names without real secret values."
+  },
+  {
+    "questionId": "git-d06-q03",
+    "correct_answer": "B",
+    "explanation": "`*.log` matches any file with that extension.",
+    "tip": "`*.tmp` and `*.bak` are also common temporary file patterns."
+  },
+  {
+    "questionId": "git-d06-q04",
+    "correct_answer": "B",
+    "explanation": "Trailing slash specifically targets directory paths.",
+    "tip": "Ignoring `node_modules/` or `target/` saves gigabytes of pointless Git tracking."
+  },
+  {
+    "questionId": "git-d06-q05",
+    "correct_answer": "B",
+    "explanation": "If Git is already tracking a file, adding it to `.gitignore` does not stop tracking automatically.",
+    "tip": "Run `git rm --cached <file>` followed by `git commit` to fix it."
+  },
+  {
+    "questionId": "git-d06-q06",
+    "correct_answer": "B",
+    "explanation": "`--cached` touches only the index/git tracking.",
+    "tip": "Without `--cached`, `git rm` deletes the file from your disk!"
+  },
+  {
+    "questionId": "git-d06-q07",
+    "correct_answer": "B",
+    "explanation": "Negation rule: ignore all logs with `*.log`, but track `!keep.log`.",
+    "tip": "Order matters: negation rules must come after the general rule."
+  },
+  {
+    "questionId": "git-d06-q08",
+    "correct_answer": "B",
+    "explanation": "GitHub Flavored Markdown (GFM) adds support for tables, task lists, and auto-links.",
+    "tip": "A great README is like a homepage for your open-source project."
+  },
+  {
+    "questionId": "git-d06-q09",
+    "correct_answer": "B",
+    "explanation": "`#` creates an H1 title. Always put a space after `#`.",
+    "tip": "Use only one H1 heading at the top of your README for good readability."
+  },
+  {
+    "questionId": "git-d06-q10",
+    "correct_answer": "B",
+    "explanation": "Specifying the language name after the first three backticks gives rich syntax coloring.",
+    "tip": "Example: ```` ```json ```` highlights JSON keys and values."
+  }
+]

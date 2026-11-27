@@ -1,0 +1,20 @@
+[
+  {
+    "title": "About issues",
+    "publisher": "GitHub Docs",
+    "url": "https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues",
+    "type": "Official Docs",
+    "est_read_time_minutes": 6,
+    "what_you_learn": "How issues track bugs and tasks, assigning team members, adding labels, and linking to PRs.",
+    "difficulty": "beginner"
+  },
+  {
+    "title": "About discussions",
+    "publisher": "GitHub Docs",
+    "url": "https://docs.github.com/en/discussions/collaborating-with-your-community-using-discussions/about-discussions",
+    "type": "Official Docs",
+    "est_read_time_minutes": 5,
+    "what_you_learn": "Difference between actionable Issues vs collaborative Discussions, Q&A, and announcements.",
+    "difficulty": "beginner"
+  }
+]

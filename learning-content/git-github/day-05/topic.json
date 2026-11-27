@@ -1,0 +1,12 @@
+{
+  "day": 5,
+  "title": "Undoing Mistakes Safely (restore, reset, revert)",
+  "slug": "undoing-mistakes-safely",
+  "category": "git",
+  "difficulty": "beginner",
+  "part": "A",
+  "introduction": "Every developer makes mistakes — staging the wrong file, deleting code accidentally, or making a commit with bugs. Today you learn Git's safety net: how to unstage files with `restore`, fix the last commit with `--amend`, and understand the crucial difference between `reset` and `revert`.",
+  "why_it_matters": "Knowing how to undo mistakes calmly prevents panic and lost work. It gives you the confidence to experiment freely knowing that Git can always bring your project back to safety.",
+  "estimated_time_minutes": 30,
+  "practical_activity_preview": "Unstage a file, discard unstaged edits, amend a commit message, and create a safe revert commit."
+}
