@@ -11,6 +11,8 @@ HCC AutoEngage is a cloud-hosted Discord automation platform designed to drive a
 The initial **7-Day Daily Tech Challenge Sprint** has successfully concluded. All 6 development phases are implemented. 
 Automated background cron drops are currently **SUSPENDED** (`AUTOMATION_SUSPENDED = true`) in standby mode while Phase 2 planning commences.
 
+> 🚀 **Update:** 15-Day Git & GitHub Learning Programme fully integrated with morning resource cards, evening 10-question timed quizzes (15s/Q), `/learning` commands, and existing leaderboard sync.
+
 ### 🏆 7-Day Sprint Highlights
 * **Duration:** 7 Consecutive Days (Nov 9 – Nov 15, 2026).
 * **Participation:** 30 Unique Campus Members.
