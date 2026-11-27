@@ -58,13 +58,21 @@ export async function upsertLearningProgress({
       .single();
 
     if (error) {
+      if (error.code === 'PGRST205' || error.message?.includes('schema cache')) {
+        logger.warn('⚠️ git_learning_progress table not yet created in Supabase. Run migrations/006_git_learning_programme.sql in Supabase SQL Editor.');
+        return null;
+      }
       logger.error('Error upserting git learning progress', { discordId, programmeDay, error: error.message });
       throw error;
     }
 
     return data;
   } catch (err) {
-    logger.warn('git_learning_progress table query failed (table may need migration)', {
+    if (err.message?.includes('schema cache') || err.code === 'PGRST205') {
+      logger.warn('⚠️ git_learning_progress table pending migration 006.');
+      return null;
+    }
+    logger.warn('git_learning_progress table query failed', {
       error: err.message,
       discordId,
       programmeDay,

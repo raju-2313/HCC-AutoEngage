@@ -29,6 +29,41 @@ const BRAND_GREEN = 0x00C853; // HackerRank green
 const HR = '───────────────────────────────────────';
 
 /**
+ * Calculates current programme day (1–15) based on a starting date string (YYYY-MM-DD).
+ * Defaults to GIT_PROGRAMME_START_DATE from env.
+ * Returns null if today is before the start date or past day 15.
+ */
+export function calculateProgrammeDay(startDateStr = process.env.GIT_PROGRAMME_START_DATE) {
+  if (!startDateStr) return null;
+
+  try {
+    const todayStr = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Kolkata',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(new Date());
+
+    const [sY, sM, sD] = startDateStr.split('-').map(Number);
+    const [tY, tM, tD] = todayStr.split('-').map(Number);
+
+    const startUtc = Date.UTC(sY, sM - 1, sD);
+    const todayUtc = Date.UTC(tY, tM - 1, tD);
+
+    const diffDays = Math.floor((todayUtc - startUtc) / (1000 * 60 * 60 * 24));
+    const dayNumber = diffDays + 1;
+
+    if (dayNumber >= 1 && dayNumber <= 15) {
+      return dayNumber;
+    }
+    return null;
+  } catch (err) {
+    logger.warn('Failed to calculate programme day from start date', { startDateStr, error: err.message });
+    return null;
+  }
+}
+
+/**
  * Loads the complete content package for a specific programme day (1–15).
  */
 export function getGitDayPackage(dayNumber) {

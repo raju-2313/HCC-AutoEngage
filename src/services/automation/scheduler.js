@@ -36,6 +36,7 @@ import { getPendingEmojiCandidates } from '../../database/queries/emojis.js';
 import {
   buildMorningAnnouncementPayload,
   getGitProgrammeQuestionBank,
+  calculateProgrammeDay,
 } from '../learning/gitLearningManager.js';
 
 /**
@@ -561,7 +562,7 @@ export async function runGitMorningAnnouncementJob(client, options = {}) {
     return { success: true, reason: 'AUTOMATION_SUSPENDED' };
   }
 
-  const dayNumber = options.dayNumber || 1;
+  const dayNumber = options.dayNumber || calculateProgrammeDay() || 1;
   const channelId = options.channelId || config.discord.channels.quiz;
   const channel = await client.channels.fetch(channelId).catch(() => null);
 
@@ -602,7 +603,7 @@ export async function runGitEveningQuizJob(client, options = {}) {
     return { success: true, reason: 'AUTOMATION_SUSPENDED' };
   }
 
-  const dayNumber = options.dayNumber || 1;
+  const dayNumber = options.dayNumber || calculateProgrammeDay() || 1;
   const channelId = options.channelId || config.discord.channels.quiz;
 
   try {
