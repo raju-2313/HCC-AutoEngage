@@ -24,12 +24,19 @@ export async function upsertLearningProgress({
     const memberId = member?.id ?? null;
 
     // Fetch existing record if any
-    const { data: existing } = await supabaseAdmin
+    const { data: existing, error: selectErr } = await supabaseAdmin
       .from('git_learning_progress')
       .select('*')
       .eq('discord_id', discordId)
       .eq('programme_day', programmeDay)
       .maybeSingle();
+
+    if (selectErr) {
+      if (selectErr.code === 'PGRST205' || selectErr.message?.includes('schema cache')) {
+        logger.warn('⚠️ git_learning_progress table not yet created in Supabase. Run migrations/006_git_learning_programme.sql in Supabase SQL Editor.');
+        return null;
+      }
+    }
 
     const payload = {
       discord_id: discordId,
@@ -93,6 +100,10 @@ export async function getMemberLearningProgress(discordId) {
       .order('programme_day', { ascending: true });
 
     if (error) {
+      if (error.code === 'PGRST205' || error.message?.includes('schema cache')) {
+        logger.warn('⚠️ git_learning_progress table pending migration 006 in Supabase.');
+        return [];
+      }
       logger.warn('Error fetching member git learning progress', { discordId, error: error.message });
       return [];
     }
@@ -114,7 +125,15 @@ export async function getDayLearningStats(programmeDay) {
       .select('learning_status, practical_task_done, quiz_attempted')
       .eq('programme_day', programmeDay);
 
-    if (error || !data) return null;
+    if (error) {
+      if (error.code === 'PGRST205' || error.message?.includes('schema cache')) {
+        return null;
+      }
+      logger.warn('Failed to calculate day learning stats', { error: error.message });
+      return null;
+    }
+
+    if (!data) return null;
 
     const stats = {
       totalEngaged: data.length,

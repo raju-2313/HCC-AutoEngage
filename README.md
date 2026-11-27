@@ -152,9 +152,7 @@ HCC-AutoEngage/
 | :--- | :--- | :--- |
 | `/profile` | `[user]` | View points, total XP, current level, streak, and quiz stats |
 | `/leaderboard` | `[timeframe]` | View current server standings (All-time, Weekly, Monthly) |
-| `/learning today` | `[day]` | View today's Git & GitHub learning card, verified resources, and practical task |
-| `/learning day` | `<number>` | View study card and resources for any specific programme day (1–15) |
-| `/learning progress` | — | View personal 15-day checklist (status, practical tasks done, quiz scores) |
+| `/learning progress` | — | View personal 15-day Git & GitHub progress, practical tasks, and quiz scores |
 | `/quiz stats` | — | Check personal quiz completion numbers and win rates |
 | `/engagement me` | — | View text chat, reaction, and voice study session scores |
 | `/ping` | — | Verify bot connectivity and measure Discord API latency |

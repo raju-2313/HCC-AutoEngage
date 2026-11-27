@@ -1,6 +1,6 @@
 /**
  * src/commands/learning.js
- * Slash command: /learning today, /learning day <1-15>, /learning progress, /learning admin-drop
+ * Slash command: /learning progress (all members), /learning admin-drop (admins only)
  */
 
 import {
@@ -10,7 +10,6 @@ import {
   ChannelType,
 } from 'discord.js';
 import {
-  getGitDayPackage,
   buildMorningAnnouncementPayload,
   buildPersonalProgressEmbed,
   getGitProgrammeQuestionBank,
@@ -26,39 +25,13 @@ export const data = new SlashCommandBuilder()
   .setDescription('HCC 15-Day Git & GitHub Learning Programme.')
   .addSubcommand((sub) =>
     sub
-      .setName('today')
-      .setDescription('View today\'s Git & GitHub learning topic, visual resources, and practical task.')
-      .addIntegerOption((opt) =>
-        opt
-          .setName('day')
-          .setDescription('Optional specific day number (1–15). Defaults to Day 1.')
-          .setMinValue(1)
-          .setMaxValue(15)
-          .setRequired(false)
-      )
-  )
-  .addSubcommand((sub) =>
-    sub
-      .setName('day')
-      .setDescription('View any specific day\'s study card and learning resources.')
-      .addIntegerOption((opt) =>
-        opt
-          .setName('number')
-          .setDescription('Programme day number (1–15)')
-          .setMinValue(1)
-          .setMaxValue(15)
-          .setRequired(true)
-      )
-  )
-  .addSubcommand((sub) =>
-    sub
       .setName('progress')
-      .setDescription('View your personal 15-day progress, practical tasks, and quiz scores.')
+      .setDescription('View your personal 15-day Git & GitHub progress, practical tasks, and quiz scores.')
   )
   .addSubcommand((sub) =>
     sub
       .setName('admin-drop')
-      .setDescription('[Admin] Trigger a learning card or launch the evening quiz for a day.')
+      .setDescription('[Admin] Manually trigger a morning learning card or launch evening quiz for testing.')
       .addIntegerOption((opt) =>
         opt
           .setName('day')
@@ -106,27 +79,6 @@ export async function execute(interaction) {
       logger.error('Error rendering /learning progress', { error: err.message });
       return interaction.editReply({
         embeds: [errorEmbed('Progress Error', 'Could not load your progress tracker right now.')],
-      });
-    }
-  }
-
-  // ── /learning today OR /learning day ────────────────────────────────────────
-  if (subcommand === 'today' || subcommand === 'day') {
-    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-    const day = interaction.options.getInteger('day') || interaction.options.getInteger('number') || 1;
-
-    try {
-      const payload = buildMorningAnnouncementPayload(day);
-      // For private /learning today view, suppress the public @everyone ping
-      return interaction.editReply({
-        content: `📖 **Here is the study material for Day ${day}:**`,
-        embeds: payload.embeds,
-        components: payload.components,
-      });
-    } catch (err) {
-      logger.error('Error fetching learning day package', { day, error: err.message });
-      return interaction.editReply({
-        embeds: [errorEmbed('Topic Not Found', `Could not load learning package for Day ${day}.`)],
       });
     }
   }
