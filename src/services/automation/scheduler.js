@@ -44,7 +44,7 @@ import {
  * All automated background crons, daily drops, checkers, and discovery jobs are suspended.
  * Set to false when Phase 2 is ready to launch.
  */
-export const AUTOMATION_SUSPENDED = true;
+export const AUTOMATION_SUSPENDED = false;
 
 const activeTasks = new Map();
 let isDailyQuizJobRunning = false;
@@ -562,7 +562,11 @@ export async function runGitMorningAnnouncementJob(client, options = {}) {
     return { success: true, reason: 'AUTOMATION_SUSPENDED' };
   }
 
-  const dayNumber = options.dayNumber || calculateProgrammeDay() || 1;
+  const dayNumber = options.dayNumber || calculateProgrammeDay();
+  if (!dayNumber) {
+    logger.info('🛑 Git Programme Morning Announcement skipped: Today is outside the 15-day programme window or programme has not started yet.');
+    return { success: true, reason: 'OUTSIDE_PROGRAMME_WINDOW' };
+  }
   const channelId = options.channelId || config.discord.channels.quiz;
   const channel = await client.channels.fetch(channelId).catch(() => null);
 
@@ -603,7 +607,11 @@ export async function runGitEveningQuizJob(client, options = {}) {
     return { success: true, reason: 'AUTOMATION_SUSPENDED' };
   }
 
-  const dayNumber = options.dayNumber || calculateProgrammeDay() || 1;
+  const dayNumber = options.dayNumber || calculateProgrammeDay();
+  if (!dayNumber) {
+    logger.info('🛑 Git Programme Evening Quiz skipped: Today is outside the 15-day programme window or programme has not started yet.');
+    return { success: true, reason: 'OUTSIDE_PROGRAMME_WINDOW' };
+  }
   const channelId = options.channelId || config.discord.channels.quiz;
 
   try {

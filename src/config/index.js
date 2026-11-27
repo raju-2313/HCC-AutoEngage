@@ -29,8 +29,8 @@ export const config = {
     guildId:  require_env('DISCORD_GUILD_ID'),
     channels: {
       announcements: optional_env('DISCORD_ANNOUNCEMENTS_CHANNEL_ID'),
-      // PRODUCTION: Resolves to DISCORD_QUIZ_CHANNEL_ID; falls back to TEST_CHANNEL_ID only if unset.
-      quiz:          optional_env('DISCORD_QUIZ_CHANNEL_ID', optional_env('TEST_CHANNEL_ID', '1567916304118063124')),
+      // PRODUCTION: Resolves to DISCORD_QUIZ_CHANNEL_ID; defaults to main community channel 1538470672722952303.
+      quiz:          optional_env('DISCORD_QUIZ_CHANNEL_ID', '1538470672722952303'),
       leaderboard:   optional_env('DISCORD_LEADERBOARD_CHANNEL_ID'),
       logs:          optional_env('DISCORD_LOGS_CHANNEL_ID'),
       // Main general/discussion channel for broader engagement tracking
