@@ -691,6 +691,14 @@ export async function reconcileMissedJobsOnStartup(client) {
 }
 
 /**
+ * Builds a cron expression from a "HH:MM" time string (e.g. "19:00" → "0 19 * * *").
+ */
+function timeToCron(timeStr) {
+  const [h = '19', m = '00'] = (timeStr || '19:00').split(':');
+  return `${parseInt(m, 10)} ${parseInt(h, 10)} * * *`;
+}
+
+/**
  * Initializes and starts all recurring cron jobs.
  */
 export function initScheduler(client) {
@@ -706,6 +714,7 @@ export function initScheduler(client) {
   logger.info(`Initializing HCC automation scheduler (Timezone: ${timezone})…`);
 
   // 1. Daily Quiz Drop (Configured via QUIZ_POST_TIME — now 07:00 PM IST / 19:00)
+  const quizCron = timeToCron(config.app.quizPostTime);
   const taskDailyQuiz = cron.schedule(
     quizCron,
     () => runDailyQuizDropJob(client),

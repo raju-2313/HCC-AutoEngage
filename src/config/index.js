@@ -50,7 +50,7 @@ export const config = {
     timezone:     process.env.TZ || 'Asia/Kolkata',
     quizPostTime: process.env.QUIZ_POST_TIME || '19:00',
     countdownSeconds: parseInt(process.env.QUIZ_START_COUNTDOWN_SECONDS || '30', 10),
-    questionTimeSeconds: parseInt(process.env.QUIZ_QUESTION_TIME_SECONDS || '20', 10),
+    questionTimeSeconds: parseInt(process.env.QUIZ_QUESTION_TIME_SECONDS || '15', 10),
     adminRoleName: process.env.ADMIN_ROLE_NAME || 'HCC Admin',
     adminUserIds: (optional_env('ADMIN_USER_IDS', ''))
       .split(',')

@@ -90,7 +90,7 @@ export async function runDailyTimedSession({
   client,
   channelId,
   dateStr = getKolkataDateString(),
-  suppressEveryonePing = false, // Used during automated testing
+  suppressEveryonePing = false, // Used during automated testing / git programme test mode
   customCountdownSeconds = null,
   customQuestionTimeSeconds = null,
   customIntermissionSeconds = null,
@@ -114,6 +114,11 @@ export async function runDailyTimedSession({
 
     const { meta, questions } = questionBank;
     const activeQuestions = meta.singleQuestionTest ? questions.slice(0, 1) : questions;
+
+    // Determine whether this is a 7-day sprint or 15-day git programme
+    const totalDays = meta.isGitProgramme ? 15 : 7;
+    const isLastDay = meta.dayNumber >= totalDays;
+
     const targetChannel = await client.channels.fetch(channelId).catch(() => null);
     if (!targetChannel) {
       throw new Error(`Target quiz channel ${channelId} not found or inaccessible by the bot.`);
@@ -121,7 +126,9 @@ export async function runDailyTimedSession({
 
     const countdownSec = customCountdownSeconds ?? config.app.countdownSeconds ?? 30;
     // Always respect per-question time from env (QUIZ_QUESTION_TIME_SECONDS=15) unless overridden by caller
-    const qTimeSec = customQuestionTimeSeconds ?? config.app.questionTimeSeconds ?? 15;
+    // For git programme sessions, always default to 15s (not config which may default to 20s)
+    const qTimeSec = customQuestionTimeSeconds
+      ?? (meta.isGitProgramme ? (meta.questionTimeSec || 15) : (config.app.questionTimeSeconds ?? 15));
 
     logger.info(`Starting daily timed quiz session for ${dateStr}`, {
       topic: meta.topic,
@@ -156,7 +163,7 @@ export async function runDailyTimedSession({
         .setColor(0x00C853) // HackerRank vibrant green
         .setTitle(`🟢  Today's HCC Daily Tech Challenge is Live!  🟢`)
         .setDescription(
-          `## 🚀  **Day ${meta.dayNumber} of 7: ${meta.topic}**\n\n` +
+          `## 🚀  **Day ${meta.dayNumber} of ${totalDays}: ${meta.topic}**\n\n` +
           `${HR}\n\n` +
           `📚  **Topic:** ${catEmoji}  **${meta.topic}**\n` +
           `❓  **Questions:** **${qCountLabel}**\n` +
@@ -453,7 +460,7 @@ export async function runDailyTimedSession({
     const totalAnswersLogged = Array.from(participantMap.values()).reduce((sum, p) => sum + p.totalAttempted, 0);
     const totalCorrectLogged = Array.from(participantMap.values()).reduce((sum, p) => sum + p.correctCount, 0);
 
-    let desc = `## 🏁  **Day ${meta.dayNumber} of 7: ${meta.topic} — Final Results**\n\n${HR}\n\n`;
+    let desc = `## 🏁  **Day ${meta.dayNumber} of ${totalDays}: ${meta.topic} — Final Results**\n\n${HR}\n\n`;
     if (podiumSection) {
       desc += `### 🌟  **TODAY'S WINNERS & PODIUM**  🌟\n\n${podiumSection}\n\n${HR}\n\n`;
     }
@@ -469,26 +476,29 @@ export async function runDailyTimedSession({
       .addFields(
         { name: '👥 Challengers', value: `${sortedRankings.length} members`, inline: true },
         { name: '🎯 Total Answers', value: `${totalAnswersLogged} (${totalCorrectLogged} correct)`, inline: true },
-        { name: '🔥 Next Challenge', value: meta.dayNumber >= 7 ? '7-Day Sprint Concluded! 🏆' : 'Tomorrow @ 07:00 PM IST', inline: true }
+        { name: '🔥 Next Challenge', value: isLastDay ? (meta.isGitProgramme ? '15-Day Git Programme Concluded! 🏆' : '7-Day Sprint Concluded! 🏆') : 'Tomorrow @ 07:00 PM IST', inline: true }
       )
       .setFooter({
-        text: `HCC AutoEngage • Day ${meta.dayNumber}/7 Complete  │  Wrap-up announcement (Ping 2 of 2)`,
+        text: `HCC AutoEngage • Day ${meta.dayNumber}/${totalDays} Complete  │  Wrap-up announcement (Ping 2 of 2)`,
       })
       .setTimestamp();
 
-    const finalMention = meta.dayNumber >= 7
-      ? `🏆 **@everyone — That's a wrap on the 7-Day Daily Tech Challenge Sprint! The Day 7 Grand Finale (${meta.topic}) is complete! Check out today's Champions & Leaderboard below!** 🎊`
-      : `🏆 **@everyone — That's a wrap! The HCC Daily Tech Challenge (${meta.topic}) is complete! Check out today's Champions & Leaderboard below!** 🎊`;
+    const finalMention = suppressEveryonePing
+      ? `🏆 **[Test Mode] Quiz Complete! Day ${meta.dayNumber}/${totalDays}: ${meta.topic} — Check the standings below!** 🎊`
+      : isLastDay
+        ? `🏆 **@everyone — That's a wrap on the ${totalDays}-Day ${meta.isGitProgramme ? 'Git & GitHub Programme' : 'Daily Tech Challenge Sprint'}! The Day ${totalDays} Grand Finale (${meta.topic}) is complete! Check out today's Champions & Leaderboard below!** 🎊`
+        : `🏆 **@everyone — That's a wrap! The HCC ${meta.isGitProgramme ? 'Git & GitHub Quiz' : 'Daily Tech Challenge'} (${meta.topic}) is complete! Check out today's Champions & Leaderboard below!** 🎊`;
 
     await targetChannel.send({
       content: finalMention,
       embeds: [finalEmbed],
-      allowedMentions: { parse: ['everyone'] }, // Final announcement ping #2 of 2
+      allowedMentions: suppressEveryonePing ? { parse: [] } : { parse: ['everyone'] },
     });
 
-    // Send the standalone "Whispers from the Mod" card as a follow-up only for intermediate days (< 7).
+    // Send the standalone "Whispers from the Mod" hint card as a follow-up only for the 7-day sprint
+    // intermediate days (< 7). Never send for git programme sessions.
     // On Day 7 (Grand Finale) or when sprint concludes, stop immediately after the second ping.
-    if (meta.dayNumber < 7) {
+    if (!meta.isGitProgramme && meta.dayNumber < 7) {
       await sleep(1500);
       const standaloneHintCard = buildStandaloneHintEmbed();
       await targetChannel.send({
