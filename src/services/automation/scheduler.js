@@ -786,17 +786,18 @@ export function initScheduler(client) {
   );
   activeTasks.set('weeklyEmojiDiscovery', taskEmojiDiscovery);
 
-  // 10. Git Programme Morning Learning Drop (09:00 AM IST)
+  // 10. Git Programme Morning Learning Drop (Defaults to 09:00 AM IST)
+  const learningCron = timeToCron(config.app.learningPostTime || '09:00');
   const taskGitMorning = cron.schedule(
-    '0 9 * * *',
+    learningCron,
     () => runGitMorningAnnouncementJob(client),
     { timezone }
   );
   activeTasks.set('gitMorningAnnouncement', taskGitMorning);
 
-  // 11. Git Programme Evening 10-Question Quiz Drop (07:00 PM IST)
+  // 11. Git Programme Evening 10-Question Quiz Drop (Defaults to 07:00 PM IST)
   const taskGitEveningQuiz = cron.schedule(
-    '0 19 * * *',
+    quizCron,
     () => runGitEveningQuizJob(client),
     { timezone }
   );
