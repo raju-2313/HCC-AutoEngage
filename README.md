@@ -78,6 +78,25 @@ Automated background cron drops are currently **SUSPENDED** (`AUTOMATION_SUSPEND
 
 ---
 
+## 🎓 15-Day Git & GitHub Learning Programme
+
+A structured, beginner-friendly learning experience where members study curated resources during the day and test understanding in an evening quiz.
+
+### 🌟 Key Architecture & Leaderboard Integration
+* **Cadence:** Morning study drop (09:00 AM IST) → daytime self-learning & practical task → evening timed quiz (07:00 PM IST).
+* **Existing Leaderboard Sync:** Every quiz question answered awards **+10 Points / +20 XP** directly to the member's profile in the **same existing leaderboard** used in the Sprint event. No split leaderboards!
+* **150 Curated Questions:** 10 questions/day across 15 days, with **15-second timers** and verified explanations.
+* **Hands-on Practical Tasks:** 15 progressive terminal exercises. Clicking **"Task Done"** awards a **+5 XP** bonus.
+* **Interactive Tracking:** Members self-report status (**🟡 In Progress**, **🟢 Completed**, **❓ Need Help**) and inspect their full 15-day checklist via `/learning progress`.
+
+| Part | Days | Focus | Practical Milestone |
+| :---: | :---: | :--- | :--- |
+| **Part A: Git Fundamentals** | Days 1–6 | Local VCS, Git vs GitHub, install, config, 3-stage workflow, commit history, undoing mistakes (`restore`, `reset`, `revert`), `.gitignore` & `README.md` | Initialize local repo, commit files, configure `.gitignore` |
+| **Part B: GitHub Fundamentals** | Days 7–11 | Remote repositories (`origin`), syncing (`push`, `clone`, `pull`, `fetch`), branching fundamentals, merging (`fast-forward` vs 3-way), merge conflicts | Push to GitHub, branch isolation, resolve merge conflict |
+| **Part C: Real-World Collaboration** | Days 12–15 | Forking open source, upstream syncing, Pull Requests (PRs), code reviews, GitHub Issues & Discussions, end-to-end Capstone simulation | Fork repo, open PR, auto-close Issue via PR, full 8-step workflow |
+
+---
+
 ## 📂 Project Directory Structure
 
 ```
@@ -131,6 +150,9 @@ HCC-AutoEngage/
 | :--- | :--- | :--- |
 | `/profile` | `[user]` | View points, total XP, current level, streak, and quiz stats |
 | `/leaderboard` | `[timeframe]` | View current server standings (All-time, Weekly, Monthly) |
+| `/learning today` | `[day]` | View today's Git & GitHub learning card, verified resources, and practical task |
+| `/learning day` | `<number>` | View study card and resources for any specific programme day (1–15) |
+| `/learning progress` | — | View personal 15-day checklist (status, practical tasks done, quiz scores) |
 | `/quiz stats` | — | Check personal quiz completion numbers and win rates |
 | `/engagement me` | — | View text chat, reaction, and voice study session scores |
 | `/ping` | — | Verify bot connectivity and measure Discord API latency |
@@ -140,6 +162,7 @@ HCC-AutoEngage/
 | Command | Options | Description |
 | :--- | :--- | :--- |
 | `/admin announce leaderboard` | `[channel] [ping_everyone] [top]` | Broadcast official Final Leaderboard with podium and @everyone ping |
+| `/learning admin-drop` | `<day> <action> [channel] [ping_everyone]` | Trigger a morning study card or evening 10-Q timed quiz for any programme day |
 | `/admin announce weekly` | — | Broadcast the weekly community digest and honors |
 | `/admin points` | `<user> <amount> [xp] [reason]` | Manually award or deduct points/XP with audit trail |
 | `/admin quiz publish` | `[question_id]` | Manually drop a daily quiz into the quiz channel |

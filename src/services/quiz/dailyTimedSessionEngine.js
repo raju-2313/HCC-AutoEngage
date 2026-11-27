@@ -28,6 +28,7 @@ import {
 import { createQuiz, publishQuiz, closeQuiz, getQuizById } from '../../database/queries/quizzes.js';
 import { getKolkataDateString } from './questionBank.js';
 import { buildStandaloneHintEmbed } from '../../utils/leaderboardTips.js';
+import { upsertLearningProgress } from '../../database/queries/gitLearning.js';
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -95,6 +96,7 @@ export async function runDailyTimedSession({
   customIntermissionSeconds = null,
   forceNewAnnouncement = false,
   customAnnouncementText = null,
+  questionBankOverride = null,
 }) {
   if (isSessionRunning) {
     logger.warn('A daily quiz session is already actively running. Skipping concurrent start.');
@@ -104,7 +106,7 @@ export async function runDailyTimedSession({
   isSessionRunning = true;
 
   try {
-    const questionBank = getDayQuestionSet(dateStr);
+    const questionBank = questionBankOverride || getDayQuestionSet(dateStr);
     if (!questionBank) {
       logger.warn(`No question set found for date: ${dateStr}. Session aborted.`);
       return { success: false, reason: 'NO_QUESTIONS_FOR_DATE' };
@@ -498,6 +500,20 @@ export async function runDailyTimedSession({
     // Mark master session completed in Supabase
     state.status = 'completed';
     await updateDailySessionState(sessionRecord.id, state);
+
+    // If this was a git learning programme session, record quiz progress in git_learning_progress
+    if (meta.isGitProgramme && meta.dayNumber) {
+      for (const [uid, p] of participantMap.entries()) {
+        upsertLearningProgress({
+          discordId: uid,
+          programmeDay: meta.dayNumber,
+          quizAttempted: true,
+          quizScore: p.totalPoints,
+        }).catch((err) => {
+          logger.warn('Failed to record git_learning_progress from quiz session', { error: err.message, uid });
+        });
+      }
+    }
 
     logger.info(`Daily timed quiz session for ${dateStr} completed successfully! ✅`, {
       totalQuestions: questions.length,

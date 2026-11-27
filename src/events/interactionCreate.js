@@ -14,6 +14,10 @@ import {
 } from '../services/recognition/engagementScoringService.js';
 import { handleStickerButtonInteraction } from '../services/stickers/reviewService.js';
 import { handleEmojiButtonInteraction } from '../services/emojis/reviewService.js';
+import {
+  handleGitLearningStatusInteraction,
+  handleGitLearningTaskInteraction,
+} from '../services/learning/gitLearningManager.js';
 
 export const name  = 'interactionCreate';
 export const once  = false;
@@ -80,6 +84,14 @@ export async function execute(interaction, client) {
 
     if (interaction.customId.startsWith('emoji:')) {
       return handleEmojiButtonInteraction(interaction);
+    }
+
+    if (interaction.customId.startsWith('gitlearn:status:')) {
+      return handleGitLearningStatusInteraction(interaction);
+    }
+
+    if (interaction.customId.startsWith('gitlearn:task:')) {
+      return handleGitLearningTaskInteraction(interaction);
     }
 
     if (interaction.customId.startsWith('lb_view:')) {

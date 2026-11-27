@@ -33,6 +33,10 @@ import { discoveryService } from '../stickers/discoveryService.js';
 import { getPendingCandidates } from '../../database/queries/stickers.js';
 import { emojiDiscoveryService } from '../emojis/discoveryService.js';
 import { getPendingEmojiCandidates } from '../../database/queries/emojis.js';
+import {
+  buildMorningAnnouncementPayload,
+  getGitProgrammeQuestionBank,
+} from '../learning/gitLearningManager.js';
 
 /**
  * MASTER SWITCH: Phase 1 Testing Completed (Nov 15, 2026).
@@ -548,6 +552,78 @@ export async function runWeeklyEmojiDiscoveryJob(client, options = {}) {
   }
 }
 
+/**
+ * Job 10: Git Programme Morning Learning Card Drop (09:00 AM IST)
+ */
+export async function runGitMorningAnnouncementJob(client, options = {}) {
+  if (AUTOMATION_SUSPENDED && !options.force) {
+    logger.info('🛑 [AUTOMATION SUSPENDED] Git Morning Announcement bypassed.');
+    return { success: true, reason: 'AUTOMATION_SUSPENDED' };
+  }
+
+  const dayNumber = options.dayNumber || 1;
+  const channelId = options.channelId || config.discord.channels.quiz;
+  const channel = await client.channels.fetch(channelId).catch(() => null);
+
+  if (!channel) {
+    logger.warn('Skipping Git Morning Announcement: Target channel not found', { channelId });
+    return { success: false, reason: 'CHANNEL_NOT_FOUND' };
+  }
+
+  try {
+    const payload = buildMorningAnnouncementPayload(dayNumber);
+    if (options.suppressEveryonePing) {
+      payload.content = payload.content.replace('@everyone', '**[Test Mode — Ping Suppressed]**');
+    }
+
+    const msg = await channel.send({
+      ...payload,
+      allowedMentions: options.suppressEveryonePing ? { parse: [] } : { parse: ['everyone'] },
+    });
+
+    logger.info(`Git Morning Announcement for Day ${dayNumber} posted successfully! ✅`, {
+      channelId,
+      messageId: msg.id,
+    });
+
+    return { success: true, messageId: msg.id };
+  } catch (err) {
+    logger.error('Failed to post Git Morning Announcement', { dayNumber, error: err.message });
+    return { success: false, error: err.message };
+  }
+}
+
+/**
+ * Job 11: Git Programme Evening 10-Question Quiz Drop (07:00 PM IST)
+ */
+export async function runGitEveningQuizJob(client, options = {}) {
+  if (AUTOMATION_SUSPENDED && !options.force) {
+    logger.info('🛑 [AUTOMATION SUSPENDED] Git Evening Quiz bypassed.');
+    return { success: true, reason: 'AUTOMATION_SUSPENDED' };
+  }
+
+  const dayNumber = options.dayNumber || 1;
+  const channelId = options.channelId || config.discord.channels.quiz;
+
+  try {
+    const questionBank = getGitProgrammeQuestionBank(dayNumber);
+    const sessionResult = await runDailyTimedSession({
+      client,
+      channelId,
+      suppressEveryonePing: options.suppressEveryonePing ?? false,
+      questionBankOverride: questionBank,
+      customAnnouncementText: options.suppressEveryonePing
+        ? `📢 **[Test Mode] Evening Git & GitHub Quiz (Day ${dayNumber}: ${questionBank.meta.topic}) is starting in 30 seconds!**\n10 questions (15s per question) — points & XP update existing leaderboard:`
+        : `📢 **@everyone — The Evening Git & GitHub Quiz (Day ${dayNumber}: ${questionBank.meta.topic}) is starting in 30 seconds!**\nGet ready for 10 questions (15s per question) to climb the community leaderboard! ⚡`,
+    });
+
+    return sessionResult;
+  } catch (err) {
+    logger.error('Failed to run Git Evening Quiz Job', { dayNumber, error: err.message });
+    return { success: false, error: err.message };
+  }
+}
+
 // ─── Scheduler Initialization ─────────────────────────────────────────────────
 
 /**
@@ -699,6 +775,22 @@ export function initScheduler(client) {
     { timezone }
   );
   activeTasks.set('weeklyEmojiDiscovery', taskEmojiDiscovery);
+
+  // 10. Git Programme Morning Learning Drop (09:00 AM IST)
+  const taskGitMorning = cron.schedule(
+    '0 9 * * *',
+    () => runGitMorningAnnouncementJob(client),
+    { timezone }
+  );
+  activeTasks.set('gitMorningAnnouncement', taskGitMorning);
+
+  // 11. Git Programme Evening 10-Question Quiz Drop (07:00 PM IST)
+  const taskGitEveningQuiz = cron.schedule(
+    '0 19 * * *',
+    () => runGitEveningQuizJob(client),
+    { timezone }
+  );
+  activeTasks.set('gitEveningQuiz', taskGitEveningQuiz);
 
   logger.info(`Scheduler running with ${activeTasks.size} registered automated jobs ✅`);
 
