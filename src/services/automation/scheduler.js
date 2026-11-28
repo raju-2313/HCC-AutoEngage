@@ -568,34 +568,44 @@ export async function runGitMorningAnnouncementJob(client, options = {}) {
     return { success: true, reason: 'OUTSIDE_PROGRAMME_WINDOW' };
   }
   const channelId = options.channelId || config.discord.channels.quiz;
-  const channel = await client.channels.fetch(channelId).catch(() => null);
 
-  if (!channel) {
-    logger.warn('Skipping Git Morning Announcement: Target channel not found', { channelId });
-    return { success: false, reason: 'CHANNEL_NOT_FOUND' };
-  }
+  let lastError = null;
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const channel = await client.channels.fetch(channelId).catch(() => null);
+      if (!channel) {
+        logger.warn('Skipping Git Morning Announcement: Target channel not found', { channelId });
+        return { success: false, reason: 'CHANNEL_NOT_FOUND' };
+      }
 
-  try {
-    const payload = buildMorningAnnouncementPayload(dayNumber);
-    if (options.suppressEveryonePing) {
-      payload.content = payload.content.replace('@everyone', '**[Test Mode — Ping Suppressed]**');
+      const payload = buildMorningAnnouncementPayload(dayNumber);
+      if (options.suppressEveryonePing) {
+        payload.content = payload.content.replace('@everyone', '**[Test Mode — Ping Suppressed]**');
+      }
+
+      const msg = await channel.send({
+        ...payload,
+        allowedMentions: options.suppressEveryonePing ? { parse: [] } : { parse: ['everyone'] },
+      });
+
+      logger.info(`Git Morning Announcement for Day ${dayNumber} posted successfully! ✅`, {
+        channelId,
+        messageId: msg.id,
+        attempt,
+      });
+
+      return { success: true, messageId: msg.id };
+    } catch (err) {
+      lastError = err;
+      logger.warn(`Git Morning Announcement attempt ${attempt} failed`, { dayNumber, attempt, error: err.message });
+      if (attempt < 2) {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+      }
     }
-
-    const msg = await channel.send({
-      ...payload,
-      allowedMentions: options.suppressEveryonePing ? { parse: [] } : { parse: ['everyone'] },
-    });
-
-    logger.info(`Git Morning Announcement for Day ${dayNumber} posted successfully! ✅`, {
-      channelId,
-      messageId: msg.id,
-    });
-
-    return { success: true, messageId: msg.id };
-  } catch (err) {
-    logger.error('Failed to post Git Morning Announcement', { dayNumber, error: err.message });
-    return { success: false, error: err.message };
   }
+
+  logger.error('Failed to post Git Morning Announcement after retries', { dayNumber, error: lastError?.message });
+  return { success: false, error: lastError?.message };
 }
 
 /**
