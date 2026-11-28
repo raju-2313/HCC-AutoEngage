@@ -1,26 +1,34 @@
 # HCC-AutoEngage: Project Handoff & Architecture Guide
 
-> **Document Version:** 2.0.0 (Phase 1 Testing Concluded)  
-> **Status:** All Automated Schedulers & Checkers SUSPENDED (Dormant Mode)  
-> **Target Date:** November 15, 2026  
+> **Document Version:** 3.0.0 (Phase 2 Git & GitHub Sprint Staged for Launch)  
+> **Status:** All Automated Schedulers & Sprints ACTIVE (`AUTOMATION_SUSPENDED = false`)  
+> **Sprint Launch Date:** Monday, November 30, 2026 at 09:00 AM IST  
 > **Maintainer:** `raju-2313` (`kumbharraju784@gmail.com`)  
-> **Repository:** `https://github.com/raju-2313/HCC-AutoEngage.git`
+> **Repository:** `https://github.com/raju-2313/HCC-AutoEngage.git`  
+> **Agent Single Source of Truth:** See [`AGENTS.md`](./AGENTS.md) for full AI agent context
 
 ---
 
 ## 1. Project Overview & Current Operating Status
 
-**HCC-AutoEngage** is the automated Discord community engagement and gamification engine for the **HackerRank Campus Crew (HCC)**. 
+**HCC-AutoEngage** is the automated Discord community engagement, timed quiz competition, and gamification engine for the **HackerRank Campus Crew (HCC)**. 
+
+### Current Status: Phase 2 Ready for Monday Nov 30 Launch 🚀
+* **Upcoming Sprint:** 15-Day Git & GitHub Learning Programme (Nov 30 – Dec 14, 2026).
+* **Launch Date & Time:** Monday, November 30, 2026 at 09:00 AM IST.
+* **Current Operating State:** **ACTIVE & OPERATIONAL**.
+  * `AUTOMATION_SUSPENDED = false` in `src/services/automation/scheduler.js`.
+  * Morning concept drop cron runs daily at **09:00 AM IST** in `#💬・general` (`1538470672722952303`).
+  * Evening 10-question timed quiz cron runs daily at **07:00 PM (19:00) IST** in `#💬・general` (`1538470672722952303`).
+  * Keep-alive heartbeat pings every 5 minutes to prevent container sleep.
+  * Teaser message and interactive buttons (`sprint_im_in`, `sprint_remind_me`) are live in `#💬・general`.
+  * All 15 days of curriculum (150 quiz questions) are loaded in `learning-content/git-github/`.
+  * Database table `git_learning_progress` migrated and reset to clean slate ready for Day 1.
 
 ### Phase 1 7-Day Sprint Testing Concluded (Nov 9 – Nov 15, 2026)
 * **Sprint Window:** November 9 – November 15, 2026.
 * **Sprint Participants:** 30 unique members, 639 total answers submitted, 428 correct answers (67% community accuracy).
-* **Current Operating State:** **DORMANT / SUSPENDED**.
-  * `AUTOMATION_SUSPENDED = true` is set in `src/services/automation/scheduler.js`.
-  * **Zero automated background crons** are registered or running.
-  * **Zero daily drops** will occur tomorrow or on future dates.
-  * **Zero startup recovery tasks** will execute on container restarts.
-  * The bot remains online in standby mode (`Phase 1 Complete 🏆 | /help`) responding only to manual admin commands (`/admin ...`).
+* **Official Podium:** 1st: `karan20071` (530 pts), 2nd: `krishnaacharya08` (520 pts), 3rd: `samiksha_2007` (450 pts).
 
 ---
 
