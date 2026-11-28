@@ -35,6 +35,8 @@ check('SUPABASE_SERVICE_ROLE_KEY', process.env.SUPABASE_SERVICE_ROLE_KEY);
 // --- App Config ---
 check('NODE_ENV=production',    process.env.NODE_ENV,                    'production');
 check('TZ=Asia/Kolkata',        process.env.TZ,                          'Asia/Kolkata');
+check('GIT_START_DATE=2026-11-30', process.env.GIT_PROGRAMME_START_DATE || '2026-11-30', '2026-11-30');
+check('GIT_POST_TIME=09:00',    process.env.GIT_LEARNING_POST_TIME || '09:00', '09:00');
 check('QUIZ_POST_TIME=19:00',   process.env.QUIZ_POST_TIME,              '19:00');
 check('QUIZ_QUESTION_TIME=15',  process.env.QUIZ_QUESTION_TIME_SECONDS,  '15');
 check('COUNTDOWN=30',           process.env.QUIZ_START_COUNTDOWN_SECONDS, '30');
