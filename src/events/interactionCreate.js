@@ -94,6 +94,46 @@ export async function execute(interaction, client) {
       return handleGitLearningTaskInteraction(interaction);
     }
 
+    // ── Sprint teaser buttons (sent with the Nov 30 teaser message) ──────────
+    if (interaction.customId === 'sprint_im_in') {
+      return interaction.reply({
+        embeds: [
+          {
+            color: 0x00C853,
+            title: "🔥 You're locked in!",
+            description:
+              "You're officially on the list for the **HCC 15-Day Git & GitHub Sprint!**\n\n" +
+              "Here's what to expect starting **Monday, 30 Nov at 9:00 AM IST:**\n" +
+              "📖 A morning learning card drops daily\n" +
+              "⚡ An evening 10-question timed quiz follows at 7:00 PM\n" +
+              "🏆 Points update the community leaderboard in real-time\n\n" +
+              "**Use `/learning progress` anytime** to track your Day-by-Day score, tasks, and quiz results.\n\n" +
+              "_See you Monday! Let's get those commits flowing. 🚀_",
+            footer: { text: "HCC AutoEngage • Git & GitHub Sprint • Only you can see this message" },
+          },
+        ],
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+
+    if (interaction.customId === 'sprint_remind_me') {
+      return interaction.reply({
+        embeds: [
+          {
+            color: 0x5865F2,
+            title: '⏰ Reminder Set!',
+            description:
+              "Got it! The **15-Day Git & GitHub Sprint** kicks off on **Monday, 30 Nov 2026 at 9:00 AM IST.**\n\n" +
+              "The bot will automatically post the **Day 1 morning learning card** in this channel — you can't miss it.\n\n" +
+              "**Tip:** Use `/learning progress` after the sprint starts to see your personal scorecard.\n\n" +
+              "_No action needed from you — just show up on Monday!_ 🗓️",
+            footer: { text: "HCC AutoEngage • Git & GitHub Sprint • Only you can see this message" },
+          },
+        ],
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+
     if (interaction.customId.startsWith('lb_view:')) {
       const period = interaction.customId.replace('lb_view:', '');
       try {
