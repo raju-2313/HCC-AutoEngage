@@ -55,6 +55,7 @@ export const config = {
     env:          process.env.NODE_ENV || 'development',
     logLevel:     process.env.LOG_LEVEL || 'info',
     timezone:     process.env.TZ || 'Asia/Kolkata',
+    gitProgrammeStartDate: optional_env('GIT_PROGRAMME_START_DATE', '2026-11-30'),
     learningPostTime: process.env.GIT_LEARNING_POST_TIME || '09:00',
     quizPostTime: process.env.QUIZ_POST_TIME || '19:00',
     countdownSeconds: parseInt(process.env.QUIZ_START_COUNTDOWN_SECONDS || '30', 10),

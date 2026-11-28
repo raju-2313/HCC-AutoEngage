@@ -20,6 +20,7 @@ import {
   getDayLearningStats,
 } from '../../database/queries/gitLearning.js';
 import { upsertMember, updateMemberPoints } from '../../database/queries/members.js';
+import { config } from '../../config/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = join(__dirname, '..', '..', '..');
@@ -30,10 +31,10 @@ const HR = '──────────────────────�
 
 /**
  * Calculates current programme day (1–15) based on a starting date string (YYYY-MM-DD).
- * Defaults to GIT_PROGRAMME_START_DATE from env.
+ * Defaults to config.app.gitProgrammeStartDate or GIT_PROGRAMME_START_DATE (defaults to 2026-11-30).
  * Returns null if today is before the start date or past day 15.
  */
-export function calculateProgrammeDay(startDateStr = process.env.GIT_PROGRAMME_START_DATE) {
+export function calculateProgrammeDay(startDateStr = config?.app?.gitProgrammeStartDate || process.env.GIT_PROGRAMME_START_DATE || '2026-11-30') {
   if (!startDateStr) return null;
 
   try {
